@@ -38,7 +38,8 @@ array_contains () {
 
 # Make result directories
 mkdir -p ${projectResultsDir}/alignment/
-mkdir -p ${projectResultsDir}/coverage/
+mkdir -p ${projectResultsDir}/coverage/CoveragePerBase
+mkdir -p ${projectResultsDir}/coverage/CoveragePerTarget
 mkdir -p ${projectResultsDir}/qc/statistics/
 mkdir -p ${projectResultsDir}/variants/
 #mkdir -p ${projectResultsDir}/Pindel/
@@ -139,7 +140,7 @@ do
 	then
 		for i in $(ls ${intermediateDir}/${sample}.*.coveragePerBase.txt )
 		do
-			rsync -a $i ${projectResultsDir}/coverage/
+			rsync -a $i ${projectResultsDir}/coverage/CoveragePerBase/
 			printf "."
 		done
 	
@@ -151,7 +152,7 @@ do
         then
 		for i in $(ls ${intermediateDir}/${sample}.*.coveragePerTarget.txt )
 		do
-			rsync -a $i ${projectResultsDir}/coverage/
+			rsync -a $i ${projectResultsDir}/coverage/CoveragePerTarget/
 			printf "."
 		done	
 	else
@@ -208,10 +209,10 @@ then
 
 	if [[ "${logsDir}" == *"/groups/umcg-gd"* ]]
 	then
-		. ${EBROOTAUTOMATED}/parameters_gd.csv
+		. ${EBROOTAUTOMATED}/umcg-gd.cfg
 	elif [[ "${logsDir}" == *"/groups/umcg-gaf"* ]] 
 	then
-		. ${EBROOTAUTOMATED}/parameters_gaf.csv
+		. ${EBROOTAUTOMATED}/umcg-gaf.cfg
 	else
 		echo "unknown groupname please run in gaf or gd"
 	fi
