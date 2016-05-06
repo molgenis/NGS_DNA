@@ -45,7 +45,8 @@
 #string snpEffVersion
 #string tabixVersion
 #string wkHtmlToPdfVersion
-
+#string capturingKit
+#string ngsversion
 
 module load ${wkHtmlToPdfVersion}
 module load ${rVersion}
@@ -72,6 +73,7 @@ if [ -f ${allMetrics} ]
 then
 	rm ${allMetrics}
 fi
+
 
 #This check needs to be performed because Compute generates duplicate values in array
 INPUTS=()
@@ -204,7 +206,20 @@ cat > ${intermediateDir}/${project}_QCReport.rhtml <<'_EOF'
 		</td>
 	</tr>
 	<tr>
-            	<td>Pipeline version</td><td>${ngsversion}</td>
+		<td>Pipeline version </td>
+		<td>
+                <!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
+		echo ${ngsversion}
+                end.rcode-->
+                </td>
+        </tr>
+	<tr>
+		<td>Capturing kit </td>
+		<td>
+                <!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
+		echo ${capturingKit}
+                end.rcode-->
+                </td>
         </tr>
 	<tr>
 		<br />
