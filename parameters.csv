@@ -8,14 +8,14 @@ targetedInsertSize,200
 checkStage,module list
 
 ### Tool versions ####
-automateVersion,Automated/3.2.2
+automateVersion,NGS_Automated/3.2.3
 bwaVersion,BWA/0.7.12-goolf-1.7.20
-computeVersion,v16.04.1-Java-1.8.0_45
+computeVersion,v16.05.1-Java-1.8.0_45
 cutadaptVersion,1.8.1-goolf-1.7.20-Python-2.7.9
-dbNSFPVersion,2.7
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.5-Java-1.7.0_80 
+iolibVersion,io_lib/1.14.6-goolf-1.7.20
 javaVersion,Java/1.8.0_45
 ngsUtilsVersion,ngs-utils/16.04.1
 picardVersion,picard/1.130-Java-1.7.0_80

@@ -8,6 +8,7 @@
 #list flowcell
 #list batchID
 #string contact
+#string seqType
 
 # conststants
 #string qcStatisticsCsv
@@ -33,6 +34,7 @@
 #string fastqcVersion
 #string gatkVersion
 #string hpoVersion
+#string iolibVersion
 #string javaVersion
 #string molgenisAnnotatorVersion
 #string ngsUtilsVersion
@@ -278,6 +280,7 @@ dbNSFP-${dbNSFPVersion}
 delly/${dellyVersion}
 ${fastqcVersion}
 ${gatkVersion}
+${iolibVersion}
 ${javaVersion}
 ${ngsUtilsVersion}
 ${picardVersion}
@@ -369,12 +372,12 @@ sed -i 's/border:solid 1px #F7F7F7/border:solid 0px #F7F7F7/g' ${projectQcDir}/$
 #
 ## Initialize
 #
-mkdir -p ${projectQcDir}
-mkdir -p ${projectQcDir}/images
 
 #only available with PE
-if [ -f "${intermediateDir}/*.merged.dedup.bam.insert_size_metrics" ]
+if [ "${seqType}" == "PE" ]
 then
+	mkdir -p ${projectQcDir}/images
+
 	cp ${intermediateDir}/*.merged.dedup.bam.insert_size_histogram.pdf ${projectQcDir}/images
     	cp ${intermediateDir}/*.merged.dedup.bam.insert_size_metrics ${projectQcDir}/images
 fi

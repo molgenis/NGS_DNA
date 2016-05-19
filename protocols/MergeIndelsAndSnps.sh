@@ -45,7 +45,7 @@ do
 	-R ${indexFile} \
 	-T CombineVariants \
 	--variant ${intermediateDir}/${externalID}.annotated.filtered.indels.vcf \
-	--variant ${intermediateDir}/${externalID}.annotated.snps.dbnsfp.vcf \
+	--variant ${intermediateDir}/${externalID}.annotated.filtered.snps.vcf \
 	--genotypemergeoption UNSORTED \
 	-o ${intermediateDir}/${externalID}.final.vcf
 done

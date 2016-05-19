@@ -78,6 +78,8 @@ do
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam ${projectResultsDir}/alignment/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.bai ${projectResultsDir}/alignment/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.md5 ${projectResultsDir}/alignment/
+	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.cram ${projectResultsDir}/alignment/
+
 	printf "."
 done
 printf " finished (4/11)\n"
@@ -121,42 +123,45 @@ rsync -a ${projectPrefix}.final.vcf ${projectResultsDir}/variants/
 printf "."
 rsync -a ${projectPrefix}.final.vcf.table ${projectResultsDir}/variants/
 printf "."
-if [ -f "${projectPrefix}.delly.snpeff.hpo.vcf" ]
-then
-	rsync -a ${projectPrefix}.delly.snpeff.hpo.vcf ${projectResultsDir}/variants/
-	printf "."
-fi
+for sa in "${UNIQUESAMPLES[@]}"
+do
+	if [ -f ${intermediateDir}/${sa}.delly.snpeff.hpo.vcf ]
+	then
+		rsync -a ${intermediateDir}/${sa}.delly.snpeff.hpo.vcf ${projectResultsDir}/variants/
+		printf "."
+	fi
+done
 printf " finished (7/11)\n"
 
 #copy vcf file + coveragePerBase.txt
 printf "Copying vcf files and coverage per base and per target files "
-for sample in "${UNIQUESAMPLES[@]}"
+for sa in "${UNIQUESAMPLES[@]}"
 do
-	rsync -a ${intermediateDir}/${sample}.final.vcf ${projectResultsDir}/variants/
+	rsync -a ${intermediateDir}/${sa}.final.vcf ${projectResultsDir}/variants/
 	printf "."
-	rsync -a ${intermediateDir}/${sample}.final.vcf.table ${projectResultsDir}/variants/
+	rsync -a ${intermediateDir}/${sa}.final.vcf.table ${projectResultsDir}/variants/
 	printf "."
-	if ls ${intermediateDir}/${sample}.*.coveragePerBase.txt 1> /dev/null 2>&1
+	if ls ${intermediateDir}/${sa}.*.coveragePerBase.txt 1> /dev/null 2>&1
 	then
-		for i in $(ls ${intermediateDir}/${sample}.*.coveragePerBase.txt )
+		for i in $(ls ${intermediateDir}/${sa}.*.coveragePerBase.txt )
 		do
 			rsync -a $i ${projectResultsDir}/coverage/CoveragePerBase/
 			printf "."
 		done
 	
 	else
-		echo "coveragePerBase skipped for sample: ${sample}"
+		echo "coveragePerBase skipped for sample: ${sa}"
 	fi
 	
-	if ls ${intermediateDir}/${sample}.*.coveragePerTarget.txt 1> /dev/null 2>&1
+	if ls ${intermediateDir}/${sa}.*.coveragePerTarget.txt 1> /dev/null 2>&1
         then
-		for i in $(ls ${intermediateDir}/${sample}.*.coveragePerTarget.txt )
+		for i in $(ls ${intermediateDir}/${sa}.*.coveragePerTarget.txt )
 		do
 			rsync -a $i ${projectResultsDir}/coverage/CoveragePerTarget/
 			printf "."
 		done	
 	else
-		 echo "coveragePerTarget skipped for sample: ${sample}"
+		 echo "coveragePerTarget skipped for sample: ${sa}"
 	fi
 	
 done
