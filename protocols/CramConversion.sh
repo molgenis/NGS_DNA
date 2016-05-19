@@ -7,8 +7,10 @@
 #string indexFile
 #string	project
 #string logsDir
+#string intermediateDir
+#string iolibVersion
 
-module load io_lib
+module load ${iolibVersion}
 module list
 
 makeTmpDir ${dedupBamCram}
@@ -16,6 +18,8 @@ tmpDedupBamCram=${MC_tmpFile}
 
 makeTmpDir ${dedupBamCramBam}
 tmpDedupBamCramBam=${MC_tmpFile}
+
+echo "Starting scramble BAM to CRAM conversion"
 
 scramble \
 -I bam \
@@ -26,15 +30,21 @@ scramble \
 ${dedupBam} \
 ${tmpDedupBamCram}
 
-scramble \
--I cram \
--O bam \
--r ${indexFile} \
--m \
--t 8 \
-${tmpDedupBamCram} \
-${tmpDedupBamCramBam}
 
 echo "dirname"
 mv ${tmpDedupBamCram} ${dedupBamCram}
-mv ${tmpDedupBamCramBam} ${dedupBamCramBam} 
+cd ${intermediateDir}
+
+md5sum $(basename ${dedupBamCram}) > $(basename ${dedupBamCram}).md5
+
+cd -
+
+#To convert from CRAM -> BAM do:
+#scramble \
+#-I cram \
+#-O bam \
+#-r ${indexFile} \
+#-m \
+#-t 8 \
+#${tmpDedupBamCram} \
+#${tmpDedupBamCramBam}

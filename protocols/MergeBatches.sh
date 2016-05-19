@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=10gb ppn=2
+#MOLGENIS walltime=23:59:00 mem=13gb ppn=2
 
 #Parameter mapping
 #string tmpName
@@ -56,7 +56,7 @@ do
 	fi
 done
 
-java -Djava.io.tmpdir=${tempDir} -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
+java -Xmx12g -Djava.io.tmpdir=${tempDir} -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
 -R ${indexFile} \
 ${INPUTS[@]} \
 -out ${tmpProjectVariantsMerged} \

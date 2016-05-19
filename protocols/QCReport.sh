@@ -8,6 +8,7 @@
 #list flowcell
 #list batchID
 #string contact
+#string seqType
 
 # conststants
 #string qcStatisticsCsv
@@ -33,6 +34,7 @@
 #string fastqcVersion
 #string gatkVersion
 #string hpoVersion
+#string iolibVersion
 #string javaVersion
 #string molgenisAnnotatorVersion
 #string ngsUtilsVersion
@@ -45,7 +47,8 @@
 #string snpEffVersion
 #string tabixVersion
 #string wkHtmlToPdfVersion
-
+#string capturingKit
+#string ngsversion
 
 module load ${wkHtmlToPdfVersion}
 module load ${rVersion}
@@ -72,6 +75,7 @@ if [ -f ${allMetrics} ]
 then
 	rm ${allMetrics}
 fi
+
 
 #This check needs to be performed because Compute generates duplicate values in array
 INPUTS=()
@@ -204,7 +208,20 @@ cat > ${intermediateDir}/${project}_QCReport.rhtml <<'_EOF'
 		</td>
 	</tr>
 	<tr>
-            	<td>Pipeline version</td><td>${ngsversion}</td>
+		<td>Pipeline version </td>
+		<td>
+                <!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
+		echo ${ngsversion}
+                end.rcode-->
+                </td>
+        </tr>
+	<tr>
+		<td>Capturing kit </td>
+		<td>
+                <!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
+		echo ${capturingKit}
+                end.rcode-->
+                </td>
         </tr>
 	<tr>
 		<br />
@@ -263,6 +280,7 @@ dbNSFP-${dbNSFPVersion}
 delly/${dellyVersion}
 ${fastqcVersion}
 ${gatkVersion}
+${iolibVersion}
 ${javaVersion}
 ${ngsUtilsVersion}
 ${picardVersion}
@@ -354,12 +372,12 @@ sed -i 's/border:solid 1px #F7F7F7/border:solid 0px #F7F7F7/g' ${projectQcDir}/$
 #
 ## Initialize
 #
-mkdir -p ${projectQcDir}
-mkdir -p ${projectQcDir}/images
 
 #only available with PE
-if [ -f "${intermediateDir}/*.merged.dedup.bam.insert_size_metrics" ]
+if [ "${seqType}" == "PE" ]
 then
+	mkdir -p ${projectQcDir}/images
+
 	cp ${intermediateDir}/*.merged.dedup.bam.insert_size_histogram.pdf ${projectQcDir}/images
     	cp ${intermediateDir}/*.merged.dedup.bam.insert_size_metrics ${projectQcDir}/images
 fi
