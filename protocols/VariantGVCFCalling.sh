@@ -82,28 +82,17 @@ if [ ${baitBatchLength} -eq 0 ]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty"  
 else
-	if [[ ${capturedBatchBed} == *batch-[0-9]*X.bed ]]
+	if [[ ${capturedBatchBed} == *batch-[0-9]*X.bed || ${capturedBatchBed} == *batch-Xnp.bed || ${capturedBatchBed} == *batch-Xp.bed ]]
 	then
-
-		if [ "${sex}" == "Male" ]
+		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" || ${capturedBatchBed} == *batch-Xp.bed ]]
 		then
-			echo "X (male): NON AUTOSOMAL REGION"
-			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
-			${EBROOTGATK}/${gatkJar} \
-			-T HaplotypeCaller \
-			-R ${indexFile} \
-			--dbsnp ${dbSNP137Vcf}\
-			${inputs} \
-			-dontUseSoftClippedBases \
-			-stand_call_conf 10.0 \
-			-stand_emit_conf 20.0 \
-			-o ${tmpSampleBatchVariantCalls} \
-			-L ${capturedBatchBed} \
-			--emitRefConfidence GVCF \
-			-ploidy 2
-		elif [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
-		then
-			echo "X (female)"
+			if [ ${capturedBatchBed} == *batch-Xp.bed ]
+			then
+				echo "Par region of X, both female and male are diploid for this region"
+			else
+				echo "X (female)"
+			fi
+		
 			#Run GATK HaplotypeCaller in DISCOVERY mode to call SNPs and indels
         		java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
         		${EBROOTGATK}/${gatkJar} \
@@ -118,15 +107,34 @@ else
         		-L ${capturedBatchBed} \
         		--emitRefConfidence GVCF \
 			-ploidy 2 
+		elif [ "${sex}" == "Male" ]
+		then
+			echo "X (male): non autosomal region, mono ploid call"
+			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
+			${EBROOTGATK}/${gatkJar} \
+			-T HaplotypeCaller \
+			-R ${indexFile} \
+			--dbsnp ${dbSNP137Vcf}\
+			${inputs} \
+			-dontUseSoftClippedBases \
+			-stand_call_conf 10.0 \
+			-stand_emit_conf 20.0 \
+			-o ${tmpSampleBatchVariantCalls} \
+			-L ${capturedBatchBed} \
+			--emitRefConfidence GVCF \
+			-ploidy 1
+
 		else 
 			echo "The sex has not a known option (Male, Female, Unknown)"
 			exit 1
 		fi
-	elif [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed ]]
+	elif [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
 	then
 		echo "Y"
 		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
         	then
+			### Female Y is not existing, but this is
+			### to prevent an error when combining all the variants together in one vcf 
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
                         ${EBROOTGATK}/${gatkJar} \
                         -T HaplotypeCaller \

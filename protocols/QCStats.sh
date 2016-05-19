@@ -13,11 +13,12 @@
 #string ngsUtilsVersion
 #string pythonVersion
 #string project
-
+#string dataDir
+#string ngsversion
 
 #Load module
 module load ${pythonVersion}
-module load ${ngsUtilsVersion}
+module load ${ngsversion}
 module list
 
 makeTmpDir ${intermediateDir}
@@ -28,10 +29,11 @@ then
 	rm ${qcMetrics}
 fi 
 
+
 printf "Sample:\t${externalSampleID}\n" > ${qcMetrics}
 
 #If paired-end do fastqc for both ends, else only for one
-python $EBROOTNGSMINUTILS/pull_DNA_Seq_Stats.py \
+python ${EBROOTNGS_DNA}/report/pull_DNA_Seq_Stats.py \
 -a ${alignmentMetrics} \
 -c ${sampleConcordanceFile} \
 -s ${hsMetrics} \
