@@ -10,7 +10,8 @@
 #string dbNSFPSampleVcf
 #string tmpDataDir
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string javaVersion
 #string snpEffVersion
 

@@ -6,7 +6,8 @@
 #string tempDir
 #string intermediateDir
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string snpEffVersion
 #string hpoTerms
 #string javaVersion

@@ -12,7 +12,8 @@
 #string projectQcDir
 #string capturedBed
 #string computeVersion
-#string group
+#string group_parameters
+#string groupname
 
 #list sequencingStartDate
 #list sequencer
@@ -31,7 +32,7 @@
 #string ngsUtilsVersion
 
 #string project
-#string logsDir
+#string logsDir 
 
 umask 0007
 
@@ -126,11 +127,13 @@ echo "before run second rocket"
 echo pwd
 
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
--p ${batchIDList} -p ${projectJobsDir}/${project}.csv -p ${environment_parameters} -p ${group} -rundir ${projectJobsDir} \
+-p ${batchIDList} -p ${projectJobsDir}/${project}.csv -p ${environment_parameters} -p ${group_parameters} -rundir ${projectJobsDir} \
 --header ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/header_gaf.ftl \
+--footer ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/footer_gaf.ftl \
 --submit ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/submit_gaf.ftl \
 -w ${workflowpath} \
 -b slurm \
 -g -weave \
 -runid ${runid} \
--o "ngsversion=${ngsversion}"
+-o "ngsversion=${ngsversion};\
+groupname=${groupname}"

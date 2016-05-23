@@ -22,7 +22,8 @@
 #string tmpDataDir
 #string externalSampleID
 #string	project
-#string logsDir
+#string logsDir 
+#string groupname
 #string dedupBam
 
 sleep 5

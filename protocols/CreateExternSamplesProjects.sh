@@ -18,7 +18,8 @@
 #list flowcell
 #list externalFastQ_1
 #list externalFastQ_2
-#string group
+#string group_parameters
+#string groupname
 
 #string mainParameters
 #string worksheet 
@@ -27,7 +28,7 @@
 
 #list internalSampleID
 #string project
-#string logsDir
+#string logsDir 
 #string ngsversion
 #list barcode
 #list lane
@@ -124,7 +125,7 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -p ${environment_parameters} \
 -p ${batchIDList} \
 -p ${projectJobsDir}/${project}.csv \
--p ${group} \
+-p ${group_parameters} \
 -rundir ${projectJobsDir} \
 -w ${workflowpath} \
 --header ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/header_gaf.ftl \
@@ -132,4 +133,4 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -b slurm \
 -g -weave \
 -runid ${runid} \
--o "ngsversion=${ngsversion}"
+-o "ngsversion=${ngsversion} ; groupname=${groupname}"

@@ -5,7 +5,8 @@
 #string vcf2Table
 #string variantsFinalProjectVcfTable
 #string tmpDataDir
-#string logsDir
+#string logsDir 
+#string groupname
 #string projectPrefix
 #string intermediateDir
 #list externalSampleID

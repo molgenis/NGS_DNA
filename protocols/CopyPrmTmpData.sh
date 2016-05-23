@@ -14,7 +14,9 @@
 #string workflowpath
 #list internalSampleID
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
+#string permanentDataDir
 #string intermediateDir
 #list barcode
 #list lane
@@ -22,18 +24,29 @@
 n_elements=${internalSampleID[@]}
 max_index=${#internalSampleID[@]}-1
 
+WHOAMI=$(whoami)
+HOST=$(hostname)
+
+if [[ "$HOST" == "zinc-finger.gcc.rug.nl" ||  "$HOST" == "leucine-zipper.gcc.rug.nl" ]] && [ ! -d /groups/${groupname}/prm02 ]
+then
+	printf "On zinc-finger or leucine-zipper...\n"
+	if [ ! -f /groups/umcg-gd/${tmpName}/logs/mailinglistDiagnostiek.txt ]
+	then
+		rsync ${WHOAMI}@calculon.hpc.rug.nl:${permanentDataDir}/logs/mailinglistDiagnostiek.txt /groups/umcg-gd/${tmpName}/logs/
+		printf "mailinglistDiagnostiek.txt copied from prm02 to /groups/umcg-gd/${tmpName}/logs/ \n"
+	fi
+fi
+
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
 
 	RUNNAME=${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}	
-	WHOAMI=$(whoami)
-	HOST=$(hostname)
-	if [ "$HOST" == "zinc-finger.gcc.rug.nl" ] && [ ! -d /groups/umcg-gaf/prm02 ]
+	if [[ "$HOST" == "zinc-finger.gcc.rug.nl" ||  "$HOST" == "leucine-zipper.gcc.rug.nl" ]] && [ ! -d /groups/${groupname}/prm02 ]
 	then
-			echo "${WHOAMI}@calculon.hpc.rug.nl:${allRawNgsPrmDataDir}/${RUNNAME}"
-			PRMDATADIR="${WHOAMI}@calculon.hpc.rug.nl:${allRawNgsPrmDataDir}/${RUNNAME}"
+		echo "${WHOAMI}@calculon.hpc.rug.nl:${allRawNgsPrmDataDir}/${RUNNAME}"
+		PRMDATADIR="${WHOAMI}@calculon.hpc.rug.nl:${allRawNgsPrmDataDir}/${RUNNAME}"
 	else	
-			PRMDATADIR=${allRawNgsPrmDataDir}/${RUNNAME}
+		PRMDATADIR=${allRawNgsPrmDataDir}/${RUNNAME}
 	fi
 
 	TMPDATADIR=${allRawNgsTmpDataDir}/${RUNNAME}

@@ -4,7 +4,8 @@
 #string tmpName
 #string project
 #string projectResultsDir
-#string logsDir
+#string logsDir 
+#string groupname
 #string projectPrefix
 #string intermediateDir
 #string projectQcDir
@@ -209,24 +210,27 @@ if [[ "${host}" == *"umcg-"* || "${host}" == "calculon" ]]
 then
 	echo "automating the pipeline is not implemented on calculon yet"
         
-elif [[ "${host}" == *"gd-node"* || "${host}" == "zinc-finger.gcc.rug.nl" ]]
+elif [[ "${host}" == *"gd-node"* || "${host}" == "zinc-finger.gcc.rug.nl" || "${host}" == "leucine-zipper.gcc.rug.nl"]]
 then
 
 	if [[ "${logsDir}" == *"/groups/umcg-gd"* ]]
 	then
-		. ${EBROOTAUTOMATED}/umcg-gd.cfg
+		. ${EBROOTNGS_AUTOMATED}/umcg-gd.cfg
 	elif [[ "${logsDir}" == *"/groups/umcg-gaf"* ]] 
 	then
-		. ${EBROOTAUTOMATED}/umcg-gaf.cfg
+		. ${EBROOTNGS_AUTOMATED}/umcg-gaf.cfg
 	else
 		echo "unknown groupname please run in gaf or gd"
 	fi
 
 	touch ${logsDir}/${project}.pipeline.finished
-        . ${EBROOTAUTOMATED}/zinc-finger.gcc.rug.nl.cfg
-        . $EBROOTAUTOMATED/sharedConfig.cfg
+        . ${EBROOTNGS_AUTOMATED}/zinc-finger.gcc.rug.nl.cfg
+        . $EBROOTNGS_AUTOMATED/sharedConfig.cfg
+	mailto=$(cat /groups/umcg-gd/${tmpName}/logs/mailinglistDiagnostiek.txt)
+
 	echo "pipeline is finished, user ${ONTVANGER} has been mailed"
-        printf "The results can be found: ${projectResultsDir}\n\nCheers from the GCC :)"| mail -s "NGS_DNA pipeline is finished for project ${project} on `date +%d/%m/%Y` `date +%H:%M`" ${ONTVANGER}
+
+        printf "The results can be found: ${projectResultsDir}\n\nCheers from the GCC :)"| mail -s "NGS_DNA pipeline is finished for project ${project} on `date +%d/%m/%Y` `date +%H:%M`" ${mailto}
 else
 	echo "unknown host"
 fi
