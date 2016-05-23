@@ -16,7 +16,8 @@
 #list externalSampleID
 #string tmpDataDir
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string seqType
 
 #Load Pindel module

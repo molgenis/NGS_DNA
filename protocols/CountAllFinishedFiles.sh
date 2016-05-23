@@ -3,7 +3,8 @@
 #string projectJobsDir
 #string intermediateDir
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 
 cd $projectJobsDir
 

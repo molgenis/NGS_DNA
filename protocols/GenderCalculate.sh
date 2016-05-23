@@ -13,7 +13,8 @@
 #string picardVersion
 #string hsMetricsNonAutosomalRegionChrX
 #string	project
-#string logsDir
+#string logsDir 
+#string groupname
 
 module load ${picardVersion}
 sleep 5

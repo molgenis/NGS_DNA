@@ -11,7 +11,8 @@
 #string picardJar
 #string hsMetricsNonAutosomalRegionChrX
 #string	project
-#string logsDir
+#string logsDir 
+#string groupname
 #string picardVersion
 
 module load ${picardVersion}

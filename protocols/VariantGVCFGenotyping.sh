@@ -18,7 +18,8 @@
 #list sampleBatchVariantCalls
 #string tmpDataDir
 #string projectJobsDir
-#string logsDir
+#string logsDir 
+#string groupname
 
 sleep 5
 

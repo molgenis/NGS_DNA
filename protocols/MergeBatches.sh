@@ -15,7 +15,8 @@
 #string projectPrefix
 #string tmpDataDir
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string sortVCFpl
 #string indexFile
 #string indexFileFastaIndex

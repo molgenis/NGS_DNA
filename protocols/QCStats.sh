@@ -12,6 +12,8 @@
 #string externalSampleID
 #string ngsUtilsVersion
 #string pythonVersion
+#string logsDir 
+#string groupname
 #string project
 #string dataDir
 #string ngsversion

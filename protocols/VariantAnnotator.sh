@@ -10,7 +10,8 @@
 #string indexFileFastaIndex
 #string capturedIntervals
 #string projectVariantsMergedSorted
-#string logsDir
+#string logsDir 
+#string groupname
 #string variantAnnotatorOutputVcf
 #string project
 #string projectVariantsMergedSortedSorted
