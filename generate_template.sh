@@ -58,7 +58,8 @@ sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 --runid ${RUNID} \
 -o "workflowpath=${WORKFLOW};\
 outputdir=scripts/jobs;mainParameters=${WORKDIR}/generatedscripts/${PROJECT}/out.csv;\
-group=${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv;\
+group_parameters=${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv;\
+groupname=${GROUP};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
 environment_parameters=${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv;\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${BATCH}.csv;\

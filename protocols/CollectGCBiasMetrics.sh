@@ -20,7 +20,8 @@
 #string insertSizeMetrics
 #string gcBiasMetrics
 #string	project
-#string logsDir
+#string logsDir 
+#string groupname
 
 #Load Picard module
 ${stage} ${picardVersion}

@@ -2,7 +2,8 @@
 # worksheet params:
 #string tmpName
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #list externalSampleID
 #list lane
 #list flowcell
@@ -29,7 +30,6 @@
 #string bwaVersion
 #string computeVersion
 #string cutadaptVersion
-#string dbNSFPVersion
 #string dellyVersion
 #string fastqcVersion
 #string gatkVersion
@@ -276,7 +276,6 @@ Used toolversions:
 ${bwaVersion}
 Molgenis-Compute/${computeVersion}
 cutadapt-${cutadaptVersion}
-dbNSFP-${dbNSFPVersion}
 delly/${dellyVersion}
 ${fastqcVersion}
 ${gatkVersion}

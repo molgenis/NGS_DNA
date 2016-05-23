@@ -8,7 +8,8 @@
 #string srBarcodeFqGz
 #string intermediateDir
 #string tmpDataDir
-#string logsDir
+#string logsDir 
+#string groupname
 #string project
 #string projectRawTmpDataDir
 

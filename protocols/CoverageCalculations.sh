@@ -7,7 +7,8 @@
 #string intermediateDir
 #string dedupBam
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string externalSampleID
 #string indexFile
 #string capturedIntervalsPerBase

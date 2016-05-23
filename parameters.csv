@@ -8,7 +8,7 @@ targetedInsertSize,200
 checkStage,module list
 
 ### Tool versions ####
-automateVersion,NGS_Automated/3.2.3
+automateVersion,NGS_Automated/1.0.1
 bwaVersion,BWA/0.7.12-goolf-1.7.20
 computeVersion,v16.05.1-Java-1.8.0_45
 cutadaptVersion,1.8.1-goolf-1.7.20-Python-2.7.9
@@ -180,8 +180,6 @@ projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
 projectVariantsMergedSortedSorted,${projectPrefix}.variant.calls.GATK.sorted.sorted.vcf
 sortVCFpl,sortVCFbyFai.pl
-dbNSFP,${dbNSFPDir}/${dbNSFPVersion}/dbNSFP${dbNSFPVersion}.txt.gz
-dbNSFPSampleVcf,${sampleNameID}.annotated.snps.dbnsfp.vcf
 variantAnnotatorOutputVcf,${projectPrefix}.annotated.vcf
 variantAnnotatorSampleOutputIndelsVcf,${sampleNameID}.annotated.indels.vcf
 variantAnnotatorSampleOutputSnpsVcf,${sampleNameID}.annotated.snps.vcf

@@ -16,7 +16,8 @@
 #string batchID
 #string projectJobsDir
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 sleep 5
 
 #Function to check if array contains value

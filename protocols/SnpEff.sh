@@ -10,7 +10,8 @@
 #string snpEffCallsVcf
 #string snpEffGenesTxt
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string projectVariantsMergedSorted
 #string tmpDataDir
 #string snpEffVersion

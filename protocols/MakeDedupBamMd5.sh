@@ -3,7 +3,8 @@
 #string tmpName
 #string dedupBam
 #string	project
-#string logsDir
+#string logsDir 
+#string groupname
 
 md5sum ${dedupBam} > ${dedupBam}.md5
 

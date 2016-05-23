@@ -10,7 +10,8 @@
 #string alignedSortedBam
 #string tmpDataDir
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string tempDir
 
 #Load Picard module

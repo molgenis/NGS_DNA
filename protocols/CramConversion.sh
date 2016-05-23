@@ -6,7 +6,8 @@
 #string dedupBamCramBam
 #string indexFile
 #string	project
-#string logsDir
+#string logsDir 
+#string groupname
 #string intermediateDir
 #string iolibVersion
 

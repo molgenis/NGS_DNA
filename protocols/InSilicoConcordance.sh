@@ -4,7 +4,8 @@
 #string simulatedPhiXVariants
 #string inSilicoConcordanceFile
 #string project
-#string logsDir
+#string logsDir 
+#string groupname
 #string project
 #string projectVariantsMergedSorted
 #string intermediateDir

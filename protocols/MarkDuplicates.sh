@@ -16,7 +16,8 @@
 #string sambambaTool
 #string dedupMetrics
 #string	project
-#string logsDir
+#string logsDir 
+#string groupname
 #string flagstatMetrics
 
 #Load Picard module
