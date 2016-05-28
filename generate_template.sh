@@ -15,7 +15,7 @@ WORKDIR="/groups/${GROUP}/${TMPDIR}"
 RUNID=runXX
 
 ## Normal user, please leave BATCH at _chr
-## For expert modus: small batchsize (6) leave BATCH empty, _exome (10 batches), _wgs (20 batches), OR but this is beta _NO (1 batch),
+## For expert modus: small batchsize (6) fill in '_small'  or per chromosome fill in _chr
 BATCH="_chr"
 THISDIR=$(pwd)
 
