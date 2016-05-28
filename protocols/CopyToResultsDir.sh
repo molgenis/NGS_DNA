@@ -210,7 +210,7 @@ if [[ "${host}" == *"umcg-"* || "${host}" == "calculon" ]]
 then
 	echo "automating the pipeline is not implemented on calculon yet"
         
-elif [[ "${host}" == *"gd-node"* || "${host}" == "zinc-finger.gcc.rug.nl" || "${host}" == "leucine-zipper.gcc.rug.nl"]]
+elif [[ "${host}" == *"gd-node"* || "${host}" == "zinc-finger.gcc.rug.nl" || "${host}" == "leucine-zipper.gcc.rug.nl" ]]
 then
 
 	if [[ "${logsDir}" == *"/groups/umcg-gd"* ]]

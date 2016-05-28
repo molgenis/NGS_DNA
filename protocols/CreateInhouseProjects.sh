@@ -10,7 +10,6 @@
 #string projectResultsDir
 #string batchIDList
 #string projectQcDir
-#string capturedBed
 #string computeVersion
 #string group_parameters
 #string groupname

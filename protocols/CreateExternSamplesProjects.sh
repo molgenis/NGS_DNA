@@ -9,7 +9,6 @@
 #string projectResultsDir
 #string batchIDList
 #string projectQcDir
-#string capturedBed
 #string environment_parameters
 
 #list sequencingStartDate
