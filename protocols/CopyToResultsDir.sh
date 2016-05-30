@@ -79,7 +79,10 @@ do
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam ${projectResultsDir}/alignment/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.bai ${projectResultsDir}/alignment/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.md5 ${projectResultsDir}/alignment/
-	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.cram ${projectResultsDir}/alignment/
+	if [ -f ${intermediateDir}/${sample}.merged.dedup.bam.cram ] 
+	then
+		rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.cram ${projectResultsDir}/alignment/
+	fi
 
 	printf "."
 done
@@ -210,7 +213,7 @@ if [[ "${host}" == *"umcg-"* || "${host}" == "calculon" ]]
 then
 	echo "automating the pipeline is not implemented on calculon yet"
         
-elif [[ "${host}" == *"gd-node"* || "${host}" == "zinc-finger.gcc.rug.nl" || "${host}" == "leucine-zipper.gcc.rug.nl"]]
+elif [[ "${host}" == *"gd-node"* || "${host}" == "zinc-finger.gcc.rug.nl" || "${host}" == "leucine-zipper.gcc.rug.nl" ]]
 then
 
 	if [[ "${logsDir}" == *"/groups/umcg-gd"* ]]
