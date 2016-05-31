@@ -72,7 +72,7 @@ then
 		for i in $(ls -d ${coveragePerTargetDir}/${bedfile}/*)
 		do
 			perTarget=$(basename $i)
-			perTargetDir=$(echo $(dirname $i)/${perTarget}/human_g1k_v37/
+			perTargetDir=$(echo $(dirname $i)/${perTarget}/human_g1k_v37/)
 
 			java -Xmx10g -XX:ParallelGCThreads=4 -jar ${EBROOTGATK}/${gatkJar} \
                		-R ${indexFile} \

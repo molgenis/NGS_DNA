@@ -231,7 +231,7 @@ then
         . $EBROOTNGS_AUTOMATED/sharedConfig.cfg
 	mailto=$(cat /groups/umcg-gd/${tmpName}/logs/mailinglistDiagnostiek.txt)
 
-	echo "pipeline is finished, user ${ONTVANGER} has been mailed"
+	echo "pipeline is finished, user(s) < ${mailto} > has/have been mailed"
 
         printf "The results can be found: ${projectResultsDir}\n\nCheers from the GCC :)"| mail -s "NGS_DNA pipeline is finished for project ${project} on `date +%d/%m/%Y` `date +%H:%M`" ${mailto}
 else
