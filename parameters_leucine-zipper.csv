@@ -1,0 +1,5 @@
+queue,lz-compute
+tmpName,tmp06
+prmName,prm02
+root,/apps/
+toolChain,foss-2015b
