@@ -9,22 +9,22 @@ checkStage,module list
 
 ### Tool versions ####
 automateVersion,NGS_Automated/1.0.1
-bwaVersion,BWA/0.7.12-goolf-1.7.20
+bwaVersion,BWA/0.7.12-${toolChain}
 computeVersion,v16.05.1-Java-1.8.0_45
-cutadaptVersion,1.8.1-goolf-1.7.20-Python-2.7.9
+cutadaptVersion,1.8.1-${toolChain}-Python-2.7.9
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.5-Java-1.7.0_80 
-iolibVersion,io_lib/1.14.6-goolf-1.7.20
+iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_45
-ngsUtilsVersion,ngs-utils/16.04.1
+ngsUtilsVersion,ngs-utils/16.05.1
 picardVersion,picard/1.130-Java-1.7.0_80
-pythonVersion,Python/2.7.9-goolf-1.7.20
-rVersion,R/3.2.1-goolf-1.7.20
-sambambaVersion,sambamba/v0.5.9-goolf-1.7.20 
-samtoolsVersion,SAMtools/1.2-goolf-1.7.20
+pythonVersion,Python/2.7.9-${toolChain}
+rVersion,R/3.2.1-${toolChain}
+sambambaVersion,sambamba/v0.5.9-${toolChain} 
+samtoolsVersion,SAMtools/1.2-${toolChain}
 snpEffVersion,snpEff/4.1g-Java-1.7.0_80
-tabixVersion,tabix/0.2.6-goolf-1.7.20
+tabixVersion,tabix/0.2.6-${toolChain}
 wkHtmlToPdfVersion,wkhtmltopdf/0.11.0_rc1-static-amd64
 molgenisAnnotatorVersion,CmdLineAnnotator/1.9.0-Java-1.8.0_45
 hpoVersion,90
@@ -33,9 +33,9 @@ picardJar,picard.jar
 sambambaTool,sambamba_v0.5.9
 
 ##### GENERAL DIRECTORIES #####
-dataDir,${root}/data/
-softwareDir,${root}/software/
-sourcesDir,${root}/sources/
+dataDir,${appsDir}/data/
+softwareDir,${appsDir}/software/
+sourcesDir,${appsDir}/sources/
 dbSNPDir,${dataDir}/dbSNP/
 dbNSFPDir,${dataDir}/dbNSFP/
 inhouseIntervalsDir,${dataDir}/UMCG/

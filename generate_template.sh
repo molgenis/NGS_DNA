@@ -1,6 +1,6 @@
 #!/bin/bash
 
-module load NGS_DNA/3.2.3-Molgenis-Compute-v16.05.1-Java-1.8.0_45
+module load NGS_DNA/3.2.3
 module list 
 HOST=$(hostname)
 ##Running script for checking the environment variables
