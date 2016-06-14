@@ -294,7 +294,7 @@ hpoVersion: ${hpoVersion}
 </pre>
 <div>
 
-<--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
+<!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
 if [ -f ${intermediateDir}/coveragePerTargetBed.txt ]
 then
         echo "Bedfiles with coverage per target output:"
@@ -307,8 +307,6 @@ then
         cat ${intermediateDir}/coveragePerBaseBed.txt
 fi
 end.rcode-->
-
-
 
 <!--begin.rcode, engine='python', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
 # print out tables with QC stats based on the qcMatricsList
