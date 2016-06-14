@@ -293,6 +293,23 @@ ${molgenisAnnotatorVersion}
 hpoVersion: ${hpoVersion}
 </pre>
 <div>
+
+<--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
+if [ -f ${intermediateDir}/coveragePerTargetBed.txt ]
+then
+        echo "Bedfiles with coverage per target output:"
+        cat ${intermediateDir}/coveragePerTargetBed.txt
+fi
+echo -e	"\n"
+if [ -f ${intermediateDir}/coveragePerBaseBed.txt ]
+then
+        echo "Bedfiles with coverage per base output:"
+        cat ${intermediateDir}/coveragePerBaseBed.txt
+fi
+end.rcode-->
+
+
+
 <!--begin.rcode, engine='python', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
 # print out tables with QC stats based on the qcMatricsList
 
