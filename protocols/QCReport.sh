@@ -398,5 +398,5 @@ fi
 
 #convert to pdf
 
-wkhtmltopdf-amd64 --page-size A0 ${projectQcDir}/${project}_QCReport.html ${projectQcDir}/${project}_QCReport.pdf
+wkhtmltopdf --page-size A0 ${projectQcDir}/${project}_QCReport.html ${projectQcDir}/${project}_QCReport.pdf
 

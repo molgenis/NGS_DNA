@@ -21,16 +21,16 @@ ngsUtilsVersion,ngs-utils/16.05.1
 picardVersion,picard/1.130-Java-1.7.0_80
 pythonVersion,Python/2.7.9-${toolChain}
 rVersion,R/3.2.1-${toolChain}
-sambambaVersion,sambamba/v0.5.9-${toolChain} 
+sambambaVersion,sambamba/v0.6.1-${toolChain} 
 samtoolsVersion,SAMtools/1.2-${toolChain}
 snpEffVersion,snpEff/4.1g-Java-1.7.0_80
 tabixVersion,tabix/0.2.6-${toolChain}
-wkHtmlToPdfVersion,wkhtmltopdf/0.11.0_rc1-static-amd64
+wkHtmlToPdfVersion,wkhtmltox/0.12.3
 molgenisAnnotatorVersion,CmdLineAnnotator/1.9.0-Java-1.8.0_45
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 picardJar,picard.jar
-sambambaTool,sambamba_v0.5.9
+sambambaTool,sambamba_v0.6.1
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
