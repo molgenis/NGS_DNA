@@ -21,7 +21,9 @@ then
     	ENVIRONMENT_PARAMETERS="parameters_calculon.csv"
         TMPDIR="tmp04"
 else
-    	echo "unknown host: running is only possible on calculon,zinc-finger or leucine-zipper"
+    	echo "unknown host: tmpTest01 will be the tmpdir"
+    	ENVIRONMENT_PARAMETERS="parameters_host.csv"
+        TMPDIR="tmpTest01"
 fi
 
 THISDIR=$(pwd)
@@ -31,6 +33,9 @@ then
 elif [[ $THISDIR == *"/groups/umcg-gd/"* ]] 
 then
 	GROUP="umcg-gd"
+elif [[ $THISDIR == *"/groups/umcg-testgroup/"* ]] 
+then
+	GROUP="umcg-testgroup"
 else
 	echo "this is not a known group, please run only in umcg-gd or umcg-gaf group"
 fi
