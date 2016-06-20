@@ -187,5 +187,8 @@ else
 	then
         	mv ${tmpSampleBatchVariantCalls} ${sampleBatchVariantCalls}
         	mv ${tmpSampleBatchVariantCallsIdx} ${sampleBatchVariantCallsIdx}
-fi
+	else
+		echo "ERROR: output file is missing"
+		exit 1
+	fi
 fi
