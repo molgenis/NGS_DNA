@@ -73,15 +73,17 @@ do
 done
 
 sex=$(less ${intermediateDir}/${externalSampleID}.chosenSex.txt | awk 'NR==2')
-
-baitBatchLength=`cat ${capturedBatchBed} | wc -l`
+if [ -f ${capturedBatchBed} ] 
+then
+	baitBatchLength=`cat ${capturedBatchBed} | wc -l`
+fi
 
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
 inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
 
-if [ ${baitBatchLength} -eq 0 ]
+if [[ -f ${capturedBatchBed} ||  ${baitBatchLength} -eq 0 ]]
 then
-	echo "skipped ${capturedBatchBed}, because the batch is empty"  
+	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"  
 else
 	if [[ ${capturedBatchBed} == *batch-[0-9]*X.bed || ${capturedBatchBed} == *batch-Xnp.bed || ${capturedBatchBed} == *batch-Xp.bed ]]
 	then
@@ -187,5 +189,8 @@ else
 	then
         	mv ${tmpSampleBatchVariantCalls} ${sampleBatchVariantCalls}
         	mv ${tmpSampleBatchVariantCallsIdx} ${sampleBatchVariantCallsIdx}
-fi
+	else
+		echo "ERROR: output file is missing"
+		exit 1
+	fi
 fi
