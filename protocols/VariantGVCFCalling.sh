@@ -71,7 +71,7 @@ for SampleID in "${externalSampleID[@]}"
 do
         array_contains INPUTS "$SampleID" || INPUTS+=("$SampleID")    # If bamFile does not exist in array add it
 done
-
+baitBatchLength=""
 sex=$(less ${intermediateDir}/${externalSampleID}.chosenSex.txt | awk 'NR==2')
 if [ -f ${capturedBatchBed} ] 
 then
@@ -81,7 +81,7 @@ fi
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
 inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
 
-if [[ -f ${capturedBatchBed} ||  ${baitBatchLength} -eq 0 ]]
+if [[ ! -f ${capturedBatchBed} ||  ${baitBatchLength} -eq 0 ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"  
 else
