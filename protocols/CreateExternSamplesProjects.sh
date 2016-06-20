@@ -132,4 +132,4 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -b slurm \
 -g -weave \
 -runid ${runid} \
--o "ngsversion=${ngsversion} ; groupname=${groupname}"
+-o "ngsversion=${ngsversion};groupname=${groupname}"

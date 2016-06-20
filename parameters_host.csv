@@ -1,6 +1,6 @@
 queue,umcg-testqueue
 tmpName,tmpTest01
 prmName,prm02
-root,/srv/molgenis/
+root,/
 appsDir,${root}/apps/
 toolChain,foss-2015b
