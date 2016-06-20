@@ -128,6 +128,7 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -rundir ${projectJobsDir} \
 -w ${workflowpath} \
 --header ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/header_gaf.ftl \
+--footer ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/footer_gaf.ftl \
 --submit ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/submit_gaf.ftl \
 -b slurm \
 -g -weave \
