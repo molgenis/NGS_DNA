@@ -208,45 +208,6 @@ chmod -R u+rwX,g+rwX ${projectResultsDir}
 
 cd ${CURRENT_DIR}
 
-host=$(hostname)
-if [[ "${host}" == *"umcg-"* || "${host}" == "calculon" ]]
-then
-        echo "automating the pipeline is not implemented on calculon yet"
-elif [[ "${host}" == *"gd-node"* || "${host}" == "zinc-finger.gcc.rug.nl" || "${host}" == "zf-compute" ]]
-then
-
-        if [[ "${logsDir}" == *"/groups/umcg-gd"* ]]
-        then
-                . ${EBROOTNGS_AUTOMATED}/parameters_gd.csv
-        elif [[ "${logsDir}" == *"/groups/umcg-gaf"* ]]
-        then
-                . ${EBROOTNGS_AUTOMATED}/parameters_gaf.csv
-        else
-                echo "unknown groupname please run in gaf or gd"
-        fi
-
-        touch ${logsDir}/${project}.pipeline.finished
-        . ${EBROOTNGS_AUTOMATED}/zinc-finger.gcc.rug.nl.cfg
-        . $EBROOTNGS_AUTOMATED/sharedConfig.cfg
-        echo "pipeline is finished, user ${ONTVANGER} has been mailed"
-        printf "The results can be found: ${projectResultsDir}\n\nCheers from the GCC :)"| mail -s "NGS_DNA pipeline is finished for project ${project} on `date +%d/%m/%Y` `date +%H:%M`" ${ONTVANGER}
-elif [[ "${host}" == "leucine-zipper.gcc.rug.nl"  || "${host}" == "lz-compute" ]]
-then
-    	if [[ "${logsDir}" == *"/groups/umcg-gd"* ]]
-        then
-                . ${EBROOTNGS_AUTOMATED}/parameters_gd.csv
-        elif [[ "${logsDir}" == *"/groups/umcg-gaf"* ]]
-        then
-                . ${EBROOTNGS_AUTOMATED}/parameters_gaf.csv
-        else
-                echo "unknown groupname please run in gaf or gd"
-        fi
-
-        touch ${logsDir}/${project}.pipeline.finished
-        . ${EBROOTNGS_AUTOMATED}/leucine-zipper.gcc.rug.nl.cfg
-        . $EBROOTNGS_AUTOMATED/sharedConfig.cfg
-        echo "pipeline is finished, user ${ONTVANGER} has been mailed"
-        printf "The results can be found on leucine-zipper.gcc.rug.nl: ${projectResultsDir}\n\nCheers from the GCC :)"| mail -s "NGS_DNA pipeline is finished for project ${project} on `date +%d/%m/%Y` `date +%H:%M`" ${ONTVANGER}
-else
-	echo "unknown host"
-fi
+echo "pipeline is finished"
+touch ${logsDir}/${project}.pipeline.finished
+echo "${logsDir}/${project}.pipeline.finished is created"
