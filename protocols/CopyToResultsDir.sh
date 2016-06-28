@@ -211,3 +211,9 @@ cd ${CURRENT_DIR}
 echo "pipeline is finished"
 touch ${logsDir}/${project}.pipeline.finished
 echo "${logsDir}/${project}.pipeline.finished is created"
+
+
+rm *.finished
+rm *.started
+
+touch pipeline.finished
