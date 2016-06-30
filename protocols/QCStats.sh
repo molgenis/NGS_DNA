@@ -20,7 +20,7 @@
 #string capturingKit
 #string coveragePerBaseDir
 #string coveragePerTargetDir
-
+#string GCC_Analysis
 
 #Load module
 module load ${pythonVersion}
@@ -47,13 +47,17 @@ python ${EBROOTNGS_DNA}/report/pull_DNA_Seq_Stats.py \
 -f ${flagstatMetrics} \
 >> ${qcMetrics}
 
-if [ ! -f ${intermediateDir}/coveragePerBaseBed.txt ]
+if [ "${GCC_Analysis}" == "diagnostiek" ] || [ "${GCC_Analysis}" == "diagnostics" ] || [ "${GCC_Analysis}" == "Diagnostiek" ] || [ "${GCC_Analysis}" == "Diagnostics" ]
 then
-	nameOfBed=$(basename $capturingKit)
-	ls ${coveragePerBaseDir}/${nameOfBed} > ${intermediateDir}/coveragePerBaseBed.txt
-fi
-if [ ! -f ${intermediateDir}/coveragePerTargetBed.txt ]
-then
-        nameOfBed=$(basename $capturingKit)
-        ls ${coveragePerTargetDir}/${nameOfBed} > ${intermediateDir}/coveragePerTargetBed.txt
+
+	if [ ! -f ${intermediateDir}/coveragePerBaseBed.txt ]
+	then
+		nameOfBed=$(basename $capturingKit)
+		ls ${coveragePerBaseDir}/${nameOfBed} > ${intermediateDir}/coveragePerBaseBed.txt
+	fi
+	if [ ! -f ${intermediateDir}/coveragePerTargetBed.txt ]
+	then
+        	nameOfBed=$(basename $capturingKit)
+	        ls ${coveragePerTargetDir}/${nameOfBed} > ${intermediateDir}/coveragePerTargetBed.txt
+	fi
 fi
