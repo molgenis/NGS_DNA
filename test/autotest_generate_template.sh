@@ -1,5 +1,6 @@
 #!/bin/bash
 
+module load Molgenis-Compute/v16.05.1-Java-1.8.0_45
 EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/
 
 HOST=$(hostname)
