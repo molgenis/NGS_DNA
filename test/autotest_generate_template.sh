@@ -20,7 +20,7 @@ BATCH="_chr"
 THISDIR=$(pwd)
 
 rm -f /home/umcg-molgenis/PlatinumSample.final.vcf
-cp /groups/umcg-gaf/prm02/projects/PlatinumSubset/run01/variants/PlatinumSample.final.vcf /home/umcg-molgenis/
+#cp /groups/umcg-gaf/prm02/projects/PlatinumSubset/run01/variants/PlatinumSample.final.vcf /home/umcg-molgenis/
 
 SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv $THISDIR) -1 ))
 echo "Samplesize is $SAMPLESIZE"
