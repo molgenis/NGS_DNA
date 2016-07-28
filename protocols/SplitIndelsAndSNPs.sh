@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=6gb ppn=2
+#MOLGENIS walltime=23:59:00 mem=9gb ppn=1
 
 #Parameter mapping
 #string tmpName
@@ -36,7 +36,7 @@ array_contains () {
 }
 
 #select only Indels
-java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
+java -XX:ParallelGCThreads=1 -Xmx8g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
 --variant ${variantAnnotatorOutputVcf} \
@@ -46,7 +46,7 @@ java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -sn ${externalSampleID}
 
 #Select SNPs and MNPs
-java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
+java -XX:ParallelGCThreads=1 -Xmx8g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
 --variant ${variantAnnotatorOutputVcf} \

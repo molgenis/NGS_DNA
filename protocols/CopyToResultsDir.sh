@@ -54,13 +54,6 @@ done
 
 EXTERN=${#UNIQUESAMPLES[@]}
 
-# Copy error, out and finished logs to project jobs directory
-printf "Copying out, error and finished logs to project jobs directory.."
-rsync -a ${projectJobsDir}/*.out ${projectLogsDir}
-rsync -a ${projectJobsDir}/*.err ${projectLogsDir}
-rsync -a ${projectJobsDir}/*.log ${projectLogsDir}
-printf ".. finished! (1/11)\n"
-
 # Copy project csv file to project results directory
 printf "Copied project csv file to project results directory.."
 rsync -a ${projectJobsDir}/${project}.csv ${projectResultsDir}
@@ -213,3 +206,6 @@ touch ${logsDir}/${project}.pipeline.finished
 echo "${logsDir}/${project}.pipeline.finished is created"
 
 touch pipeline.finished
+
+rm *.finished
+rm *.started
