@@ -1,6 +1,5 @@
 #!/bin/bash
 
-module load Molgenis-Compute/v16.05.1-Java-1.8.0_45
 EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/
 
 HOST=$(hostname)
@@ -20,24 +19,13 @@ RUNID=run01
 BATCH="_chr"
 THISDIR=$(pwd)
 
-rm -f /home/umcg-molgenis/PlatinumSample.final.vcf
-
 SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv $THISDIR) -1 ))
 echo "Samplesize is $SAMPLESIZE"
 if [ $SAMPLESIZE -gt 199 ]
 then
     	WORKFLOW=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv
 else
-	lastline=$(tail -1 ${EBROOTNGS_DNA}/workflow.csv)
-	
-	if [[ $lastline == *"s26_CopyToResultsDir"* ]]
-	then
-		echo "s27_Autotest,test/protocols/Autotest.sh,s26_CopyToResultsDir" >> ${EBROOTNGS_DNA}/workflow.csv
-	else
-		echo "workflow has been changed, please update the test"
-		exit 0
-        fi
-	WORKFLOW=${EBROOTNGS_DNA}/workflow.csv
+	WORKFLOW=${EBROOTNGS_DNA}/test/workflow.csv
 fi
 
 if [ -f .compute.properties ];
@@ -59,13 +47,15 @@ ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv
 perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
 ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
 
+module load Molgenis-Compute/v16.05.1-Java-1.8.0_45
+
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/out.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv \
 -p ${EBROOTNGS_DNA}/batchIDList${BATCH}.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv \
--w ${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv \
+-w ${EBROOTNGS_DNA}/create_external_ngs_projects_workflow.csv \
 -rundir ${WORKDIR}/generatedscripts/${PROJECT}/scripts \
 --runid ${RUNID} \
 -o "workflowpath=${WORKFLOW};\
