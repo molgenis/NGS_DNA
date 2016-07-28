@@ -7,7 +7,7 @@ then
 	rm -rf ${workfolder}/tmp/NGS_DNA/
 fi
 
-git clone https://github.com/molgenis/NGS_DNA.git
+git clone https://github.com/roankanninga/NGS_DNA.git
 cd ${workfolder}/tmp/NGS_DNA
 
 if [ ! -d ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/ ] 
