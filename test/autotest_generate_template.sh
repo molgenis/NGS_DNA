@@ -32,7 +32,7 @@ else
 	
 	if [[ $lastline == *"s26_CopyToResultsDir"* ]]
 	then
-		echo "s27_Autotest,protocols/Autotest.sh,s26_CopyToResultsDir" >> ${EBROOTNGS_DNA}/workflow.csv
+		echo "s27_Autotest,test/protocols/Autotest.sh,s26_CopyToResultsDir" >> ${EBROOTNGS_DNA}/workflow.csv
 	else
 		echo workflow has been changed, please update the test"
 		exit 0
