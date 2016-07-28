@@ -20,7 +20,6 @@ BATCH="_chr"
 THISDIR=$(pwd)
 
 rm -f /home/umcg-molgenis/PlatinumSample.final.vcf
-#cp /groups/umcg-gaf/prm02/projects/PlatinumSubset/run01/variants/PlatinumSample.final.vcf /home/umcg-molgenis/
 
 SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv $THISDIR) -1 ))
 echo "Samplesize is $SAMPLESIZE"
@@ -34,7 +33,7 @@ else
 	then
 		echo "s27_Autotest,test/protocols/Autotest.sh,s26_CopyToResultsDir" >> ${EBROOTNGS_DNA}/workflow.csv
 	else
-		echo workflow has been changed, please update the test"
+		echo "workflow has been changed, please update the test"
 		exit 0
         fi
 	WORKFLOW=${EBROOTNGS_DNA}/workflow.csv

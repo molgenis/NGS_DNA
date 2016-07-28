@@ -24,6 +24,7 @@ fi
 rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
 cp test/results/PlatinumSample.final.vcf /home/umcg-molgenis/PlatinumSample.final.vcf
 cp test/autotest_generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+cp test/PlatinumSubset.csv ${workfolder}/generatedscripts/PlatinumSubset/
 
 cd ${workfolder}/generatedscripts/PlatinumSubset/
 
