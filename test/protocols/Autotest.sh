@@ -6,7 +6,11 @@
 #string groupname
 #string projectResultsDir
 
-difference=$(diff -y ${projectResultsDir}/variants/PlatinumSample.final.vcf /home/molgenis/PlatinumSample.final.vcf)
+
+module load ngs-utils
+
+${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -vcf1 ${projectResultsDir}/variants/PlatinumSample.final.vcf -vcf2 /home/molgenis/PlatinumSample_True.final.vcf -o /home/umcg-molgenis/output
+
 
 if [[ $difference == "" ]]
 then
