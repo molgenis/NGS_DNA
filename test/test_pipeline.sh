@@ -1,5 +1,4 @@
 workfolder="/groups/umcg-gaf/tmp04/"
-prmfolder="/groups/umcg-gaf/prm02/"
 
 cd ${workfolder}/tmp/
 if [ -d ${workfolder}/tmp/NGS_DNA ]
