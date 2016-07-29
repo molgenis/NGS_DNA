@@ -34,3 +34,6 @@ cd scripts
 
 sh submit.sh
 
+cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
+
+sh submit.sh
