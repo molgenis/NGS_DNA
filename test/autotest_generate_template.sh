@@ -47,8 +47,8 @@ ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv
 perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
 ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
 
-module load Molgenis-Compute/v16.05.1-Java-1.8.0_45
-
+#module load Molgenis-Compute/v16.05.1-Java-1.8.0_45
+EBROOTMOLGENISMINCOMPUTE="/apps/software/Molgenis-Compute/v16.05.1-Java-1.8.0_45/"
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/out.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv \
