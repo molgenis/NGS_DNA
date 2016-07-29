@@ -17,8 +17,9 @@ fi
 if [ -d ${workfolder}/generatedscripts/PlatinumSubset ] 
 then
 	rm -rf ${workfolder}/generatedscripts/PlatinumSubset/
-	mkdir ${workfolder}/generatedscripts/PlatinumSubset/
 fi
+
+mkdir ${workfolder}/generatedscripts/PlatinumSubset/
 
 rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
 cp test/results/PlatinumSample.final.vcf /home/umcg-molgenis/PlatinumSample.final.vcf
@@ -31,5 +32,5 @@ sh generate_template.sh
 
 cd scripts
 
-sh submit.sh >> ${workfolder}/generatedscripts/PlatinumSubset/logger.txt 2>&1 
+sh submit.sh
 

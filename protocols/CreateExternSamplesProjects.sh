@@ -94,7 +94,6 @@ cd $ROCKETPOINT
 
 echo "before splitting"
 echo `pwd`
-module load $ngsversion
 module load ${ngsUtilsVersion}
 
 #
