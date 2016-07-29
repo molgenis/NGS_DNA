@@ -25,7 +25,7 @@ if [ $SAMPLESIZE -gt 199 ]
 then
     	WORKFLOW=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv
 else
-	WORKFLOW=${EBROOTNGS_DNA}/test_workflow.csv
+	WORKFLOW=${EBROOTNGS_DNA}/test/workflow.csv
 fi
 
 if [ -f .compute.properties ];
