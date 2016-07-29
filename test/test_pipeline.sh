@@ -35,5 +35,5 @@ cd scripts
 sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
-
+perl -pi -e 's|partition=ll|partition=devel|' *.sh
 sh submit.sh
