@@ -27,7 +27,7 @@ makeTmpDir ${hsMetrics}
 tmpHsMetrics=${MC_tmpFile}
 
 #Run Picard HsMetrics if capturingKit was used
-if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
+if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ] || [ "${capturingKit}" == "UMCG/autotest_wgs"  ]
 then
 	java -jar -Xmx4g ${EBROOTPICARD}/${picardJar} ${hsMetricsJar} \
 	INPUT=${dedupBam} \
