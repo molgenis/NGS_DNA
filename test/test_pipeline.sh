@@ -1,3 +1,6 @@
+set -e 
+set -u
+
 workfolder="/groups/umcg-gaf/tmp04/"
 
 cd ${workfolder}/tmp/
@@ -17,6 +20,11 @@ fi
 if [ -d ${workfolder}/generatedscripts/PlatinumSubset ] 
 then
 	rm -rf ${workfolder}/generatedscripts/PlatinumSubset/
+fi
+
+if [ -d ${workfolder}/projects/PlatinumSubset ] 
+then
+	rm -rf ${workfolder}/projects/PlatinumSubset/
 fi
 
 mkdir ${workfolder}/generatedscripts/PlatinumSubset/
