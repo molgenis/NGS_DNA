@@ -6,18 +6,21 @@
 #string groupname
 #string projectResultsDir
 
+rm -rf /home/umcg-molgenis/output
 
 module load ngs-utils
 
-${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -vcf1 ${projectResultsDir}/variants/PlatinumSample.final.vcf -vcf2 /home/molgenis/PlatinumSample_True.final.vcf -o /home/umcg-molgenis/output
+${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 ${projectResultsDir}/variants/PlatinumSample.final.vcf -2 /home/umcg-molgenis/PlatinumSample_True.final.vcf -o /home/umcg-molgenis/output
 
 
-if [[ $difference == "" ]]
+if [[ -f /home/umcg-molgenis/output/notInVcf1.txt || -f /home/umcg-molgenis/output/notInVcf2.txt || -f /home/umcg-molgenis/output/inconsistent.txt ]]
 then
-	echo "test succeeded"
-else
 	echo "there are differences between the test and the original output"
-	echo "please fix the bug or update this test"
-	echo $difference	
-	exit -1
+        echo "please fix the bug or update this test"
+        echo "the stats can be found here: /home/umcg-molgenis/output/vcfStats.txt"
+        exit 1
+else
+	echo "test succeeded"
+	head -2 /home/umcg-molgenis/output/vcfStats.txt
+
 fi
