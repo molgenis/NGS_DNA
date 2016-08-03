@@ -44,4 +44,25 @@ sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
 perl -pi -e 's|partition=ll|partition=devel|' *.sh
+perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s24a_QCStats_0.sh  
+perl -pi -e 's|module load test|#|' s24b_QCReport_0.sh
+perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s25_CountAllFinishedFiles_0.sh
+
 sh submit.sh
+
+count=0
+minutes=0
+while [ ! -f /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/s27_Autotest_0.sh.finished ]
+do
+
+        echo "not finished in $minutes minutes, going to sleep for 5 minutes"
+    	sleep 300
+        minutes=$((minutes+5))
+
+        count=$((count+1))
+        if [ $count -eq 50 ]
+    	then
+                echo "the test was not finished within 4 hours, let's kill it"
+                exit 1
+        fi
+done
