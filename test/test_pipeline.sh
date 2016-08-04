@@ -55,14 +55,16 @@ minutes=0
 while [ ! -f /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/s27_Autotest_0.sh.finished ]
 do
 
-        echo "not finished in $minutes minutes, going to sleep for 5 minutes"
-    	sleep 300
-        minutes=$((minutes+5))
+        echo "not finished in $minutes minutes, going to sleep for 1 minute"
+        sleep 60 
+        minutes=$((minutes+1))
 
         count=$((count+1))
-        if [ $count -eq 50 ]
-    	then
-                echo "the test was not finished within 4 hours, let's kill it"
+        if [ $count -eq 60 ]
+        then
+            	echo "the test was not finished within 1 hour, let's kill it"
                 exit 1
         fi
 done
+echo "Test succeeded"
+head -2 /home/umcg-molgenis/output/vcfStats.txt
