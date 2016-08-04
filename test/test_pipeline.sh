@@ -1,6 +1,8 @@
 set -e 
 set -u
 
+scancel -u umcg-molgenis
+
 workfolder="/groups/umcg-gaf/tmp04/"
 
 cd ${workfolder}/tmp/
