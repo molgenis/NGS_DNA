@@ -30,7 +30,7 @@ molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 picardJar,picard.jar
-sambambaTool,sambamba_v0.6.1
+sambambaTool,sambamba_v0.6.3
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
