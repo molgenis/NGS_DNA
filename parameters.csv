@@ -27,7 +27,7 @@ samtoolsVersion,SAMtools/1.2-${toolChain}
 snpEffVersion,snpEff/4.1g-Java-1.7.0_80
 tabixVersion,tabix/0.2.6-${toolChain}
 wkHtmlToPdfVersion,wkhtmltox/0.12.3
-molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
+molgenisAnnotatorVersion,CmdLineAnnotator/1.9.0-Java-1.8.0_45
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 picardJar,picard.jar
