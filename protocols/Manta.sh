@@ -1,4 +1,4 @@
-#MOLGENIS walltime=120:00:00 mem=30gb
+#MOLGENIS walltime=120:00:00 mem=30gb ppn=25
 #string tmpName
 #string project
 #string logsDir
@@ -34,7 +34,7 @@ else
 fi
 
 
-python ${tmpMantaDir}/runWorkflow.py -m local -j 10
+python ${tmpMantaDir}/runWorkflow.py -m local -j 24
 
 mv ${tmpMantaDir}/* ${mantaDir} 
 
