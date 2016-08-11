@@ -1,3 +1,1 @@
 # NGS_DNA
-
-testing
