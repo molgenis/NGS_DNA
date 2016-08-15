@@ -11,6 +11,8 @@ then
 	rm -rf ${workfolder}/tmp/NGS_DNA/
 fi
 
+echo "pr number: $1"
+
 PULLREQUEST=$1
 
 git clone https://github.com/molgenis/NGS_DNA.git
