@@ -62,9 +62,11 @@ trap "errorExitandCleanUp" HUP INT QUIT TERM EXIT ERR
 MOLGENIS_START=$(date +%s)
 
 touch ${taskId}.sh.started
+<#noparse>
 if [ -f Timesheet.txt ]
 then
 MYDATE=$(date +%Y-%m-%d)
 	printf "\n\n${MYDATE}" >> Timesheet.txt
 fi
+</#noparse>
 SECONDS=0
