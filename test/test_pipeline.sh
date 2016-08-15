@@ -10,9 +10,15 @@ if [ -d ${workfolder}/tmp/NGS_DNA ]
 then
 	rm -rf ${workfolder}/tmp/NGS_DNA/
 fi
-
+echo "welke pull request: $1"
+PULLREQUEST=$1
 git clone https://github.com/molgenis/NGS_DNA.git
 cd ${workfolder}/tmp/NGS_DNA
+
+git fetch --tags --progress https://github.com/molgenis/NGS_DNA/ +refs/pull/*:refs/remotes/origin/pr/*
+COMMIT=$(git rev-parse refs/remotes/origin/pr/$PULLREQUEST/merge^{commit})
+git config core.sparsecheckout
+git checkout -f ${COMMIT}
 
 if [ ! -d ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/ ] 
 then
