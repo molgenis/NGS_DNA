@@ -10,8 +10,9 @@ if [ -d ${workfolder}/tmp/NGS_DNA ]
 then
 	rm -rf ${workfolder}/tmp/NGS_DNA/
 fi
-echo "welke pull request: $1"
+
 PULLREQUEST=$1
+
 git clone https://github.com/molgenis/NGS_DNA.git
 cd ${workfolder}/tmp/NGS_DNA
 
