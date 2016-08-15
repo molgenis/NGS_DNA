@@ -64,7 +64,7 @@ MOLGENIS_START=$(date +%s)
 touch ${taskId}.sh.started
 if [ -f Timesheet.txt ]
 then
-DATE=$(date +%Y-%m-%d)
-	printf "\n\n${DATE}" >> Timesheet.txt
+MYDATE=$(date +%Y-%m-%d)
+	printf "\n\n${MYDATE}" >> Timesheet.txt
 fi
 SECONDS=0
