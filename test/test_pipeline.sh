@@ -11,6 +11,8 @@ then
 	rm -rf ${workfolder}/tmp/NGS_DNA/
 fi
 
+echo "pr number: $1"
+
 PULLREQUEST=$1
 
 git clone https://github.com/molgenis/NGS_DNA.git
@@ -18,7 +20,7 @@ cd ${workfolder}/tmp/NGS_DNA
 
 git fetch --tags --progress https://github.com/molgenis/NGS_DNA/ +refs/pull/*:refs/remotes/origin/pr/*
 COMMIT=$(git rev-parse refs/remotes/origin/pr/$PULLREQUEST/merge^{commit})
-git config core.sparsecheckout
+echo "checkout commit: COMMIT"
 git checkout -f ${COMMIT}
 
 if [ ! -d ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/ ] 
@@ -48,6 +50,7 @@ cd ${workfolder}/generatedscripts/PlatinumSubset/
 sh generate_template.sh 
 
 cd scripts
+perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' *.sh  
 
 sh submit.sh
 
