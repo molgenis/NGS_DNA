@@ -116,9 +116,9 @@ function processJob () {
 # Then change to that directory to make sure relative paths 
 # further down in this script can be resolved correctly.
 #
-scriptsDir=$( cd -P "$( dirname "$0" )" && pwd )
-echo -n "INFO: Changing working directory to ${scriptsDir}... "
-cd "${scriptsDir}"
+MC_scriptsDir=$( cd -P "$( dirname "$0" )" && pwd )
+echo -n "INFO: Changing working directory to ${MC_scriptsDir}... "
+cd "${MC_scriptsDir}"
 echo 'done.'
 
 #
