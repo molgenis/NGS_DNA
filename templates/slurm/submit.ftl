@@ -7,17 +7,102 @@ set -e
 set -u
 
 #
+# Global variables declared in MOLGENIS Compute script templates
+# always start with a MC_ prefix.
+#
+declare MC_jobID='' # To keep track of IDs of submitted jobs.
+declare MC_submittedJobIDs='molgenis.submitted.log'
+declare MC_jobDependenciesExist=false
+declare MC_jobDependencies=''
+#
+# Get commandline arguments.
+# Any arguments specified are assumed to be sbatch options 
+# and passed on to sbatch unparsed "as is"...
+# You can for example specify a Quality of Service (QoS) level using
+#     bash submit.sh --qos=SomeLevel
+# if you don't want to use the default QoS.
+#
+MC_sbatchOptions="${@}"
+
+#
 ##
 ### Functions.
 ##
 #
 
-stop () {
-	
-	while (IFS=':' read -r col1 col2); do
-		scancel -Q $col2
-	done <$1
+function cancelJobs () {
+	local jobList=${1}
+	local jobName
+	local jobID
+	echo 'INFO: Found list of previously submitted jobs in:'
+	echo "          ${jobList}"
+	echo '      Will try to cancel those jobs before re-submitting new ones...'
+	while IFS=':' read -r jobName jobID; do
+		echo -n "INFO: Cancelling job ${jobName} (${jobID})... "
+		set +e
+		scancel -Q "${jobID}"
+		local status=${?}
+		set -e
+		if [ ${status} = 0 ]; then
+			echo 'done'
+		else
+			echo 'FAILED'
+			exit 1
+		fi
+	done < "${jobList}"
+	rm "${jobList}"
+}
 
+function processJob () {
+	local jobName="${1}"
+	local jobScript="${jobName}.sh"
+	local sbatchOptions="${2:-}" # Optional.
+	local dependencies="${3:-}"  # Optional.
+	local n=1
+	local max=5
+	local delay=15
+	local output=''
+	
+	#
+	# Skip this job if it already finished successfully.
+	#
+	if [ -f ${jobName}.sh.finished ]; then
+		echo "INFO: Skipped ${jobScript}"
+		echo "0: Skipped --- TASK ${jobScript} --- ON $(date +"%Y-%m-%d %T")" >> molgenis.skipped.log
+		MC_jobID=''
+		return
+	fi
+	
+	#
+	# Submit job to batch scheduler.
+	#
+	set +e
+	while (true); do
+		local sbatchCommand="sbatch ${sbatchOptions} ${dependencies} ${jobScript}"
+		echo "INFO: Trying to submit batch job:"
+		echo "          ${sbatchCommand}"
+		output=$(${sbatchCommand} 2>&1)
+		if [[ ${?} -eq 0 ]]; then
+			echo "      ${output}"
+			MC_jobID=${output##"Submitted batch job "}
+			echo "${jobName}:${MC_jobID}" >> ${MC_submittedJobIDs}
+			break
+		else
+			if [[ $n -lt ${max} ]]; then
+				echo "ERROR: Attempt ${n}/${max} failed for command:"
+				echo "           ${sbatchCommand}"
+				echo "      ${output}"
+				echo "WARN: Sleeping for ${delay} seconds before trying again."
+				sleep "${delay}"
+				n=$((n+1))
+				delay=$((${delay} * ${n}))
+			else
+				set -e
+				echo "FATAL: Job submission failed reproducibly and I'm giving up after ${n} attempts!"
+				exit 1
+			fi
+		fi
+	done
 }
 
 #
@@ -27,99 +112,74 @@ stop () {
 #
 
 #
-# First cd to the directory with the *.sh and *.finished scripts
+# First find our where this submit.sh script and the job *.sh scripts were created
+# Then change to that directory to make sure relative paths 
+# further down in this script can be resolved correctly.
 #
-MOLGENIS_scriptsDir=$( cd -P "$( dirname "$0" )" && pwd )
-echo "cd $MOLGENIS_scriptsDir"
-cd $MOLGENIS_scriptsDir
-runnumber=$(basename $(dirname $MOLGENIS_scriptsDir))
-echo "$runnumber"
+scriptsDir=$( cd -P "$( dirname "$0" )" && pwd )
+echo -n "INFO: Changing working directory to ${scriptsDir}... "
+cd "${scriptsDir}"
+echo 'done.'
 
-cd ../..
-project=$(pwd)
-projectName=$(basename $project)
-cd $MOLGENIS_scriptsDir
+#
+# Only for UMCG groups on UMCG clusters.
+# scriptsDir is:
+#	/groups/umcg-${group}/tmp*/projects/${project}/run*/jobs/
+# Central location for log files for all projects of a group is:
+#	/groups/umcg-${group}/tmp*/logs/
+# (Cannot get this from a parameters file; vars are not available in the submit template.)
+#
+project=$(basename $(dirname $(cd ../ && pwd)))
+baseDir=$(dirname $(cd ../../../ && pwd))
+logsDir="${baseDir}/logs"
+MC_failedFile="${logsDir}/${project}.pipeline.failed"
 
-HOST=$(hostname)
-myTmp=""
-myGroup=""
-if [ "${HOST}" == "zinc-finger.gcc.rug.nl" ]
-then
-	myTmp="tmp05"
-	myGroup="umcg-gd"
-elif [ "${HOST}" == "leucine-zipper.gcc.rug.nl" ]
-then
-	myTmp="tmp06"
-	myGroup="umcg-gd"
-elif [ "${HOST}" == "calculon" ]
-then
-	myTmp="tmp04"
-		myGroup="umcg-gaf"
-elif [[ "${HOST}" == *"molgenis"* ]]
-then
-	myTmp="tmpTest01"
-		myGroup="umcg-testgroup"
-else
-	echo "unknown server, please contact helpdesk.gcc.groningen@gmail.com"
-	exit 0
-fi
-
-failedFile="/groups/${myGroup}/${myTmp}/logs/${projectName}.pipeline.failed"
-
-if [ -f ${failedFile} ]
-then
-	rm ${failedFile}
-	if [ -f ${failedFile}.mailed ]
-	then
-		rm ${failedFile}.mailed
+if [ -f "${MC_failedFile}" ]; then
+	rm "${MC_failedFile}"
+	if [ -f "${MC_failedFile}.mailed" ]; then
+		rm "${MC_failedFile}.mailed"
 	fi
 fi
 
-if [ -f submitted_jobIDs.txt ]
-then
-	stop submitted_jobIDs.txt
+#
+# Cleanup and cancel previously submitted jobs and 
+# initialize empty ${MC_submittedJobIDs} with desired perms
+# before re-submitting jobs for the same project.
+#
+if [ -f "${MC_submittedJobIDs}" ]; then
+	cancelJobs "${MC_submittedJobIDs}"
 fi
-
-</#noparse>
+chmod g+w ${MC_submittedJobIDs}>>${MC_submittedJobIDs}
 
 touch molgenis.submit.started
 
-# Use this to indicate that we skip a step
-skip(){
-echo "0: Skipped --- TASK '$1' --- ON $(date +"%Y-%m-%d %T")" >> molgenis.skipped.log
-}
+</#noparse>
 
 <#foreach t in tasks>
 #
 ##${t.name}
 #
 
-# Skip this step if step finished already successfully
-if [ -f ${t.name}.sh.finished ]; then
-	skip ${t.name}.sh
-	echo "Skipped ${t.name}.sh"
-else
-	# Build dependency string
-	dependenciesExist=false
-	dependencies="--dependency=afterok"
-	<#foreach d in t.previousTasks>
-		if [[ -n "$${d}" ]]; then
-			dependenciesExist=true
-			dependencies+=":$${d}"
-		fi
-	</#foreach>
-	if ! $dependenciesExist; then
-		dependencies=''
+#
+# Build dependency string.
+#
+MC_jobDependenciesExist=false
+MC_jobDependencies='--dependency=afterok'
+<#foreach d in t.previousTasks>
+	if [[ -n "$${d}" ]]; then
+		MC_jobDependenciesExist=true
+		MC_jobDependencies+=":$${d}"
 	fi
-	output=$(sbatch $dependencies ${t.name}.sh)
-	id=${t.name}
-	${t.name}=<#noparse>${output##"Submitted batch job "}</#noparse> 
-	echo "$id:$${t.name}"
-	echo "$id:$${t.name}" >> submitted_jobIDs.txt
+</#foreach>
+if ! <#noparse>${MC_jobDependenciesExist}</#noparse>; then
+	MC_jobDependencies=''
 fi
-
-
+#
+# Process job: either skip if job if previously finished successfully or submit job to batch scheduler.
+#
+processJob "${t.name}" <#noparse>"${MC_sbatchOptions}" "${MC_jobDependencies}"</#noparse>
+${t.name}=<#noparse>"${MC_jobID}"</#noparse>
 
 </#foreach>
-chmod g+w submitted_jobIDs.txt
-touch molgenis.submit.finished
+
+mv molgenis.submit.{started,finished}

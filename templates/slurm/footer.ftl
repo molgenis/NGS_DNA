@@ -1,17 +1,21 @@
-touch ${taskId}.sh.finished
 
-echo "On $(date +"%Y-%m-%d %T"), after $(( ($(date +%s) - $MOLGENIS_START) / 60 )) minutes, task ${taskId} finished successfully" >> molgenis.bookkeeping.log
 <#noparse>
-if [ -d ${MC_tmpFolder:-} ];
-        then
-	echo "removed tmpFolder $MC_tmpFolder"
-        rm -r $MC_tmpFolder
+
+if [ -d ${MC_tmpFolder:-} ]; then
+	echo -n "INFO: Removing MC_tmpFolder ${MC_tmpFolder} ..."
+	rm -rf ${MC_tmpFolder}
+	echo 'done.'
 fi
 
-tS=$SECONDS
+tS=${SECONDS:-0}
 tM=$((SECONDS / 60 ))
 tH=$((SECONDS / 3600))
-printf "</#noparse>${taskId}<#noparse>:\t${tS} seconds\t${tM} minutes\t${tH} hours \n" >> Timesheet.txt
+echo "On $(date +"%Y-%m-%d %T") ${MC_jobScript} finished successfully after ${tM} minutes." >> molgenis.bookkeeping.log
+printf '%s:\t%d seconds\t%d minutes\t%d hours\n' "${MC_jobScript}" "${tS}" "${tM}" "${tH}" >> molgenis.bookkeeping.walltime
+
+mv "${MC_jobScript}.started" "${MC_jobScript}.finished"
+
 trap - EXIT
 exit 0
+
 </#noparse>
