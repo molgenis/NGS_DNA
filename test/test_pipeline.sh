@@ -50,7 +50,7 @@ cd ${workfolder}/generatedscripts/PlatinumSubset/
 sh generate_template.sh 
 
 cd scripts
-perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' *.sh  
+perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' *.sh  
 
 sh submit.sh
 
