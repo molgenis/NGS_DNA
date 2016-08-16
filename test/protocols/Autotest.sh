@@ -1,0 +1,26 @@
+#MOLGENIS walltime=23:59:00 mem=4gb
+
+#string tmpName
+#string	project
+#string logsDir 
+#string groupname
+#string projectResultsDir
+
+rm -rf /home/umcg-molgenis/output
+
+module load ngs-utils
+
+${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 ${projectResultsDir}/variants/PlatinumSample.final.vcf -2 /home/umcg-molgenis/PlatinumSample_True.final.vcf -o /home/umcg-molgenis/output
+
+
+if [[ -f /home/umcg-molgenis/output/notInVcf1.txt || -f /home/umcg-molgenis/output/notInVcf2.txt || -f /home/umcg-molgenis/output/inconsistent.txt ]]
+then
+	echo "there are differences between the test and the original output"
+        echo "please fix the bug or update this test"
+        echo "the stats can be found here: /home/umcg-molgenis/output/vcfStats.txt"
+        exit 1
+else
+	echo "test succeeded"
+	head -2 /home/umcg-molgenis/output/vcfStats.txt
+
+fi

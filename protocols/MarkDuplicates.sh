@@ -34,10 +34,6 @@ tmpDedupBam=${MC_tmpFile}
 makeTmpDir ${dedupBamIdx}
 tmpDedupBamIdx=${MC_tmpFile}
 
-makeTmpDir ${dedupMetrics}
-tmpDedupMetrics=${MC_tmpFile}
-
-
 ##Run picard, sort BAM file and create index on the fly
 ${EBROOTSAMBAMBA}/${sambambaTool} markdup \
 --nthreads=4 \
@@ -47,21 +43,8 @@ ${EBROOTSAMBAMBA}/${sambambaTool} markdup \
 --tmpdir=${tempDir} \
 ${sampleMergedBam} ${tmpDedupBam}
 
-#make metrics file
-${EBROOTSAMBAMBA}/${sambambaTool} \
-flagstat \
---nthreads=4 \
-${tmpDedupBam} > ${tmpFlagstatMetrics}
-
-echo -e "READ_PAIR_DUPLICATES\tPERCENT_DUPLICATION" > ${tmpDedupMetrics}
-sed -n '1p;4p' ${tmpFlagstatMetrics} | awk '{print $1}' | perl -wpe 's|\n|\t|' | awk '{print $2"\t"($2/$1)*100}' >> ${tmpDedupMetrics}
-
 echo -e "\nMarkDuplicates finished succesfull. Moving temp files to final.\n\n"
-mv ${tmpFlagstatMetrics} ${flagstatMetrics}
-echo "moved ${tmpFlagstatMetrics} ${flagstatMetrics}"
 mv ${tmpDedupBam} ${dedupBam}
 echo "moved ${tmpDedupBam} ${dedupBam}"
 mv ${tmpDedupBamIdx} ${dedupBamIdx}
 echo "mv ${tmpDedupBamIdx} ${dedupBamIdx}"
-mv ${tmpDedupMetrics} ${dedupMetrics}
-echo "mv ${tmpDedupMetrics} ${dedupMetrics}"

@@ -17,20 +17,21 @@ fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.5-Java-1.7.0_80 
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_45
+mantaVersion,manta/0.29.5-foss-2015b
 ngsUtilsVersion,ngs-utils/16.05.1
 picardVersion,picard/1.130-Java-1.7.0_80
 pythonVersion,Python/2.7.9-${toolChain}
 rVersion,R/3.2.1-${toolChain}
-sambambaVersion,sambamba/v0.6.1-${toolChain} 
+sambambaVersion,sambamba/v0.6.3-${toolChain} 
 samtoolsVersion,SAMtools/1.2-${toolChain}
 snpEffVersion,snpEff/4.1g-Java-1.7.0_80
 tabixVersion,tabix/0.2.6-${toolChain}
 wkHtmlToPdfVersion,wkhtmltox/0.12.3
-molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
+molgenisAnnotatorVersion,CmdLineAnnotator/1.9.0-Java-1.8.0_45
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 picardJar,picard.jar
-sambambaTool,sambamba_v0.6.1
+sambambaTool,sambamba_v0.6.3
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -154,6 +155,7 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
+mantaDir,${intermediateDir}/Manta/
 dellyVcf,${sampleNameID}.delly.vcf 
 dellySnpEffVcf,${sampleNameID}.delly.snpeff.vcf
 dellyTypeDEL,DEL

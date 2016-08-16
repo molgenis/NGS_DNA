@@ -35,6 +35,7 @@
 
 umask 0007
 module load Molgenis-Compute/${computeVersion}
+module load $ngsversion
 
 module list
 #
@@ -94,7 +95,6 @@ cd $ROCKETPOINT
 
 echo "before splitting"
 echo `pwd`
-module load $ngsversion
 module load ${ngsUtilsVersion}
 
 #
@@ -127,9 +127,9 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -p ${group_parameters} \
 -rundir ${projectJobsDir} \
 -w ${workflowpath} \
---header ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/header_gaf.ftl \
---footer ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/footer_gaf.ftl \
---submit ${EBROOTMOLGENISMINCOMPUTE}/templates/slurm/submit_gaf.ftl \
+--header ${EBROOTNGS_DNA}/templates/slurm/header.ftl \
+--footer ${EBROOTNGS_DNA}/templates/slurm/footer.ftl \
+--submit ${EBROOTNGS_DNA}/templates/slurm/submit.ftl \
 -b slurm \
 -g -weave \
 -runid ${runid} \
