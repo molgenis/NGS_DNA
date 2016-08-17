@@ -55,6 +55,10 @@ elif [ "${HOST}" == "calculon" ]
 then
 	myTmp="tmp04"
 		myGroup="umcg-gaf"
+elif [ "${HOST}" == "leela.gcc.rug.nl" ]
+then
+	myTmp="tmp04"
+	myGroup="umcg-gaf"
 elif [[ "${HOST}" == *"molgenis"* ]]
 then
 	myTmp="tmpTest01"
