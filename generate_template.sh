@@ -6,8 +6,8 @@ HOST=$(hostname)
 thisDir=$(pwd)
 
 ENVIRONMENT_PARAMETERS="parameters_${HOST%%.*}.csv"
-TMPDIR=$(cd ../../ && ${thisDir} )
-GROUP=$(cd ../../../ && ${thisDir} )
+TMPDIR=$(basename $(cd ../../ && ${thisDir} ))
+GROUP=$(basename $(cd ../../../ && ${thisDir} ))
 
 PROJECT=projectXX
 WORKDIR="/groups/${GROUP}/${TMPDIR}"
