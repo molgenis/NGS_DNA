@@ -10,6 +10,7 @@
 #string batchIDList
 #string projectQcDir
 #string environment_parameters
+#string tmpdir_parameters
 
 #list sequencingStartDate
 #list sequencer
@@ -125,6 +126,7 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -p ${batchIDList} \
 -p ${projectJobsDir}/${project}.csv \
 -p ${group_parameters} \
+-p ${tmpdir_parameters} \
 -rundir ${projectJobsDir} \
 -w ${workflowpath} \
 --header ${EBROOTNGS_DNA}/templates/slurm/header.ftl \
