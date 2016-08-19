@@ -38,13 +38,12 @@ array_contains () {
 }
 
 # Make result directories
-mkdir -p ${projectResultsDir}/alignment/
+mkdir -p ${projectResultsDir}/alignment/gVCF
 mkdir -p ${projectResultsDir}/coverage/CoveragePerBase
 mkdir -p ${projectResultsDir}/coverage/CoveragePerTarget
 mkdir -p ${projectResultsDir}/qc/statistics/
-mkdir -p ${projectResultsDir}/variants/
-#mkdir -p ${projectResultsDir}/Pindel/
-
+mkdir -p ${projectResultsDir}/variants/cnv/
+mkdir -p ${projectResultsDir}/general
 
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
@@ -81,6 +80,17 @@ do
 done
 printf " finished (4/11)\n"
 
+#Copy g.vcf.gz + g.vcf.gz.tbi
+printf "Copying gVCF files + index file"
+for sample in "${UNIQUESAMPLES[@]}"
+do
+        rsync -a ${intermediateDir}/${sample}.*.g.vcf.gz ${projectResultsDir}/alignment/gVCF/
+        rsync -a ${intermediateDir}/${sample}.*.g.vcf.gz.tbi ${projectResultsDir}/alignment/gVCF/
+
+        printf "."
+done
+printf " finished (5/11)\n"
+
 # Copy alignment stats (lane and sample) to results directory
 
 count=1
@@ -94,25 +104,17 @@ do
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.hs_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.bam_index_stats ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.metrics ${projectResultsDir}/qc/statistics/
+	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.flagstat ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}*.pdf ${projectResultsDir}/qc/statistics/
+	if [ -f "${intermediateDir}/${sample}.merged.dedup.bam.insert_size_metrics" ]
+	then
+		rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.insert_size_metrics ${projectResultsDir}/qc/statistics/
+	else
+		echo "no insertsize metrics are available, skipped"
+	fi
 	printf "."
 done
-	printf " finished (5/11)\n"
-
-#copy insert size metrics (only available with PE)
-
-if [ -f "${intermediateDir}/*.insert_size_metrics" ]
-then
-	printf "Copying insert size metrics "
-	for sample in "${UNIQUESAMPLES[@]}"
-	do
-		rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.insert_size_metrics ${projectResultsDir}/qc/statistics/
-		printf "."
-	done
 	printf " finished (6/11)\n"
-else
-	printf "no insert size metrics available, skipped (6/11)\n"
-fi
 
 printf "Copying variants vcf and tables to results directory "
 # Copy variants vcf and tables to results directory
@@ -130,14 +132,18 @@ do
 done
 printf " finished (7/11)\n"
 
-#copy vcf file + coveragePerBase.txt
-printf "Copying vcf files and coverage per base and per target files "
+#copy vcf file + coveragePerBase.txt + gender determination
+printf "Copying vcf files, gender determination, coverage per base and per target files "
 for sa in "${UNIQUESAMPLES[@]}"
 do
 	rsync -a ${intermediateDir}/${sa}.final.vcf ${projectResultsDir}/variants/
 	printf "."
 	rsync -a ${intermediateDir}/${sa}.final.vcf.table ${projectResultsDir}/variants/
 	printf "."
+
+	rsync -a ${intermediateDir}/${sa}.chosenSex.txt ${projectResultsDir}/general/
+	printf "."
+
 	if ls ${intermediateDir}/${sa}.*.coveragePerBase.txt 1> /dev/null 2>&1
 	then
 		for i in $(ls ${intermediateDir}/${sa}.*.coveragePerBase.txt )
