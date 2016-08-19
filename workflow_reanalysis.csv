@@ -1,5 +1,5 @@
 step,protocol,dependencies
-s16a_VariantCalling,protocols/VariantGVCFCalling.sh,s16_PrepareReAnalysis
+s16a_VariantCalling,protocols/VariantGVCFCalling.sh,
 s16c_GenotypeVariants,protocols/VariantGVCFGenotyping.sh,s16a_VariantCalling
 s16d_GVCFCompressing,protocols/VariantGVCFCompressing.sh,s16a_VariantCalling
 s17_MergeBatches,protocols/MergeBatches.sh,s16c_GenotypeVariants
