@@ -9,6 +9,7 @@ cd ${workfolder}/tmp/
 if [ -d ${workfolder}/tmp/NGS_DNA ]
 then
 	rm -rf ${workfolder}/tmp/NGS_DNA/
+	echo "removed ${workfolder}/tmp/NGS_DNA/"
 fi
 
 echo "pr number: $1"
