@@ -25,9 +25,6 @@ ${stage} ${sambambaVersion}
 ${checkStage}
 sleep 5
 
-makeTmpDir ${flagstatMetrics}
-tmpFlagstatMetrics=${MC_tmpFile}
-
 makeTmpDir ${dedupBam}
 tmpDedupBam=${MC_tmpFile}
 

@@ -22,15 +22,19 @@ sleep 5
 
 makeTmpDir ${flagstatMetrics}
 tmpFlagstatMetrics=${MC_tmpFile}
+
+makeTmpDir ${flagstatMetrics}
+tmpFlagstatMetrics=${MC_tmpFile}
+
 echo "starting to calculate flagstat metrics"
 #make metrics file
 ${EBROOTSAMBAMBA}/${sambambaTool} \
 flagstat \
 --nthreads=4 \
-${dedupBam} > ${tmpFlagstatMetrics}
+${dedupBam} > ${tmpFlagstatMetrics}.tmp
 
-echo -e "READ_PAIR_DUPLICATES\tPERCENT_DUPLICATION" > ${tmpDedupMetrics}
-sed -n '1p;4p' ${tmpFlagstatMetrics} | awk '{print $1}' | perl -wpe 's|\n|\t|' | awk '{print $2"\t"($2/$1)*100}' >> ${tmpDedupMetrics}
+echo -e "READ_PAIR_DUPLICATES\tPERCENT_DUPLICATION" > ${tmpFlagstatMetrics}
+sed -n '1p;4p' ${tmpFlagstatMetrics}.tmp | awk '{print $1}' | perl -wpe 's|\n|\t|' | awk '{print $2"\t"($2/$1)*100}' >> ${tmpFlagstatMetrics}
 
 echo -e "\nFlagstatMetrics calculated. Moving temp files to final.\n\n"
 mv ${tmpFlagstatMetrics} ${flagstatMetrics}

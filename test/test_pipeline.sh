@@ -81,13 +81,14 @@ do
         if [ $count -eq 15 ]
         then
                 echo "the test was not finished within 1 hour, let's kill it"
+		echo -e "\n"
 		for i in $(ls /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/*.sh)
 		do
 			if [ ! -f $i.finished ]
 			then
 				echo "basename ($i) is not finished"
 			fi
-		
+		done		
                 exit 1
         fi
 done
