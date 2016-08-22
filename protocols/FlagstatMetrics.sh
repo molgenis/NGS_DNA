@@ -23,9 +23,6 @@ sleep 5
 makeTmpDir ${flagstatMetrics}
 tmpFlagstatMetrics=${MC_tmpFile}
 
-makeTmpDir ${flagstatMetrics}
-tmpFlagstatMetrics=${MC_tmpFile}
-
 echo "starting to calculate flagstat metrics"
 #make metrics file
 ${EBROOTSAMBAMBA}/${sambambaTool} \
