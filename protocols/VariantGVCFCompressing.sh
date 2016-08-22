@@ -14,6 +14,7 @@
 #string groupname
 #string tabixVersion
 #string capturedBatchBed
+#string projectJobsDir
 
 sleep 5
 
