@@ -86,7 +86,7 @@ do
 		do
 			if [ ! -f $i.finished ]
 			then
-				echo "basename ($i) is not finished"
+				echo "$(basename $i)" is not finished"
 			fi
 		done		
                 exit 1
