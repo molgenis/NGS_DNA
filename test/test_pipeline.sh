@@ -73,14 +73,21 @@ minutes=0
 while [ ! -f /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/s27_Autotest_0.sh.finished ]
 do
 
-        echo "not finished in $minutes minutes, going to sleep for 1 minute"
+        echo "not finished in $minutes minutes, sleeping for 1 minute"
         sleep 60
         minutes=$((minutes+1))
 
         count=$((count+1))
-        if [ $count -eq 60 ]
+        if [ $count -eq 15 ]
         then
                 echo "the test was not finished within 1 hour, let's kill it"
+		for i in $(ls /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/*.sh)
+		do
+			if [ ! -f $i.finished ]
+			then
+				echo "basename ($i) is not finished"
+			fi
+		
                 exit 1
         fi
 done

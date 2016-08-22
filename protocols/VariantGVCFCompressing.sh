@@ -58,17 +58,21 @@ else
                 fi
         done
 fi
+count=${#ALLGVCFs[@]}
+if [ $count -ne 0 ]
+then
+	for i in ${ALLGVCFs[@]}
+	do
+		if [ -f $i ]
+	        then
+	                printf "bgzipping $i"
+	                bgzip -c $i > $i.gz
+	                printf "..done\ntabix-ing $i.gz .."
+	                tabix -p vcf $i.gz	
+       	         	printf "..done\n"
+        	fi
 
-for i in ${ALLGVCFs[@]}
-do
-	if [ -f $i ]
-        then
-                printf "bgzipping $i"
-                bgzip -c $i > $i.gz
-                printf "..done\ntabix-ing $i.gz .."
-                tabix -p vcf $i.gz	
-                printf "..done\n"
-        fi
-
-done
-
+	done
+else
+	echo "there are no batches to process, skipped"
+fi
