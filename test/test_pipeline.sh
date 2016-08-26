@@ -65,8 +65,10 @@ perl -pi -e 's|partition=ll|partition=devel|' *.sh
 perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s24a_QCStats_0.sh  
 perl -pi -e 's|module load test|#|' s24b_QCReport_0.sh
 perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s25_CountAllFinishedFiles_0.sh
+perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
+perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
 
-sh submit.sh
+sh submit.sh --qos=priority
 
 count=0
 minutes=0
