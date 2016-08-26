@@ -12,11 +12,11 @@ s08b_Flagstat,protocols/FlagstatMetrics.sh,s08_MarkDuplicates
 #s09b_DellyAnnotator,protocols/DellyAnnotator.sh,s09a_Delly_DEL
 s09c_Manta,protocols/Manta.sh,s08_MarkDuplicates
 s10a_GenderCalculate,protocols/GenderCalculate.sh,s08_MarkDuplicates
-sXX_Convading_s1,protocols/Convading/Convading_s1.sh,s08_MarkDuplicates
-sXX_Convading_s2,protocols/Convading/Convading_s2.sh,s08_MarkDuplicates
-sXX_Convading_s3,protocols/Convading/Convading_s3.sh,s08_MarkDuplicates
-sXX_Convading_s4,protocols/Convading/Convading_s4.sh,s08_MarkDuplicates
-sXX_Convading_s5,protocols/Convading/Convading_s5.sh,s08_MarkDuplicates
+#sXX_Convading_s1,protocols/Convading/Convading_s1.sh,s08_MarkDuplicates
+#sXX_Convading_s2,protocols/Convading/Convading_s2.sh,s08_MarkDuplicates
+#sXX_Convading_s3,protocols/Convading/Convading_s3.sh,s08_MarkDuplicates
+#sXX_Convading_s4,protocols/Convading/Convading_s4.sh,s08_MarkDuplicates
+#sXX_Convading_s5,protocols/Convading/Convading_s5.sh,s08_MarkDuplicates
 #s10b_CramConversion,protocols/CramConversion.sh,s08_MarkDuplicates
 s11_MakeDedupBamMd5,protocols/MakeDedupBamMd5.sh,s08_MarkDuplicates
 s12_SequenomConcordanceCheck,protocols/SequenomConcordanceCheck.sh,s08_MarkDuplicates
