@@ -9,6 +9,7 @@ cd ${workfolder}/tmp/
 if [ -d ${workfolder}/tmp/NGS_DNA ]
 then
 	rm -rf ${workfolder}/tmp/NGS_DNA/
+	echo "removed ${workfolder}/tmp/NGS_DNA/"
 fi
 
 echo "pr number: $1"
@@ -40,6 +41,11 @@ fi
 
 mkdir ${workfolder}/generatedscripts/PlatinumSubset/
 
+### create testworkflow
+cd ${workfolder}/tmp/NGS_DNA/
+cp workflow.csv test_workflow.csv 
+tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
+
 rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
 cp test/results/PlatinumSample.final.vcf /home/umcg-molgenis/PlatinumSample.final.vcf
 cp test/autotest_generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
@@ -59,22 +65,32 @@ perl -pi -e 's|partition=ll|partition=devel|' *.sh
 perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s24a_QCStats_0.sh  
 perl -pi -e 's|module load test|#|' s24b_QCReport_0.sh
 perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s25_CountAllFinishedFiles_0.sh
+perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
+perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
 
-sh submit.sh
+sh submit.sh --qos=priority
 
 count=0
 minutes=0
 while [ ! -f /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/s27_Autotest_0.sh.finished ]
 do
 
-        echo "not finished in $minutes minutes, going to sleep for 1 minute"
+        echo "not finished in $minutes minutes, sleeping for 1 minute"
         sleep 60
         minutes=$((minutes+1))
 
         count=$((count+1))
-        if [ $count -eq 60 ]
+        if [ $count -eq 15 ]
         then
                 echo "the test was not finished within 1 hour, let's kill it"
+		echo -e "\n"
+		for i in $(ls /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/*.sh)
+		do
+			if [ ! -f $i.finished ]
+			then
+				echo "$(basename $i)" is not finished"
+			fi
+		done		
                 exit 1
         fi
 done

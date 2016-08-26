@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=30gb ppn=5
+#MOLGENIS walltime=16:00:00 mem=30gb ppn=5
 
 #Parameter mapping
 #string tmpName
@@ -24,9 +24,6 @@
 ${stage} ${sambambaVersion}
 ${checkStage}
 sleep 5
-
-makeTmpDir ${flagstatMetrics}
-tmpFlagstatMetrics=${MC_tmpFile}
 
 makeTmpDir ${dedupBam}
 tmpDedupBam=${MC_tmpFile}

@@ -8,10 +8,15 @@ s06_SortBam,protocols/SortBam.sh,s05_SamToBam
 s07_MergeBam,protocols/MergeBam.sh,s06_SortBam;inputMergeBam=alignedSortedBam;inputMergeBamIdx=alignedSortedBamIdx
 s08_MarkDuplicates,protocols/MarkDuplicates.sh,s07_MergeBam
 s08b_Flagstat,protocols/FlagstatMetrics.sh,s08_MarkDuplicates
-s09a_Delly_DEL,protocols/Delly.sh,s07_MergeBam;dellyType=dellyTypeDEL;dellyInput=sampleMergedBam
-s09b_DellyAnnotator,protocols/DellyAnnotator.sh,s09a_Delly_DEL
+#s09a_Delly_DEL,protocols/Delly.sh,s07_MergeBam;dellyType=dellyTypeDEL;dellyInput=sampleMergedBam
+#s09b_DellyAnnotator,protocols/DellyAnnotator.sh,s09a_Delly_DEL
 s09c_Manta,protocols/Manta.sh,s08_MarkDuplicates
 s10a_GenderCalculate,protocols/GenderCalculate.sh,s08_MarkDuplicates
+#sXX_Convading_s1,protocols/Convading/Convading_s1.sh,s08_MarkDuplicates
+#sXX_Convading_s2,protocols/Convading/Convading_s2.sh,s08_MarkDuplicates
+#sXX_Convading_s3,protocols/Convading/Convading_s3.sh,s08_MarkDuplicates
+#sXX_Convading_s4,protocols/Convading/Convading_s4.sh,s08_MarkDuplicates
+#sXX_Convading_s5,protocols/Convading/Convading_s5.sh,s08_MarkDuplicates
 #s10b_CramConversion,protocols/CramConversion.sh,s08_MarkDuplicates
 s11_MakeDedupBamMd5,protocols/MakeDedupBamMd5.sh,s08_MarkDuplicates
 s12_SequenomConcordanceCheck,protocols/SequenomConcordanceCheck.sh,s08_MarkDuplicates
@@ -23,6 +28,7 @@ s14d_CollectBamIndexMetrics,protocols/CollectBamIndexMetrics.sh,s08_MarkDuplicat
 s15_GenderCheck,protocols/GenderCheck.sh,s10a_GenderCalculate;s14b_CollectHSMetrics
 s16a_VariantCalling,protocols/VariantGVCFCalling.sh,s15_GenderCheck
 s16c_GenotypeVariants,protocols/VariantGVCFGenotyping.sh,s16a_VariantCalling
+s16d_GVCFCompressing,protocols/VariantGVCFCompressing.sh,s16a_VariantCalling
 s17_MergeBatches,protocols/MergeBatches.sh,s16c_GenotypeVariants
 s18_VariantAnnotator,protocols/VariantAnnotator.sh,s17_MergeBatches
 s19_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s18_VariantAnnotator
