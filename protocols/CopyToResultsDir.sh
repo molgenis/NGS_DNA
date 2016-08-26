@@ -212,6 +212,3 @@ touch ${logsDir}/${project}.pipeline.finished
 echo "${logsDir}/${project}.pipeline.finished is created"
 
 touch pipeline.finished
-
-rm *.finished
-rm *.started
