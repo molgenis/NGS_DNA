@@ -1,4 +1,4 @@
-#MOLGENIS walltime=120:00:00 mem=30gb
+#MOLGENIS walltime=64:00:00 mem=30gb
 #string tmpName
 #string project
 #string logsDir 
