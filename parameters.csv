@@ -10,7 +10,7 @@ checkStage,module list
 ### Tool versions ####
 automateVersion,NGS_Automated/1.0.1
 bwaVersion,BWA/0.7.12-${toolChain}
-computeVersion,v16.08.1-Java-1.8.0_45
+computeVersion,v16.08.1-Java-1.8.0_74
 convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,1.8.1-${toolChain}-Python-2.7.9
 dellyVersion,v0.7.1
@@ -97,7 +97,9 @@ projectQcDir,${projectDir}/qc/
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
-srBarcodeFqGz,${rawFile}.${rawFileExt}
+peEnd1BarcodePhiXFqGz,${rawFile}.phiX_1.${rawFileExt}
+peEnd2BarcodePhiXFqGz,${rawFile}.phiX_2.${rawFileExt}
+srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
 peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
 peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
 srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
@@ -212,20 +214,26 @@ allMetrics,${intermediateDir}/${project}_qc.metricsList
 fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 
 ## Protocols Convading and XHMM
+convadingDataDir,${dataDir}/Convading/
+convadingControlsDir,${convadingDataDir}/Controls/
+
 convadingDir,${intermediateDir}/Convading/
-convadingInputBamsDir,${convadingInputDir}/bams/
+convadingInputBamsDir,${convadingDir}/bams/
 convadingStartWithBam,${convadingDir}/StartWithBam/
 convadingStartWithMatchScore,${convadingDir}/StartWithMatchScore/
 convadingStartWithBestScore,${convadingDir}/StartWithBestScore/
 convadingGenerateTargetQcList,${convadingDir}/GenerateTargetQcList/
 convadingCreateFinalList,${convadingDir}/CreateFinalList/
 
+xhmmDataDir,${dataDir}/XHMM/
+seqDBhg19,${xhmmDataDir}/seqdb.hg19/hg19/
+xhmmHighSenseParams,${xhmmDataDir}/parameters_high_sensitivity/params.txt
+xhmmControlsDir,${xhmmDataDir}/Controls/
+
 xhmmDir,${intermediateDir}/XHMM/
 xhmmDepthOfCoverage,${intermediateDir}/XHMM/DepthOfCoverage
-DepthOfCoveragePerSample,${xhmmDepthOfCoverage}/${externalSampleID}.${CAPT}
-DepthOfCoverageControls,${xhmmDepthOfCoverage}/Controls.${CAPT}
+DepthOfCoveragePerSample,${xhmmDepthOfCoverage}/${externalSampleID}
 xhmmMergedSample,${xhmmDepthOfCoverage}/${externalSampleID}.step2.DATA.RD.txt
-seqDBhg19,/apps/data/XHMM/hg19/seqdb.hg19
 xhmmFilterSample,${xhmmDepthOfCoverage}/${externalSampleID}_step5.filtered_centered.RD.txt
 xhmmPCAfile,${xhmmDepthOfCoverage}/${externalSampleID}_step6_RD.PCA
 xhmmPCANormalizedfile,${xhmmDepthOfCoverage}/${externalSampleID}_step7.PCA_normalized.txt
@@ -234,5 +242,4 @@ xhmmSameFiltered,${xhmmDepthOfCoverage}/${externalSampleID}_step9.same_filtered.
 xhmmXcnv,${xhmmDepthOfCoverage}/${externalSampleID}_step10.xcnv
 xhmmAUXcnv,${xhmmDepthOfCoverage}/${externalSampleID}_step10.aux_cnv
 xhmmPosterior,${xhmmDepthOfCoverage}/${externalSampleID}_step10
-xhmmhighSenseParams,/apps/data/XHMM/parameters_high_sensitivity/params.txt
 xhmmGenotypedCNV,${xhmmDepthOfCoverage}/${externalSampleID}_step11.vcf
