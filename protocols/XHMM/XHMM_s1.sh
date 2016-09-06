@@ -1,14 +1,16 @@
-
+#MOLGENIS walltime=05:59:00 mem=4gb ppn=1
+#string logsDir
+#string groupname
+#string project
 #string gatkVersion
 #string indexFile
 #string capturedBed
+#string capturingKit
 #string xhmmDir
 #string xhmmDepthOfCoverage
 #string dedupBam
-### DepthOfCoverageControls or DepthOfCoveragePerSample
-#string DepthOfCoveragePer
-
-
+#string intermediateDir
+#string DepthOfCoveragePerSample
 
 module load GATK/3.6-Java-1.8.0_74
 
@@ -36,11 +38,13 @@ do
 done
 
 ## Creating bams directory
-mkdir -p ${xhmmDir}
+mkdir -p ${xhmmDepthOfCoverage}
 
 ## write capturingkit to file to make it easier to split
 echo $capturingKit > ${intermediateDir}/capt.txt
 CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
+
+rm -f ${xhmmDir}/${CAPT}.READS.bam.list
 
 for i in ${INPUTS[@]}
 do
@@ -50,7 +54,6 @@ done
 sID=$(basename $dedupBam)
 sampleID=${sID%%.*}
 
-### ??? Should be expand with per part and per group?????
 java -Xmx3072m -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \
 -T DepthOfCoverage \
 -I ${xhmmDir}/${CAPT}.READS.bam.list \
@@ -60,5 +63,5 @@ java -Xmx3072m -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \
 --minBaseQuality 0 --minMappingQuality 20 --start 1 --stop 5000 --nBins 200 \
 --includeRefNSites \
 --countType COUNT_FRAGMENTS \
--o ${DepthOfCoveragePerSample}
+-o ${DepthOfCoveragePerSample}.${CAPT}
 

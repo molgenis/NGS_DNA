@@ -1,8 +1,13 @@
+#MOLGENIS walltime=05:59:00 mem=4gb ppn=1
+#string logsDir
+#string groupname
+#string project
 #string indexFile
 #string capturedBed
 #string xhmmDir
 #string gatkJar
 #string intermediateDir
+#string capturingKit
 
 module load GATK/3.6-Java-1.8.0_74
 

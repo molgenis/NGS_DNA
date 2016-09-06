@@ -1,8 +1,11 @@
-
+#MOLGENIS walltime=05:59:00 mem=4gb ppn=1
+#string logsDir
+#string groupname
+#string project
 #string xhmmVersion
 #string xhmmDir
 #string xhmmFilterSample
-#string xhmmPCAfiles
+#string xhmmPCAfile
 
 module load ${xhmmVersion}
 
@@ -12,5 +15,5 @@ OUTPUTFILE="xhmm_diagnostic_yield_cardio_0394321_step6_RD.PCA"
 
 $EBROOTXHMM/bin/xhmm --PCA \
 -r ${xhmmFilterSample} \
---PCAfiles ${xhmmPCAfiles}
+--PCAfiles ${xhmmPCAfile}
 

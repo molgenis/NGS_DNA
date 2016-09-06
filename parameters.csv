@@ -218,15 +218,15 @@ convadingDataDir,${dataDir}/Convading/
 convadingControlsDir,${convadingDataDir}/Controls/
 
 convadingDir,${intermediateDir}/Convading/
-convadingInputBamsDir,${convadingDir}/bams/
-convadingStartWithBam,${convadingDir}/StartWithBam/
-convadingStartWithMatchScore,${convadingDir}/StartWithMatchScore/
-convadingStartWithBestScore,${convadingDir}/StartWithBestScore/
-convadingGenerateTargetQcList,${convadingDir}/GenerateTargetQcList/
-convadingCreateFinalList,${convadingDir}/CreateFinalList/
+convadingInputBamsDir,${convadingDir}/bams/${externalSampleID}/
+convadingStartWithBam,${convadingDir}/StartWithBam/${externalSampleID}/
+convadingStartWithMatchScore,${convadingDir}/StartWithMatchScore/${externalSampleID}/
+convadingStartWithBestScore,${convadingDir}/StartWithBestScore/${externalSampleID}/
+convadingGenerateTargetQcList,${convadingDir}/GenerateTargetQcList/${externalSampleID}/
+convadingCreateFinalList,${convadingDir}/CreateFinalList/${externalSampleID}/
 
 xhmmDataDir,${dataDir}/XHMM/
-seqDBhg19,${xhmmDataDir}/seqdb.hg19/hg19/
+seqDBhg19,${xhmmDataDir}/seqdb.hg19/hg19/seqdb.hg19
 xhmmHighSenseParams,${xhmmDataDir}/parameters_high_sensitivity/params.txt
 xhmmControlsDir,${xhmmDataDir}/Controls/
 

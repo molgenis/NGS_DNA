@@ -1,13 +1,17 @@
-
+#MOLGENIS walltime=05:59:00 mem=4gb ppn=1
+#string logsDir
+#string groupname
+#string project
 #string xhmmVersion
 #string xhmmDir
 #string xhmmMergedSample
 #string xhmmFilterSample
 #string intermediateDir
+#string	capturingKit
+
 module load ${xhmmVersion}
 
 CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
-${xhmmDir}/${CAPT}.step4.low_complexity_targets.txt
 
 xhmmExtremeGcContent=${xhmmDir}/${CAPT}_step3.extreme_gc_targets.txt
 
@@ -18,7 +22,7 @@ $EBROOTXHMM/bin/xhmm --matrix \
 -o ${xhmmFilterSample} \
 --outputExcludedTargets ${xhmmMergedSample}.filtered_centered.RD.txt.filtered_targets.txt \
 --outputExcludedSamples ${xhmmMergedSample}.filtered_centered.RD.txt.filtered_samples.txt \
---excludeTargets ${${xhmmMergedSample}} \
+--excludeTargets ${xhmmExtremeGcContent} \
 --minTargetSize 10 \
 --maxTargetSize 10000 \
 --minMeanTargetRD 10 \

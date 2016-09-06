@@ -1,11 +1,15 @@
 #MOLGENIS walltime=05:59:00 mem=4gb ppn=1
-
+#string logsDir
+#string groupname
+#string project
 #string convadingVersion
 #string convadingControlsDir
-#string convadingInputBamsDir
-#string convadingSamplesNormalizedDir
+#string convadingStartWithMatchScore
+#string convadingStartWithBam
+#string intermediateDir
+#string capturingKit
 
-module load convadingVersion
+module load ${convadingVersion}
 
 makeTmpDir ${convadingStartWithMatchScore}
 tmpConvadingStartWithMatchScore=${MC_tmpFile}
@@ -19,11 +23,11 @@ CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
 
 perl ${EBROOTCONVADING}/CoNVaDING.pl \
 -mode StartWithMatchScore \
--inputDir ${convadingSamplesNormalizedDir} \
+-inputDir ${convadingStartWithBam} \
 -outputDir ${tmpConvadingStartWithMatchScore} \
--controlsDir ${convadingControlsDir}
+-controlsDir ${convadingControlsDir}/${CAPT}/ 
 
 printf "moving ${tmpConvadingStartWithMatchScore} to ${convadingStartWithMatchScore} .. "
-mv ${tmpConvadingStartWithMatchScore} ${convadingStartWithMatchScore}
+mv ${tmpConvadingStartWithMatchScore}/* ${convadingStartWithMatchScore}
 printf " .. done\n"
 

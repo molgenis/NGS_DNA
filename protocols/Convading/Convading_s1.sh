@@ -1,15 +1,17 @@
 #MOLGENIS walltime=05:59:00 mem=4gb ppn=1
-
+#string logsDir
+#string groupname
+#string project
 #string convadingVersion
 #string capturingKit
 #string intermediateDir
 #string capturedBed
 #string convadingControlsDir
-#list dedupBam
+#string dedupBam
 #string convadingInputBamsDir
-#string StartWithBam
+#string convadingStartWithBam
 
-module load convadingVersion
+module load ${convadingVersion}
 
 #Function to check if array contains value
 array_contains () {
@@ -36,10 +38,15 @@ done
 
 ## Creating bams directory
 mkdir -p ${convadingStartWithBam}
+mkdir -p ${convadingInputBamsDir} 
+ln -sf ${dedupBam} ${convadingInputBamsDir}/
+ln -sf ${dedupBam}.bai ${convadingInputBamsDir}/
 
 ## write capturingkit to file to make it easier to split
 echo $capturingKit > ${intermediateDir}/capt.txt
 CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
+
+echo $project
 
 for i in ${INPUTS[@]}
 do
@@ -50,10 +57,10 @@ perl ${EBROOTCONVADING}/CoNVaDING.pl \
 -mode StartWithBam \
 -inputDir ${convadingInputBamsDir} \
 -outputDir ${tmpConvadingStartWithBam} \
--controlsDir ${convadingControlsDir} \
+-controlsDir ${convadingControlsDir}/${CAPT}/ \
 -bed ${capturedBed} \
 -rmdup
 
 printf "moving ${tmpConvadingStartWithBam} to ${convadingStartWithBam} ... "
-mv ${tmpConvadingStartWithBam} ${convadingStartWithBam}
+mv ${tmpConvadingStartWithBam}/* ${convadingStartWithBam}
 printf " .. done \n"
