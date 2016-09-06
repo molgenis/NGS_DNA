@@ -8,6 +8,8 @@
 #string srBarcodeFqGz
 #string peEnd1BarcodeFqGz
 #string peEnd2BarcodeFqGz
+#string peEnd1BarcodePhiXFqGz
+#string peEnd2BarcodePhiXFqGz
 #string project
 #string logsDir 
 #string groupname
@@ -30,9 +32,7 @@ else
 	elif [ "${seqType}" == "PE" ]
 	then
 		echo "Append phiX reads"
-		cat ${peEnd1BarcodeFqGz} ${phiXEnd1Gz} > ${peEnd1BarcodeFqGz}.tmp
-		cat ${peEnd2BarcodeFqGz} ${phiXEnd2Gz} > ${peEnd2BarcodeFqGz}.tmp
-		mv ${peEnd1BarcodeFqGz}.tmp ${peEnd1BarcodeFqGz}
-		mv ${peEnd2BarcodeFqGz}.tmp ${peEnd2BarcodeFqGz}
+		cat ${peEnd1BarcodeFqGz} ${phiXEnd1Gz} > ${peEnd1BarcodePhiXFqGz}
+		cat ${peEnd2BarcodeFqGz} ${phiXEnd2Gz} > ${peEnd2BarcodePhiXFqGz}
 	fi
 fi

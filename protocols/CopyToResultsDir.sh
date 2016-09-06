@@ -211,4 +211,9 @@ echo "pipeline is finished"
 touch ${logsDir}/${project}.pipeline.finished
 echo "${logsDir}/${project}.pipeline.finished is created"
 
+if [ ! -d ${logsDir}/${project}/ ]
+then
+	mkdir -p ${logsDir}/${project}/
+fi
+
 touch pipeline.finished

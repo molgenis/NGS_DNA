@@ -9,8 +9,8 @@
 cd $projectJobsDir
 
 
-countShScripts=$(find *.sh ! -name '*Manta*.sh'  | wc -l)
-countFinishedFiles=$(find *.sh.finished ! -name '*Manta*.sh.finished' | wc -l)
+countShScripts=$(find *.sh ! -name '*Manta*.sh' ! -name 'sXX*.sh'  | wc -l)
+countFinishedFiles=$(find *.sh.finished ! -name '*Manta*.sh.finished' ! -name 'sXX*.sh.finished' | wc -l)
 
 #remove 3, because this step (CountAllFinishedFiles) and the CopyToResultsDir are not finished yet and there is submit.sh
 countShScripts=$(($countShScripts-3))

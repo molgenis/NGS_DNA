@@ -72,7 +72,7 @@ sh submit.sh --qos=priority
 
 count=0
 minutes=0
-while [ ! -f /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/s27_Autotest_0.sh.finished ]
+while [ ! -f /groups/umcg-gaf/tmp04/projects/PlatinumSubset/run01/jobs/Autotest_0.sh.finished ]
 do
 
         echo "not finished in $minutes minutes, sleeping for 1 minute"
