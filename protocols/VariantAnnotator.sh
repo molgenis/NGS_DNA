@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=15gb ppn=8
+#MOLGENIS walltime=23:59:00 mem=13gb
 
 #Parameter mapping
 #string tmpName
@@ -9,12 +9,9 @@
 #string indexFile
 #string indexFileFastaIndex
 #string capturedIntervals
-#string projectVariantsMergedSorted
 #string logsDir 
 #string groupname
-#string variantAnnotatorOutputVcf
 #string project
-#string projectVariantsMergedSortedSorted
 
 #list externalSampleID
 #string tmpDataDir
@@ -24,10 +21,13 @@
 #string javaVersion
 #string dbSNPDir
 
+#string projectBatchGenotypedVariantCalls
+#string projectBatchGenotypedVariantCallsAnnotated
+
 sleep 5
 
-makeTmpDir ${variantAnnotatorOutputVcf}
-tmpVariantAnnotatorOutputVcf=${MC_tmpFile}
+makeTmpDir ${projectBatchGenotypedVariantCallsAnnotated}
+tmpProjectBatchGenotypedVariantCallsAnnotated=${MC_tmpFile}
 
 #Function to check if array contains value
 array_contains () { 
@@ -50,8 +50,8 @@ done
 
 for sample in "${SAMPLES[@]}"
 do
-  echo "sample: ${sample}"		
-  INPUTS+=("-I ${intermediateDir}/${sample}.merged.dedup.bam")
+	echo "sample: ${sample}"		
+  	INPUTS+=("-I ${intermediateDir}/${sample}.merged.dedup.bam")
 done
 
 #Load GATK module
@@ -61,13 +61,7 @@ ${stage} ngs-utils
 
 ${checkStage}
 
-#sort VCf file: ${projectVariantsMergedSorted} 
-${sortVCFpl} \
--fastaIndexFile ${indexFileFastaIndex} \
--inputVCF ${projectVariantsMergedSorted} \
--outputVCF ${projectVariantsMergedSortedSorted}
-
-java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx8g -jar \
+java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
 ${EBROOTGATK}/${gatkJar} \
 -T VariantAnnotator \
 -R ${indexFile} \
@@ -90,11 +84,10 @@ ${INPUTS[@]} \
 -A SpanningDeletions \
 --disable_auto_index_creation_and_locking_when_reading_rods \
 -D ${dbSNPDir}/dbsnp_137.b37.vcf \
---variant ${projectVariantsMergedSorted} \
--L ${capturedIntervals} \
--o ${tmpVariantAnnotatorOutputVcf} \
--nt 8
+--variant ${projectBatchGenotypedVariantCalls} \
+-L ${projectBatchGenotypedVariantCalls} \
+-o ${tmpProjectBatchGenotypedVariantCallsAnnotated}
 
-mv ${tmpVariantAnnotatorOutputVcf} ${variantAnnotatorOutputVcf}
-echo "mv ${tmpVariantAnnotatorOutputVcf} ${variantAnnotatorOutputVcf}"
+mv ${tmpProjectBatchGenotypedVariantCallsAnnotated} ${projectBatchGenotypedVariantCallsAnnotated}
+echo "mv ${tmpProjectBatchGenotypedVariantCallsAnnotated} ${projectBatchGenotypedVariantCallsAnnotated}"
 

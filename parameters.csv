@@ -160,7 +160,7 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
-mantaDir,${intermediateDir}/Manta/
+mantaDir,${intermediateDir}/Manta/${sampleNameID}/
 dellyVcf,${sampleNameID}.delly.vcf 
 dellySnpEffVcf,${sampleNameID}.delly.snpeff.vcf
 dellyTypeDEL,DEL
@@ -182,16 +182,18 @@ sampleBatchVariantCallsMaleNONPARIdx,${sampleBatchVariantCallsMaleNONPAR}.idx
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 
+
 ### Protocols 17, 19, 20, 21, 22 and 23 (MergeBatches, VariantAnnotator, dbNSFPAnnotation, VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
+projectBatchGenotypedVariantCallsAnnotated,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotatedvcf
+projectVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
+projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
+projectVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
+projectVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
 projectVariantsMergedSortedSorted,${projectPrefix}.variant.calls.GATK.sorted.sorted.vcf
 sortVCFpl,sortVCFbyFai.pl
-variantAnnotatorOutputVcf,${projectPrefix}.annotated.vcf
-variantAnnotatorSampleOutputIndelsVcf,${sampleNameID}.annotated.indels.vcf
-variantAnnotatorSampleOutputSnpsVcf,${sampleNameID}.annotated.snps.vcf
-variantAnnotatorSampleOutputIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
-variantAnnotatorSampleOutputSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
+
 
 ### Protocols 24 and 25 (VcfToTable, QCReport) ###
 variantsFinalProjectVcfTable,${projectPrefix}.final.vcf.table
@@ -222,7 +224,6 @@ convadingInputBamsDir,${convadingDir}/bams/${externalSampleID}/
 convadingStartWithBam,${convadingDir}/StartWithBam/${externalSampleID}/
 convadingStartWithMatchScore,${convadingDir}/StartWithMatchScore/${externalSampleID}/
 convadingStartWithBestScore,${convadingDir}/StartWithBestScore/${externalSampleID}/
-convadingGenerateTargetQcList,${convadingDir}/GenerateTargetQcList/${externalSampleID}/
 convadingCreateFinalList,${convadingDir}/CreateFinalList/${externalSampleID}/
 
 xhmmDataDir,${dataDir}/XHMM/
