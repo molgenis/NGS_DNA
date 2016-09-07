@@ -7,11 +7,11 @@ HOST=$(hostname)
 thisDir=$(pwd)
 
 ENVIRONMENT_PARAMETERS="parameters_${HOST%%.*}.csv"
-TMPDIR=$(basename $(cd ../../ && pwd ))
+TMPDIRECTORY=$(basename $(cd ../../ && pwd ))
 GROUP=$(basename $(cd ../../../ && pwd ))
 
 PROJECT=PlatinumSubset
-WORKDIR="/groups/${GROUP}/${TMPDIR}"
+WORKDIR="/groups/${GROUP}/${TMPDIRECTORY}"
 RUNID=run01
 
 ## Normal user, please leave BATCH at _chr
@@ -38,7 +38,7 @@ then
     	rm -rf ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 fi
 
-echo "tmpName,${TMPDIR}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv
+echo "tmpName,${TMPDIRECTORY}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv
 
 perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv
@@ -50,13 +50,9 @@ ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
-${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
-
 module load Molgenis-Compute/v16.05.1-Java-1.8.0_45
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/out.csv \
--p ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv \
 -p ${EBROOTNGS_DNA}/batchIDList${BATCH}.csv \
@@ -69,7 +65,6 @@ outputdir=scripts/jobs;mainParameters=${WORKDIR}/generatedscripts/${PROJECT}/out
 group_parameters=${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv;\
 groupname=${GROUP};\
 ngsversion="test";\
-environment_parameters=${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv;\
 tmpdir_parameters=${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv;\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${BATCH}.csv;\
 worksheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv" \

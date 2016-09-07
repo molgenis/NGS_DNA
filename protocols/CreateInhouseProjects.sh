@@ -26,7 +26,6 @@
 #string worksheet 
 #string outputdir
 #string workflowpath
-#string environment_parameters
 #string tmpdir_parameters
 #string ngsversion
 #string ngsUtilsVersion
@@ -128,7 +127,7 @@ echo "before run second rocket"
 echo pwd
 
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
--p ${batchIDList} -p ${projectJobsDir}/${project}.csv -p ${environment_parameters} -p ${group_parameters} -p ${tmpdir_parameters} -rundir ${projectJobsDir} \
+-p ${batchIDList} -p ${projectJobsDir}/${project}.csv -p -p ${group_parameters} -p ${tmpdir_parameters} -rundir ${projectJobsDir} \
 --header ${EBROOTNGS_DNA}/templates/slurm/header.ftl \
 --footer ${EBROOTNGS_DNA}/templates/slurm/footer.ftl \
 --submit ${EBROOTNGS_DNA}/templates/slurm/submit.ftl \

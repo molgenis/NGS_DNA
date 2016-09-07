@@ -9,7 +9,6 @@
 #string projectResultsDir
 #string batchIDList
 #string projectQcDir
-#string environment_parameters
 #string tmpdir_parameters
 
 #list sequencingStartDate
@@ -122,7 +121,6 @@ echo "before run second rocket"
 echo pwd
 
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
--p ${environment_parameters} \
 -p ${batchIDList} \
 -p ${projectJobsDir}/${project}.csv \
 -p ${group_parameters} \

@@ -47,7 +47,7 @@ hpoDir,${dataDir}/HPO/
 sequenomDir,${dataDir}/Sequenom/
 tmpDataDir,${workDir}/${tmpName}/
 tempDir,${tmpDataDir}/temp/
-tmpDir,${tmpDataDir}/tmp/
+tmpDirectory,${tmpDataDir}/tmp/
 permanentDataDir,${workDir}/${prmName}
 logsDir,${tmpDataDir}/logs
 
@@ -87,7 +87,7 @@ capturedExomeIntervals,${dataDir}/Agilent/SureSelect_Human_All_Exon_V5_S04380110
 
 #### Projects ####
 projectDir,${tmpDataDir}/projects/${project}/${runid}
-intermediateDir,${tmpDir}/${project}/${runid}/
+intermediateDir,${tmpDirectory}/${project}/${runid}/
 projectPrefix,${intermediateDir}/${project}
 projectJobsDir,${projectDir}/jobs/
 projectLogsDir,${projectDir}/logs/
@@ -184,7 +184,7 @@ projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.call
 
 
 ### Protocols 17, 19, 20, 21, 22 and 23 (MergeBatches, VariantAnnotator, dbNSFPAnnotation, VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
-projectBatchGenotypedVariantCallsAnnotated,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotatedvcf
+projectBatchGenotypedVariantCallsAnnotated,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
 projectVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
 projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
 projectVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
