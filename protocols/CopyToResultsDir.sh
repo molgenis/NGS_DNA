@@ -84,8 +84,8 @@ printf " finished (4/11)\n"
 printf "Copying gVCF files + index file"
 for sample in "${UNIQUESAMPLES[@]}"
 do
-        rsync -a ${intermediateDir}/${sample}.*.g.vcf.gz ${projectResultsDir}/alignment/gVCF/
-        rsync -a ${intermediateDir}/${sample}.*.g.vcf.gz.tbi ${projectResultsDir}/alignment/gVCF/
+        rsync -a ${intermediateDir}/gVCF/${sample}.*.g.vcf.gz ${projectResultsDir}/alignment/gVCF/
+        rsync -a ${intermediateDir}/gVCF/${sample}.*.g.vcf.gz.tbi ${projectResultsDir}/alignment/gVCF/
 
         printf "."
 done

@@ -18,6 +18,7 @@
 #list externalFastQ_1
 #list externalFastQ_2
 #string group_parameters
+#string environment_parameters
 #string groupname
 
 #string mainParameters
@@ -123,6 +124,7 @@ echo pwd
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -p ${batchIDList} \
 -p ${projectJobsDir}/${project}.csv \
+-p ${environment_parameters} \
 -p ${group_parameters} \
 -p ${tmpdir_parameters} \
 -rundir ${projectJobsDir} \

@@ -1,7 +1,7 @@
 step,protocol,dependencies
-s16a_VariantCalling,protocols/VariantGVCFCalling.sh,
-s16c_GenotypeVariants,protocols/VariantGVCFGenotyping.sh,s16a_VariantCalling
-s16d_GVCFCompressing,protocols/VariantGVCFCompressing.sh,s16a_VariantCalling
+s16a_VariantCalling,protocols/VariantCalling.sh,
+s16c_GenotypeVariants,protocols/VariantGenotyping.sh,s16a_VariantCalling
+s16d_GVCFCompressing,protocols/VariantCompressing.sh,s16a_VariantCalling
 s17_MergeBatches,protocols/MergeBatches.sh,s16c_GenotypeVariants
 s18_VariantAnnotator,protocols/VariantAnnotator.sh,s17_MergeBatches
 s19_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s18_VariantAnnotator

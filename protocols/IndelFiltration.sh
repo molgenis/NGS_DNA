@@ -17,7 +17,7 @@
 #string groupname
 
 sleep 5
-}
+
 
 #Load GATK module
 module load  ${gatkVersion}

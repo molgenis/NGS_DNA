@@ -9,7 +9,7 @@ fi
 module load NGS_DNA/3.2.5
 module list 
 HOST=$(hostname)
-TMPDTHISDIR=$(pwd)
+THISDIR=$(pwd)
 
 previousRun=$1
 
@@ -55,9 +55,13 @@ ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv
 
+perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
+${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
+
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/out.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv \
+-p ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv \
 -p ${EBROOTNGS_DNA}/batchIDList${BATCH}.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv \
@@ -70,6 +74,7 @@ group_parameters=${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv;\
 groupname=${GROUP};\
 previousRun=${previousRun};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
+environment_parameters=${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv;\
 tmpdir_parameters=${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv;\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${BATCH}.csv;\
 worksheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv" \
