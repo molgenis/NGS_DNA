@@ -60,7 +60,8 @@ ${stage} ${gatkVersion}
 ${stage} ngs-utils
 
 ${checkStage}
-
+if [ -f ${projectBatchGenotypedVariantCalls} ]
+then
 java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
 ${EBROOTGATK}/${gatkJar} \
 -T VariantAnnotator \
@@ -91,3 +92,6 @@ ${INPUTS[@]} \
 mv ${tmpProjectBatchGenotypedVariantCallsAnnotated} ${projectBatchGenotypedVariantCallsAnnotated}
 echo "mv ${tmpProjectBatchGenotypedVariantCallsAnnotated} ${projectBatchGenotypedVariantCallsAnnotated}"
 
+else
+	echo "batch not available, skipped"
+fi
