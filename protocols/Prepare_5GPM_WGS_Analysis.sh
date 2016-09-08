@@ -109,4 +109,4 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -g -weave \
 -runid ${runid} \
 -o "ngsversion=${ngsversion};\
-groupname=${groupname}"
+groupname=${groupname};\previousRun=${previousRun};\"

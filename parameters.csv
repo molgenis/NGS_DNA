@@ -181,7 +181,7 @@ sampleBatchVariantCallsMaleNONPAR,${sampleNameID}.batch-${batchID}.chrX.male.NON
 sampleBatchVariantCallsMaleNONPARIdx,${sampleBatchVariantCallsMaleNONPAR}.idx
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
-
+sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 
 ### Protocols 17, 19, 20, 21, 22 and 23 (MergeBatches, VariantAnnotator, dbNSFPAnnotation, VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
 projectBatchGenotypedVariantCallsAnnotated,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf

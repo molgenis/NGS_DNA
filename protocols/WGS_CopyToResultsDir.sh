@@ -9,6 +9,7 @@
 #string projectPrefix
 #string intermediateDir
 #string projectJobsDir
+#string previousRun
 #list externalSampleID
 #string automateVersion
 # Change permissions
