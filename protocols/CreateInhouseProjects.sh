@@ -26,8 +26,8 @@
 #string worksheet 
 #string outputdir
 #string workflowpath
-#string environment_parameters
 #string tmpdir_parameters
+#string environment_parameters
 #string ngsversion
 #string ngsUtilsVersion
 

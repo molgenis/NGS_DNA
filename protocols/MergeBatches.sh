@@ -53,7 +53,7 @@ for b in "${batchID[@]}"
 do
 	if [ -f ${projectPrefix}.batch-${b}.variant.calls.genotyped.vcf ]
 	then
-		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.variant.calls.genotyped.vcf" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.variant.calls.genotyped.vcf")
+		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.variant.calls.genotyped.annotated.vcf" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.variant.calls.genotyped.annotated.vcf")
 	fi
 done
 

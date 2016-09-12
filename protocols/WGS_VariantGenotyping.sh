@@ -20,6 +20,7 @@
 #string projectJobsDir
 #string logsDir 
 #string groupname
+#string batchID
 
 sleep 5
 
@@ -48,24 +49,11 @@ SAMPLESIZE=$(cat ${projectJobsDir}/${project}.csv | wc -l)
 numberofbatches=$(($SAMPLESIZE / 200))
 ALLGVCFs=()
 
-if [ $SAMPLESIZE -gt 200 ]
-then
-	for b in $(seq 0 $numberofbatches)
-	do
-		if [ -f ${projectBatchCombinedVariantCalls}.$b ]
-		then
- 			ALLGVCFs+=(--variant ${projectBatchCombinedVariantCalls}.$b)
-		fi
-	done
-else
-	for sbatch in "${sampleBatchVariantCalls[@]}"
-        do
-		if [ -f $sbatch ]
-		then
-          		array_contains ALLGVCFs "--variant $sbatch" || ALLGVCFs+=("--variant $sbatch")
-		fi
-        done
-fi 
+for i in $(ls ${intermediateDir}/gVCF/*batch-${batchID}*.g.vcf.gz)
+do
+	array_contains ALLGVCFs "--variant $i" || ALLGVCFs+=("--variant $i")
+done
+
 GvcfSize=${#ALLGVCFs[@]}
 if [ ${GvcfSize} -ne 0 ]
 then

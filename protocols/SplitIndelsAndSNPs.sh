@@ -1,4 +1,4 @@
-#MOLGENIS walltime=05:59:00 mem=9gb ppn=1
+#MOLGENIS walltime=05:59:00 mem=6gb ppn=2
 
 #Parameter mapping
 #string tmpName
@@ -6,51 +6,47 @@
 #string checkStage
 #string intermediateDir
 #string project
-#string logsDir 
+#string logsDir
 #string groupname
 #string gatkVersion
 #string gatkJar
 #string indexFile
 #string capturedIntervals
-#string variantAnnotatorOutputVcf
-#string variantAnnotatorSampleOutputIndelsVcf
-#string variantAnnotatorSampleOutputSnpsVcf
+#string projectVariantsMergedSorted
+#string projectVariantsMergedSnpsVcf
+#string projectVariantsMergedIndelsVcf
 #string externalSampleID
 
-#Load GATK,bcftools,tabix module
-${stage} ${gatkVersion}
-${checkStage}
+module load ${gatkVersion}
 
-#Function to check if array contains value
-array_contains () {
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
-            in=0
-            break
-        fi
-    done
-    return $in
-}
+makeTmpDir ${projectVariantsMergedIndelsVcf}
+tmpProjectVariantsMergedIndelsVcf=${MC_tmpFile}
+
+makeTmpDir ${projectVariantsMergedSnpsVcf}
+tmpProjectVariantsMergedSnpsVcf=${MC_tmpFile}
 
 #select only Indels
-java -XX:ParallelGCThreads=1 -Xmx8g -jar ${EBROOTGATK}/${gatkJar} \
+java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${variantAnnotatorOutputVcf} \
--o ${variantAnnotatorSampleOutputIndelsVcf} \
+--variant ${projectVariantsMergedSorted} \
+-o ${tmpProjectVariantsMergedIndelsVcf} \
 -L ${capturedIntervals} \
 --selectTypeToInclude INDEL \
 -sn ${externalSampleID}
 
+mv ${tmpProjectVariantsMergedIndelsVcf} ${projectVariantsMergedIndelsVcf}
+echo "moved ${tmpProjectVariantsMergedIndelsVcf} to ${projectVariantsMergedIndelsVcf}"
+
 #Select SNPs and MNPs
-java -XX:ParallelGCThreads=1 -Xmx8g -jar ${EBROOTGATK}/${gatkJar} \
+java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${variantAnnotatorOutputVcf} \
--o ${variantAnnotatorSampleOutputSnpsVcf} \
+--variant ${projectVariantsMergedSorted} \
+-o ${tmpProjectVariantsMergedSnpsVcf} \
 -L ${capturedIntervals} \
 --selectTypeToExclude INDEL \
 -sn ${externalSampleID}
+
+mv ${tmpProjectVariantsMergedSnpsVcf} ${projectVariantsMergedSnpsVcf}
+echo "moved ${tmpProjectVariantsMergedSnpsVcf} to ${projectVariantsMergedSnpsVcf}"

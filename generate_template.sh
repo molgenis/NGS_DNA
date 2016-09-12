@@ -6,11 +6,11 @@ HOST=$(hostname)
 thisDir=$(pwd)
 
 ENVIRONMENT_PARAMETERS="parameters_${HOST%%.*}.csv"
-TMPDIR=$(basename $(cd ../../ && pwd ))
+TMPDIRECTORY=$(basename $(cd ../../ && pwd ))
 GROUP=$(basename $(cd ../../../ && pwd ))
 
 PROJECT=projectXX
-WORKDIR="/groups/${GROUP}/${TMPDIR}"
+WORKDIR="/groups/${GROUP}/${TMPDIRECTORY}"
 RUNID=runXX
 
 ## Normal user, please leave BATCH at _chr
@@ -36,7 +36,7 @@ then
     	rm -rf ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 fi
 
-echo "tmpName,${TMPDIR}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv 
+echo "tmpName,${TMPDIRECTORY}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv 
 
 perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv
@@ -52,12 +52,16 @@ ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
 
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/out.csv \
--p ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv \
+-p ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv \
 -p ${EBROOTNGS_DNA}/batchIDList${BATCH}.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv \
 -w ${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv \
+--header ${EBROOTNGS_DNA}/templates/slurm/header.ftl \
+--footer ${EBROOTNGS_DNA}/templates/slurm/footer.ftl \
+--submit ${EBROOTNGS_DNA}/templates/slurm/submit.ftl \
+-b slurm \
 -rundir ${WORKDIR}/generatedscripts/${PROJECT}/scripts \
 --runid ${RUNID} \
 -o "workflowpath=${WORKFLOW};\

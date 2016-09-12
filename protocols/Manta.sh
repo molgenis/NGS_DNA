@@ -18,14 +18,13 @@ tmpMantaDir=${MC_tmpFile}
 module load ${mantaVersion}
 module load ${pythonVersion}
 
+rm -rf ${mantaDir}
+
 if [ "${GCC_Analysis}" == "diagnostiek" ] || [ "${GCC_Analysis}" == "diagnostics" ] || [ "${GCC_Analysis}" == "Diagnostiek" ] || [ "${GCC_Analysis}" == "Diagnostics" ]
 then
     	echo "Manta is skipped"
 else
-	if [ ! -d ${mantaDir} ]
-	then	
-		mkdir ${mantaDir}
-	fi
+	mkdir ${mantaDir}
 
 	python ${EBROOTMANTA}/bin/configManta.py \
 	--bam ${dedupBam} \

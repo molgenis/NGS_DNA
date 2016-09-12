@@ -40,6 +40,8 @@ SAMPLESIZE=$(cat ${projectJobsDir}/${project}.csv | wc -l)
 numberofbatches=$(($SAMPLESIZE / 200))
 ALLGVCFs=()
 
+
+
 if [ $SAMPLESIZE -gt 200 ]
 then
     	for b in $(seq 0 $numberofbatches)
@@ -61,6 +63,7 @@ fi
 count=${#ALLGVCFs[@]}
 if [ $count -ne 0 ]
 then
+	mkdir -p ${intermediateDir}/gVCF/
 	for i in ${ALLGVCFs[@]}
 	do
 		if [ -f $i ]
@@ -70,6 +73,10 @@ then
 	                printf "..done\ntabix-ing $i.gz .."
 	                tabix -p vcf $i.gz	
        	         	printf "..done\n"
+			echo "moving  $i.gz and matching index file to ${intermediateDir}/gVCF/"
+			mv $i.gz ${intermediateDir}/gVCF/
+			mv $i.gz.tbi ${intermediateDir}/gVCF/
+			echo "done"
         	fi
 
 	done

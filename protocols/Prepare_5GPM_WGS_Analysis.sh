@@ -10,8 +10,8 @@
 #string projectQcDir
 #string computeVersion
 #string group_parameters
-#string groupname
 #string previousRun
+#string groupname
 #string permanentDataDir
 
 #list sequencingStartDate
@@ -55,15 +55,21 @@ ROCKETPOINT=`pwd`
 ### Copying prm results data from the run that needs to be reanalyzed
 ##
 #
-printf "Copying ${permanentDataDir}/projects/${project}/${previousRun}/results/alignment/* to ${intermediateDir} .."
-rsync -a ${permanentDataDir}/projects/${project}/${previousRun}/results/alignment/* ${intermediateDir}
-printf ".. finished\nCopying ${permanentDataDir}/projects/${project}/${previousRun}/results/qc/*.zip to ${intermediateDir} .."
-rsync -a ${permanentDataDir}/projects/${project}/${previousRun}/results/qc/*.zip ${intermediateDir}
-printf ".. finished\nCopying ${permanentDataDir}/projects/${project}/${previousRun}/results/qc/statistics/* to ${intermediateDir} .."
-rsync -a ${permanentDataDir}/projects/${project}/${previousRun}/results/qc/statistics/* ${intermediateDir}
-printf ".. finished\nCopying ${permanentDataDir}/projects/${project}/${previousRun}/results/general/*chosenSex.txt to ${intermediateDir} .."
-rsync -a ${permanentDataDir}/projects/${project}/${previousRun}/results/general/*chosenSex.txt ${intermediateDir}
-printf "..finished \n"
+permanentDataDirGD="/groups/umcg-gd/prm02/projects/"
+for i in $(ls ${permanentDataDirGD}/5GPM_WGS/run01/results/alignment/gVCF/*.g.vcf.gz)
+do
+
+	printf "Copying $i to ${intermediateDir}/gVCF/ .."
+	rsync -a ${i} ${intermediateDir}/gVCF/ 
+	rsync -a ${i}.tbi ${intermediateDir}/gVCF/ 
+	printf ".. done \n"
+done
+
+printf "Copying ${permanentDataDirGD}/${project}/${previousRun}/results/alignment/* to ${intermediateDir} .."
+rsync -a ${permanentDataDirGD}/${project}/${previousRun}/results/alignment/* ${intermediateDir}
+
+printf ".. finished\nCopying ${permanentDataDirGD}/${project}/${previousRun}/results/general/*chosenSex.txt to ${intermediateDir} .."
+rsync -a ${permanentDataDirGD}/${project}/${previousRun}/results/general/*chosenSex.txt ${intermediateDir}
 
 cd $ROCKETPOINT
 
@@ -94,7 +100,7 @@ echo "before run second rocket"
 echo pwd
 
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
--p ${batchIDList} -p ${projectJobsDir}/${project}.csv  -p ${environment_parameters} -p ${group_parameters} -p ${tmpdir_parameters} -rundir ${projectJobsDir} \
+-p ${batchIDList} -p ${projectJobsDir}/${project}.csv -p ${environment_parameters} -p ${group_parameters} -p ${tmpdir_parameters} -rundir ${projectJobsDir} \
 --header ${EBROOTNGS_DNA}/templates/slurm/header.ftl \
 --footer ${EBROOTNGS_DNA}/templates/slurm/footer.ftl \
 --submit ${EBROOTNGS_DNA}/templates/slurm/submit.ftl \
@@ -103,4 +109,4 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -g -weave \
 -runid ${runid} \
 -o "ngsversion=${ngsversion};\
-groupname=${groupname}"
+groupname=${groupname};\previousRun=${previousRun};\"
