@@ -160,7 +160,7 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
-mantaDir,${intermediateDir}/Manta/${externalSampleID/
+mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 dellyVcf,${sampleNameID}.delly.vcf 
 dellySnpEffVcf,${sampleNameID}.delly.snpeff.vcf
 dellyTypeDEL,DEL
