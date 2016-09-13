@@ -15,6 +15,7 @@
 makeTmpDir ${mantaDir}
 tmpMantaDir=${MC_tmpFile}
 
+
 module load ${mantaVersion}
 module load ${pythonVersion}
 
@@ -30,11 +31,11 @@ else
 	--bam ${dedupBam} \
 	--referenceFasta ${indexFile} \
 	--runDir ${tmpMantaDir}
+
+
+	python ${tmpMantaDir}/runWorkflow.py -m local -j 20
+
+	mv ${tmpMantaDir}/* ${mantaDir} 
 fi
-
-
-python ${tmpMantaDir}/runWorkflow.py -m local -j 20
-
-mv ${tmpMantaDir}/* ${mantaDir} 
 
 
