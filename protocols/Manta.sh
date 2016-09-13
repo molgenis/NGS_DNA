@@ -12,8 +12,6 @@
 #string pythonVersion
 #string GCC_Analysis
 
-makeTmpDir ${mantaDir}
-tmpMantaDir=${MC_tmpFile}
 
 module load ${mantaVersion}
 module load ${pythonVersion}
@@ -24,17 +22,19 @@ if [ "${GCC_Analysis}" == "diagnostiek" ] || [ "${GCC_Analysis}" == "diagnostics
 then
     	echo "Manta is skipped"
 else
+	makeTmpDir ${mantaDir}
+	tmpMantaDir=${MC_tmpFile}
 	mkdir ${mantaDir}
 
 	python ${EBROOTMANTA}/bin/configManta.py \
 	--bam ${dedupBam} \
 	--referenceFasta ${indexFile} \
 	--runDir ${tmpMantaDir}
+
+
+	python ${tmpMantaDir}/runWorkflow.py -m local -j 20
+
+	mv ${tmpMantaDir}/* ${mantaDir} 
 fi
-
-
-python ${tmpMantaDir}/runWorkflow.py -m local -j 20
-
-mv ${tmpMantaDir}/* ${mantaDir} 
 
 
