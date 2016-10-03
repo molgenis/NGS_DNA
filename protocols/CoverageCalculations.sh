@@ -54,7 +54,7 @@ then
 
 			echo -e "Index\tChr\tChr Position Start\tDescription\tMin Counts\tCDS\tContig" > ${sampleNameID}.${perBase}.coveragePerBase.txt
 
-			awk -v OFS='\t' '{print NR,$1,$2,$5,$7,"CDS","1"}' ${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt >> ${sampleNameID}.${perBase}.coveragePerBase.txt
+			awk -v OFS='\t' '{print NR,$1,$2,$4,$6,"CDS","1"}' ${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt >> ${sampleNameID}.${perBase}.coveragePerBase.txt
 			
 			#remove phiX
 			grep -v "NC_001422.1" ${sampleNameID}.${perBase}.coveragePerBase.txt > ${sampleNameID}.${perBase}.coveragePerBase.txt.tmp
