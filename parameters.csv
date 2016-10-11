@@ -16,9 +16,11 @@ cutadaptVersion,1.8.1-${toolChain}-Python-2.7.9
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.6-Java-1.8.0_74 
+gavinVersion,GAVIN/0.0.1-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/0.29.5-foss-2015b
+molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
 ngsUtilsVersion,ngs-utils/16.05.1
 plinkSeqVersion,plinkseq/x86_64-0.10
 picardVersion,picard/1.130-Java-1.7.0_80
@@ -26,13 +28,15 @@ pythonVersion,Python/2.7.9-${toolChain}
 rVersion,R/3.2.1-${toolChain}
 sambambaVersion,sambamba/v0.6.3-${toolChain} 
 samtoolsVersion,SAMtools/1.2-${toolChain}
-snpEffVersion,snpEff/4.1g-Java-1.7.0_80
+snpEffVersion,snpEff/4.3-Java-1.7.0_80
 tabixVersion,tabix/0.2.6-${toolChain}
 wkHtmlToPdfVersion,wkhtmltox/0.12.3
 xhmmVersion,xhmm/2016-01-04-cc14e528d909-foss-2015b
-molgenisAnnotatorVersion,CmdLineAnnotator/1.9.0-Java-1.8.0_45
+## Jars
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
+gavinJar,GAVIN-APP-0.0.1-testing.jar
+molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
 picardJar,picard.jar
 sambambaTool,sambamba_v0.6.3
 
@@ -160,6 +164,9 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
+exacAnnotation,${dataDir}/ExAC/release0.3/ExAC.r0.3.sites.vep.vcf.gz
+caddAnnotation,${dataDir}/CADD/whole_genome_SNVs.tsv.gz
+gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 dellyVcf,${sampleNameID}.delly.vcf 
 dellySnpEffVcf,${sampleNameID}.delly.snpeff.vcf
@@ -183,8 +190,22 @@ projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 
+projectVariantCallsSnpEff_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.vcf
+projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.vcf
+projectVariantCallsSnpEff_ExAC_GoNL_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.vcf
+projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.vcf
+
+####GAVIN 
+gavinDataDir,${dataDir}/GAVIN/
+gavinClinVar,${gavinDataDir}/clinvar.patho.fix.5.5.16.vcf.gz
+gavinCGD,${gavinDataDir}/CGD_1jun2016.txt.gz
+gavinFDR,${gavinDataDir}/FDR_allGenes.tsv
+gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.1.tsv
+gavinOutputFirstPass,${projectPrefix}.GAVIN.RVCF.firstpass.vcf
+gavinToCADD,${projectPrefix}.GAVIN.toCadd.tsv
+
 ### Protocols 17, 19, 20, 21, 22 and 23 (MergeBatches, VariantAnnotator, dbNSFPAnnotation, VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
-projectBatchGenotypedVariantCallsAnnotated,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
+projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
 projectVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
 projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
 projectVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
