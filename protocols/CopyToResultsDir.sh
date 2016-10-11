@@ -124,9 +124,14 @@ rsync -a ${projectPrefix}.final.vcf.table ${projectResultsDir}/variants/
 printf "."
 for sa in "${UNIQUESAMPLES[@]}"
 do
-	if [ -f ${intermediateDir}/${sa}.delly.snpeff.hpo.vcf ]
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ]
 	then
-		rsync -a ${intermediateDir}/${sa}.delly.snpeff.hpo.vcf ${projectResultsDir}/variants/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		printf "."
 	fi
 done

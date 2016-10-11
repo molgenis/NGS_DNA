@@ -2,7 +2,7 @@
 
 if [ -e $1 ]
 then
-    	echo "this script needs 1 argument with the name of the run that needs to be reanalyzed (e.g. run01")
+    	echo "this script needs 1 argument with the name of the run that needs to be reanalyzed (e.g. run01) and one optional parameter which can contain the groupname of the previous run on prm"
         exit 0
 fi
 
@@ -16,6 +16,12 @@ previousRun=$1
 ENVIRONMENT_PARAMETERS="parameters_${HOST%%.*}.csv"
 TMPDIRECTORY=$(basename $(cd ../../ && pwd ))
 GROUP=$(basename $(cd ../../../ && pwd ))
+
+groupPreviousRun=$GROUP
+if [ ! -e $2 ]
+then
+	groupPreviousRun=$2				
+fi
 
 PROJECT=projectXX
 WORKDIR="/groups/${GROUP}/${TMPDIRECTORY}"
