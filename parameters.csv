@@ -19,7 +19,7 @@ gatkVersion,GATK/3.6-Java-1.8.0_74
 gavinVersion,GAVIN/0.0.1-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
-mantaVersion,manta/0.29.5-foss-2015b
+mantaVersion,manta/1.0.1-foss-2015b
 molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
 ngsUtilsVersion,ngs-utils/16.05.1
 plinkSeqVersion,plinkseq/x86_64-0.10
