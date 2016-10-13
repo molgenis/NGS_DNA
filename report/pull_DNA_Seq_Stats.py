@@ -97,7 +97,7 @@ def parse_hs_metrics_file(hs_metrics_path):
                 # encountering EOF before metrics is an error
                 if source.tell() == fsize:
                     raise ValueError("Metrics not found inside %r" % \
-                            metrics_path)
+                            hs_metrics_path)
                 line = source.readline().strip()
             else:
                 break
@@ -120,7 +120,7 @@ def parse_hs_metrics_file(hs_metrics_path):
                 data[COLNAMES_HS[col]] = float(value)
             else:
                 warnings.warn("Undefined value for %s in %s: %s" % (col,
-                    metrics_path, value))
+                    hs_metrics_path, value))
                 data[COLNAMES_HS[col]] = None
 	elif col == "BAIT_SET":
 	    data[COLNAMES_HS[col]] = value
@@ -139,7 +139,7 @@ def parse_concordance_file(concordance_path):
                 # encountering EOF before metrics is an error
                 if source.tell() == fsize:
                     raise ValueError("Metrics not found inside %r" % \
-                            metrics_path)
+                            concordance_path)
                 line = source.readline().strip()
             else:
                 break
@@ -161,7 +161,7 @@ def parse_concordance_file(concordance_path):
                 data[COLNAMES_CONCORDANCE[col]] = float(value)
             else:
                 warnings.warn("Undefined value for %s in %s: %s" % (col,
-                    metrics_path, value))
+                    concordance_path, value))
                 data[COLNAMES_CONCORDANCE[col]] = None
     return data
 
@@ -179,7 +179,7 @@ def parse_insertSize_metrics_file(insertSize_metrics_path):
                 # encountering EOF before metrics is an error
                 if source.tell() == fsize:
                     raise ValueError("Metrics not found inside %r" % \
-                            metrics_path)
+                            insertSize_metrics_path)
                 line = source.readline().strip()
             else:
                 break
@@ -200,7 +200,7 @@ def parse_insertSize_metrics_file(insertSize_metrics_path):
               data[COLNAMES_INSERTSIZE[col]] = float(value)
           else:
               warnings.warn("Undefined value for %s in %s: %s" % (col,
-              metrics_path, value))
+              insertSize_metrics_path, value))
               data[COLNAMES_INSERTSIZE[col]] = None
 
     return data
@@ -218,7 +218,7 @@ def parse_alignment_metrics_file(alignment_metrics_path):
                 # encountering EOF before metrics is an error
                 if source.tell() == fsize:
                     raise ValueError("Metrics not found inside %r" % \
-                            metrics_path)
+                            alignment_metrics_path)
                 line = source.readline().strip()            
 	    else:
                 break
@@ -248,7 +248,7 @@ def parse_alignment_metrics_file(alignment_metrics_path):
             data[COLNAMES_ALIGNMENT[col]] = float(value)
           else:
             warnings.warn("Undefined value for %s in %s: %s" % (col,
-            metrics_path, value))
+            alignment_metrics_path, value))
             data[COLNAMES_HS[col]] = None
 
     return data
