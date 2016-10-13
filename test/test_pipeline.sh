@@ -23,8 +23,8 @@ echo "checkout commit: COMMIT"
 git checkout -f ${COMMIT}
 
 ##Copy raw data
-cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_1.fq.gz ${workfolder}/rawdata/ngs/
-cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_2.fq.gz ${workfolder}/rawdata/ngs/
+cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_1.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/
+cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_2.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/
 
 if [ -d ${workfolder}/generatedscripts/PlatinumSubset ] 
 then
