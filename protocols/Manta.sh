@@ -30,8 +30,8 @@ else
 	python ${EBROOTMANTA}/bin/configManta.py \
 	--bam ${dedupBam} \
 	--referenceFasta ${indexFile} \
-	--runDir ${tmpMantaDir}
-
+	--runDir ${tmpMantaDir} \
+	--region chr2:100000-500000
 
 	python ${tmpMantaDir}/runWorkflow.py -m local -j 20
 
