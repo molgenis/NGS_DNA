@@ -1,8 +1,6 @@
 set -e 
 set -u
 
-scancel -u umcg-molgenis
-
 workfolder="/groups/umcg-gaf/tmp04/"
 
 cd ${workfolder}/tmp/
@@ -24,10 +22,9 @@ COMMIT=$(git rev-parse refs/remotes/origin/pr/$PULLREQUEST/merge^{commit})
 echo "checkout commit: COMMIT"
 git checkout -f ${COMMIT}
 
-if [ ! -d ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/ ] 
-then
-	cp -r test/rawdata/MY_TEST_BAM_PROJECT/ ${workfolder}/rawdata/ngs/
-fi
+##Copy raw data
+cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_1.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/
+cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_2.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/
 
 if [ -d ${workfolder}/generatedscripts/PlatinumSubset ] 
 then
@@ -39,6 +36,11 @@ then
 	rm -rf ${workfolder}/projects/PlatinumSubset/
 fi
 
+if [ -d ${workfolder}/tmp/PlatinumSubset ] 
+then
+	rm -rf ${workfolder}/tmp/PlatinumSubset/
+fi
+
 mkdir ${workfolder}/generatedscripts/PlatinumSubset/
 
 ### create testworkflow
@@ -47,7 +49,7 @@ cp workflow.csv test_workflow.csv
 tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
 
 rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
-cp test/results/PlatinumSample.final.vcf /home/umcg-molgenis/PlatinumSample.final.vcf
+cp test/results/PlatinumSample.final.vcf /home/umcg-molgenis/NGS_DNA/PlatinumSample.final.vcf
 cp test/autotest_generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 cp test/PlatinumSubset.csv ${workfolder}/generatedscripts/PlatinumSubset/
 
@@ -61,7 +63,7 @@ perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp
 sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
-perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_0.sh
+perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_0.sh  
 perl -pi -e 's|module load test|#|' s*_QCReport_0.sh
 perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s*_CountAllFinishedFiles_0.sh
 perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
@@ -79,7 +81,7 @@ do
         minutes=$((minutes+1))
 
         count=$((count+1))
-        if [ $count -eq 15 ]
+        if [ $count -eq 60 ]
         then
                 echo "the test was not finished within 1 hour, let's kill it"
 		echo -e "\n"
@@ -87,7 +89,7 @@ do
 		do
 			if [ ! -f $i.finished ]
 			then
-				echo "$(basename $i)" is not finished"
+				echo "$(basename $i) is not finished"
 			fi
 		done		
                 exit 1
@@ -97,4 +99,4 @@ echo ""
 echo "Test succeeded!"
 echo ""
 
-head -2 /home/umcg-molgenis/output/vcfStats.txt
+head -2 /home/umcg-molgenis/NGS_DNA/output/vcfStats.txt
