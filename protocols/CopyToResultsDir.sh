@@ -103,7 +103,6 @@ do
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.quality_distribution_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.hs_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.bam_index_stats ${projectResultsDir}/qc/statistics/
-	rsync -a ${intermediateDir}/${sample}.merged.dedup.metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.flagstat ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}*.pdf ${projectResultsDir}/qc/statistics/
 	if [ -f "${intermediateDir}/${sample}.merged.dedup.bam.insert_size_metrics" ]
