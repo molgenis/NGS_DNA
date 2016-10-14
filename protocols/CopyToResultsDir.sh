@@ -90,6 +90,7 @@ do
 	if [ -f ${intermediateDir}/${sample}.merged.dedup.bam.cram ] 
 	then
 		rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.cram ${projectResultsDir}/alignment/
+		rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.cram.md5 ${projectResultsDir}/alignment/
 	fi
 
 	printf "."

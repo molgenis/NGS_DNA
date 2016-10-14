@@ -1,4 +1,4 @@
-#MOLGENIS walltime=05:59:00 mem=1gb ppn=9
+#MOLGENIS walltime=05:59:00 mem=6gb ppn=9
 #string tmpName
 #string dedupBam
 #string indexFile
