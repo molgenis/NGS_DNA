@@ -38,7 +38,7 @@ xhmmVersion,xhmm/2016-01-04-cc14e528d909-foss-2015b
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 gavinJar,GAVIN-APP-1.0.jar
-gavinMergeBackToolJar,MergeBackTool.jar
+gavinMergeBackToolJar,MergeBackTool-0.2.jar
 molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
 picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}

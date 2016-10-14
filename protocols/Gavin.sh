@@ -85,7 +85,7 @@ echo "GAVIN round 1 is finished, uploading to CADD..."
 
 echo "Merging ${projectVariantsMergedSorted} and ${gavinOutputFirstPass}"
 
-java -jar -Xmx4g ${EBROOTGAVINMERGEBACKTOOL}/gavinMergeBackToolJar \
+java -jar -Xmx4g ${EBROOTGAVINMERGEBACKTOOL}/${gavinMergeBackToolJar} \
 -i ${projectVariantsMergedSorted} \
 -v ${gavinOutputFirstPass} \
 -o ${gavinOutputFirstPassMerged}
