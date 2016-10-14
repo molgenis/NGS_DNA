@@ -17,6 +17,7 @@ dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.6-Java-1.8.0_74 
 gavinVersion,GAVIN/1.0-Java-1.8.0_74
+gavinMergeBackToolVersion,GavinMergeBackTool/0.2-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-foss-2015b
@@ -37,6 +38,7 @@ xhmmVersion,xhmm/2016-01-04-cc14e528d909-foss-2015b
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 gavinJar,GAVIN-APP-1.0.jar
+gavinMergeBackToolJar,MergeBackTool.jar
 molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
 picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
@@ -206,6 +208,9 @@ gavinOutputFirstPass,${projectPrefix}.GAVIN.RVCF.firstpass.vcf
 gavinOutputFinal,${projectPrefix}.GAVIN.RVCF.final.vcf
 gavinToCADD,${projectPrefix}.GAVIN.toCadd.tsv
 gavinFromCADD,${projectPrefix}.GAVIN.fromCadd.tsv 
+
+gavinOutputFirstPassMerged,${projectPrefix}.GAVIN.RVCF.firstpass.mergedWithOriginal.vcf
+
 
 ### Protocols 17, 19, 20, 21, 22 and 23 (MergeBatches, VariantAnnotator, dbNSFPAnnotation, VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf

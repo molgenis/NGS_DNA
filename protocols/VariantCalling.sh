@@ -78,6 +78,11 @@ then
 	baitBatchLength=`cat ${capturedBatchBed} | wc -l`
 fi
 
+if [ ! -d ${intermediateDir}/gVCF ]
+then
+	mkdir -p ${intermediateDir}/gVCF
+fi
+
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
 inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
 
@@ -189,6 +194,9 @@ else
 	then
         	mv ${tmpSampleBatchVariantCalls} ${sampleBatchVariantCalls}
         	mv ${tmpSampleBatchVariantCallsIndex} ${sampleBatchVariantCallsIndex}
+			
+		mv ${sampleBatchVariantCalls} ${intermediateDir}/gVCF/
+		mv ${sampleBatchVariantCallsIndex} ${intermediateDir}/gVCF/
 	else
 		echo "ERROR: output file is missing"
 		exit 1

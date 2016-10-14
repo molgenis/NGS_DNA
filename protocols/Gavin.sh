@@ -23,6 +23,10 @@
 #string gavinToCADD
 #string gavinFromCADD
 
+#string gavinMergeBackToolVersion
+#string gavinMergeBackToolJar
+#string gavinOutputFirstPassMerged
+
 sleep 3
 
 makeTmpDir ${gavinOutputFirstPass}
@@ -35,6 +39,7 @@ makeTmpDir ${gavinOutputFinal}
 tmpGavinOutputFinal=${MC_tmpFile}
 
 ${stage} ${gavinVersion}
+${stage} ${gavinMergeBackToolVersion}
 
 ${checkStage}
 java -Xmx4g -jar ${EBROOTGAVIN}/${gavinJar} \
@@ -77,3 +82,10 @@ echo "GAVIN round 1 is finished, uploading to CADD..."
 #echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
 
 #echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" ${gavinOutputFinal} | wc -l'
+
+echo "Merging ${projectVariantsMergedSorted} and ${gavinOutputFirstPass}"
+
+java -jar -Xmx4g ${EBROOTGAVINMERGEBACKTOOL}/gavinMergeBackToolJar \
+-i ${projectVariantsMergedSorted} \
+-v ${gavinOutputFirstPass} \
+-o ${gavinOutputFirstPassMerged}
