@@ -37,7 +37,7 @@ tmpGavinOutputFinal=${MC_tmpFile}
 ${stage} ${gavinVersion}
 
 ${checkStage}
-
+java -Xmx4g -jar ${EBROOTGAVIN}/${gavinJar} \
 -i ${projectVariantsMergedSorted} \
 -o ${tmpGavinOutputFirstPass} \
 -m CREATEFILEFORCADD \
