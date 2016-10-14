@@ -16,7 +16,7 @@ cutadaptVersion,1.8.1-${toolChain}-Python-2.7.9
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.6-Java-1.8.0_74 
-gavinVersion,GAVIN/0.0.1-Java-1.8.0_74
+gavinVersion,GAVIN/1.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-foss-2015b
@@ -36,7 +36,7 @@ xhmmVersion,xhmm/2016-01-04-cc14e528d909-foss-2015b
 ## Jars
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
-gavinJar,GAVIN-APP-0.0.1-testing.jar
+gavinJar,GAVIN-APP-1.0.jar
 molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
 picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
