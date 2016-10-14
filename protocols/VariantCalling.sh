@@ -195,8 +195,8 @@ else
         	mv ${tmpSampleBatchVariantCalls} ${sampleBatchVariantCalls}
         	mv ${tmpSampleBatchVariantCallsIndex} ${sampleBatchVariantCallsIndex}
 			
-		mv ${sampleBatchVariantCalls} ${intermediateDir}/gVCF/
-		mv ${sampleBatchVariantCallsIndex} ${intermediateDir}/gVCF/
+		cp ${sampleBatchVariantCalls} ${intermediateDir}/gVCF/
+		cp ${sampleBatchVariantCallsIndex} ${intermediateDir}/gVCF/
 	else
 		echo "ERROR: output file is missing"
 		exit 1
