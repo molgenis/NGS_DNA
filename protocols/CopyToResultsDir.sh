@@ -17,7 +17,12 @@
 #list batchID
 #list seqType
 #string automateVersion
+#string gavinOutputFirstPass
+#string gavinOutputFinal
+
+
 # Change permissions
+
 
 umask 0007
 
@@ -62,6 +67,17 @@ printf ".. finished (2/11)\n"
 printf "Copying fastQC output to results directory.."
 rsync -a ${intermediateDir}/*_fastqc.zip ${projectResultsDir}/qc/
 printf ".. finished (3/11)\n"
+
+##Copy GAVIN results
+if [ -f ${gavinOutputFirstPass} ]
+then
+	rsync -a ${gavinOutputFirstPass} ${projectResultsDir}/variants/GAVIN/
+fi
+
+if [ -f ${gavinOutputFinal} ]
+then
+	rsync -a ${gavinOutputFinal} ${projectResultsDir}/variants/GAVIN/
+fi
 
 count=1
 #copy realigned bams
@@ -121,6 +137,9 @@ rsync -a ${projectPrefix}.final.vcf ${projectResultsDir}/variants/
 printf "."
 rsync -a ${projectPrefix}.final.vcf.table ${projectResultsDir}/variants/
 printf "."
+
+
+
 for sa in "${UNIQUESAMPLES[@]}"
 do
 	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ]

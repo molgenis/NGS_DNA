@@ -15,7 +15,7 @@
 #string projectBatchGenotypedVariantCalls
 #string project
 #string projectBatchCombinedVariantCalls
-#list sampleBatchVariantCallsCompressed
+#list sampleBatchVariantCalls
 #string tmpDataDir
 #string projectJobsDir
 #string logsDir 
@@ -58,7 +58,7 @@ then
 		fi
 	done
 else
-	for sbatch in "${sampleBatchVariantCallsCompressed[@]}"
+	for sbatch in "${sampleBatchVariantCalls[@]}"
         do
 		if [ -f $sbatch ]
 		then

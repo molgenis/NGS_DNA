@@ -76,4 +76,4 @@ echo "GAVIN round 1 is finished, uploading to CADD..."
 #mv ${tmpGavinOutputFinal} ${gavinOutputFinal}
 #echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
 
-#echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" GAVIN-APP_Demo_1000G_Spiked.RVCF.vcf | wc -l'
+#echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" ${gavinOutputFinal} | wc -l'

@@ -181,15 +181,15 @@ dbSNP137Vcf,${dbSNPDir}/dbsnp_137.b37.vcf
 dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
-sampleBatchVariantCalls,${sampleNameID}.batch-${batchID}.variant.calls.g.vcf
+sampleBatchVariantCalls,${sampleNameID}.batch-${batchID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIdx,${sampleBatchVariantCalls}.idx
-sampleBatchVariantCallsFemale,${sampleNameID}.batch-${batchID}.chrX.female.variant.calls.g.vcf
+sampleBatchVariantCallsFemale,${sampleNameID}.batch-${batchID}.chrX.female.variant.calls.g.vcf.gz
 sampleBatchVariantCallsFemaleIdx,${sampleBatchVariantCallsFemale}.idx
-sampleBatchVariantCallsMaleNONPAR,${sampleNameID}.batch-${batchID}.chrX.male.NONPAR.variant.calls.g.vcf
+sampleBatchVariantCallsMaleNONPAR,${sampleNameID}.batch-${batchID}.chrX.male.NONPAR.variant.calls.g.vcf.gz
 sampleBatchVariantCallsMaleNONPARIdx,${sampleBatchVariantCallsMaleNONPAR}.idx
-projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf
-projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
+projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
+projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 
 projectVariantCallsSnpEff_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.vcf
 projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.vcf
