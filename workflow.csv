@@ -28,7 +28,7 @@ s22_MergeBatches,protocols/MergeBatches.sh,s21_VariantAnnotator
 s23_Gavin,protocols/Gavin.sh,s22_MergeBatches
 s24_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s22_MergeBatches
 s25a_SnpFiltration,protocols/SnpFiltration.sh,s24_SplitIndelsAndSNPs
-s25b_IndelFiltration,protocols/IndelFiltration.sh,s204SplitIndelsAndSNPs
+s25b_IndelFiltration,protocols/IndelFiltration.sh,s24_SplitIndelsAndSNPs
 s26_MergeIndelsAndSnps,protocols/MergeIndelsAndSnps.sh,s25b_IndelFiltration;s25a_SnpFiltration
 s27_VcfToTable,protocols/VcfToTable.sh,s26_MergeIndelsAndSnps
 s28_InSilicoConcordance,protocols/InSilicoConcordance.sh,s27_VcfToTable
