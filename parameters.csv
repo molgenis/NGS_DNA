@@ -198,12 +198,14 @@ projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batc
 
 ####GAVIN 
 gavinDataDir,${dataDir}/GAVIN/
-gavinClinVar,${gavinDataDir}/clinvar.patho.fix.5.5.16.vcf.gz
-gavinCGD,${gavinDataDir}/CGD_1jun2016.txt.gz
-gavinFDR,${gavinDataDir}/FDR_allGenes.tsv
-gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.1.tsv
+gavinClinVar,${gavinDataDir}/clinvar.patho.fix.11oct2016.vcf.gz
+gavinCGD,${gavinDataDir}/CGD_11oct2016.txt.gz
+gavinFDR,${gavinDataDir}/FDR_allGenes_r1.0.tsv
+gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.3.tsv
 gavinOutputFirstPass,${projectPrefix}.GAVIN.RVCF.firstpass.vcf
+gavinOutputFinal,${projectPrefix}.GAVIN.RVCF.final.vcf
 gavinToCADD,${projectPrefix}.GAVIN.toCadd.tsv
+gavinFromCADD,${projectPrefix}.GAVIN.fromCadd.tsv 
 
 ### Protocols 17, 19, 20, 21, 22 and 23 (MergeBatches, VariantAnnotator, dbNSFPAnnotation, VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf

@@ -19,7 +19,9 @@
 #string gavinJar
 #string gavinVersion
 #string gavinOutputFirstPass
+#string gavinOutputFinal
 #string gavinToCADD
+#string gavinFromCADD
 
 sleep 3
 
@@ -29,11 +31,13 @@ tmpGavinOutputFirstPass=${MC_tmpFile}
 makeTmpDir ${gavinToCADD}
 tmpGavinToCADD=${MC_tmpFile}
 
+makeTmpDir ${gavinOutputFinal}
+tmpGavinOutputFinal=${MC_tmpFile}
+
 ${stage} ${gavinVersion}
 
 ${checkStage}
 
-java -Xmx4g -jar ${EBROOTGAVIN}/${gavinJar} \
 -i ${projectVariantsMergedSorted} \
 -o ${tmpGavinOutputFirstPass} \
 -m CREATEFILEFORCADD \
@@ -48,3 +52,28 @@ echo "moved ${tmpGavinOutputFirstPass} to ${gavinOutputFirstPass}"
 
 mv ${tmpGavinToCADD} ${gavinToCADD}
 echo "moved ${tmpGavinToCADD} to ${gavinToCADD}"
+
+echo "GAVIN round 1 is finished, uploading to CADD..."
+
+
+##UPLOADING TO CADD
+### 
+###
+# INPUT: ${gavinToCADD}
+# OUTPUT: ${gavinFromCADD}
+
+
+#java -Xmx4g -jar ${EBROOTGAVIN}/${gavinJar} \
+#-i ${projectVariantsMergedSorted} \
+#-o ${tmpGavinOutputFinal} \
+#-m ANALYSIS \
+#-a ${gavinFromCADD} \
+#-c ${gavinClinVar} \
+#-d ${gavinCGD} \
+#-f ${gavinFDR} \
+#-g ${gavinCalibrations}
+
+#mv ${tmpGavinOutputFinal} ${gavinOutputFinal}
+#echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
+
+#echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" GAVIN-APP_Demo_1000G_Spiked.RVCF.vcf | wc -l'
