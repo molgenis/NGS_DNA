@@ -138,6 +138,10 @@ rsync -a ${projectPrefix}.final.vcf ${projectResultsDir}/variants/
 printf "."
 rsync -a ${projectPrefix}.final.vcf.table ${projectResultsDir}/variants/
 printf "."
+rsync -a ${projectPrefix}.final.vcf.gz ${projectResultsDir}/variants/
+printf "."
+rsync -a ${projectPrefix}.final.vcf.gz.tbi ${projectResultsDir}/variants/
+printf "."
 
 
 
@@ -164,6 +168,12 @@ do
 	printf "."
 	rsync -a ${intermediateDir}/${sa}.final.vcf.table ${projectResultsDir}/variants/
 	printf "."
+
+	rsync -a ${intermediateDir}/${sa}.final.vcf.gz ${projectResultsDir}/variants/
+	printf "."
+	rsync -a ${intermediateDir}/${sa}.final.vcf.gz.tbi ${projectResultsDir}/variants/
+	printf "."
+
 
 	rsync -a ${intermediateDir}/${sa}.chosenSex.txt ${projectResultsDir}/general/
 	printf "."

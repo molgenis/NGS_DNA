@@ -225,7 +225,9 @@ sortVCFpl,sortVCFbyFai.pl
 
 
 ### Protocols 24 and 25 (VcfToTable, QCReport) ###
-variantsFinalProjectVcfTable,${projectPrefix}.final.vcf.table
+sampleFinalVcf,${intermediateDir}/${externalID}.final.vcf
+projectFinalVcf,${projectPrefix}.final.vcf
+variantsFinalProjectVcfTable,${finalVcf}.table
 vcf2Table,vcf2tabV3.pl
 getStatisticsScript,getStatistics.R
 getDedupInfoScript,getDedupInfo.R
