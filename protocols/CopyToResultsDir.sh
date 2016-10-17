@@ -134,8 +134,6 @@ done
 
 printf "Copying variants vcf and tables to results directory "
 # Copy variants vcf and tables to results directory
-rsync -a ${projectPrefix}.final.vcf ${projectResultsDir}/variants/
-printf "."
 rsync -a ${projectPrefix}.final.vcf.table ${projectResultsDir}/variants/
 printf "."
 rsync -a ${projectPrefix}.final.vcf.gz ${projectResultsDir}/variants/
@@ -164,8 +162,6 @@ printf " finished (7/11)\n"
 printf "Copying vcf files, gender determination, coverage per base and per target files "
 for sa in "${UNIQUESAMPLES[@]}"
 do
-	rsync -a ${intermediateDir}/${sa}.final.vcf ${projectResultsDir}/variants/
-	printf "."
 	rsync -a ${intermediateDir}/${sa}.final.vcf.table ${projectResultsDir}/variants/
 	printf "."
 
