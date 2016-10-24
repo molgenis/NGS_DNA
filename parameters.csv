@@ -12,7 +12,6 @@ automateVersion,NGS_Automated/1.0.1
 bwaVersion,BWA/0.7.12-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 convadingVersion,CoNVaDING/1.1.6
-cutadaptVersion,1.8.1-${toolChain}-Python-2.7.9
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.6-Java-1.8.0_74 
@@ -22,7 +21,7 @@ mantaVersion,manta/0.29.5-foss-2015b
 ngsUtilsVersion,ngs-utils/16.05.1
 plinkSeqVersion,plinkseq/x86_64-0.10
 picardVersion,picard/1.130-Java-1.7.0_80
-pythonVersion,Python/2.7.9-${toolChain}
+pythonVersion,Python/2.7.10-${toolChain}
 rVersion,R/3.2.1-${toolChain}
 sambambaVersion,sambamba/${sambambaVer}-foss-2015b
 sambambaVer,v0.6.4
