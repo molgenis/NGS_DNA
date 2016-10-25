@@ -2,4 +2,4 @@ queue,ll
 prmName,prm02
 root,/
 appsDir,${root}/apps/
-toolChain,goolf-1.7.20
+toolChain,foss-2015b
