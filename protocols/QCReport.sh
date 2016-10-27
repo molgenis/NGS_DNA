@@ -29,7 +29,7 @@
 
 #string bwaVersion
 #string computeVersion
-#string dellyVersion
+#string mantaVersion
 #string fastqcVersion
 #string gatkVersion
 #string hpoVersion
@@ -274,7 +274,7 @@ Used toolversions:
 
 ${bwaVersion}
 Molgenis-Compute/${computeVersion}
-delly/${dellyVersion}
+${mantaVersion}
 ${fastqcVersion}
 ${gatkVersion}
 ${iolibVersion}
