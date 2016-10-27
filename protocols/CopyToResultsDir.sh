@@ -16,12 +16,9 @@
 #list externalSampleID
 #list batchID
 #list seqType
-#string automateVersion
 # Change permissions
 
 umask 0007
-
-module load ${automateVersion}
 
 #Function to check if array contains value
 array_contains () {
