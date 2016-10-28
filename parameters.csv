@@ -20,7 +20,7 @@ iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-${toolChain}
 molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
-ngsUtilsVersion,ngs-utils/16.09.1
+ngsUtilsVersion,ngs-utils/16.10.2
 plinkSeqVersion,plinkseq/x86_64-0.10
 picardVersion,picard/1.130-Java-1.7.0_80
 pythonVersion,Python/2.7.10-${toolChain}
@@ -245,7 +245,7 @@ fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 
 ## Protocols Convading and XHMM
 convadingDataDir,${dataDir}/Convading/
-convadingControlsDir,${convadingDataDir}/Controls/
+convadingControlsDir,${dataDir}/ConvadingXHMMControls/
 
 convadingDir,${intermediateDir}/Convading/
 convadingInputBamsDir,${convadingDir}/bams/${externalSampleID}/

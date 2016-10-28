@@ -5,12 +5,13 @@
 #string logsDir 
 #string groupname
 #string projectResultsDir
+#string ngsUtilsVersion
 
 rm -rf /home/umcg-molgenis/NGS_DNA/output
 
 module load ngs-utils
 
-${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 ${projectResultsDir}/variants/PlatinumSample.final.vcf -2 /home/umcg-molgenis/NGS_DNA/PlatinumSample_True.final.vcf -o /home/umcg-molgenis/NGS_DNA/output
+${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 ${projectResultsDir}/variants/PlatinumSample.final.vcf.gz -2 /home/umcg-molgenis/NGS_DNA/PlatinumSample_True.final.vcf.gz -o /home/umcg-molgenis/NGS_DNA/output
 
 
 if [[ -f /home/umcg-molgenis/NGS_DNA/output/notInVcf1.txt || -f /home/umcg-molgenis/NGS_DNA/output/notInVcf2.txt || -f /home/umcg-molgenis/NGS_DNA/output/inconsistent.txt ]]
