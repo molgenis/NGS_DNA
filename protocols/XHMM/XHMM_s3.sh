@@ -8,10 +8,11 @@
 #string gatkJar
 #string intermediateDir
 #string capturingKit
+#string gatkVersion
 
-module load GATK/3.6-Java-1.8.0_74
+.  ./Controls.env
 
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
+module load ${gatkVersion}
 
 xhmmGcContent=${xhmmDir}/${CAPT}_step3.DATA.locus_GC.txt
 xhmmExtremeGcContent=${xhmmDir}/${CAPT}_step3.extreme_gc_targets.txt

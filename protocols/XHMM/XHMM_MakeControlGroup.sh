@@ -11,8 +11,12 @@
 #string dedupBam
 #string intermediateDir
 #string DepthOfCoveragePerSample
+#string gatkVersion
 
-module load GATK/3.6-Java-1.8.0_74
+
+.  ./Controls.env
+
+module load ${gatkVersion}
 
 #Function to check if array contains value
 array_contains () {
@@ -39,10 +43,6 @@ done
 
 ## Creating bams directory
 mkdir -p ${xhmmDepthOfCoverage}
-
-## write capturingkit to file to make it easier to split
-echo $capturingKit > ${intermediateDir}/capt.txt
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
 
 rm -f ${xhmmDir}/${CAPT}.READS.bam.list
 

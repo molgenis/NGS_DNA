@@ -3,25 +3,22 @@
 #string groupname
 #string project
 #string convadingVersion
-#string convadingControlsDir
 #string convadingGenerateTargetQcList
 #string intermediateDir
 #string capturingKit
+
+. ./Controls.env
 
 module load ${convadingVersion}
 
 makeTmpDir ${convadingGenerateTargetQcList}
 tmpConvadingGenerateTargetQcList=${MC_tmpFile}
 
-## write capturingkit to file to make it easier to split
-echo $capturingKit > ${intermediateDir}/capt.txt
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
-
 perl ${EBROOTCONVADING}/CoNVaDING.pl \
 -mode GenerateTargetQcList \
 -inputDir ${convadingControlsDir} \
 -outputDir ${tmpConvadingGenerateTargetQcList} \
--controlsDir ${convadingControlsDir}/${CAPT}/ 
+-controlsDir ${convadingControlsDir} 
 
 printf "moving ${tmpConvadingGenerateTargetQcList} to ${convadingGenerateTargetQcList} .. "
 mv ${tmpConvadingGenerateTargetQcList}/* ${convadingGenerateTargetQcList}

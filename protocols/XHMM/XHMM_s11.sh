@@ -11,6 +11,8 @@
 #string xhmmHighSenseParams
 #string indexFile
 
+.  ./Controls.env
+
 module load ${xhmmVersion}
 
 FASTA="/apps/data/1000G/phase1/human_g1k_v37_phiX.fasta"

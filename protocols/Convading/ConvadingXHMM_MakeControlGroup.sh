@@ -231,6 +231,8 @@ then
 else
 	echo "GenerateTargetQcList skipped"
 fi
+echo "Copying targetQcList.txt to ${pathToFinalControls}/${version}/Convading/"
+cp ${convadingGenerateTargetQcListDir}/targetQcList.txt ${pathToFinalControls}/${version}/Convading/
 
 
 mkdir -p ${workingDir}/XHMM
@@ -326,7 +328,12 @@ if [ -f ${workingDir}/XHMM.finished ]
 then
 	echo "### COPYING XHMM controls to final destination"
 
-	cp -r ${workingDir}/XHMM/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/
+	cp -r ${workingDir}/XHMM/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
+	for i in $(ls ${pathToFinalControls}/${version}/XHMM/PerSample/*.sample_interval_summary )
+	do
+		echo "$i" >> ${workingDir}/XHMM/sample_interval_summary.Controls
+	done
+	cp ${workingDir}/XHMM/sample_interval_summary.Controls ${pathToFinalControls}/${version}/XHMM/Controls.sample_interval_summary
 	echo "xhmm results copied"
 	
 fi

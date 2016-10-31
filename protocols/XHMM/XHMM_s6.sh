@@ -7,6 +7,8 @@
 #string xhmmFilterSample
 #string xhmmPCAfile
 
+.  ./Controls.env
+
 module load ${xhmmVersion}
 
 OUTPUTDIR="/groups/umcg-gdio/tmp04/umcg-ljohansson/Diagnostic_Yield_CNV_Cardio/XHMM/results_Cardio_0394321/"

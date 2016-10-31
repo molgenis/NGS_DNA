@@ -9,9 +9,9 @@
 #string intermediateDir
 #string	capturingKit
 
-module load ${xhmmVersion}
+.  ./Controls.env
 
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
+module load ${xhmmVersion}
 
 xhmmExtremeGcContent=${xhmmDir}/${CAPT}_step3.extreme_gc_targets.txt
 

@@ -5,19 +5,15 @@
 #string convadingVersion
 #string convadingCreateFinalList
 #string convadingStartWithBestScore
-#string convadingControlsDir
 #string capturingKit
 #string intermediateDir
+
+. ./Controls.env
 
 module load ${convadingVersion}
 
 makeTmpDir ${convadingCreateFinalList}
 tmpConvadingCreateFinalList=${MC_tmpFile}
-
-## write capturingkit to file to make it easier to split
-echo $capturingKit > ${intermediateDir}/capt.txt
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
-
 
 ## Creating directory
 mkdir -p ${convadingCreateFinalList}
@@ -26,7 +22,7 @@ perl ${EBROOTCONVADING}/CoNVaDING.pl \
 -mode CreateFinalList \
 -inputDir ${convadingStartWithBestScore} \
 -outputDir ${tmpConvadingCreateFinalList} \
--targetQcList ${convadingControlsDir}/${CAPT}/targetQcList.txt
+-targetQcList ${convadingControlsDir}/targetQcList.txt
 
 printf "moving ${tmpConvadingCreateFinalList} to ${convadingCreateFinalList} .. "
 mv ${tmpConvadingCreateFinalList}/* ${convadingCreateFinalList}

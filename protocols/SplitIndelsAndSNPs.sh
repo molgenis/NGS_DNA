@@ -25,6 +25,8 @@ tmpProjectVariantsMergedIndelsVcf=${MC_tmpFile}
 makeTmpDir ${projectVariantsMergedSnpsVcf}
 tmpProjectVariantsMergedSnpsVcf=${MC_tmpFile}
 
+sleep 5
+
 #select only Indels
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
@@ -37,6 +39,8 @@ java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 
 mv ${tmpProjectVariantsMergedIndelsVcf} ${projectVariantsMergedIndelsVcf}
 echo "moved ${tmpProjectVariantsMergedIndelsVcf} to ${projectVariantsMergedIndelsVcf}"
+
+sleep 5
 
 #Select SNPs and MNPs
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \

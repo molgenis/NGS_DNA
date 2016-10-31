@@ -3,11 +3,12 @@
 #string groupname
 #string project
 #string convadingVersion
-#string convadingControlsDir
 #string convadingStartWithMatchScore
 #string convadingStartWithBestScore
 #string intermediateDir
 #string capturingKit
+
+. ./Controls.env
 
 module load ${convadingVersion}
 
@@ -17,15 +18,11 @@ tmpConvadingStartWithBestScore=${MC_tmpFile}
 ## Creating directory
 mkdir -p ${convadingStartWithBestScore}
 
-## write capturingkit to file to make it easier to split
-echo $capturingKit > ${intermediateDir}/capt.txt
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
-
 perl ${EBROOTCONVADING}/CoNVaDING.pl \
 -mode StartWithBestScore \
 -inputDir ${convadingStartWithMatchScore} \
 -outputDir ${tmpConvadingStartWithBestScore} \
--controlsDir ${convadingControlsDir}/${CAPT}/  
+-controlsDir ${convadingControlsDir}
 
 printf "moving ${tmpConvadingStartWithBestScore} to ${convadingStartWithBestScore} .. "
 mv ${tmpConvadingStartWithBestScore}/* ${convadingStartWithBestScore}

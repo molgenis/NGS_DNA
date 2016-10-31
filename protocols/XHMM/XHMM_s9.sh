@@ -8,6 +8,8 @@
 #string xhmmMergedSample
 #string xhmmSameFiltered
 
+.  ./Controls.env
+
 module load ${xhmmVersion}
 
 $EBROOTXHMM/bin/xhmm --matrix \

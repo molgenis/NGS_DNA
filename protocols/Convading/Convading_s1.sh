@@ -6,10 +6,22 @@
 #string capturingKit
 #string intermediateDir
 #string capturedBed
-#string convadingControlsDir
 #string dedupBam
 #string convadingInputBamsDir
 #string convadingStartWithBam
+#string cxControlsDir
+#string ControlsVersioning
+#string capturingKit
+
+cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
+
+echo "xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/" > ./Controls.env
+echo "convadingControlsDir=${cxControlsDir}/${cDir}/Convading/" >> ./Controls.env
+## write capturingkit to file to make it easier to split
+echo $capturingKit > ${intermediateDir}/capt.txt 
+echo "CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)" >> ./Controls.env
+
+.  ./Controls.env
 
 module load ${convadingVersion}
 
@@ -42,9 +54,6 @@ mkdir -p ${convadingInputBamsDir}
 ln -sf ${dedupBam} ${convadingInputBamsDir}/
 ln -sf ${dedupBam}.bai ${convadingInputBamsDir}/
 
-## write capturingkit to file to make it easier to split
-echo $capturingKit > ${intermediateDir}/capt.txt
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
 
 echo $project
 
@@ -57,7 +66,7 @@ perl ${EBROOTCONVADING}/CoNVaDING.pl \
 -mode StartWithBam \
 -inputDir ${convadingInputBamsDir} \
 -outputDir ${tmpConvadingStartWithBam} \
--controlsDir ${convadingControlsDir}/${CAPT}/ \
+-controlsDir ${convadingControlsDir} \
 -bed ${capturedBed} \
 -rmdup
 

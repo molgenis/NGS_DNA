@@ -245,7 +245,8 @@ fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 
 ## Protocols Convading and XHMM
 convadingDataDir,${dataDir}/Convading/
-convadingControlsDir,${dataDir}/ConvadingXHMMControls/
+cxControlsDir,${dataDir}/Controls_Convading_XHMM/
+ControlsVersioning,${cxControlsDir}/Controls_v1.txt
 
 convadingDir,${intermediateDir}/Convading/
 convadingInputBamsDir,${convadingDir}/bams/${externalSampleID}/
@@ -257,7 +258,6 @@ convadingCreateFinalList,${convadingDir}/CreateFinalList/${externalSampleID}/
 xhmmDataDir,${dataDir}/XHMM/
 seqDBhg19,${xhmmDataDir}/seqdb.hg19/hg19/seqdb.hg19
 xhmmHighSenseParams,${xhmmDataDir}/parameters_high_sensitivity/params.txt
-xhmmControlsDir,${xhmmDataDir}/Controls/
 
 xhmmDir,${intermediateDir}/XHMM/
 xhmmDepthOfCoverage,${intermediateDir}/XHMM/DepthOfCoverage

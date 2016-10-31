@@ -38,3 +38,17 @@ s30a_QCStats,protocols/QCStats.sh,s16a_CollectMultipleMetrics;s16b_CollectHSMetr
 s30b_QCReport,protocols/QCReport.sh,s30a_QCStats
 s31_CountAllFinishedFiles,protocols/CountAllFinishedFiles.sh,s30b_QCReport;s15_CoverageCalculations
 s32_CopyToResultsDir,protocols/CopyToResultsDir.sh,s10_Manta;s27a_CompressingSampleVcf;s27b_CompressingProjectVcf;s31_CountAllFinishedFiles
+sXX_Convading_s1,protocols/Convading/Convading_s1.sh,s08_MarkDuplicates
+sXX_Convading_s2,protocols/Convading/Convading_s2.sh,sXX_Convading_s1
+sXX_Convading_s3,protocols/Convading/Convading_s3.sh,sXX_Convading_s2
+sXX_Convading_s5,protocols/Convading/Convading_s5.sh,sXX_Convading_s3
+sXX_XHMM_s1,protocols/XHMM/XHMM_s1.sh,sXX_Convading_s1
+sXX_XHMM_s2,protocols/XHMM/XHMM_s2.sh,sXX_XHMM_s1
+sXX_XHMM_s3,protocols/XHMM/XHMM_s3.sh,sXX_XHMM_s2
+sXX_XHMM_s4,protocols/XHMM/XHMM_s4.sh,sXX_XHMM_s3
+sXX_XHMM_s5,protocols/XHMM/XHMM_s5.sh,sXX_XHMM_s2;sXX_XHMM_s4
+sXX_XHMM_s6,protocols/XHMM/XHMM_s6.sh,sXX_XHMM_s5
+sXX_XHMM_s7,protocols/XHMM/XHMM_s7.sh,sXX_XHMM_s6
+sXX_XHMM_s8,protocols/XHMM/XHMM_s8.sh,sXX_XHMM_s7
+sXX_XHMM_s9,protocols/XHMM/XHMM_s9.sh,sXX_XHMM_s8
+sXX_XHMM_s10,protocols/XHMM/XHMM_s10.sh,sXX_XHMM_s9

@@ -11,11 +11,11 @@
 #string seqDBhg19
 #string capturingKit
 
+.  ./Controls.env
+
 module load ${xhmmVersion}
 
 module load ${plinkSeqVersion}
-
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
 
 outputbase=${xhmmDir}/${CAPT}.step4
 targets=${outputbase}.targets

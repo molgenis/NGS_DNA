@@ -7,6 +7,8 @@
 #string xhmmPCANormalizedfile
 #string xhmmFilterSample
 
+.  ./Controls.env
+
 module load ${xhmmVersion}
 
 $EBROOTXHMM/bin/xhmm --normalize \

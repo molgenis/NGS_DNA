@@ -7,6 +7,8 @@
 #string xhmmFilterSample
 #string xhmmPCANormalizedfileFilteredZscores
 
+.  ./Controls.env
+
 module load ${xhmmVersion}
 
 $EBROOTXHMM/bin/xhmm --matrix \

@@ -10,6 +10,8 @@
 #string xhmmPosterior
 #string xhmmHighSenseParams
 
+.  ./Controls.env
+
 module load ${xhmmVersion}
 
 $EBROOTXHMM/bin/xhmm --discover \
