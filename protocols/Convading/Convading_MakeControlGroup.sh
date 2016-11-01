@@ -14,7 +14,7 @@ Arguments
 	-b|--bedfile		full path to bedfile (e.g. /apps/data/Agilent/ONCO_v3/human_g1k_v37/captured.bed)
 	Optional:
 	-o|--controlsDir	Place where final controls will be, the name of the panel will be pasted as folder and MONTH 
-				default: /apps/data/Controls_Convading_XHMM/${panel}/\${MONTH}
+				default: /apps/data/Controls_Convading_XHMM/\${panel}/\${MONTH}
 	-r|--reference		path to reference genome (e.g. /apps/data/1000G/phase1/human_g1k_v37_phiX.fasta)
 				default: /apps/data/1000G/phase1/human_g1k_v37_phiX.fasta"
 }
@@ -234,7 +234,6 @@ fi
 echo "Copying targetQcList.txt to ${pathToFinalControls}/${version}/Convading/"
 cp ${convadingGenerateTargetQcListDir}/targetQcList.txt ${pathToFinalControls}/${version}/Convading/
 
-
 mkdir -p ${workingDir}/XHMM
 if [ ! -f ${workingDir}/XHMM.finished ]
 then 
@@ -328,13 +327,57 @@ if [ -f ${workingDir}/XHMM.finished ]
 then
 	echo "### COPYING XHMM controls to final destination"
 
-	cp -r ${workingDir}/XHMM/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
-	for i in $(ls ${pathToFinalControls}/${version}/XHMM/PerSample/*.sample_interval_summary )
-	do
-		echo "$i" >> ${workingDir}/XHMM/sample_interval_summary.Controls
-	done
+        cp -r ${workingDir}/XHMM/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
+        for i in $(ls ${pathToFinalControls}/${version}/XHMM/PerSample/*.sample_interval_summary )
+        do
+          	echo "$i" >> ${workingDir}/XHMM/sample_interval_summary.Controls
+        done
 	cp ${workingDir}/XHMM/sample_interval_summary.Controls ${pathToFinalControls}/${version}/XHMM/Controls.sample_interval_summary
-	echo "xhmm results copied"
-	
+        echo "xhmm results copied"
+
 fi
 
+xhmmGcContent=${workingDir}/XHMM/step3.DATA.locus_GC.txt
+xhmmExtremeGcContent=${workingDir}/XHMM/step3.extreme_gc_targets.txt
+
+java -Xmx3072m -jar $EBROOTGATK/GenomeAnalysisTK.jar \
+-T GCContentByInterval \
+-L ${capturedBed} \
+-R ${indexFile} \
+-o ${xhmmGcContent}.tmp
+
+printf "moving ${xhmmGcContent}.tmp to ${xhmmGcContent} .. "
+mv ${xhmmGcContent}.tmp ${xhmmGcContent}
+printf " .. done!"
+
+cat ${xhmmGcContent} | awk '{if ($2 < 0.1 || $2 > 0.9) print $1}' > ${xhmmExtremeGcContent}
+
+echo "Extreme GC content file created: ${xhmmExtremeGcContent}"
+
+cp ${xhmmGcContent} ${pathToFinalControls}/${version}/XHMM/
+cp ${xhmmExtremeGcContent} ${pathToFinalControls}/${version}/XHMM/
+
+
+module load xhmm
+
+module load plinkseq
+
+outputbase=${workingDir}/XHMM/output.step4
+targets=${outputbase}.targets
+targetsLOCDB=${targets}.LOCDB
+
+seqDBhg19=/apps/data/XHMM/seqdb.hg19/hg19/seqdb.hg19
+
+$EBROOTXHMM/bin/interval_list_to_pseq_reg ${capturedBed} > ${targets}.reg
+
+$EBROOTPLINKSEQ/pseq . loc-load --locdb ${targetsLOCDB} --file ${targets}.reg --group targets --out ${targetsLOCDB}.loc-load
+
+$EBROOTPLINKSEQ/pseq . loc-stats --locdb ${targetsLOCDB} --group targets --seqdb ${seqDBhg19} | \
+awk '{if (NR > 1) print $_}' | sort -k1 -g | awk '{print $10}' | paste ${capturedBed} - | \
+awk '{print $1"\t"$2}' > ${outputbase}.locus_complexity.txt
+
+cat ${outputbase}.locus_complexity.txt | awk '{if ($2 > 0.25) print $1}' \
+> ${outputbase}.low_complexity_targets.txt
+
+cp ${outputbase}.low_complexity_targets.txt ${pathToFinalControls}/${version}/XHMM/
+cp ${outputbase}.locus_complexity.txt  ${pathToFinalControls}/${version}/XHMM/
