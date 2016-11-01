@@ -41,7 +41,7 @@ then
 			-o ${sampleNameID}.${perBase}.coveragePerBase \
 			--omitLocusTable \
 			-I ${dedupBam} \
-			-L ${perBaseDir}/${perBase}.bed
+			-L ${perBaseDir}/${perBase}.interval_list
 	
 			sed '1d' ${sampleNameID}.${perBase}.coveragePerBase > ${sampleNameID}.${perBase}.coveragePerBase_withoutHeader
 			sort -V ${sampleNameID}.${perBase}.coveragePerBase_withoutHeader > ${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted
@@ -78,7 +78,7 @@ then
                		-o ${sampleNameID}.${perTarget}.coveragePerTarget \
                		-I ${dedupBam} \
 			--omitDepthOutputAtEachBase \
-               		-L ${perTargetDir}/${perTarget}.merged.bed
+               		-L ${perTargetDir}/${perTarget}.interval_list
 
 			awk -v OFS='\t' '{print $1,$3}' ${sampleNameID}.${perTarget}.coveragePerTarget.sample_interval_summary | sed '1d' > ${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp
 			sort -V ${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp > ${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp
