@@ -34,6 +34,11 @@ then
 	java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx4g -jar \
 	$EBROOTSNPEFF/snpEff.jar \
 	-v hg19 \
+	-noStats \
+	-noLog \
+	-lof \
+	-canon \
+	-ud 0 \
 	-c $EBROOTSNPEFF/snpEff.config \
 	${projectBatchGenotypedVariantCalls} \
 	> ${tmpProjectVariantCallsSnpEff_Annotated}

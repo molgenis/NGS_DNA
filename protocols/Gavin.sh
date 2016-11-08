@@ -16,16 +16,17 @@
 #string gavinCGD
 #string gavinFDR
 #string gavinCalibrations
-#string gavinJar
-#string gavinVersion
 #string gavinOutputFirstPass
 #string gavinOutputFinal
 #string gavinToCADD
 #string gavinFromCADD
 
-#string gavinMergeBackToolVersion
+#string gavinToolPackVersion
+#string gavinJar
+#string gavinSplitRlvToolJar
 #string gavinMergeBackToolJar
 #string gavinOutputFirstPassMerged
+#string gavinOutputFirstPassMergedRLV
 
 sleep 3
 
@@ -38,11 +39,11 @@ tmpGavinToCADD=${MC_tmpFile}
 makeTmpDir ${gavinOutputFinal}
 tmpGavinOutputFinal=${MC_tmpFile}
 
-${stage} ${gavinVersion}
-${stage} ${gavinMergeBackToolVersion}
+${stage} ${gavinToolPackVersion}
+${stage} ${Version}
 
 ${checkStage}
-java -Xmx4g -jar ${EBROOTGAVIN}/${gavinJar} \
+java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
 -i ${projectVariantsMergedSorted} \
 -o ${tmpGavinOutputFirstPass} \
 -m CREATEFILEFORCADD \
@@ -68,7 +69,7 @@ echo "GAVIN round 1 is finished, uploading to CADD..."
 # OUTPUT: ${gavinFromCADD}
 
 
-#java -Xmx4g -jar ${EBROOTGAVIN}/${gavinJar} \
+#java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
 #-i ${projectVariantsMergedSorted} \
 #-o ${tmpGavinOutputFinal} \
 #-m ANALYSIS \
@@ -85,7 +86,21 @@ echo "GAVIN round 1 is finished, uploading to CADD..."
 
 echo "Merging ${projectVariantsMergedSorted} and ${gavinOutputFirstPass}"
 
-java -jar -Xmx4g ${EBROOTGAVINMERGEBACKTOOL}/${gavinMergeBackToolJar} \
+java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
 -i ${projectVariantsMergedSorted} \
 -v ${gavinOutputFirstPass} \
 -o ${gavinOutputFirstPassMerged}
+
+
+#gavinSplitRlvToolJar
+java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinSplitRlvToolJar} \
+-i ${gavinOutputFirstPassMerged} \
+-o ${gavinOutputFirstPassMergedRLV}
+
+perl -pi -e 's|##INFO=<ID=EXAC_AF,Number=.,Type=String|##INFO=<ID=EXAC_AF,Number=.,Type=Float|' ${gavinOutputFirstPassMergedRLV}
+perl -pi -e 's|##INFO=<ID=EXAC_AC_HOM,Number=.,Type=String|##INFO=<ID=EXAC_AC_HOM,Number=.,Type=Integer|' ${gavinOutputFirstPassMergedRLV}
+perl -pi -e 's|##INFO=<ID=EXAC_AC_HET,Number=.,Type=String|##INFO=<ID=EXAC_AC_HET,Number=.,Type=Integer|' ${gavinOutputFirstPassMergedRLV}
+perl -pi -e 's|##INFO=<ID=GoNL_AF,Number=.,Type=String|##INFO=<ID=GoNL_AF,Number=.,Type=Float|' ${gavinOutputFirstPassMergedRLV}
+perl -pi -e 's|##INFO=<ID=Thousand_Genomes_AF,Number=.,Type=String|##INFO=<ID=Thousand_Genomes_AF,Number=.,Type=Float|' ${gavinOutputFirstPassMergedRLV}
+
+echo "output: ${gavinOutputFirstPassMergedRLV}"

@@ -20,8 +20,9 @@ module load ${mantaVersion}
 module load ${pythonVersion}
 
 rm -rf ${mantaDir}
-
-if [ "${GCC_Analysis}" == "diagnostiek" ] || [ "${GCC_Analysis}" == "diagnostics" ] || [ "${GCC_Analysis}" == "Diagnostiek" ] || [ "${GCC_Analysis}" == "Diagnostics" ]
+if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" == *"DYS_v"* || "${bedfile}" == *"EPI_v"* \
+|| "${bedfile}" == *"LEVER_v"* || "${bedfile}" == *"MYO_v"* || "${bedfile}" == *"NEURO_v"* || "${bedfile}" == *"ONCO_v"* \
+|| "${bedfile}" == *"PCS_v"* || "${bedfile}" == *"TID_v"* ]]
 then
     	echo "Manta is skipped"
 else

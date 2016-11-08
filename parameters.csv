@@ -13,9 +13,8 @@ computeVersion,v16.08.1-Java-1.8.0_74
 convadingVersion,CoNVaDING/1.1.6
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
-gatkVersion,GATK/3.6-Java-1.8.0_74 
-gavinVersion,GAVIN/1.0-Java-1.8.0_74
-gavinMergeBackToolVersion,GavinMergeBackTool/0.2-Java-1.8.0_74
+gatkVersion,GATK/3.6-Java-1.8.0_74
+gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-${toolChain}
@@ -36,6 +35,7 @@ hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 gavinJar,GAVIN-APP-1.0.jar
 gavinMergeBackToolJar,MergeBackTool-0.2.jar
+gavinSplitRlvToolJar,SplitRlvTool-0.1.jar
 molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
 picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
@@ -140,7 +140,7 @@ MillsGoldStandardDir,${indicesDir}/Mills_and_1000G_gold_standard/
 MillsGoldStandardIndelsVcf,${MillsGoldStandardDir}/1000G_phase1.indels_Mills_and_1000G_gold_standard.indels.b37.human_g1k_v37.vcf
 MillsGoldStandardChr1Intervals,${MillsGoldStandardDir}/1000G_phase1.indels_Mills_and_1000G_gold_standard.indels.b37.human_g1k_v37.chr1.intervals
 
-### Protocols 11, 12, 13 and 14 (CheckSex, Delly, CoveragePerBase, SequonomConcordanceCheck, CollectBamMetrics) ###
+### Protocols 11, 12, 13 and 14 (CheckSex, Manta, CoveragePerBase, SequonomConcordanceCheck, CollectBamMetrics) ###
 whichSex,${sampleNameID}.chosenSex.txt
 checkSexMeanCoverage,${sampleNameID}.checkSex.filter.meancoverage.txt
 capturedIntervals_nonAutoChrX,${sampleNameID}.${nameBed}.nonAutosomalChrX.interval_list
@@ -168,14 +168,8 @@ exacAnnotation,${dataDir}/ExAC/release0.3/ExAC.r0.3.sites.vep.vcf.gz
 caddAnnotation,${dataDir}/CADD/whole_genome_SNVs.tsv.gz
 gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
-dellyVcf,${sampleNameID}.delly.vcf 
-dellySnpEffVcf,${sampleNameID}.delly.snpeff.vcf
-dellyTypeDEL,DEL
-dellyTypeDUP,DUP
-dellyTypeINV,INV
-dellyTypeTRA,TRA
 
-### Protocols 16a 16b 16c and  (gVCF VariantCalling, VariantCombine, VariantGenotyping) ###
+### Protocols 18a 18b 18c and  (gVCF VariantCalling, VariantCombine, VariantGenotyping) ###
 dbSNP137Vcf,${dbSNPDir}/dbsnp_137.b37.vcf
 dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
@@ -190,12 +184,20 @@ sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.ba
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 
+
+
+### Protocols 19, 20, 21, 21, 22, 23 and 24 (SnpEff,CmdLineAnnotator, VariantAnnotator, MergeBatches,Gavin VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
 projectVariantCallsSnpEff_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.vcf
 projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.vcf
-
-####GAVIN 
+projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
+projectVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
+projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
+projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
+projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
+projectVariantsMergedSortedSorted,${projectPrefix}.variant.calls.GATK.sorted.sorted.vcf
+sortVCFpl,sortVCFbyFai.pl
 gavinDataDir,${dataDir}/GAVIN/
 gavinClinVar,${gavinDataDir}/clinvar.patho.fix.11oct2016.vcf.gz
 gavinCGD,${gavinDataDir}/CGD_11oct2016.txt.gz
@@ -204,26 +206,17 @@ gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.3.tsv
 gavinOutputFirstPass,${projectPrefix}.GAVIN.RVCF.firstpass.vcf
 gavinOutputFinal,${projectPrefix}.GAVIN.RVCF.final.vcf
 gavinToCADD,${projectPrefix}.GAVIN.toCadd.tsv
-gavinFromCADD,${projectPrefix}.GAVIN.fromCadd.tsv 
-
+gavinFromCADD,${projectPrefix}.GAVIN.fromCadd.tsv
 gavinOutputFirstPassMerged,${projectPrefix}.GAVIN.RVCF.firstpass.mergedWithOriginal.vcf
+gavinOutputFirstPassMergedRLV,${projectPrefix}.GAVIN.RVCF.firstpass.mergedWithOriginal.rlv.vcf
 
-
-### Protocols 17, 19, 20, 21, 22 and 23 (MergeBatches, VariantAnnotator, dbNSFPAnnotation, VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
-projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
-projectVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
-projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
+### 25, 26
 projectVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
 projectVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
-projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
-projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
-projectVariantsMergedSortedSorted,${projectPrefix}.variant.calls.GATK.sorted.sorted.vcf
-sortVCFpl,sortVCFbyFai.pl
-
-
-### Protocols 24 and 25 (VcfToTable, QCReport) ###
 sampleFinalVcf,${intermediateDir}/${externalSampleID}.final.vcf
 projectFinalVcf,${projectPrefix}.final.vcf
+
+### Protocols 24 and 25 (VcfToTable, QCReport) ###
 variantsFinalProjectVcfTable,${projectFinalVcf}.table
 vcf2Table,vcf2tabV3.pl
 getStatisticsScript,getStatistics.R

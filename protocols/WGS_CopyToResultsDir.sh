@@ -11,12 +11,10 @@
 #string projectJobsDir
 #string previousRun
 #list externalSampleID
-#string automateVersion
 # Change permissions
 
 umask 0007
 
-module load ${automateVersion}
 
 #Function to check if array contains value
 array_contains () {

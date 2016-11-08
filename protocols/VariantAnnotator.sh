@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=13gb
+#MOLGENIS walltime=23:59:00 mem=18gb
 
 #Parameter mapping
 #string tmpName
@@ -64,7 +64,7 @@ perl -i -wpe 'my @t = split("\t",$_);$t[7] =~ s/ /_/g if ($t[7]);$t[7] =~ s/;$//
 ${checkStage}
 if [ -f ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} ]
 then
-java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
+java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx16g -jar \
 ${EBROOTGATK}/${gatkJar} \
 -T VariantAnnotator \
 -R ${indexFile} \

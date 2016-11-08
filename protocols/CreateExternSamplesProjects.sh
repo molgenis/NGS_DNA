@@ -35,7 +35,7 @@
 #string ngsUtilsVersion
 
 umask 0007
-module load Molgenis-Compute/${computeVersion}
+module load ${ngsUtilsVersion}
 module load $ngsversion
 
 module list
@@ -50,7 +50,7 @@ mkdir -p ${intermediateDir}
 mkdir -p ${projectResultsDir}
 mkdir -p ${projectQcDir}
 
-ROCKETPOINT=`pwd`
+ROCKETPOINT=$(pwd)
 
 cd ${projectRawTmpDataDir}
 
@@ -95,8 +95,7 @@ done
 cd $ROCKETPOINT
 
 echo "before splitting"
-echo `pwd`
-module load ${ngsUtilsVersion}
+echo $(pwd)
 
 #
 # TODO: array for each sample:
@@ -118,9 +117,6 @@ then
      rm ../.compute.properties
 fi
 
-echo "before run second rocket"
-echo pwd
-
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -p ${batchIDList} \
 -p ${projectJobsDir}/${project}.csv \
@@ -135,4 +131,5 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -b slurm \
 -g -weave \
 -runid ${runid} \
--o "ngsversion=${ngsversion};groupname=${groupname}"
+-o "ngsversion=${ngsversion};\
+groupname=${groupname}"
