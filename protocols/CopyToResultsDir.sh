@@ -140,13 +140,23 @@ printf "."
 
 for sa in "${UNIQUESAMPLES[@]}"
 do
-	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ]
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/candidateSV.vcf.gz ]
 	then
-		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz ${projectResultsDir}/variants/cnv/
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ${projectResultsDir}/variants/cnv/
-		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz ${projectResultsDir}/variants/cnv/
-		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
+		printf "."
+	fi
+
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/candidateSmallIndels.vcf.gz ]
+        then
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
+		printf "."
+	fi
+
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/diploidSV.vcf.gz ]
+        then
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz ${projectResultsDir}/variants/cnv/
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		printf "."
 	fi

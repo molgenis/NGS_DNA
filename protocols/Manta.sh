@@ -12,13 +12,17 @@
 #string pythonVersion
 #string GCC_Analysis
 #string capturingKit
+#string capturedBed
+#string bedToolsVersion
+#string tabixVersion
 
 makeTmpDir ${mantaDir}
 tmpMantaDir=${MC_tmpFile}
 
-
 module load ${mantaVersion}
 module load ${pythonVersion}
+module load ${bedToolsVersion}
+module load ${tabixVersion}
 
 rm -rf ${mantaDir}
 
@@ -35,11 +39,57 @@ else
 	python ${EBROOTMANTA}/bin/configManta.py \
 	--bam ${dedupBam} \
 	--referenceFasta ${indexFile} \
+	--exome \
 	--runDir ${tmpMantaDir}
 
 	python ${tmpMantaDir}/runWorkflow.py -m local -j 20
 
 	mv ${tmpMantaDir}/* ${mantaDir} 
+
+	if [ $capturingKit != *"wgs"* ]
+	then
+		mkdir ${mantaDir}/results/variants/real/	
+		
+		#
+		## 3 files has been created by Manta, they all should be limited only on the bedfile
+		#
+	
+		bedtools intersect -a ${mantaDir}/results/variants/candidateSmallIndels.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/candidateSmallIndels.vcf
+		if [ -f ${mantaDir}/results/variants/real/candidateSmallIndels.vcf ]
+                then
+			bgzip -c ${mantaDir}/results/variants/real/candidateSmallIndels.vcf > ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz
+			printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz .."
+			tabix -p vcf ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz
+			printf "${mantaDir}/results/variants/real/candidateSmallIndels.vcf ..done\n"
+		else
+			echo "no candidateSmallIndels's left after filtering with the bedfile"
+                        touch ${mantaDir}/results/variants/real/NO_candidateSmallIndels 
+		fi
+		bedtools intersect -a ${mantaDir}/results/variants/candidateSV.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/candidateSV.vcf
+		if [ -f ${mantaDir}/results/variants/real/candidateSV.vcf ]
+		then
+			bgzip -c ${mantaDir}/results/variants/real/candidateSV.vcf > ${mantaDir}/results/variants/real/candidateSV.vcf.gz
+        		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
+       			tabix -p vcf ${mantaDir}/results/variants/real/candidateSV.vcf.gz
+			printf "${mantaDir}/results/variants/real/candidateSV.vcf ..done\n"
+		else
+			echo "no candidateSV's left after filtering with the bedfile"
+			touch ${mantaDir}/results/variants/real/NO_candidateSV
+		fi
+		
+		bedtools intersect -a ${mantaDir}/results/variants/diploidSV.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/diploidSV.vcf
+		if [ -f ${mantaDir}/results/variants/real/diploidSV.vcf ]
+                then
+			bgzip -c ${mantaDir}/results/variants/real/diploidSV.vcf > ${mantaDir}/results/variants/real/diploidSV.vcf.gz
+		        printf "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
+		        tabix -p vcf ${mantaDir}/results/variants/real/diploidSV.vcf.gz
+			printf "${mantaDir}/results/variants/real/diploidSV.vcf ..done\n"
+		else
+			echo "no diploidSV's left after filtering with the bedfile"
+                        touch ${mantaDir}/results/variants/real/NO_diploidSV
+		fi
+	fi
+	
 fi
 
 

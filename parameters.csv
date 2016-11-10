@@ -8,6 +8,7 @@ targetedInsertSize,200
 checkStage,module list
 
 ### Tool versions ####
+bedToolsVersion,BEDTools/2.25.0-foss-2015b
 bwaVersion,BWA/0.7.12-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 convadingVersion,CoNVaDING/1.1.6
