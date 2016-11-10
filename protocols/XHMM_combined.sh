@@ -25,7 +25,13 @@
 #string xhmmPosterior
 #string xhmmHighSenseParams
 
-.  ./Controls.env
+
+cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
+xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/"                 
+convadingControlsDir=${cxControlsDir}/${cDir}/Convading/"
+## write capturingkit to file to make it easier to split
+echo $capturingKit > ${intermediateDir}/capt.txt
+CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)  
 
 module load ${gatkVersion}
 

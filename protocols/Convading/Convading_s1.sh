@@ -14,14 +14,11 @@
 #string capturingKit
 
 cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
-
-echo "xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/" > ./Controls.env
-echo "convadingControlsDir=${cxControlsDir}/${cDir}/Convading/" >> ./Controls.env
+xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/"
+convadingControlsDir=${cxControlsDir}/${cDir}/Convading/" >>
 ## write capturingkit to file to make it easier to split
 echo $capturingKit > ${intermediateDir}/capt.txt 
-echo "CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)" >> ./Controls.env
-
-.  ./Controls.env
+CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
 
 module load ${convadingVersion}
 
@@ -39,6 +36,7 @@ array_contains () {
     return $in
 }
 
+
 makeTmpDir ${convadingStartWithBam}
 tmpConvadingStartWithBam=${MC_tmpFile}
 
@@ -54,9 +52,7 @@ mkdir -p ${convadingInputBamsDir}
 ln -sf ${dedupBam} ${convadingInputBamsDir}/
 ln -sf ${dedupBam}.bai ${convadingInputBamsDir}/
 
-
 echo $project
-
 for i in ${INPUTS[@]}
 do
 	echo "$i" >> ${convadingInputBamsDir}/${CAPT}.READS.bam.list

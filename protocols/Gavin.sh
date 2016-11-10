@@ -40,7 +40,6 @@ makeTmpDir ${gavinOutputFinal}
 tmpGavinOutputFinal=${MC_tmpFile}
 
 ${stage} ${gavinToolPackVersion}
-${stage} ${Version}
 
 ${checkStage}
 java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
