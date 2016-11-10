@@ -27,7 +27,7 @@ fi
 
 cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
 	
-convadingControlsDir=${cxControlsDir}/${cDir}/Convading/"
+convadingControlsDir=${cxControlsDir}/${cDir}/Convading/
 echo "##"
 echo "### convadingControlsDir=$convadingControlsDir"
 echo "##"

@@ -24,15 +24,19 @@
 #string xhmmAUXcnv
 #string xhmmPosterior
 #string xhmmHighSenseParams
+#string ControlsVersioning
 
+nameOfSample=$(basename ${dedupBam%%.*})
 
 cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
 xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/"                 
-convadingControlsDir=${cxControlsDir}/${cDir}/Convading/"
-## write capturingkit to file to make it easier to split
-echo $capturingKit > ${intermediateDir}/capt.txt
-CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)  
 
+if [[ ! -f ${intermediateDir}/capt.txt || ! -f ${intermediateDir}/capt.txt.locked ]]
+then
+	## write capturingkit to file to make it easier to split
+	echo $capturingKit > ${intermediateDir}/capt.txt
+	CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)  
+fi
 module load ${gatkVersion}
 
 #Function to check if array contains value
@@ -50,7 +54,7 @@ array_contains () {
 }
 
 
-if [ ! -f XHMM_combined.s1.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s1.finished ]
 then
 	#
 	## Step1
@@ -89,9 +93,9 @@ then
 	-o ${DepthOfCoveragePerSample}.${CAPT}
 
 	echo "s1 finished"
-	touch XHMM_combined.s1.finished
+	touch XHMM_combined.${nameOfSample}.s1.finished
 fi
-if [ ! -f XHMM_combined.s2.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s2.finished ]
 then
 	#
 	## Step2
@@ -110,12 +114,12 @@ then
 	mv ${tmpXhmmMergedSample} ${xhmmMergedSample}
 	printf " .. done!"
 
-	touch XHMM_combined.s2.finished
+	touch XHMM_combined.${nameOfSample}.s2.finished
 	echo "s2 finished"
 
 fi
 
-if [ ! -f XHMM_combined.s5.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s5.finished ]
 then
 	#
 	## Step 5
@@ -139,14 +143,14 @@ then
 	--maxSdSampleRD 150
 
 	echo "s5 finished"
-	touch XHMM_combined.s5.finished
+	touch XHMM_combined.${nameOfSample}.s5.finished
 fi
 
 #--excludeTargets ${xhmmDir}/${CAPT}.step4.low_complexity_targets.txt \
 #maxMeanTarget changed from 500 (as in tutorial) to 1500 to keep al targets in the calculation
 #maxMeanSampleRD changed from 200 (as in tutorial) to 1000 to keep al targets in the calculation
 
-if [ ! -f XHMM_combined.s6.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s6.finished ]
 then
 	#
 	## Step 6
@@ -155,11 +159,11 @@ then
 	-r ${xhmmFilterSample} \
 	--PCAfiles ${xhmmPCAfile}
 
-	touch XHMM_combined.s6.finished
+	touch XHMM_combined.${nameOfSample}.s6.finished
 	echo "s6 finished"
 fi
 
-if [ ! -f XHMM_combined.s7.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s7.finished ]
 then
 	#
 	## Step 7
@@ -172,10 +176,10 @@ then
 	--PVE_mean_factor 0.7
 
 	echo "s7 finished"
-	touch XHMM_combined.s7.finished
+	touch XHMM_combined.${nameOfSample}.s7.finished
 fi
 
-if [ ! -f XHMM_combined.s8.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s8.finished ]
 then
 	#
 	## Step 8
@@ -191,10 +195,10 @@ then
 	--maxSdTargetRD 30
 
 	echo "s8 finished"
-	touch XHMM_combined.s8.finished
+	touch XHMM_combined.${nameOfSample}.s8.finished
 fi
 
-if [ ! -f XHMM_combined.s9.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s9.finished ]
 then
 	#
 	## Step 9
@@ -208,10 +212,10 @@ then
 	-o ${xhmmSameFiltered}
 
 	echo "s9 finished"
-	touch XHMM_combined.s9.finished
+	touch XHMM_combined.${nameOfSample}.s9.finished
 fi
 
-if [ ! -f XHMM_combined.s10.finished ]
+if [ ! -f XHMM_combined.${nameOfSample}.s10.finished ]
 then
 	#
 	## Step 10
@@ -224,6 +228,6 @@ then
 	-c ${xhmmXcnv} \
 	-a ${xhmmAUXcnv} \
 	-s ${xhmmPosterior}
-	touch XHMM_combined.s10.finished
+	touch XHMM_combined.${nameOfSample}.s10.finished
 	echo "s10 finished"
 fi
