@@ -66,9 +66,10 @@ rsync -a ${projectPrefix}.final.vcf.table ${projectResultsDir}/variants/
 printf "."
 printf " finished (2/3)\n"
 
+mkdir -p ${intermediateDir}/gVCF/new/ 
 
 #copy vcf file + coveragePerBase.txt + gender determination
-printf "Copying vcf files, gender determination, coverage per base and per target files "
+printf "Copying vcf files, gender determination, coverage per base and per target files and new gVCF files to new folder"
 for sa in "${UNIQUESAMPLES[@]}"
 do
 	rsync -a ${intermediateDir}/${sa}.final.vcf ${projectResultsDir}/variants/
@@ -76,6 +77,9 @@ do
 	rsync -a ${intermediateDir}/${sa}.final.vcf.table ${projectResultsDir}/variants/
 	printf "."
 
+	rsync -a ${intermediateDir}/gVCF/${sa}*g.vcf.gz*  ${intermediateDir}/gVCF/new/
+	printf "."
+	
 	rsync -a ${intermediateDir}/${sa}.chosenSex.txt ${projectResultsDir}/general/
 	printf "."
 	
