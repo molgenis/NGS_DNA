@@ -12,7 +12,7 @@
 #string gatkJar
 #string indexFile
 #string capturedIntervals
-#string projectVariantsMergedSorted
+#string projectVariantsMerged
 #string projectVariantsMergedSnpsVcf
 #string projectVariantsMergedIndelsVcf
 #string externalSampleID
@@ -31,7 +31,7 @@ sleep 5
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${projectVariantsMergedSorted} \
+--variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedIndelsVcf} \
 -L ${capturedIntervals} \
 --selectTypeToInclude INDEL \
@@ -46,7 +46,7 @@ sleep 5
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${projectVariantsMergedSorted} \
+--variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedSnpsVcf} \
 -L ${capturedIntervals} \
 --selectTypeToExclude INDEL \

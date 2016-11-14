@@ -11,7 +11,7 @@
 #string snpEffVersion
 #string javaVersion
 
-#string projectVariantsMergedSorted
+#string projectVariantsMerged
 #string gavinClinVar
 #string gavinCGD
 #string gavinFDR
@@ -43,7 +43,7 @@ ${stage} ${gavinToolPackVersion}
 
 ${checkStage}
 java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
--i ${projectVariantsMergedSorted} \
+-i ${projectVariantsMerged} \
 -o ${tmpGavinOutputFirstPass} \
 -m CREATEFILEFORCADD \
 -a ${tmpGavinToCADD} \
@@ -69,7 +69,7 @@ echo "GAVIN round 1 is finished, uploading to CADD..."
 
 
 #java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
-#-i ${projectVariantsMergedSorted} \
+#-i ${projectVariantsMerged} \
 #-o ${tmpGavinOutputFinal} \
 #-m ANALYSIS \
 #-a ${gavinFromCADD} \
@@ -83,10 +83,10 @@ echo "GAVIN round 1 is finished, uploading to CADD..."
 
 #echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" ${gavinOutputFinal} | wc -l'
 
-echo "Merging ${projectVariantsMergedSorted} and ${gavinOutputFirstPass}"
+echo "Merging ${projectVariantsMerged} and ${gavinOutputFirstPass}"
 
 java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
--i ${projectVariantsMergedSorted} \
+-i ${projectVariantsMerged} \
 -v ${gavinOutputFirstPass} \
 -o ${gavinOutputFirstPassMerged}
 
