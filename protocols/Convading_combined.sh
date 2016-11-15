@@ -32,6 +32,10 @@ echo "##"
 echo "### convadingControlsDir=$convadingControlsDir"
 echo "##"
 
+
+if [ -d ${convadingControlsDir} ]
+then
+
 CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
 nameOfSample=$(basename ${dedupBam%%.*})
 
@@ -155,4 +159,10 @@ then
 	printf " .. done\n"
 	
 	touch convading.${nameOfSample}.step5.finished
+fi
+
+
+else
+	echo "Convading step has been skipped since there are no controls for this group: ${cDir}/Convading/"
+
 fi
