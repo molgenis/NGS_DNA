@@ -95,11 +95,7 @@ java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
 java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinSplitRlvToolJar} \
 -i ${gavinOutputFirstPassMerged} \
 -o ${gavinOutputFirstPassMergedRLV}
-
-perl -pi -e 's|##INFO=<ID=EXAC_AF,Number=.,Type=String|##INFO=<ID=EXAC_AF,Number=.,Type=Float|' ${gavinOutputFirstPassMergedRLV}
-perl -pi -e 's|##INFO=<ID=EXAC_AC_HOM,Number=.,Type=String|##INFO=<ID=EXAC_AC_HOM,Number=.,Type=Integer|' ${gavinOutputFirstPassMergedRLV}
-perl -pi -e 's|##INFO=<ID=EXAC_AC_HET,Number=.,Type=String|##INFO=<ID=EXAC_AC_HET,Number=.,Type=Integer|' ${gavinOutputFirstPassMergedRLV}
-perl -pi -e 's|##INFO=<ID=GoNL_AF,Number=.,Type=String|##INFO=<ID=GoNL_AF,Number=.,Type=Float|' ${gavinOutputFirstPassMergedRLV}
-perl -pi -e 's|##INFO=<ID=Thousand_Genomes_AF,Number=.,Type=String|##INFO=<ID=Thousand_Genomes_AF,Number=.,Type=Float|' ${gavinOutputFirstPassMergedRLV}
+perl -pi -e 's|ID=RLV_PRESENT,Number=1,Type=String,|ID=RLV_PRESENT,Number=1,Type=Float,|' ${gavinOutputFirstPassMergedRLV}
+perl -pi -e 's|RLV_VARIANTSIGNIFICANCE,Number=1,Type=String,|RLV_VARIANTSIGNIFICANCE,Number=1,Type=Float,|' ${gavinOutputFirstPassMergedRLV}
 
 echo "output: ${gavinOutputFirstPassMergedRLV}"

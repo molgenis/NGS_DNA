@@ -248,6 +248,8 @@ convadingInputBamsDir,${convadingDir}/bams/${externalSampleID}/
 convadingStartWithBam,${convadingDir}/StartWithBam/${externalSampleID}/
 convadingStartWithMatchScore,${convadingDir}/StartWithMatchScore/${externalSampleID}/
 convadingStartWithBestScore,${convadingDir}/StartWithBestScore/${externalSampleID}/
+convadingStartWithMatchScoreGender,${convadingDir}/StartWithMatchScore/${externalSampleID}/Gender/
+convadingStartWithBestScoreGender,${convadingDir}/StartWithBestScore/${externalSampleID}/Gender/
 convadingCreateFinalList,${convadingDir}/CreateFinalList/${externalSampleID}/
 
 xhmmDataDir,${dataDir}/XHMM/

@@ -39,9 +39,10 @@ then
 	then
 		## write capturingkit to file to make it easier to split
 		echo $capturingKit > ${intermediateDir}/capt.txt
-		CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)  
 	fi
 	module load ${gatkVersion}
+	CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)  
+
 
 	#Function to check if array contains value
 	array_contains () {
@@ -58,6 +59,7 @@ then
     		done
     		return $in
 	}
+
 
 
 	if [ ! -f XHMM_combined.${nameOfSample}.s1.finished ]
@@ -130,7 +132,7 @@ then
 	#
 	## Step 5
 	#
-		xhmmExtremeGcContent=${xhmmDataDir}/step3.extreme_gc_targets.txt
+		xhmmExtremeGcContent=${xhmmDataDir}/${CAPT}/step3.extreme_gc_targets.txt
 
 		$EBROOTXHMM/bin/xhmm --matrix \
 		-r ${xhmmMergedSample} \

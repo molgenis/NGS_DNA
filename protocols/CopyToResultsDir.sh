@@ -219,7 +219,7 @@ printf " finished (9/11)\n"
 
 echo "Creating zip file"
 # Create zip file for all "small text" files
-CURRENT_DIR=`pwd`
+CURRENT_DIR=$(pwd)
 cd ${projectResultsDir}
 
 zip -gr ${projectResultsDir}/${project}.zip variants
@@ -236,9 +236,6 @@ echo "Zip file created: ${projectResultsDir}/${project}.zip (10/11)"
 
 md5sum ${project}.zip > ${projectResultsDir}/${project}.zip.md5
 echo "Made md5 file for ${projectResultsDir}/${project}.zip (11/11)"
-# add u+rwx,g+r+w rights for GAF group
-
-chmod -R u+rwX,g+rwX ${projectResultsDir}
 
 cd ${CURRENT_DIR}
 
