@@ -19,11 +19,13 @@ Arguments
 	-a|--includeallruns	include all previous runs of this panel (true|false)
 				default: false 
 	-r|--reference		path to reference genome (e.g. /apps/data/1000G/phase1/human_g1k_v37_phiX.fasta)
-				default: /apps/data/1000G/phase1/human_g1k_v37_phiX.fasta"
+				default: /apps/data/1000G/phase1/human_g1k_v37_phiX.fasta
+	-g|--gender		file containing umcg-ids and gender (e.g. 123344,Male)
+				default: (\${workingDir}/umcg-ids.txt)"
 }
 
 
-PARSED_OPTIONS=$(getopt -n "$0"  -o i:w:p:b:o:r:a: --long "bamsfolder:workdir:panel:bedfile:controlsDir:reference:includeallruns:"  -- "$@")
+PARSED_OPTIONS=$(getopt -n "$0"  -o i:w:p:b:o:r:a:g: --long "bamsfolder:workdir:panel:bedfile:controlsDir:reference:includeallruns:gender:"  -- "$@")
 
 #
 # Bad arguments, something has gone wrong with the getopt command.
@@ -72,6 +74,10 @@ while true; do
 		case "$2" in
 		*) includePrevRuns=$2 ; shift 2 ;;
 	    esac ;;
+	-g|--gender)
+		case "$2" in
+		*) genderFile=$2 ; shift 2 ;;
+	    esac ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
   esac
@@ -104,8 +110,9 @@ fi
 if [[ -z "${includePrevRuns-}" ]]; then
         includePrevRuns="false"
 fi
-
-
+if [[ -z "${genderFile-}" ]]; then
+	genderFile="${workingDir}/umcg-ids.txt"
+fi
 module load ngs-utils
 module load CoNVaDING/1.1.6
 module load GATK
@@ -127,6 +134,11 @@ convadingGenerateTargetQcListDir=${workingDir}/GenerateTargetQcList/
 convadingCreateFinalListDir=${workingDir}/CreateFinalListDir/
 controlsDir=${workingDir}/ControlsDir/
 kickedOutSamples=${workingDir}/KickedOutSamples/
+
+startWithBamFinished="${workingDir}/step1_startWithBam.finished"
+startWithMatchScoreFinished="${workingDir}/step2_startWithMatchScore.finished"
+startWithBestScoreFinished="${workingDir}/step3_startWithBestScore.finished"
+generateTargetQcListFinished="${workingDir}/step4b_generateTargetQcList.finished"
 
 chmod ugo+x ${workingDir}/config.cfg
 
@@ -177,7 +189,6 @@ else
 	echo "startWithBamFinished skipped"
 fi
 
-
 if [ ! -f ${startWithMatchScoreFinished} ]
 then
 	if [ "${includePrevRuns}" == "true" ]
@@ -187,6 +198,10 @@ then
 		do
 			cp $i ${controlsDir}
 			cp $i ${convadingStartWithBamDir}
+			if [ -f ${workingDir}/oldControls.txt ]
+			then
+				rm ${workingDir}/oldControls.txt
+			fi 
 			echo $(basename ${i%%.*}) >> ${workingDir}/oldControls.txt
 		done	 		
 	fi
@@ -229,9 +244,12 @@ fi
 mkdir -p ${kickedOutSamples}
 rm -f step4_removingSamplesFromControls.log 
 echo "removing bad samples out of the controlsDir"
-version="$(date +"%Y-%m")"
+version="$(date +"%Y-%m")_2"
+rm -f ${workingDir}/RemovedFromOldControlsGroup.txt
+
 if [ ! -f ${workingDir}/step4a_removingSamplesFromControls.finished ]
 then
+	rm -f ${workingDir}/step4a_removingSamplesFromControls.log
 	for i in $(ls ${convadingStartWithBestScoreDir}/*.shortlist.txt)
 	do
 	##SHORTLIST (uit stap3)
@@ -240,17 +258,23 @@ then
         	then
         	    	sampleID=$(basename ${i%%.*})
 			rm -f ${convadingInputBamsDir}/${sampleID}*
-	
+			echo $sampleID	
 			##
 			### Check if the control of the old controlgroup is still a control
 			##
 			oldControlGoesOut=""
 			if [ -f ${workingDir}/oldControls.txt ]
 			then
-				oldControlGoesOut=$(grep $sampleID ${workingDir}/oldControls.txt)
+
+				if grep "$sampleID" ${workingDir}/oldControls.txt
+				then
+					oldControlGoesOut=$(grep "$sampleID" ${workingDir}/oldControls.txt)
+				fi
 			else
+
 				oldControlGoesOut=""	
 			fi
+			echo "2"
 			if [ ! -z "${oldControlGoesOut}" ]
 			then
 				echo "${sampleID}" >> ${workingDir}/RemovedFromOldControlsGroup.txt
@@ -266,31 +290,15 @@ then
 			#
 			#mv ${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt ${kickedOutSamples}/
 			printf "number of outliers: ${size}\t${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt moved to ${kickedOutSamples} folder \n" >> ${workingDir}/step4a_removingSamplesFromControls.log
-			printf "You can check the outliers in: $i \n\n" | tee ${workingDir}/step4a_removingSamplesFromControls.log
-			
-		
+			#printf "You can check the outliers in: $i \n\n" | tee ${workingDir}/step4a_removingSamplesFromControls.log
         	fi
-
+	
 	done
-touch ${workingDir}/step4a_removingSamplesFromControls.finished
+	echo "blaat"
+	touch ${workingDir}/step4a_removingSamplesFromControls.finished
 
 fi
-
-#########
-#
-##
-### Copy data to permanent storage --> ${pathToControls} (default: /apps/data/Controls_Convading_XHMM )
-##
-#
-mkdir -p ${pathToFinalControls}/${version}/Convading/
-mkdir -p ${pathToFinalControls}/${version}/XHMM/
-
-echo "###COPYING Convading controls normalized coverage files to final destination"
-
-cp ${controlsDir}/*.aligned.only.normalized.coverage.txt ${pathToFinalControls}/${version}/Convading
-echo "copied ${controlsDir}/*.aligned.only.normalized.coverage.txt to ${pathToFinalControls}/${version}/Convading/"
-
-
+echo "hoi"
 #########
 #
 ##
@@ -303,17 +311,33 @@ then
 	echo "working on: s4b_generateTargetQcList with updated controls list"
 	perl ${EBROOTCONVADING}/CoNVaDING.pl \
 	-mode GenerateTargetQcList \
-	-inputDir ${pathToFinalControls}/${version}/Convading \
+	-inputDir ${controlsDir}  \
 	-outputDir ${convadingGenerateTargetQcListDir} \
-	-controlsDir ${pathToFinalControls}/${version}/Convading >> ${workingDir}/step4_generateTargetQcList.log
+	-controlsDir ${controlsDir} >> ${workingDir}/step4_generateTargetQcList.log
 	
 	touch ${generateTargetQcListFinished}
 	echo "generateTargetQcList created"
 else
 	echo "GenerateTargetQcList skipped"
 fi
+
+#########
+#
+##
+### Copy data to permanent storage --> ${pathToControls} (default: /apps/data/Controls_Convading_XHMM )
+##
+#
+mkdir -p ${pathToFinalControls}/${version}/Convading/
+mkdir -p ${pathToFinalControls}/${version}/XHMM/
+
 echo "Copying targetQcList.txt to ${pathToFinalControls}/${version}/Convading/"
 cp ${convadingGenerateTargetQcListDir}/targetQcList.txt ${pathToFinalControls}/${version}/Convading/
+
+echo "###COPYING Convading controls normalized coverage files to final destination"
+
+cp ${controlsDir}/*.aligned.only.normalized.coverage.txt ${pathToFinalControls}/${version}/Convading
+echo "copied ${controlsDir}/*.aligned.only.normalized.coverage.txt to ${pathToFinalControls}/${version}/Convading"
+
 
 #########
 #
@@ -321,15 +345,20 @@ cp ${convadingGenerateTargetQcListDir}/targetQcList.txt ${pathToFinalControls}/$
 ### Start with XHMM step
 ##
 #
+xhmmWorkingDir=${workingDir}/XHMM/
 
-rm -f ${workingDir}/XHMM.failed
-rm -f ${workingDir}/XHMM.submitted
-
-if [ -d ${workingDir}/XHMM ]
+if [ ! -f ${workingDir}/XHMM.finished ]
 then
-	rm -rf ${workingDir}/XHMM
-	mkdir -p ${workingDir}/XHMM
+	rm -f ${workingDir}/XHMM.failed
+	rm -f ${workingDir}/XHMM.submitted
 
+
+	if [ -d ${workingDir}/XHMM ]
+	then
+		rm -rf ${xhmmWorkingDir}
+
+	fi
+	mkdir -p ${xhmmWorkingDir}
 fi
 
 if [ ! -f ${workingDir}/XHMM.finished ]
@@ -338,20 +367,20 @@ then
 	for i in $(ls ${convadingInputBamsDir}/*.bam)
 	do
 		name=$(basename ${i%%.*})
-	  	echo "$i" > ${workingDir}/XHMM/${name}.READS.bam.list
+	  	echo "$i" > ${xhmmWorkingDir}/${name}.READS.bam.list
 
 	done
 	
-	for i in $(ls ${workingDir}/XHMM/*.READS.bam.list)
+	for i in $(ls ${xhmmWorkingDir}/*.READS.bam.list)
 	do
-	mkdir -p ${workingDir}/XHMM/scripts/
+	mkdir -p ${xhmmWorkingDir}/scripts/
 	bas=$(basename ${i%%.*})
-	output=${workingDir}/XHMM/scripts/xhmm_${bas}.sh
+	output=${xhmmWorkingDir}/scripts/xhmm_${bas}.sh
 
 	echo "#!/bin/bash" > ${output}
 	echo "#SBATCH --job-name=xhmm_${bas}" >> ${output}
-	echo "#SBATCH --output=${workingDir}/XHMM/scripts/xhmm_${bas}.out" >> ${output}
-	echo "#SBATCH --error=${workingDir}/XHMM/scripts/xhmm_${bas}.err" >> ${output}
+	echo "#SBATCH --output=${xhmmWorkingDir}/scripts/xhmm_${bas}.out" >> ${output}
+	echo "#SBATCH --error=${xhmmWorkingDir}/scripts/xhmm_${bas}.err" >> ${output}
 	echo "#SBATCH --time=05:59:00" >> ${output}
 	echo "#SBATCH --cpus-per-task 1" >> ${output}
 	echo "#SBATCH --mem 6gb" >> ${output}
@@ -375,7 +404,7 @@ then
 	echo "--minBaseQuality 0 --minMappingQuality 20 --start 1 --stop 5000 --nBins 200 \\">> ${output}
 	echo "--includeRefNSites \\">> ${output}
 	echo "--countType COUNT_FRAGMENTS \\" >> ${output}
-	echo "-o ${workingDir}/XHMM/${bas}" >> ${output}
+	echo "-o ${xhmmWorkingDir}/${bas}" >> ${output}
 	echo -e "\ntouch ${output}.finished" >> ${output}
 	echo -e "\ntrap - EXIT">> ${output}
 	echo "exit 0">> ${output}
@@ -391,8 +420,6 @@ then
 	touch ${workingDir}/XHMM.submitted
 fi
 
-
-
 #
 ##
 ### Because the files get submitted we want to know when XHMM is finished (or crashed)
@@ -401,11 +428,11 @@ fi
 while [[ ! -f ${workingDir}/XHMM.finished && ! -f ${workingDir}/XHMM.failed ]]
 do
 	
-	countSh=$(ls ${workingDir}/XHMM/scripts/*.sh | wc -l)
+	countSh=$(ls ${xhmmWorkingDir}/scripts/*.sh | wc -l)
 	countFinished=0
-	if ls ${workingDir}/XHMM/scripts/*.sh.finished 1> /dev/null 2>&1
+	if ls ${xhmmWorkingDir}/scripts/*.sh.finished 1> /dev/null 2>&1
 	then
-		countFinished=$(ls ${workingDir}/XHMM/scripts/*.sh.finished | wc -l)
+		countFinished=$(ls ${xhmmWorkingDir}/scripts/*.sh.finished | wc -l)
 	fi
 
 	if [ $countSh == $countFinished ]
@@ -423,29 +450,36 @@ done
 
 if [ -f ${workingDir}/XHMM.failed ]
 then
-	echo "An error has occured, please check the .err files in ${workingDir}/XHMM/scripts/"
+	echo "An error has occured, please check the .err files in ${xhmmWorkingDir}/scripts/"
 	exit 1
 fi
-
+echo "VERSION: $version"
 if [ -f ${workingDir}/XHMM.finished ]
 then
-	echo "### COPYING XHMM controls to final destination"
-	mkdir -p ${pathToFinalControls}/${version}/XHMM/PerSample/
-        cp -r ${workingDir}/XHMM/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
-
 	if [ "${includePrevRuns}" == "true" ]
-	then
-		echo "start copying interval summary files from previous runs to ${pathToFinalControls}/${version}/Convading/"
-    		cp ${pathToFinalControls}/*/XHMM/PerSample/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
-	fi
+        then
+                echo "start copying interval summary files from previous runs to ${xhmmWorkingDir} "
+                echo "cp ${pathToFinalControls}/*/XHMM/PerSample/*.sample_interval_summary ${xhmmWorkingDir}/"
+        fi
 
-        for i in $(ls ${pathToFinalControls}/${version}/XHMM/PerSample/*.sample_interval_summary )
+	mkdir -p ${pathToFinalControls}/${version}/XHMM/PerSample/
+	echo "JOHA"
+
+        if [ -f ${xhmmWorkingDir}/sample_interval_summary.Controls ]
+        then
+            	rm ${xhmmWorkingDir}/sample_interval_summary.Controls
+        fi
+
+	for i in $(ls ${pathToFinalControls}/${version}/XHMM//PerSample/*.sample_interval_summary )
         do
-          	echo "$i" >> ${workingDir}/XHMM/sample_interval_summary.Controls
+          	echo "$i" >> ${xhmmWorkingDir}/sample_interval_summary.Controls
         done
-	cp ${workingDir}/XHMM/sample_interval_summary.Controls ${pathToFinalControls}/${version}/XHMM/Controls.sample_interval_summary
-        echo "xhmm results copied"
+        echo "### COPYING XHMM controls to final destination"
+        cp -r ${xhmmWorkingDir}/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
 
+	cp ${xhmmWorkingDir}/sample_interval_summary.Controls ${pathToFinalControls}/${version}/XHMM/Controls.sample_interval_summary
+
+        echo "xhmm results copied"
 
 fi
 
@@ -455,47 +489,69 @@ fi
 ### Create extreme GC content files once per panel 
 ##
 #
-xhmmGcContent=${workingDir}/XHMM/step3.DATA.locus_GC.txt
-xhmmExtremeGcContent=${workingDir}/XHMM/step3.extreme_gc_targets.txt
+if [ ! -f ${pathToFinalControls}/${panel}.extreme_gc_targets.txt ]
+then
+	xhmmGcContent=${xhmmWorkingDir}/step3.DATA.locus_GC.txt
+	xhmmExtremeGcContent=${xhmmWorkingDir}/step3.extreme_gc_targets.txt
 
-java -Xmx3072m -jar $EBROOTGATK/GenomeAnalysisTK.jar \
--T GCContentByInterval \
--L ${capturedBed} \
--R ${indexFile} \
--o ${xhmmGcContent}.tmp
+	java -Xmx3072m -jar $EBROOTGATK/GenomeAnalysisTK.jar \
+	-T GCContentByInterval \
+	-L ${capturedBed} \
+	-R ${indexFile} \
+	-o ${xhmmGcContent}.tmp
 
-printf "moving ${xhmmGcContent}.tmp to ${xhmmGcContent} .. "
-mv ${xhmmGcContent}.tmp ${xhmmGcContent}
-printf " .. done!"
+	printf "moving ${xhmmGcContent}.tmp to ${xhmmGcContent} .. "
+	mv ${xhmmGcContent}.tmp ${xhmmGcContent}
+	printf " .. done!"
 
-cat ${xhmmGcContent} | awk '{if ($2 < 0.1 || $2 > 0.9) print $1}' > ${xhmmExtremeGcContent}
+	cat ${xhmmGcContent} | awk '{if ($2 < 0.1 || $2 > 0.9) print $1}' > ${xhmmExtremeGcContent}
 
-echo "Extreme GC content file created: ${xhmmExtremeGcContent}"
+	echo "Extreme GC content file created: ${xhmmExtremeGcContent}"
 
-cp ${xhmmGcContent} ${pathToFinalControls}/
-cp ${xhmmExtremeGcContent} ${pathToFinalControls}/
+	cp ${xhmmGcContent} ${pathToFinalControls}/${panel}.DATA.locus_GC.txt
+	cp ${xhmmExtremeGcContent} ${pathToFinalControls}/${panel}.extreme_gc_targets.txt
+fi
+if [ ! -f ${pathToFinalControls}/${panel}.locus_complexity.txt ]
+then
+	module load xhmm
 
+	module load plinkseq
 
-module load xhmm
+	outputbase=${xhmmWorkingDir}/output.step4
+	targets=${outputbase}.targets
+	targetsLOCDB=${targets}.LOCDB
 
-module load plinkseq
+	seqDBhg19=/apps/data/XHMM/seqdb.hg19/hg19/seqdb.hg19
 
-outputbase=${workingDir}/XHMM/output.step4
-targets=${outputbase}.targets
-targetsLOCDB=${targets}.LOCDB
+	$EBROOTXHMM/bin/interval_list_to_pseq_reg ${capturedBed} > ${targets}.reg
 
-seqDBhg19=/apps/data/XHMM/seqdb.hg19/hg19/seqdb.hg19
+	$EBROOTPLINKSEQ/pseq . loc-load --locdb ${targetsLOCDB} --file ${targets}.reg --group targets --out ${targetsLOCDB}.loc-load
 
-$EBROOTXHMM/bin/interval_list_to_pseq_reg ${capturedBed} > ${targets}.reg
+	$EBROOTPLINKSEQ/pseq . loc-stats --locdb ${targetsLOCDB} --group targets --seqdb ${seqDBhg19} | \
+	awk '{if (NR > 1) print $_}' | sort -k1 -g | awk '{print $10}' | paste ${capturedBed} - | \
+	awk '{print $1"\t"$2}' > ${outputbase}.locus_complexity.txt
 
-$EBROOTPLINKSEQ/pseq . loc-load --locdb ${targetsLOCDB} --file ${targets}.reg --group targets --out ${targetsLOCDB}.loc-load
+	cat ${outputbase}.locus_complexity.txt | awk '{if ($2 > 0.25) print $1}' > ${outputbase}.low_complexity_targets.txt
 
-$EBROOTPLINKSEQ/pseq . loc-stats --locdb ${targetsLOCDB} --group targets --seqdb ${seqDBhg19} | \
-awk '{if (NR > 1) print $_}' | sort -k1 -g | awk '{print $10}' | paste ${capturedBed} - | \
-awk '{print $1"\t"$2}' > ${outputbase}.locus_complexity.txt
+	cp ${outputbase}.low_complexity_targets.txt ${pathToFinalControls}/${panel}.low_complexity_targets.txt 
+	cp ${outputbase}.locus_complexity.txt  ${pathToFinalControls}/${panel}.locus_complexity.txt 
+fi
 
-cat ${outputbase}.locus_complexity.txt | awk '{if ($2 > 0.25) print $1}' \
-> ${outputbase}.low_complexity_targets.txt
+rm -f ${workingDir}/chrXRegions.txt
 
-cp ${outputbase}.low_complexity_targets.txt ${pathToFinalControls}/
-cp ${outputbase}.locus_complexity.txt  ${pathToFinalControls}/
+awk '{
+	if ($1 == "X"){
+		print $0
+	}
+}' ${capturedBed} >> ${workingDir}/chrXRegions.txt
+
+size=$(cat ${workingDir}/chrXRegions.txt | wc -l)
+
+#
+## Execute chrX steps
+#
+if [ $size != 0 ]
+then
+	echo "the bedfile contains chrX regions, convading and xhmm will now be executed for male and female seperately"
+	sh ${workingDir}/prepareMaleFemale.sh ${genderFile} ${workingDir}
+fi

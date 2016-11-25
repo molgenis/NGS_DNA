@@ -16,13 +16,11 @@ workingDir=$2
 
 workingDir=${workingDir}/Gender/${gender}
 
-
 ##### CHANGE WHEN TESTING IS DONE, should come from other script (prepareSexChromosomes script)
 includePrevRuns="true"
 ##########
 
-
-cd $bamsFolder
+cd ${workingDir}/$bamsFolder
 
 rm -rf ${workingDir}/inputBams/
 
@@ -45,7 +43,7 @@ kickedOutSamples=${workingDir}/KickedOutSamples/
 startWithBamFinished="${workingDir}/step1_startWithBam.finished"
 startWithMatchScoreFinished="${workingDir}/step2_startWithMatchScore.finished"
 startWithBestScoreFinished="${workingDir}/step3_startWithBestScore.finished"
-generateTargetQcListFinished="${workingDir}/step4_generateTargetQcList.finished"
+generateTargetQcListFinished="${workingDir}/step4b_generateTargetQcList.finished"
 pathToFinalControls="${pathToControls}/${panel}/"
 
 if [ ! -f ${startWithBamFinished} ]
@@ -113,7 +111,7 @@ fi
 mkdir -p ${kickedOutSamples}
 rm -f step4_removingSamplesFromControls.log 
 echo "removing bad samples out of the controlsDir"
-version="$(date +"%Y-%m")-2"
+version="$(date +"%Y-%m")_2"
 
 if [ ! -f ${workingDir}/step4a_removingSamplesFromControls.finished ]
 then
@@ -134,14 +132,17 @@ then
 	        if [ ${size} != 0 ]
                 then
                         rm -f ${convadingInputBamsDir}/${sampleID}*
-			
+		
                         ##
                         ### Check if the control of the old controlgroup is still a control
                         ##
                         oldControlGoesOut=""
                         if [ -f ${workingDir}/oldControls.txt ]
                         then
-                            	oldControlGoesOut=$(grep $sampleID ${workingDir}/oldControls.txt)
+				if grep $sampleID ${workingDir}/oldControls.txt 
+				then
+                            		oldControlGoesOut=$(grep $sampleID ${workingDir}/oldControls.txt)
+				fi				
                         else
                             	oldControlGoesOut=""
                         fi
@@ -171,6 +172,7 @@ then
 	touch ${workingDir}/step4a_removingSamplesFromControls.finished
 
 fi
+
 if [ ! -d ${pathToFinalControls}/${version}/Convading/${gender}/ ]
 then
 	echo "${pathToFinalControls}/${version}/Convading/${gender}/"	
@@ -312,11 +314,6 @@ then
 	then
 		echo "start copying interval summary files from previous runs to ${xhmmWorkingDir} "
 		cp ${pathToFinalControls}/*/XHMM/${gender}/PerSample/*.sample_interval_summary ${xhmmWorkingDir}		
-    		#for i in $(ls ${pathToFinalControls}/*/XHMM/${gender}/PerSample/*.sample_interval_summary)
-		#do
-		#	cd $(dirname $i)
-		#	echo "ln -s $i ../../../../2016-11-2/XHMM/${gender}/PerSample/$(basename $i)"
-		#done
 	fi
 
 	mkdir -p ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/
@@ -324,6 +321,11 @@ then
 	echo "### COPYING XHMM controls to final destination"
         cp -r ${xhmmWorkingDir}/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/
 
+	if [ -f ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls ]
+	then
+		rm ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls
+	fi
+ 
         for i in $(ls ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/*.sample_interval_summary )
         do
           	echo "$i" >> ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls
