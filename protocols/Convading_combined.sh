@@ -21,12 +21,32 @@
 convadingControlsDir=""
 
 awk '{
-      	if ($1 == "Y"){
+      	if ($1 == "X"){
                 print $0
         }
 }' ${capturedBed} >> ${intermediateDir}/chrXRegions.txt
 
 size=$(cat ${intermediateDir}/chrXRegions.txt | wc -l)
+
+
+makeTmpDir ${convadingStartWithBam}
+tmpConvadingStartWithBam=${MC_tmpFile}
+
+makeTmpDir ${convadingStartWithMatchScore}
+tmpConvadingStartWithMatchScore=${MC_tmpFile}
+
+makeTmpDir ${convadingStartWithMatchScoreGender}
+tmpConvadingStartWithMatchScoreGender=${MC_tmpFile}
+
+makeTmpDir ${convadingStartWithBestScore}
+tmpConvadingStartWithBestScore=${MC_tmpFile}
+
+makeTmpDir ${convadingStartWithBestScoreGender}
+tmpConvadingStartWithBestScoreGender=${MC_tmpFile}
+
+makeTmpDir ${convadingCreateFinalList}
+tmpConvadingCreateFinalList=${MC_tmpFile}
+
 
 #
 ## Execute chrX steps
@@ -45,13 +65,16 @@ fi
 for i in ${run[@]}
 do
 	echo $i
+	cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
 
 	if [ "${i}" == "autosomal" ]
 	then
 		convadingControlsDir=${cxControlsDir}/${cDir}/Convading/
 	elif [[ "${i}" == "Male" || "${i}" == "Man" ]]
+	then
 		convadingControlsDir=${cxControlsDir}/${cDir}/Convading/Male/
 	elif [[ "${i}" == "Female" || "${i}" == "Vrouw" ]]
+	then
 		convadingControlsDir=${cxControlsDir}/${cDir}/Convading/Female/
 	else
 		echo "THIS CANNOT BE TRUE, no Male, Female or autosomal!!"
@@ -64,7 +87,6 @@ do
 		echo $capturingKit > ${intermediateDir}/capt.txt 
 	fi
 	
-	cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
 		
 	convadingControlsDir=${cxControlsDir}/${cDir}/Convading/
 	echo "##"
@@ -95,9 +117,7 @@ do
 	
 	##STEP 1
 	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step1.finished ]
-		then
-		makeTmpDir ${convadingStartWithBam}
-		tmpConvadingStartWithBam=${MC_tmpFile}
+	then
 	
 		for bamFile in "${dedupBam[@]}"
 		do
@@ -135,13 +155,10 @@ do
 	##STEP 2
 	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step2.finished ]
 	then
-		makeTmpDir ${convadingStartWithMatchScore}
-		tmpConvadingStartWithMatchScore=${MC_tmpFile}
-		makeTmpDir ${convadingStartWithMatchScoreGender}
-		tmpConvadingStartWithMatchScoreGender=${MC_tmpFile}
 	
 		## Creating directory
-		mkdir -p ${convadingStartWithMatchScore}
+		mkdir -p ${convadingStartWithMatchScore}/
+		mkdir -p ${convadingStartWithMatchScoreGender}
 		
 		if [ "${i}" == "autosomal" ]
         	then
@@ -173,14 +190,10 @@ do
 	##STEP 3
 	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step3.finished ]
 	then
-		makeTmpDir ${convadingStartWithBestScore}
-		tmpConvadingStartWithBestScore=${MC_tmpFile}
-
-		makeTmpDir ${convadingStartWithBestScoreGender}
-		tmpConvadingStartWithBestScoreGender=${MC_tmpFile}
 	
 		## Creating directory
 		mkdir -p ${convadingStartWithBestScore}
+		mkdir -p ${convadingStartWithBestScoreGender}
 		if [ "${i}" == "autosomal" ]
                 then	
 			perl ${EBROOTCONVADING}/CoNVaDING.pl \
@@ -228,8 +241,6 @@ do
 	##STEP 5
 	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step5.finished ]
 	then
-		makeTmpDir ${convadingCreateFinalList}
-		tmpConvadingCreateFinalList=${MC_tmpFile}
 	
 		## Creating directory
 		mkdir -p ${convadingCreateFinalList}

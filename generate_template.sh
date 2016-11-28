@@ -18,6 +18,7 @@ RUNID=runXX
 BATCH="_chr"
 
 SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv $thisDir) -1 ))
+sh ${EBROOTNGS_DNA}/gender.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
 echo "Samplesize is $SAMPLESIZE"
 if [ $SAMPLESIZE -gt 199 ]
 then
