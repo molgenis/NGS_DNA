@@ -20,6 +20,7 @@ BATCH="_small"
 THISDIR=$(pwd)
 
 SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv $THISDIR) -1 ))
+sh ${EBROOTNGS_DNA}/gender.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
 echo "Samplesize is $SAMPLESIZE"
 if [ $SAMPLESIZE -gt 199 ]
 then
