@@ -36,7 +36,7 @@ hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
 gavinJar,GAVIN-APP-1.0.jar
 gavinMergeBackToolJar,MergeBackTool-0.2.jar
-gavinSplitRlvToolJar,SplitRlvTool-0.1.jar
+gavinSplitRlvToolJar,SplitRlvTool-0.2.jar
 molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
 picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
