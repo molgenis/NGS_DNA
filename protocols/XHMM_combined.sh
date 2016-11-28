@@ -62,7 +62,6 @@ tmpXhmmPCANormalizedfileFilteredZscores=${MC_tmpFile}
 makeTmpDir ${xhmmSameFiltered}
 tmpXhmmSameFiltered=${MC_tmpFile}
 #10
-10
 makeTmpDir ${xhmmXcnv}
 tmpXhmmXcnv=${MC_tmpFile}
 
