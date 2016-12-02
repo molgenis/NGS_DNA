@@ -9,8 +9,6 @@ s07_MergeBam,protocols/MergeBam.sh,s06_SortBam;inputMergeBam=alignedSortedBam;in
 s08_MarkDuplicates,protocols/MarkDuplicates.sh,s07_MergeBam
 s09_Flagstat,protocols/FlagstatMetrics.sh,s08_MarkDuplicates
 s10a_Manta,protocols/Manta.sh,s08_MarkDuplicates
-s10b_Convading,protocols/Convading.sh,s08_MarkDuplicates
-s10c_XHMM,protocols/XHMM.sh,s08_MarkDuplicates
 s11_GenderCalculate,protocols/GenderCalculate.sh,s08_MarkDuplicates
 s12_CramConversion,protocols/CramConversion.sh,s08_MarkDuplicates
 s13_MakeDedupBamMd5,protocols/MakeDedupBamMd5.sh,s08_MarkDuplicates

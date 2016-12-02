@@ -39,7 +39,7 @@
 
 nameOfSample=$(basename ${dedupBam%%.*})
 
-if grep ${capturedBed} ControlsVersioning
+if grep ${capturingKit} ${ControlsVersioning}
 then
 	
 	xhmmControlsDir=""
@@ -538,5 +538,4 @@ then
 	
 else
 	echo "for this bedfile there is no Controlsgroup"
-	exit 0
 fi
