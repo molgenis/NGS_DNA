@@ -259,6 +259,7 @@ xhmmHighSenseParams,${xhmmDataDir}/parameters_high_sensitivity/params.txt
 xhmmDir,${intermediateDir}/XHMM/
 xhmmDepthOfCoverage,${intermediateDir}/XHMM/DepthOfCoverage
 DepthOfCoveragePerSample,${xhmmDepthOfCoverage}/${externalSampleID}
+
 xhmmMergedSample,${xhmmDepthOfCoverage}/${externalSampleID}.step2.DATA.RD.txt
 xhmmFilterSample,${xhmmDepthOfCoverage}/${externalSampleID}_step5.filtered_centered.RD.txt
 xhmmPCAfile,${xhmmDepthOfCoverage}/${externalSampleID}_step6_RD.PCA
@@ -268,4 +269,15 @@ xhmmSameFiltered,${xhmmDepthOfCoverage}/${externalSampleID}_step9.same_filtered.
 xhmmXcnv,${xhmmDepthOfCoverage}/${externalSampleID}_step10.xcnv
 xhmmAUXcnv,${xhmmDepthOfCoverage}/${externalSampleID}_step10.aux_cnv
 xhmmPosterior,${xhmmDepthOfCoverage}/${externalSampleID}_step10
-xhmmGenotypedCNV,${xhmmDepthOfCoverage}/${externalSampleID}_step11.vcf
+
+xhmmMergedSampleGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}.step2.DATA.RD.txt
+xhmmFilterSampleGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step5.filtered_centered.RD.txt
+xhmmPCAfileGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step6_RD.PCA
+xhmmPCANormalizedfileGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step7.PCA_normalized.txt
+xhmmPCANormalizedfileFilteredZscoresGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step8.PCA_normalized.filtered.sample_zscores.RD.txt
+xhmmSameFilteredGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step9.same_filtered.RD.txt
+xhmmXcnvGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step10.xcnv
+xhmmAUXcnvGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step10.aux_cnv
+xhmmPosteriorGender,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step10
+
+xhmmGenotypedCNV,${xhmmDepthOfCoverage}/Gender/${externalSampleID}_step11.vcf

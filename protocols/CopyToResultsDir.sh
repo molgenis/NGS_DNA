@@ -137,6 +137,7 @@ rsync -a ${projectPrefix}.final.vcf.gz.tbi ${projectResultsDir}/variants/
 printf "."
 
 
+echo "copy cnv results of Convading and XHMM and Manta"
 
 for sa in "${UNIQUESAMPLES[@]}"
 do
@@ -160,6 +161,15 @@ do
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		printf "."
 	fi
+	echo "copying Convading data"
+	cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.totallist.txt ${projectResultsDir}/variants/cnv/
+	cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.shortlist.txt ${projectResultsDir}/variants/cnv/
+	cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.longlist.txt ${projectResultsDir}/variants/cnv/
+	cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log ${projectResultsDir}/variants/cnv/
+	cp ${intermediateDir}/Convading//CreateFinalList/${sa}/*.shortlist.finallist.txt ${projectResultsDir}/variants/cnv/
+	echo "copying XHMM results"
+	cp ${intermediateDir}/${sa}_step10.xcnv ${projectResultsDir}/variants/cnv/
+	
 done
 printf " finished (7/11)\n"
 

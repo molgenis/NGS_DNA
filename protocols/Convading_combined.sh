@@ -62,11 +62,15 @@ then
 	run+=("$gender")
 fi
 
+mkdir -p ${intermediateDir}/Convading
+
 for i in ${run[@]}
 do
 	echo $i
 	cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
 
+	convadingControlsDir=""
+	workingDir=""
 	if [ "${i}" == "autosomal" ]
 	then
 		convadingControlsDir=${cxControlsDir}/${cDir}/Convading/
@@ -86,13 +90,7 @@ do
 		## write capturingkit to file to make it easier to split
 		echo $capturingKit > ${intermediateDir}/capt.txt 
 	fi
-	
 		
-	convadingControlsDir=${cxControlsDir}/${cDir}/Convading/
-	echo "##"
-	echo "### convadingControlsDir=$convadingControlsDir"
-	echo "##"
-	
 	if [ -d ${convadingControlsDir} ]
 	then
 	
@@ -116,7 +114,7 @@ do
 		}
 	
 	##STEP 1
-	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step1.finished ]
+	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step1.finished ]
 	then
 	
 		for bamFile in "${dedupBam[@]}"
@@ -133,9 +131,9 @@ do
 	
 		echo $project
 	
-		for i in ${INPUTS[@]}
+		for k in ${INPUTS[@]}
 		do
-			echo "$i" >> ${convadingInputBamsDir}/${CAPT}.READS.bam.list
+			echo "$k" >> ${convadingInputBamsDir}/${CAPT}.READS.bam.list
 		done
 		
 		perl ${EBROOTCONVADING}/CoNVaDING.pl \
@@ -149,11 +147,11 @@ do
 		printf "moving ${tmpConvadingStartWithBam} to ${convadingStartWithBam} ... "
 		mv ${tmpConvadingStartWithBam}/* ${convadingStartWithBam}
 		printf " .. done \n"
-		touch ${intermediateDir}/convading.${nameOfSample}.step1.finished
+		touch ${intermediateDir}/convading.${nameOfSample}.${i}.step1.finished
 	fi
 	
 	##STEP 2
-	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step2.finished ]
+	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step2.finished ]
 	then
 	
 		## Creating directory
@@ -167,6 +165,10 @@ do
         	        -inputDir ${convadingStartWithBam} \
         	        -outputDir ${tmpConvadingStartWithMatchScore} \
         	        -controlsDir ${convadingControlsDir}
+			printf "moving ${tmpConvadingStartWithMatchScore} to ${convadingStartWithMatchScore} .. "
+			mv ${tmpConvadingStartWithMatchScore}/* ${convadingStartWithMatchScore}
+			printf " .. done\n"
+
         	else
 			perl ${EBROOTCONVADING}/CoNVaDING.pl \
                         -mode StartWithMatchScore \
@@ -180,15 +182,12 @@ do
                 	printf " .. done\n"
         	fi
 	
-		printf "moving ${tmpConvadingStartWithMatchScore} to ${convadingStartWithMatchScore} .. "
-		mv ${tmpConvadingStartWithMatchScore}/* ${convadingStartWithMatchScore}
-		printf " .. done\n"
 		
-		touch ${intermediateDir}/convading.${nameOfSample}.step2.finished
+		touch ${intermediateDir}/convading.${nameOfSample}.${i}.step2.finished
 	fi
 	
 	##STEP 3
-	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step3.finished ]
+	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished ]
 	then
 	
 		## Creating directory
@@ -201,6 +200,9 @@ do
 			-inputDir ${convadingStartWithMatchScore} \
 			-outputDir ${tmpConvadingStartWithBestScore} \
 			-controlsDir ${convadingControlsDir}
+			printf "moving ${tmpConvadingStartWithBestScore} to ${convadingStartWithBestScore} .. "
+			mv ${tmpConvadingStartWithBestScore}/* ${convadingStartWithBestScore}
+			printf " .. done\n"
 		else
 		
 			perl ${EBROOTCONVADING}/CoNVaDING.pl \
@@ -215,31 +217,33 @@ do
 	                printf " .. done\n"
 	
 		fi
-		printf "moving ${tmpConvadingStartWithBestScore} to ${convadingStartWithBestScore} .. "
-		mv ${tmpConvadingStartWithBestScore}/* ${convadingStartWithBestScore}
-		printf " .. done\n"
 		
-		touch ${intermediateDir}/convading.${nameOfSample}.step3.finished
+		touch ${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished
 	fi
 	if [ -d ${convadingStartWithBestScoreGender} ]
 	then 
 
-		for i in $(${convadingStartWithBestScoreGender}/*.txt)
+		for z in $(ls ${convadingStartWithBestScoreGender}/*.txt)
 		do
-			BAS=$(basename $i)
+			BEFORE=$(cat $z | wc -l)
+			BAS=$(basename $z)
 			awk '{
 				if ($1 == "X"){
 					print $0
 				}
-			}' $i >> ${convadingStartWithBestScore}/${BAS} 
-			echo "writing all X calls from ${i} to ${convadingStartWithBestScore}/${BAS}"
+			}' $z >> ${convadingStartWithBestScore}/${BAS} 
+			AFTER=$(cat ${convadingStartWithBestScore}/${BAS} | wc -l)
+			if [ $BEFORE -eq $AFTER ]
+			then
+				echo "no calls on X for ${z}"
+			else
+				echo "writing all X calls from ${z} to ${convadingStartWithBestScore}/${BAS}"
+			fi
 		done
 	fi	
-		 
-	
 
 	##STEP 5
-	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.step5.finished ]
+	if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step5.finished ]
 	then
 	
 		## Creating directory
@@ -255,7 +259,7 @@ do
 		mv ${tmpConvadingCreateFinalList}/* ${convadingCreateFinalList}
 		printf " .. done\n"
 		
-		touch ${intermediateDir}/convading.${nameOfSample}.step5.finished
+		touch ${intermediateDir}/convading.${nameOfSample}.${i}.step5.finished
 	fi
 	
 	

@@ -26,6 +26,7 @@
 #string intermediateDir
 #string inSilicoConcordanceFile
 #string allMetrics 
+#string ControlsVersioning
 
 #string bwaVersion
 #string computeVersion
@@ -289,6 +290,15 @@ ${snpEffVersion}
 ${tabixVersion}
 ${molgenisAnnotatorVersion}
 hpoVersion: ${hpoVersion}
+</pre>
+<pre>
+Used Controls version for XHMM and Convading
+File: ${ControlsVersioning}
+<!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
+printf "Version: "
+grep ${capturingKit} ${ControlsVersioning} | awk '{printf $2}'
+printf "\n"
+end.rcode-->
 </pre>
 <div>
 

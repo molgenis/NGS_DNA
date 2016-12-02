@@ -1,40 +1,58 @@
-Gender/Man_sampleNames.txt
-manSamples=/groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/Gender/Man_samples.txt
-vrouwSamples=/groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/Gender/Vrouw_samples.txt
-manSampleNames=/groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/Gender/Man_sampleNames.txt
-vrouwSampleNames=/groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/Gender/Vrouw_sampleNames.txt
-mybamsDir=/groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/mybams/
+genderFile=$1
+workingDir=$2
 
+##. ${workingDir}/config.cfg
 
-rm -f ${manSamples}
-rm -f ${vrouwSamples}
-rm -f ${manSampleNames}
-rm -f ${vrouwSampleNames}
+mkdir -p ${workingDir}/Gender/
 
-awk 'BEGIN{FS=","} 
-	{print $1 >> "/groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/Gender/"$2"_samples.txt"
-}' /groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/UMCG_IDs_Convading_Initial_Gender.txt
+maleSamples=${workingDir}/Gender/Male_samples.txt
+femaleSamples=${workingDir}/Gender/Female_samples.txt
+maleSampleNames=${workingDir}/Gender/Male_sampleNames.txt
+femaleSampleNames=${workingDir}/Gender/Female_sampleNames.txt
+mybamsDir=${workingDir}/mybams
 
+mybams="mybams"
+
+rm -f ${maleSamples}
+rm -f ${FemaleSamples}
+rm -f ${maleSampleNames}
+rm -f ${femaleSampleNames}
+
+perl -p -e 's|Man|Male|g' ${genderFile} >> ${genderFile}.translated
+perl -p -e 's|Vrouw|Female|g' ${genderFile} >> ${genderFile}.translated
+
+awk -v var="${workingDir}" 'BEGIN{FS=","}{print $1 > var"/Gender/"$2"_samples.txt"
+}' ${genderFile}.translated
 
 while read line 
 do
-	ls -1 ${mybamsDir}/*${line}*.bam* >> ${manSampleNames}
-done<${manSamples}
+	ls -1 ${mybamsDir}/*${line}*.bam* >> ${maleSampleNames}
+done<${maleSamples}
 
 while read line 
 do
-	ls -1 ${mybamsDir}/*${line}*.bam* >> ${vrouwSampleNames}
-done<${vrouwSamples}
+	ls -1 ${mybamsDir}/*${line}*.bam* >> ${femaleSampleNames}
+done<${femaleSamples}
 
-cd /groups/umcg-gaf/tmp04/umcg-rkanninga/Convading_Initial/Gender/
+mkdir -p ${workingDir}/Gender/Male/${mybams}
+mkdir -p ${workingDir}/Gender/Female/${mybams}
 
-while read line
-do
-	ln -sf $line Male/$(basename $line) 
-done<${manSampleNames}
+cd ${workingDir}/Gender/Male/${mybams}
 
 while read line
 do
-	ln -sf $line Female/$(basename $line)
-done<${vrouwSampleNames}
+	ln -sf $line $(basename $line) 
+done<${maleSampleNames}
 
+cd ${workingDir}/Gender/Female/${mybams}
+
+while read line
+do
+	ln -sf $line $(basename $line)
+done<${femaleSampleNames}
+
+for gender in Male Female
+do
+	echo "executing Convading_MakeControlGroup_Gender.sh for ${gender}"
+	sh ${workingDir}/Convading_MakeControlGroup_Gender.sh ${gender} ${workingDir}
+done
