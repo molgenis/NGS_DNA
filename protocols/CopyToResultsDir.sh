@@ -161,9 +161,9 @@ do
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		printf "."
 	fi
-	echo "copying Convading data"
 	if [ -f ${intermediateDir}/${sa}_step10.xcnv ]
 	then
+		echo "copying Convading data"	
 		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.totallist.txt ${projectResultsDir}/variants/cnv/
 		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.shortlist.txt ${projectResultsDir}/variants/cnv/
 		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.longlist.txt ${projectResultsDir}/variants/cnv/
