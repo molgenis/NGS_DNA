@@ -533,8 +533,13 @@ then
                 	mv ${xhmmAUXcnv}.tmp ${xhmmAUXcnv}
         	fi
 	fi 
-	mv ${DepthOfCoveragePerSample}*  ${intermediateDir}
-	echo "moved all XHMM intermediate files from ${DepthOfCoveragePerSample}* to ${intermediateDir}"
+	if ls ${DepthOfCoveragePerSample}* 1> /dev/null 2>&1
+	then
+		mv ${DepthOfCoveragePerSample}*  ${intermediateDir}
+		echo "moved all XHMM intermediate files from ${DepthOfCoveragePerSample}* to ${intermediateDir}"
+	else
+		echo "${DepthOfCoveragePerSample}* is already copied"
+	fi
 	
 else
 	echo "for this bedfile there is no Controlsgroup"

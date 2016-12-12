@@ -30,6 +30,7 @@ sambambaVer,v0.6.4
 samtoolsVersion,SAMtools/1.2-${toolChain}
 snpEffVersion,snpEff/4.3-Java-1.7.0_80
 tabixVersion,tabix/0.2.6-${toolChain}
+vepVersion,VEP/${vepDBVersion}
 wkHtmlToPdfVersion,wkhtmltox/0.12.3
 xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain}
 hpoVersion,90
@@ -40,6 +41,7 @@ gavinSplitRlvToolJar,SplitRlvTool-0.2.jar
 molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
 picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
+vepDBVersion,86
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -185,8 +187,6 @@ sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.ba
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 
-
-
 ### Protocols 19, 20, 21, 21, 22, 23 and 24 (SnpEff,CmdLineAnnotator, VariantAnnotator, MergeBatches,Gavin VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
 projectVariantCallsSnpEff_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.vcf
 projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.vcf
@@ -209,8 +209,12 @@ gavinOutputFirstPass,${projectPrefix}.GAVIN.RVCF.firstpass.vcf
 gavinOutputFinal,${projectPrefix}.GAVIN.RVCF.final.vcf
 gavinToCADD,${projectPrefix}.GAVIN.toCadd.tsv
 gavinFromCADD,${projectPrefix}.GAVIN.fromCadd.tsv
-gavinOutputFirstPassMerged,${projectPrefix}.GAVIN.RVCF.firstpass.mergedWithOriginal.vcf
-gavinOutputFirstPassMergedRLV,${projectPrefix}.GAVIN.RVCF.firstpass.mergedWithOriginal.rlv.vcf
+gavinToCADDgz,${projectPrefix}.GAVIN.toCadd.tsv.gz
+gavinFromCADDgz,${projectPrefix}.GAVIN.fromCadd.tsv.gz
+gavinOutputFinalMerged,${projectPrefix}.GAVIN.RVCF.final.mergedWithOriginal.vcf
+gavinOutputFinalMergedRLV,${projectPrefix}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf
+vepDataDir,${dataDir}/Ensembl/VEP/${vepDBVersion}
+projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.VEP.vcf
 
 ### 25, 26
 projectVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf

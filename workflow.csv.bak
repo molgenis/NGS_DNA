@@ -26,8 +26,8 @@ s18d_GenotypeVariants,protocols/VariantGenotyping.sh,s18a_VariantCalling
 s19_SnpEff,protocols/SnpEff.sh,s18d_GenotypeVariants
 s19b_VEP,protocols/VEP.sh,s18d_GenotypeVariants
 s20_CmdLineAnnotator,protocols/CmdLineAnnotator.sh,s19_SnpEff
-#s21_VariantAnnotator,protocols/VariantAnnotator.sh,s20_CmdLineAnnotator
-s22_MergeBatches,protocols/MergeBatches.sh,s20_CmdLineAnnotator
+s21_VariantAnnotator,protocols/VariantAnnotator.sh,s20_CmdLineAnnotator
+s22_MergeBatches,protocols/MergeBatches.sh,s21_VariantAnnotator
 s23_Gavin,protocols/Gavin.sh,s22_MergeBatches
 s24_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s22_MergeBatches
 s25a_SnpFiltration,protocols/SnpFiltration.sh,s24_SplitIndelsAndSNPs

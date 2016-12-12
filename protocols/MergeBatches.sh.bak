@@ -54,9 +54,9 @@ INPUTS=()
 
 for b in "${batchID[@]}"
 do
-	if [ -f ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.vcf ]
+	if [ -f ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf ]
 	then
-		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.vcf" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.vcf")
+		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf")
 	fi
 done
 

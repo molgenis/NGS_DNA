@@ -27,11 +27,28 @@ then
       		if ($1 == "X"){
                 	print $0
         	}
-	}' ${capturedBed} >> ${intermediateDir}/chrXRegions.txt
+	}' ${capturedBed} > ${intermediateDir}/chrXRegions.txt
+
+	size=0
+	if [ -f ${intermediateDir}/chrXRegions.txt ]
+	then	
+		size=$(cat ${intermediateDir}/chrXRegions.txt | wc -l)
+	fi
+
+	#
+	## Execute chrX steps
+	#
 	
-	size=$(cat ${intermediateDir}/chrXRegions.txt | wc -l)
-	
-	
+	ChrXRun="false"
+	run=()
+	run+=("autosomal")
+	if [ $size != 0 ]
+	then
+        	echo "the bedfile contains chrX regions, convading now be executed with a male or female controlsgroup"
+		chrXRun="true"
+		run+=("$gender")
+	fi
+		
 	makeTmpDir ${convadingStartWithBam}
 	tmpConvadingStartWithBam=${MC_tmpFile}
 	
@@ -50,20 +67,6 @@ then
 	makeTmpDir ${convadingCreateFinalList}
 	tmpConvadingCreateFinalList=${MC_tmpFile}
 	
-	
-	#
-	## Execute chrX steps
-	#
-	
-	ChrXRun="false"
-	run=()
-	run+=("autosomal")
-	if [ $size != 0 ]
-	then
-        	echo "the bedfile contains chrX regions, convading now be executed with a male or female controlsgroup"
-		chrXRun="true"
-		run+=("$gender")
-	fi
 	
 	mkdir -p ${intermediateDir}/Convading
 	
