@@ -245,7 +245,7 @@ then
 	mkdir -p ${kickedOutSamples}
 	rm -f step4_removingSamplesFromControls.log 
 	echo "removing bad samples out of the controlsDir"
-	version="$(date +"%Y-%m")_2"
+	version="$(date +"%Y-%m")"
 	rm -f ${workingDir}/RemovedFromOldControlsGroup.txt
 	
 	if [ ! -f ${workingDir}/step4a_removingSamplesFromControls.finished ]
@@ -283,23 +283,20 @@ then
 	       	        		#
 					## The controlsGroup does not contain bams anymore, only bams of this new group can be removed 
 					#
-					echo "blaat"		
+					echo "The controlsGroup does not contain bams anymore, only bams of this new group can be removed"		
 				
 				fi
 				#
 				## Removing samples from the controlsDir
 				#
-				#mv ${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt ${kickedOutSamples}/
+				mv ${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt ${kickedOutSamples}/
 				printf "number of outliers: ${size}\t${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt moved to ${kickedOutSamples} folder \n" >> ${workingDir}/step4a_removingSamplesFromControls.log
-				#printf "You can check the outliers in: $i \n\n" | tee ${workingDir}/step4a_removingSamplesFromControls.log
         		fi
 		
 		done
-		echo "blaat"
 		touch ${workingDir}/step4a_removingSamplesFromControls.finished
 	
 	fi
-	echo "hoi"
 	#########
 	#
 	##
@@ -348,8 +345,9 @@ then
 	#
 	xhmmWorkingDir=${workingDir}/XHMM/
 	
+	
 	if [ ! -f ${workingDir}/XHMM.finished ]
-	then
+	then 
 		rm -f ${workingDir}/XHMM.failed
 		rm -f ${workingDir}/XHMM.submitted
 	
@@ -360,62 +358,59 @@ then
 	
 		fi
 		mkdir -p ${xhmmWorkingDir}
-	fi
 	
-	if [ ! -f ${workingDir}/XHMM.finished ]
-	then 
-	
+		rm -f ${xhmmWorkingDir}/${name}.READS.bam.list
 		for i in $(ls ${convadingInputBamsDir}/*.bam)
 		do
 			name=$(basename ${i%%.*})
-	  		echo "$i" > ${xhmmWorkingDir}/${name}.READS.bam.list
+	  		echo "$i" >> ${xhmmWorkingDir}/${name}.READS.bam.list
 	
 		done
 		
 		for i in $(ls ${xhmmWorkingDir}/*.READS.bam.list)
 		do
-		mkdir -p ${xhmmWorkingDir}/scripts/
-		bas=$(basename ${i%%.*})
-		output=${xhmmWorkingDir}/scripts/xhmm_${bas}.sh
-	
-		echo "#!/bin/bash" > ${output}
-		echo "#SBATCH --job-name=xhmm_${bas}" >> ${output}
-		echo "#SBATCH --output=${xhmmWorkingDir}/scripts/xhmm_${bas}.out" >> ${output}
-		echo "#SBATCH --error=${xhmmWorkingDir}/scripts/xhmm_${bas}.err" >> ${output}
-		echo "#SBATCH --time=05:59:00" >> ${output}
-		echo "#SBATCH --cpus-per-task 1" >> ${output}
-		echo "#SBATCH --mem 6gb" >> ${output}
-		echo "#SBATCH --open-mode=append" >> ${output}
-		echo "#SBATCH --export=NONE" >> ${output}
-		echo "#SBATCH --get-user-env=30L" >> ${output}
-		echo "set -e" >> ${output}
-		echo "set -u" >> ${output}
-		echo "function finish {">> ${output}
-        	echo "echo \"TRAPPED\"">> ${output}
-        	echo "touch ${workingDir}/XHMM.failed">> ${output}
-        	echo "}">> ${output}
-		echo "trap finish HUP INT QUIT TERM EXIT ERR" >> ${output}
-		echo "module load GATK" >> ${output}
-		echo "java -Xmx5g -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \\" >> ${output}
-		echo "-T DepthOfCoverage \\">> ${output}
-		echo "-I $i \\">> ${output}
-		echo "-L ${capturedBed} \\">> ${output}
-		echo "-R ${indexFile} \\">> ${output}
-		echo "-dt BY_SAMPLE -dcov 5000 -l INFO --omitDepthOutputAtEachBase --omitLocusTable \\">> ${output}
-		echo "--minBaseQuality 0 --minMappingQuality 20 --start 1 --stop 5000 --nBins 200 \\">> ${output}
-		echo "--includeRefNSites \\">> ${output}
-		echo "--countType COUNT_FRAGMENTS \\" >> ${output}
-		echo "-o ${xhmmWorkingDir}/${bas}" >> ${output}
-		echo -e "\ntouch ${output}.finished" >> ${output}
-		echo -e "\ntrap - EXIT">> ${output}
-		echo "exit 0">> ${output}
+			mkdir -p ${xhmmWorkingDir}/scripts/
+			bas=$(basename ${i%%.*})
+			output=${xhmmWorkingDir}/scripts/xhmm_${bas}.sh
 		
-		if [ ! -f ${output}.finished ]
-		then
-			sbatch $output
-		else
-			echo "${output} skipped"
-		fi
+			echo "#!/bin/bash" > ${output}
+			echo "#SBATCH --job-name=xhmm_${bas}" >> ${output}
+			echo "#SBATCH --output=${xhmmWorkingDir}/scripts/xhmm_${bas}.out" >> ${output}
+			echo "#SBATCH --error=${xhmmWorkingDir}/scripts/xhmm_${bas}.err" >> ${output}
+			echo "#SBATCH --time=05:59:00" >> ${output}
+			echo "#SBATCH --cpus-per-task 1" >> ${output}
+			echo "#SBATCH --mem 6gb" >> ${output}
+			echo "#SBATCH --open-mode=append" >> ${output}
+			echo "#SBATCH --export=NONE" >> ${output}
+			echo "#SBATCH --get-user-env=30L" >> ${output}
+			echo "set -e" >> ${output}
+			echo "set -u" >> ${output}
+			echo "function finish {">> ${output}
+        		echo "echo \"TRAPPED\"">> ${output}
+        		echo "touch ${workingDir}/XHMM.failed">> ${output}
+        		echo "}">> ${output}
+			echo "trap finish HUP INT QUIT TERM EXIT ERR" >> ${output}
+			echo "module load GATK" >> ${output}
+			echo "java -Xmx5g -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \\" >> ${output}
+			echo "-T DepthOfCoverage \\">> ${output}
+			echo "-I $i \\">> ${output}
+			echo "-L ${capturedBed} \\">> ${output}
+			echo "-R ${indexFile} \\">> ${output}
+			echo "-dt BY_SAMPLE -dcov 5000 -l INFO --omitDepthOutputAtEachBase --omitLocusTable \\">> ${output}
+			echo "--minBaseQuality 0 --minMappingQuality 20 --start 1 --stop 5000 --nBins 200 \\">> ${output}
+			echo "--includeRefNSites \\">> ${output}
+			echo "--countType COUNT_FRAGMENTS \\" >> ${output}
+			echo "-o ${xhmmWorkingDir}/${bas}" >> ${output}
+			echo -e "\ntouch ${output}.finished" >> ${output}
+			echo -e "\ntrap - EXIT">> ${output}
+			echo "exit 0">> ${output}
+			
+			if [ ! -f ${output}.finished ]
+			then
+				sbatch $output
+			else
+				echo "${output} skipped"
+			fi
 		done
 	
 		touch ${workingDir}/XHMM.submitted
@@ -460,11 +455,10 @@ then
 		if [ "${includePrevRuns}" == "true" ]
         	then
                 	echo "start copying interval summary files from previous runs to ${xhmmWorkingDir} "
-                	echo "cp ${pathToFinalControls}/*/XHMM/PerSample/*.sample_interval_summary ${xhmmWorkingDir}/"
+                	cp ${pathToFinalControls}/*/XHMM/PerSample/*.sample_interval_summary ${xhmmWorkingDir}/
         	fi
 	
 		mkdir -p ${pathToFinalControls}/${version}/XHMM/PerSample/
-		echo "JOHA"
 	
         	if [ -f ${xhmmWorkingDir}/sample_interval_summary.Controls ]
         	then

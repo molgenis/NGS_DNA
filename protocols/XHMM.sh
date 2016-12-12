@@ -35,7 +35,7 @@
 #string xhmmHighSenseParams
 #string ControlsVersioning
 #string cxControlsDir
-#string gender
+#string Gender
 
 nameOfSample=$(basename ${dedupBam%%.*})
 
@@ -109,7 +109,7 @@ then
 	then
     		echo "the bedfile contains chrX regions, convading now be executed with a male or female controlsgroup"
         	chrXRun="true"
-        	run+=("$gender")
+        	run+=("$Gender")
 	fi
 	
 	for i in ${run[@]}

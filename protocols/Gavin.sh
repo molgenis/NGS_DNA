@@ -11,7 +11,7 @@
 #string snpEffVersion
 #string javaVersion
 
-#string projectVariantsMerged
+#string sampleVariantsMergedGavin
 #string gavinClinVar
 #string gavinCGD
 #string gavinFDR
@@ -23,6 +23,7 @@
 #string gavinToCADDgz
 #string gavinFromCADDgz
 #string tabixVersion
+#string caddVersion
 
 #string gavinToolPackVersion
 #string gavinJar
@@ -49,16 +50,13 @@ makeTmpDir ${gavinFromCADDgz}
 tmpGavinFromCADDgz=${MC_tmpFile}
 
 ${stage} ${tabixVersion}
-${stage}  PerlPlus/5.22.0-foss-2015b-v16.11.1
-${stage}  HTSlib/1.3.2-foss-2015b
-${stage}  SAMtools/1.3.1-foss-2015b
-${stage}  PythonPlus/2.7.10-foss-2015b-v16.11.1
+${stage} ${caddVersion}
 
 ${stage} ${gavinToolPackVersion}
 
 ${checkStage}
 java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
--i ${projectVariantsMerged} \
+-i ${sampleVariantsMergedGavin} \
 -o ${tmpGavinOutputFirstPass} \
 -m CREATEFILEFORCADD \
 -a ${tmpGavinToCADD} \
@@ -83,7 +81,7 @@ echo "starting to get CADD annotations locally for ${gavinToCADD}"
 bgzip -c ${gavinToCADD} > ${gavinToCADDgz}
 tabix -p vcf ${gavinToCADDgz} 
 
-bin/score.sh ${gavinToCADDgz} ${tmpGavinFromCADDgz}
+score.sh ${gavinToCADDgz} ${tmpGavinFromCADDgz}
 
 cd -
 
@@ -91,7 +89,7 @@ mv ${tmpGavinFromCADDgz} ${gavinFromCADDgz}
 echo "moved ${tmpGavinFromCADDgz} ${gavinFromCADDgz}"
 
 java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
--i ${projectVariantsMerged} \
+-i ${sampleVariantsMergedGavin} \
 -o ${tmpGavinOutputFinal} \
 -m ANALYSIS \
 -a ${gavinFromCADDgz} \
@@ -105,10 +103,10 @@ echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
 
 #echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" ${gavinOutputFinal} | wc -l'
 
-echo "Merging ${projectVariantsMerged} and ${gavinOutputFinal}"
+echo "Merging ${sampleVariantsMergedGavin} and ${gavinOutputFinal}"
 
 java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
--i ${projectVariantsMerged} \
+-i ${sampleVariantsMergedGavin} \
 -v ${gavinOutputFinal} \
 -o ${gavinOutputFinalMerged}
 

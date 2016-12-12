@@ -16,7 +16,6 @@
 #list externalSampleID
 #list batchID
 #list seqType
-#string gavinOutputFirstPass
 #string gavinOutputFinal
 # Change permissions
 
@@ -64,10 +63,6 @@ rsync -a ${intermediateDir}/*_fastqc.zip ${projectResultsDir}/qc/
 printf ".. finished (3/11)\n"
 
 ##Copy GAVIN results
-if [ -f ${gavinOutputFirstPass} ]
-then
-	rsync -a ${gavinOutputFirstPass} ${projectResultsDir}/variants/GAVIN/
-fi
 
 if [ -f ${gavinOutputFinal} ]
 then

@@ -11,6 +11,7 @@ checkStage,module list
 bedToolsVersion,BEDTools/2.25.0-foss-2015b
 bwaVersion,BWA/0.7.12-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
+caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
@@ -205,15 +206,17 @@ gavinClinVar,${gavinDataDir}/clinvar.patho.fix.11oct2016.vcf.gz
 gavinCGD,${gavinDataDir}/CGD_11oct2016.txt.gz
 gavinFDR,${gavinDataDir}/FDR_allGenes_r1.0.tsv
 gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.3.tsv
-gavinOutputFirstPass,${projectPrefix}.GAVIN.RVCF.firstpass.vcf
-gavinOutputFinal,${projectPrefix}.GAVIN.RVCF.final.vcf
-gavinToCADD,${projectPrefix}.GAVIN.toCadd.tsv
-gavinFromCADD,${projectPrefix}.GAVIN.fromCadd.tsv
-gavinToCADDgz,${projectPrefix}.GAVIN.toCadd.tsv.gz
-gavinFromCADDgz,${projectPrefix}.GAVIN.fromCadd.tsv.gz
-gavinOutputFinalMerged,${projectPrefix}.GAVIN.RVCF.final.mergedWithOriginal.vcf
-gavinOutputFinalMergedRLV,${projectPrefix}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf
+gavinOutputFirstPass,${sampleNameID}.GAVIN.RVCF.firstpass.vcf
+gavinOutputFinal,${sampleNameID}.GAVIN.RVCF.final.vcf
+gavinToCADD,${sampleNameID}.GAVIN.toCadd.tsv
+gavinFromCADD,${sampleNameID}.GAVIN.fromCadd.tsv
+gavinToCADDgz,${sampleNameID}.GAVIN.toCadd.tsv.gz
+gavinFromCADDgz,${sampleNameID}.GAVIN.fromCadd.tsv.gz
+gavinOutputFinalMerged,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.vcf
+gavinOutputFinalMergedRLV,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf
+gavinOutputFinalMergedRLVVcf,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf
 vepDataDir,${dataDir}/Ensembl/VEP/${vepDBVersion}
+sampleVariantsMergedGavin,${sampleNameID}.variant.calls.GATK.vcf
 projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.VEP.vcf
 
 ### 25, 26

@@ -111,7 +111,7 @@ then
 	mkdir -p ${kickedOutSamples}
 	rm -f step4_removingSamplesFromControls.log 
 	echo "removing bad samples out of the controlsDir"
-	version="$(date +"%Y-%m")_2"
+	version="$(date +"%Y-%m")"
 	
 	if [ ! -f ${workingDir}/step4a_removingSamplesFromControls.finished ]
 	then
@@ -125,10 +125,14 @@ then
 				if ($1 == "X"){
 					print $0
 				}
-			}' $i >> ${sampleID}.chrX.shortlist 
-	
-                	size=$(cat ${sampleID}.chrX.shortlist | wc -l)
-        	
+			}' $i > ${sampleID}.chrX.shortlist 
+			size=0
+
+			if [ -f ${sampleID}.chrX.shortlist ]
+			then	
+                		size=$(cat ${sampleID}.chrX.shortlist | wc -l)
+        		fi
+
 	        	if [ ${size} != 0 ]
                 	then
                         	rm -f ${convadingInputBamsDir}/${sampleID}*
@@ -182,9 +186,7 @@ then
 	then
 		mkdir -p ${pathToFinalControls}/${version}/XHMM//${gender}/
 	fi
-	
-	##Make symlinks to bams
-	
+		
 	if [ ! -f ${generateTargetQcListFinished} ]
 	then
 		echo "working on: s4_generateTargetQcList with updated controls list"
@@ -218,6 +220,7 @@ then
 	xhmmWorkingDir=${workingDir}/XHMM/
 	
 	rm -f ${xhmmWorkingDir}/scripts/XHMM.failed
+	rm -f ${xhmmWorkingDir}/${name}.READS.bam.list
 	
 	if [ ! -f ${workingDir}/XHMM.finished ]
 	then 
@@ -225,7 +228,7 @@ then
 		for i in $(ls ${convadingInputBamsDir}/*.bam)
 		do
 			name=$(basename ${i%%.*})
-	  		echo "$i" > ${xhmmWorkingDir}/${name}.READS.bam.list
+	  		echo "$i" >> ${xhmmWorkingDir}/${name}.READS.bam.list
 	
 		done
 		

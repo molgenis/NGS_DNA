@@ -16,7 +16,7 @@
 #string convadingCreateFinalList
 #string cxControlsDir
 #string ControlsVersioning
-#string gender
+#string Gender
 
 convadingControlsDir=""
 
@@ -46,7 +46,7 @@ then
 	then
         	echo "the bedfile contains chrX regions, convading now be executed with a male or female controlsgroup"
 		chrXRun="true"
-		run+=("$gender")
+		run+=("$Gender")
 	fi
 		
 	makeTmpDir ${convadingStartWithBam}
@@ -137,7 +137,8 @@ then
 				ln -sf ${dedupBam}.bai ${convadingInputBamsDir}/
 			
 				echo $project
-			
+				rm -f ${convadingInputBamsDir}/${CAPT}.READS.bam.list
+					
 				for k in ${INPUTS[@]}
 				do
 					echo "$k" >> ${convadingInputBamsDir}/${CAPT}.READS.bam.list
@@ -160,13 +161,11 @@ then
 			##STEP 2
 			if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step2.finished ]
 			then
-			
-				## Creating directory
-				mkdir -p ${convadingStartWithMatchScore}/
-				mkdir -p ${convadingStartWithMatchScoreGender}
-				
+							
 				if [ "${i}" == "autosomal" ]
         			then
+					mkdir -p ${convadingStartWithMatchScore}/
+	
 	            			perl ${EBROOTCONVADING}/CoNVaDING.pl \
         	        		-mode StartWithMatchScore \
         	        		-inputDir ${convadingStartWithBam} \
@@ -177,6 +176,8 @@ then
 					printf " .. done\n"
 		
         			else
+					mkdir -p ${convadingStartWithMatchScoreGender}	
+
 					perl ${EBROOTCONVADING}/CoNVaDING.pl \
                         		-mode StartWithMatchScore \
                         		-inputDir ${convadingStartWithBam} \
@@ -197,11 +198,10 @@ then
 			if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished ]
 			then
 			
-				## Creating directory
-				mkdir -p ${convadingStartWithBestScore}
-				mkdir -p ${convadingStartWithBestScoreGender}
 				if [ "${i}" == "autosomal" ]
                 		then	
+					mkdir -p ${convadingStartWithBestScore}
+				
 					perl ${EBROOTCONVADING}/CoNVaDING.pl \
 					-mode StartWithBestScore \
 					-inputDir ${convadingStartWithMatchScore} \
@@ -211,6 +211,7 @@ then
 					mv ${tmpConvadingStartWithBestScore}/* ${convadingStartWithBestScore}
 					printf " .. done\n"
 				else
+					mkdir -p ${convadingStartWithBestScore}
 				
 					perl ${EBROOTCONVADING}/CoNVaDING.pl \
                         		-mode StartWithBestScore \
