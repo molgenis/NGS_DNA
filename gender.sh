@@ -8,7 +8,7 @@ count=0
 genderCheck="false"
 for i in "${array[@]}"
 do
-	if [ "${i}" == "gender" ]
+	if [ "${i}" == "Gender" ]
         then
 		genderCheck="true"
         fi
@@ -21,7 +21,7 @@ then
 	echo "Adding Gender column and values to ${samplesheetFile}, writing to ${samplesheetFile}.tmp"
 	awk '{
 	if (NR==1){
-		print $0",gender"
+		print $0",Gender"
 	}
 	else{
 		print $0",Unknown"
