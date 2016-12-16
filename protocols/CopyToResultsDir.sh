@@ -65,9 +65,9 @@ printf ".. finished (3/11)\n"
 for sample in "${UNIQUESAMPLES[@]}"
 do
 	if [ -f ${intermediateDir}/${sample}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf ]
-	do
+	then
 		rsync -a ${intermediateDir}/${sample}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf ${projectResultsDir}/variants/GAVIN/
-	done
+	fi
 done
 
 count=1
