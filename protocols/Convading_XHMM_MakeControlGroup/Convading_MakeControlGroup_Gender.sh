@@ -84,7 +84,6 @@ then
 		-mode StartWithMatchScore \
 		-inputDir ${convadingStartWithBamDir} \
 		-outputDir ${convadingStartWithMatchScoreDir} \
-		-controlSamples 8 \
 		-sexChr \
 		-controlsDir ${controlsDir}  2>&1 >> ${workingDir}/step2_StartWithMatchScore.log
 	

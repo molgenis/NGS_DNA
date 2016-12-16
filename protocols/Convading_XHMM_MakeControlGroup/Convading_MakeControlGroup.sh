@@ -213,7 +213,6 @@ then
 		perl ${EBROOTCONVADING}/CoNVaDING.pl \
 		-mode StartWithMatchScore \
 		-inputDir ${convadingStartWithBamDir} \
-		-controlSamples 8 \
 		-outputDir ${convadingStartWithMatchScoreDir} \
 		-controlsDir ${controlsDir}  2>&1 >> ${workingDir}/step2_StartWithMatchScore.log
 	
@@ -229,7 +228,6 @@ then
 		perl ${EBROOTCONVADING}/CoNVaDING.pl \
 		-mode StartWithBestScore \
 		-inputDir ${convadingStartWithMatchScoreDir} \
-		-controlSamples 8 \
 		-outputDir ${convadingStartWithBestScoreDir} \
 		-controlsDir ${controlsDir}  2>&1 >> ${workingDir}/step3_StartWithBestScore.log
 		
