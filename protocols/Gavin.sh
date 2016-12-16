@@ -118,4 +118,9 @@ java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinSplitRlvToolJar} \
 #perl -pi -e 's|ID=RLV_PRESENT,Number=1,Type=String,|ID=RLV_PRESENT,Number=1,Type=Float,|' ${gavinOutputFinalMergedRLV}
 #perl -pi -e 's|RLV_VARIANTSIGNIFICANCE,Number=1,Type=String,|RLV_VARIANTSIGNIFICANCE,Number=1,Type=Float,|' ${gavinOutputFinalMergedRLV}
 
+perl -pi -e 's|INFO=<ID=EXAC_AF,Number=.,Type=String|INFO=<ID=EXAC_AF,Number=.,Type=Float|' ${gavinOutputFinalMergedRLV}
+perl -pi -e 's|INFO=ID=EXAC_AC_HOM,Number=.,Type=String|INFO=ID=EXAC_AC_HOM,Number=.,Type=Integer|' ${gavinOutputFinalMergedRLV}
+perl -pi -e 's|INFO=<ID=EXAC_AC_HET,Number=.,Type=String|INFO=<ID=EXAC_AC_HET,Number=.,Type=Integer|' ${gavinOutputFinalMergedRLV}
+
+
 echo "output: ${gavinOutputFinalMergedRLV}"

@@ -4,6 +4,7 @@ The sequencer is producing reads (in FastQ format) and are aligned to the hg19 r
 Sambamba (Tarasov et al.<sup>2</sup>)  is processing the aligned reads and then we applied GATK (McKenna et al. <sup>3</sup>) duplicate removal,
 performed SNP and INDEL discovery and genotyping using standard hard filtering parameters to GATK Best Practices recommendations (Van der Auwera et al.<sup>4</sup>)
 
+
 <h3>References</h3>
 1. Li Durbin, Fast and accurate short read alignment with Burrows-Wheeler transform.
 2. Sambamba: Fast processing of NGS alignment formats
