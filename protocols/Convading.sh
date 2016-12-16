@@ -86,6 +86,10 @@ then
 		elif [[ "${i}" == "Female" || "${i}" == "Vrouw" ]]
 		then
 			convadingControlsDir=${cxControlsDir}/${cDir}/Convading/Female/
+		elif [ "${i}" == "Unknown" ]
+		then
+			echo "Gender is Unknown, skipped"
+			break
 		else
 			echo "THIS CANNOT BE TRUE, no Male, Female or autosomal!!"
 			exit 1
