@@ -16,7 +16,6 @@
 #list externalSampleID
 #list batchID
 #list seqType
-#string gavinOutputFinal
 # Change permissions
 
 
@@ -63,11 +62,13 @@ rsync -a ${intermediateDir}/*_fastqc.zip ${projectResultsDir}/qc/
 printf ".. finished (3/11)\n"
 
 ##Copy GAVIN results
-
-if [ -f ${gavinOutputFinal} ]
-then
-	rsync -a ${gavinOutputFinal} ${projectResultsDir}/variants/GAVIN/
-fi
+for sample in "${UNIQUESAMPLES[@]}"
+do
+	if [ -f ${intermediateDir}/${sample}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf ]
+	do
+		rsync -a ${intermediateDir}/${sample}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf ${projectResultsDir}/variants/GAVIN/
+	done
+done
 
 count=1
 #copy realigned bams
