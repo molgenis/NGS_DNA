@@ -296,7 +296,12 @@ Used Controls version for XHMM and Convading
 File: ${ControlsVersioning}
 <!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
 printf "Version: "
-grep ${capturingKit} ${ControlsVersioning} | awk '{printf $2}'
+if grep ${capturingKit} ${ControlsVersioning}
+then
+	grep ${capturingKit} ${ControlsVersioning} | awk '{printf $2}'
+else
+	echo "capturingKit does not contain a controlsgroup"
+fi
 printf "\n"
 end.rcode-->
 </pre>
