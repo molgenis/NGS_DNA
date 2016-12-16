@@ -18,41 +18,55 @@ rm -f ${FemaleSamples}
 rm -f ${maleSampleNames}
 rm -f ${femaleSampleNames}
 
-perl -p -e 's|Man|Male|g' ${genderFile} >> ${genderFile}.translated
-perl -p -e 's|Vrouw|Female|g' ${genderFile} >> ${genderFile}.translated
-
 awk -v var="${workingDir}" 'BEGIN{FS=","}{print $1 > var"/Gender/"$2"_samples.txt"
-}' ${genderFile}.translated
+}' ${genderFile}
 
-while read line 
-do
-	ls -1 ${mybamsDir}/*${line}*.bam* >> ${maleSampleNames}
-done<${maleSamples}
+ARR=()
 
-while read line 
-do
-	ls -1 ${mybamsDir}/*${line}*.bam* >> ${femaleSampleNames}
-done<${femaleSamples}
+if [ -f ${maleSamples} ]
+then
+	while read line 
+	do
+		ls -1 ${mybamsDir}/*${line}*.bam* >> ${maleSampleNames}
+	done<${maleSamples}
+	
+	mkdir -p ${workingDir}/Gender/Male/${mybams}
+	
+	cd ${workingDir}/Gender/Male/${mybams}
+	
+	while read line
+	do
+		ln -sf $line $(basename $line) 
+	done<${maleSampleNames}
+		
+	ARR+=("Male")
+else
+	echo "there are no male samples"
+fi
+if [ -f ${femaleSamples} ]
+then
+	while read line 
+	do
+		ls -1 ${mybamsDir}/*${line}*.bam* >> ${femaleSampleNames}
+	done<${femaleSamples}
+	
+	mkdir -p ${workingDir}/Gender/Female/${mybams}
+	
+	
+	cd ${workingDir}/Gender/Female/${mybams}
+	
+	while read line
+	do
+		ln -sf $line $(basename $line)
+	done<${femaleSampleNames}
+	ARR+=("Female")
+else
+	echo "there are no female samples"
+fi
 
-mkdir -p ${workingDir}/Gender/Male/${mybams}
-mkdir -p ${workingDir}/Gender/Female/${mybams}
-
-cd ${workingDir}/Gender/Male/${mybams}
-
-while read line
-do
-	ln -sf $line $(basename $line) 
-done<${maleSampleNames}
-
-cd ${workingDir}/Gender/Female/${mybams}
-
-while read line
-do
-	ln -sf $line $(basename $line)
-done<${femaleSampleNames}
-
-for gender in Male Female
+	
+for gender in ${ARR[@]}
 do
 	echo "executing Convading_MakeControlGroup_Gender.sh for ${gender}"
-	sh ${workingDir}/Convading_MakeControlGroup_Gender.sh ${gender} ${workingDir}
+	sh ${EBROOTNGS_DNA}/protocols/Convading_XHMM_MakeControlGroup/Convading_MakeControlGroup_Gender.sh ${gender} ${workingDir}
 done

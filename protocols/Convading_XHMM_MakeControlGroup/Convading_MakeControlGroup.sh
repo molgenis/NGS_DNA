@@ -117,6 +117,8 @@ module load ngs-utils
 module load CoNVaDING/1.1.6
 module load GATK
 
+module load NGS_DNA/3.3.0-beta
+
 echo "bamsFolder=${bamsFolder}
 workingDir=${workingDir}
 panel=${panel}
@@ -211,6 +213,7 @@ then
 		perl ${EBROOTCONVADING}/CoNVaDING.pl \
 		-mode StartWithMatchScore \
 		-inputDir ${convadingStartWithBamDir} \
+		-controlSamples 8 \
 		-outputDir ${convadingStartWithMatchScoreDir} \
 		-controlsDir ${controlsDir}  2>&1 >> ${workingDir}/step2_StartWithMatchScore.log
 	
@@ -226,6 +229,7 @@ then
 		perl ${EBROOTCONVADING}/CoNVaDING.pl \
 		-mode StartWithBestScore \
 		-inputDir ${convadingStartWithMatchScoreDir} \
+		-controlSamples 8 \
 		-outputDir ${convadingStartWithBestScoreDir} \
 		-controlsDir ${controlsDir}  2>&1 >> ${workingDir}/step3_StartWithBestScore.log
 		
@@ -359,11 +363,10 @@ then
 		fi
 		mkdir -p ${xhmmWorkingDir}
 	
-		rm -f ${xhmmWorkingDir}/${name}.READS.bam.list
 		for i in $(ls ${convadingInputBamsDir}/*.bam)
 		do
 			name=$(basename ${i%%.*})
-	  		echo "$i" >> ${xhmmWorkingDir}/${name}.READS.bam.list
+	  		echo "$i" > ${xhmmWorkingDir}/${name}.READS.bam.list
 	
 		done
 		
@@ -453,10 +456,19 @@ then
 	if [ -f ${workingDir}/XHMM.finished ]
 	then
 		if [ "${includePrevRuns}" == "true" ]
-        	then
-                	echo "start copying interval summary files from previous runs to ${xhmmWorkingDir} "
-                	cp ${pathToFinalControls}/*/XHMM/PerSample/*.sample_interval_summary ${xhmmWorkingDir}/
-        	fi
+                then
+                        ls -d ${pathToFinalControls}/*/ > ${xhmmWorkingDir}/versions.txt
+                        while read line
+                        do
+                                B=$(basename $line)
+                                if [ -d ${pathToFinalControls}/${B}/XHMM/PerSample/ ]
+                                then
+                                        cp ${pathToFinalControls}/${B}/XHMM//PerSample/*.sample_interval_summary ${xhmmWorkingDir}
+
+                                fi
+                        done<${xhmmWorkingDir}/versions.txt
+
+                fi
 	
 		mkdir -p ${pathToFinalControls}/${version}/XHMM/PerSample/
 	
@@ -540,17 +552,18 @@ then
 	echo "moving data to ${logsDir}"
 	mv step* ${logsDir}
 	mv XHMM.* ${logsDir}
-	mv oldControls.txt ${logsDir}
-	
+	if [ -f ${workingDir}/oldControls.txt ]
+	then
+		mv ${workingDir}/oldControls.txt ${logsDir}
+	fi
 	
 else
-echo "skipped Make Control group because it is already finished"	
+	echo "skipped Make Control group because it is already finished"	
 fi
 
 
 
 rm -f ${workingDir}/chrXRegions.txt
-
 awk '{
 	if ($1 == "X"){
 		print $0
@@ -559,6 +572,7 @@ awk '{
 
 size=$(cat ${workingDir}/chrXRegions.txt | wc -l)
 
+echo "SIZE:${capturedBed}"
 
 
 #
@@ -567,5 +581,7 @@ size=$(cat ${workingDir}/chrXRegions.txt | wc -l)
 if [ $size != 0 ]
 then
 	echo "the bedfile contains chrX regions, convading and xhmm will now be executed for male and female seperately"
-	sh ${workingDir}/prepareMaleFemale.sh ${genderFile} ${workingDir}
+	sh ${EBROOTNGS_DNA}/protocols/Convading_XHMM_MakeControlGroup/prepareMaleFemale.sh ${genderFile} ${workingDir}
+else
+	echo "There are no chrX regions, creating Controlsgroup is finished"
 fi

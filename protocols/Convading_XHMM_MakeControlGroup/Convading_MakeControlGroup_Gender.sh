@@ -66,11 +66,15 @@ then
 	then
 		if [ "${includePrevRuns}" == "true" ]
 		then
+			rm -f ${workingDir}/oldControls.txt
 			for i in $(ls -d ${pathToFinalControls}/*/)
                         do
                                 echo "start copying normalized coverage files from previous runs to ${convadingStartWithBamDir}"
-                                cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${convadingStartWithBamDir}
-                                cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${controlsDir}
+				if [ -d ${pathToFinalControls}/$(basename ${i})/Convading/${gender} ]
+	                        then
+				        cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${convadingStartWithBamDir}
+       	                        	cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${controlsDir}
+				fi
                                 echo $(basename ${i%%.*}) >> ${workingDir}/oldControls.txt
                         done
 		fi
@@ -80,6 +84,7 @@ then
 		-mode StartWithMatchScore \
 		-inputDir ${convadingStartWithBamDir} \
 		-outputDir ${convadingStartWithMatchScoreDir} \
+		-controlSamples 8 \
 		-sexChr \
 		-controlsDir ${controlsDir}  2>&1 >> ${workingDir}/step2_StartWithMatchScore.log
 	
@@ -220,7 +225,6 @@ then
 	xhmmWorkingDir=${workingDir}/XHMM/
 	
 	rm -f ${xhmmWorkingDir}/scripts/XHMM.failed
-	rm -f ${xhmmWorkingDir}/${name}.READS.bam.list
 	
 	if [ ! -f ${workingDir}/XHMM.finished ]
 	then 
@@ -228,7 +232,7 @@ then
 		for i in $(ls ${convadingInputBamsDir}/*.bam)
 		do
 			name=$(basename ${i%%.*})
-	  		echo "$i" >> ${xhmmWorkingDir}/${name}.READS.bam.list
+	  		echo "$i" > ${xhmmWorkingDir}/${name}.READS.bam.list
 	
 		done
 		
@@ -315,11 +319,17 @@ then
 	
 		if [ "${includePrevRuns}" == "true" ]
 		then
-			for i in $(ls -d ${pathToFinalControls}/*/)
-                        do
-                                echo "start copying interval summary files from previous runs to ${xhmmWorkingDir} "
-                                cp ${pathToFinalControls}/$(basename ${i})/XHMM/${gender}/PerSample/*.sample_interval_summary ${xhmmWorkingDir}
-                        done
+			ls -d ${pathToFinalControls}/*/ > ${xhmmWorkingDir}/versions.txt
+			while read line 
+			do 
+				B=$(basename $line)
+				if [ -d ${pathToFinalControls}/${B}/XHMM/${gender}/PerSample/ ]
+				then
+       	                        	cp ${pathToFinalControls}/${B}/XHMM/${gender}/PerSample/*.sample_interval_summary ${xhmmWorkingDir}
+
+				fi
+			done<${xhmmWorkingDir}/versions.txt 
+
 		fi
 	
 		mkdir -p ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/
@@ -349,9 +359,13 @@ then
 	echo "moving data to ${logsDir}"
         mv ${workingDir}/step* ${logsDir}
         mv ${workingDir}/XHMM.* ${logsDir}
-        mv ${workingDir}/oldControls.txt ${logsDir}
-	touch ${workingDir}/Convading_MakeControlGroup.finished
-
+        if [ -f ${workingDir}/oldControls.txt ]
+	then
+		mv ${workingDir}/oldControls.txt ${logsDir}
+		touch ${workingDir}/Convading_MakeControlGroup.finished
+		
+	fi
+	echo "Making controlsgroup is completely finished"
 else
 	echo "MakeControlgroupGender is already created,skipped"
 fi
