@@ -9,8 +9,6 @@ s07_MergeBam,protocols/MergeBam.sh,s06_SortBam;inputMergeBam=alignedSortedBam;in
 s08_MarkDuplicates,protocols/MarkDuplicates.sh,s07_MergeBam
 s09_Flagstat,protocols/FlagstatMetrics.sh,s08_MarkDuplicates
 s10a_Manta,protocols/Manta.sh,s08_MarkDuplicates
-s10b_Convading,protocols/Convading.sh,s08_MarkDuplicates
-s10c_XHMM,protocols/XHMM.sh,s08_MarkDuplicates
 s11_GenderCalculate,protocols/GenderCalculate.sh,s08_MarkDuplicates
 s12_CramConversion,protocols/CramConversion.sh,s08_MarkDuplicates
 s13_MakeDedupBamMd5,protocols/MakeDedupBamMd5.sh,s08_MarkDuplicates
@@ -24,12 +22,10 @@ s17_GenderCheck,protocols/GenderCheck.sh,s11_GenderCalculate;s16b_CollectHSMetri
 s18a_VariantCalling,protocols/VariantCalling.sh,s17_GenderCheck
 s18d_GenotypeVariants,protocols/VariantGenotyping.sh,s18a_VariantCalling
 s19_SnpEff,protocols/SnpEff.sh,s18d_GenotypeVariants
-s19b_VEP,protocols/VEP.sh,s18d_GenotypeVariants
 s20_CmdLineAnnotator,protocols/CmdLineAnnotator.sh,s19_SnpEff
 s21_VariantAnnotator,protocols/VariantAnnotator.sh,s20_CmdLineAnnotator
 s22_MergeBatches,protocols/MergeBatches.sh,s21_VariantAnnotator
-s23a_GavinSplitSamples,protocols/GavinSplitSamples.sh,s22_MergeBatches
-s23b_Gavin,protocols/Gavin.sh,s23a_GavinSplitSamples
+s23_Gavin,protocols/Gavin.sh,s22_MergeBatches
 s24_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s22_MergeBatches
 s25a_SnpFiltration,protocols/SnpFiltration.sh,s24_SplitIndelsAndSNPs
 s25b_IndelFiltration,protocols/IndelFiltration.sh,s24_SplitIndelsAndSNPs
@@ -41,4 +37,4 @@ s29_InSilicoConcordance,protocols/InSilicoConcordance.sh,s28_VcfToTable
 s30a_QCStats,protocols/QCStats.sh,s16a_CollectMultipleMetrics;s16b_CollectHSMetrics;s16c_CollectGCBiasMetrics;s16d_CollectBamIndexMetrics;s29_InSilicoConcordance
 s30b_QCReport,protocols/QCReport.sh,s30a_QCStats
 s31_CountAllFinishedFiles,protocols/CountAllFinishedFiles.sh,s30b_QCReport;s15_CoverageCalculations
-s32_CopyToResultsDir,protocols/CopyToResultsDir.sh,s10_Manta;s23b_Gavin;s27a_CompressingSampleVcf;s27b_CompressingProjectVcf;s31_CountAllFinishedFiles
+s32_CopyToResultsDir,protocols/CopyToResultsDir.sh,s10_Manta;s27a_CompressingSampleVcf;s27b_CompressingProjectVcf;s31_CountAllFinishedFiles

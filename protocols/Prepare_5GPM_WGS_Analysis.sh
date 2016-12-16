@@ -110,3 +110,6 @@ sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh -p ${mainParameters} \
 -runid ${runid} \
 -o "ngsversion=${ngsversion};\
 groupname=${groupname};\previousRun=${previousRun};\"
+
+
+perl -pi -e 's|#SBATCH --mem 4gb|#SBATCH --mem 4gb\n#SBATCH --qos=ds|' ${projectJobsDir}/*CopyGvcfToPrm_0.sh

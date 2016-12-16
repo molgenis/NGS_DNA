@@ -58,11 +58,13 @@ cd ${workfolder}/generatedscripts/PlatinumSubset/
 sh generate_template.sh 
 
 cd scripts
-perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' *.sh  
+perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\nmodule load Molgenis-Compute/\${computeVersion}|' *.sh
 
 sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
+
+perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
 perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_0.sh  
 perl -pi -e 's|module load test|#|' s*_QCReport_0.sh
 perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s*_CountAllFinishedFiles_0.sh

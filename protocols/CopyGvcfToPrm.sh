@@ -31,8 +31,8 @@ echo "blaat"
 
 for samp in ${UNIQUESAMPLES[@]}
 do 
-	cp ${intermediateDir}/gVCF/${samp}*.g.vcf.gz /groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/
-	cp ${intermediateDir}/gVCF/${samp}*.g.vcf.gz.tbi /groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/
+	rsync -rlD ${intermediateDir}/gVCF/new/${samp}*.g.vcf.gz /groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/
+	rsync -rlD ${intermediateDir}/gVCF/new/${samp}*.g.vcf.gz.tbi /groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/
 	
 done
 

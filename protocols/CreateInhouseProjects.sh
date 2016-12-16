@@ -35,10 +35,9 @@
 #string logsDir 
 
 umask 0007
+module load ${ngsUtilsVersion}
+module load ${ngsversion}
 
-module list
-module load Molgenis-Compute/${computeVersion}
-module load $ngsversion
 #
 # Create project dirs.
 #
@@ -100,10 +99,6 @@ done
 
 cd $ROCKETPOINT
 
-echo "before splitting"
-echo `pwd`
-module load ${ngsUtilsVersion}
-module load ${ngsversion}
 #
 # TODO: array for each sample:
 #
@@ -113,6 +108,8 @@ module load ${ngsversion}
 #
 
 extract_samples_from_GAF_list.pl --i ${worksheet} --o ${projectJobsDir}/${project}.csv --c project --q ${project}
+
+perl -pi -e 's/\r(?!\n)//g' ${projectJobsDir}/${project}.csv
 
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.

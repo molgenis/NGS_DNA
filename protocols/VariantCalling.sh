@@ -14,11 +14,11 @@
 #string dbSNP137Vcf
 #string dbSNP137VcfIdx
 #string sampleBatchVariantCalls
-#string sampleBatchVariantCallsIdx
+#string sampleBatchVariantCallsIndex
 #string sampleBatchVariantCallsMaleNONPAR
-#string sampleBatchVariantCallsMaleNONPARIdx
+#string sampleBatchVariantCallsMaleNONPARIndex
 #string sampleBatchVariantCallsFemale
-#string sampleBatchVariantCallsFemaleIdx
+#string sampleBatchVariantCallsFemaleIndex
 #string tmpDataDir
 #string externalSampleID
 #string	project
@@ -49,20 +49,20 @@ ${checkStage}
 makeTmpDir ${sampleBatchVariantCalls}
 tmpSampleBatchVariantCalls=${MC_tmpFile}
 
-makeTmpDir ${sampleBatchVariantCallsIdx}
-tmpSampleBatchVariantCallsIdx=${MC_tmpFile}
+makeTmpDir ${sampleBatchVariantCallsIndex}
+tmpSampleBatchVariantCallsIndex=${MC_tmpFile}
 
 makeTmpDir ${sampleBatchVariantCallsMaleNONPAR}
 tmpSampleBatchVariantCallsMaleNONPAR=${MC_tmpFile}
 
-makeTmpDir ${sampleBatchVariantCallsMaleNONPARIdx}
-tmpSampleBatchVariantCallsMaleNONPARIdx=${MC_tmpFile} 
+makeTmpDir ${sampleBatchVariantCallsMaleNONPARIndex}
+tmpSampleBatchVariantCallsMaleNONPARIndex=${MC_tmpFile} 
 
 makeTmpDir ${sampleBatchVariantCallsFemale}
 tmpSampleBatchVariantCallsFemale=${MC_tmpFile}
 
-makeTmpDir ${sampleBatchVariantCallsFemaleIdx}
-tmpSampleBatchVariantCallsFemaleIdx=${MC_tmpFile}
+makeTmpDir ${sampleBatchVariantCallsFemaleIndex}
+tmpSampleBatchVariantCallsFemaleIndex=${MC_tmpFile}
 
 MALE_BAMS=()
 BAMS=()
@@ -76,6 +76,11 @@ sex=$(less ${intermediateDir}/${externalSampleID}.chosenSex.txt | awk 'NR==2')
 if [ -f ${capturedBatchBed} ] 
 then
 	baitBatchLength=`cat ${capturedBatchBed} | wc -l`
+fi
+
+if [ ! -d ${intermediateDir}/gVCF ]
+then
+	mkdir -p ${intermediateDir}/gVCF
 fi
 
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
@@ -188,7 +193,10 @@ else
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
         	mv ${tmpSampleBatchVariantCalls} ${sampleBatchVariantCalls}
-        	mv ${tmpSampleBatchVariantCallsIdx} ${sampleBatchVariantCallsIdx}
+        	mv ${tmpSampleBatchVariantCallsIndex} ${sampleBatchVariantCallsIndex}
+			
+		cp ${sampleBatchVariantCalls} ${intermediateDir}/gVCF/
+		cp ${sampleBatchVariantCallsIndex} ${intermediateDir}/gVCF/
 	else
 		echo "ERROR: output file is missing"
 		exit 1

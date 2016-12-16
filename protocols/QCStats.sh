@@ -47,9 +47,12 @@ python ${EBROOTNGS_DNA}/report/pull_DNA_Seq_Stats.py \
 -f ${flagstatMetrics} \
 >> ${qcMetrics}
 
-if [ "${GCC_Analysis}" == "diagnostiek" ] || [ "${GCC_Analysis}" == "diagnostics" ] || [ "${GCC_Analysis}" == "Diagnostiek" ] || [ "${GCC_Analysis}" == "Diagnostics" ]
-then
+bedfile=$(basename $capturingKit)
 
+if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" == *"DYS_v"* || "${bedfile}" == *"EPI_v"* \
+|| "${bedfile}" == *"LEVER_v"* || "${bedfile}" == *"MYO_v"* || "${bedfile}" == *"NEURO_v"* || "${bedfile}" == *"ONCO_v"* \
+|| "${bedfile}" == *"PCS_v"* || "${bedfile}" == *"TID_v"* ]]
+then
     	if [ ! -f ${intermediateDir}/coveragePerBaseBed.txt ]
         then
             	nameOfBed=$(basename $capturingKit)

@@ -7,7 +7,7 @@
 #string logsDir 
 #string groupname
 #string project
-#string projectVariantsMergedSorted
+#string projectVariantsMerged
 #string intermediateDir
 
 sleep 10
@@ -32,7 +32,7 @@ FNR==NR{
   if ((k in a) && (lc==$4) && (ld==$5)){
         print k,lc,ld
         }
-}' ${intermediateDir}/InSilico.txt ${projectVariantsMergedSorted} > ${intermediateDir}/InSilicoConcordanceCheck.txt
+}' ${intermediateDir}/InSilico.txt ${projectVariantsMerged} > ${intermediateDir}/InSilicoConcordanceCheck.txt
 
 count=`cat ${intermediateDir}/InSilicoConcordanceCheck.txt | wc -l`
 

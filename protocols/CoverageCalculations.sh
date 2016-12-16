@@ -24,10 +24,12 @@ sleep 5
 module load ${gatkVersion}
 module load ${ngsUtilsVersion}
 
-if [ "${GCC_Analysis}" == "diagnostiek" ] || [ "${GCC_Analysis}" == "diagnostics" ] || [ "${GCC_Analysis}" == "Diagnostiek" ] || [ "${GCC_Analysis}" == "Diagnostics" ]
+### Per base bed files
+bedfile=$(basename $capturingKit)
+if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" == *"DYS_v"* || "${bedfile}" == *"EPI_v"* \
+|| "${bedfile}" == *"LEVER_v"* || "${bedfile}" == *"MYO_v"* || "${bedfile}" == *"NEURO_v"* || "${bedfile}" == *"ONCO_v"* \
+|| "${bedfile}" == *"PCS_v"* || "${bedfile}" == *"TID_v"* ]]
 then
-	### Per base bed files
-	bedfile=$(basename $capturingKit)
 	if [ -d ${coveragePerBaseDir}/${bedfile} ]
 	then
 		for i in $(ls -d ${coveragePerBaseDir}/${bedfile}/*)

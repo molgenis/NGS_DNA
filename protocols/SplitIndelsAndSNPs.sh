@@ -12,7 +12,7 @@
 #string gatkJar
 #string indexFile
 #string capturedIntervals
-#string projectVariantsMergedSorted
+#string projectVariantsMerged
 #string projectVariantsMergedSnpsVcf
 #string projectVariantsMergedIndelsVcf
 #string externalSampleID
@@ -25,11 +25,13 @@ tmpProjectVariantsMergedIndelsVcf=${MC_tmpFile}
 makeTmpDir ${projectVariantsMergedSnpsVcf}
 tmpProjectVariantsMergedSnpsVcf=${MC_tmpFile}
 
+sleep 5
+
 #select only Indels
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${projectVariantsMergedSorted} \
+--variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedIndelsVcf} \
 -L ${capturedIntervals} \
 --selectTypeToInclude INDEL \
@@ -38,11 +40,13 @@ java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 mv ${tmpProjectVariantsMergedIndelsVcf} ${projectVariantsMergedIndelsVcf}
 echo "moved ${tmpProjectVariantsMergedIndelsVcf} to ${projectVariantsMergedIndelsVcf}"
 
+sleep 5
+
 #Select SNPs and MNPs
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${projectVariantsMergedSorted} \
+--variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedSnpsVcf} \
 -L ${capturedIntervals} \
 --selectTypeToExclude INDEL \

@@ -9,12 +9,10 @@
 #string tempDir
 #string dedupBam
 #string dedupBamIdx
-#string dedupMetrics
 #string tmpDataDir
 #string picardJar
 #string sambambaVersion
 #string sambambaTool
-#string dedupMetrics
 #string	project
 #string logsDir 
 #string groupname

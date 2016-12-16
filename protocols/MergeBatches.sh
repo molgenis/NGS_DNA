@@ -10,6 +10,7 @@
 #string tempDir
 #string intermediateDir
 #string projectVariantsMerged
+#string projectVariantsMergedIdx
 #string projectVariantsMergedSorted
 #list batchID
 #string projectPrefix
@@ -29,6 +30,8 @@ ${checkStage}
 
 makeTmpDir ${projectVariantsMerged}
 tmpProjectVariantsMerged=${MC_tmpFile}
+makeTmpDir ${projectVariantsMergedIdx}
+tmpProjectVariantsMergedIdx=${MC_tmpFile}
 
 makeTmpDir ${projectVariantsMergedSorted}
 tmpProjectVariantsMergedSorted=${MC_tmpFile}
@@ -51,23 +54,18 @@ INPUTS=()
 
 for b in "${batchID[@]}"
 do
-	if [ -f ${projectPrefix}.batch-${b}.variant.calls.genotyped.vcf ]
+	if [ -f ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf ]
 	then
-		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.variant.calls.genotyped.annotated.vcf" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.variant.calls.genotyped.annotated.vcf")
+		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf")
 	fi
 done
 
 java -Xmx12g -Djava.io.tmpdir=${tempDir} -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
 -R ${indexFile} \
 ${INPUTS[@]} \
--out ${tmpProjectVariantsMerged} \
--assumeSorted
+-out ${tmpProjectVariantsMerged}
 
-#sort and rename VCF file 
-${sortVCFpl} \
--fastaIndexFile ${indexFileFastaIndex} \
--inputVCF ${tmpProjectVariantsMerged} \
--outputVCF ${tmpProjectVariantsMergedSorted}
-
-mv ${tmpProjectVariantsMergedSorted} ${projectVariantsMergedSorted}
-echo "mv ${tmpProjectVariantsMergedSorted} ${projectVariantsMergedSorted}"
+mv ${tmpProjectVariantsMergedIdx} ${projectVariantsMergedIdx}
+echo "mv ${tmpProjectVariantsMergedIdx} ${projectVariantsMergedIdx}"
+mv ${tmpProjectVariantsMerged} ${projectVariantsMerged}
+echo "mv ${tmpProjectVariantsMerged} ${projectVariantsMerged}"

@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=13gb
+#MOLGENIS walltime=23:59:00 mem=18gb
 
 #Parameter mapping
 #string tmpName
@@ -21,13 +21,13 @@
 #string javaVersion
 #string dbSNPDir
 
-#string projectBatchGenotypedVariantCalls
-#string projectBatchGenotypedVariantCallsAnnotated
+#string projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated
+#string projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated
 
 sleep 5
 
-makeTmpDir ${projectBatchGenotypedVariantCallsAnnotated}
-tmpProjectBatchGenotypedVariantCallsAnnotated=${MC_tmpFile}
+makeTmpDir ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated}
+tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated=${MC_tmpFile}
 
 #Function to check if array contains value
 array_contains () { 
@@ -59,10 +59,12 @@ ${stage} ${javaVersion}
 ${stage} ${gatkVersion}
 ${stage} ngs-utils
 
+perl -i -wpe 'my @t = split("\t",$_);$t[7] =~ s/ /_/g if ($t[7]);$t[7] =~ s/;$//g if ($t[7]);$_ = join("\t",@t)' ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}
+
 ${checkStage}
-if [ -f ${projectBatchGenotypedVariantCalls} ]
+if [ -f ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} ]
 then
-java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
+java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx16g -jar \
 ${EBROOTGATK}/${gatkJar} \
 -T VariantAnnotator \
 -R ${indexFile} \
@@ -79,18 +81,20 @@ ${INPUTS[@]} \
 -A ReadPosRankSumTest \
 -A RMSMappingQuality \
 -A QualByDepth \
+-A SnpEff \
 -A VariantType \
 -A AlleleBalanceBySample \
 -A DepthPerAlleleBySample \
 -A SpanningDeletions \
 --disable_auto_index_creation_and_locking_when_reading_rods \
 -D ${dbSNPDir}/dbsnp_137.b37.vcf \
---variant ${projectBatchGenotypedVariantCalls} \
--L ${projectBatchGenotypedVariantCalls} \
--o ${tmpProjectBatchGenotypedVariantCallsAnnotated}
+--variant ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} \
+--snpEffFile ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} \
+-L ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} \
+-o ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated}
 
-mv ${tmpProjectBatchGenotypedVariantCallsAnnotated} ${projectBatchGenotypedVariantCallsAnnotated}
-echo "mv ${tmpProjectBatchGenotypedVariantCallsAnnotated} ${projectBatchGenotypedVariantCallsAnnotated}"
+mv ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated} ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated}
+echo "mv ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated} ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated}"
 
 else
 	echo "batch not available, skipped"

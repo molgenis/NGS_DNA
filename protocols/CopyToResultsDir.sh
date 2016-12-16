@@ -18,6 +18,7 @@
 #list seqType
 # Change permissions
 
+
 umask 0007
 
 #Function to check if array contains value
@@ -60,6 +61,15 @@ printf "Copying fastQC output to results directory.."
 rsync -a ${intermediateDir}/*_fastqc.zip ${projectResultsDir}/qc/
 printf ".. finished (3/11)\n"
 
+##Copy GAVIN results
+for sample in "${UNIQUESAMPLES[@]}"
+do
+	if [ -f ${intermediateDir}/${sample}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf ]
+	then
+		rsync -a ${intermediateDir}/${sample}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf ${projectResultsDir}/variants/GAVIN/
+	fi
+done
+
 count=1
 #copy realigned bams
 printf "Copying ${EXTERN} realigned bams "
@@ -71,6 +81,7 @@ do
 	if [ -f ${intermediateDir}/${sample}.merged.dedup.bam.cram ] 
 	then
 		rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.cram ${projectResultsDir}/alignment/
+		rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.cram.md5 ${projectResultsDir}/alignment/
 	fi
 
 	printf "."
@@ -100,7 +111,6 @@ do
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.quality_distribution_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.hs_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.bam_index_stats ${projectResultsDir}/qc/statistics/
-	rsync -a ${intermediateDir}/${sample}.merged.dedup.metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.flagstat ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}*.pdf ${projectResultsDir}/qc/statistics/
 	if [ -f "${intermediateDir}/${sample}.merged.dedup.bam.insert_size_metrics" ]
@@ -115,16 +125,48 @@ done
 
 printf "Copying variants vcf and tables to results directory "
 # Copy variants vcf and tables to results directory
-rsync -a ${projectPrefix}.final.vcf ${projectResultsDir}/variants/
-printf "."
 rsync -a ${projectPrefix}.final.vcf.table ${projectResultsDir}/variants/
 printf "."
+rsync -a ${projectPrefix}.final.vcf.gz ${projectResultsDir}/variants/
+printf "."
+rsync -a ${projectPrefix}.final.vcf.gz.tbi ${projectResultsDir}/variants/
+printf "."
+
+
+echo "copy cnv results of Convading and XHMM and Manta"
+
 for sa in "${UNIQUESAMPLES[@]}"
 do
-	if [ -f ${intermediateDir}/${sa}.delly.snpeff.hpo.vcf ]
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/candidateSV.vcf.gz ]
 	then
-		rsync -a ${intermediateDir}/${sa}.delly.snpeff.hpo.vcf ${projectResultsDir}/variants/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		printf "."
+	fi
+
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/candidateSmallIndels.vcf.gz ]
+        then
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
+		printf "."
+	fi
+
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/diploidSV.vcf.gz ]
+        then
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz ${projectResultsDir}/variants/cnv/
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
+		printf "."
+	fi
+	if [ -f ${intermediateDir}/${sa}_step10.xcnv ]
+	then
+		echo "copying Convading data"	
+		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.totallist.txt ${projectResultsDir}/variants/cnv/
+		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.shortlist.txt ${projectResultsDir}/variants/cnv/
+		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.longlist.txt ${projectResultsDir}/variants/cnv/
+		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log ${projectResultsDir}/variants/cnv/
+		cp ${intermediateDir}/Convading//CreateFinalList/${sa}/*.shortlist.finallist.txt ${projectResultsDir}/variants/cnv/
+		echo "copying XHMM results"
+		cp ${intermediateDir}/${sa}_step10.xcnv ${projectResultsDir}/variants/cnv/
 	fi
 done
 printf " finished (7/11)\n"
@@ -133,10 +175,14 @@ printf " finished (7/11)\n"
 printf "Copying vcf files, gender determination, coverage per base and per target files "
 for sa in "${UNIQUESAMPLES[@]}"
 do
-	rsync -a ${intermediateDir}/${sa}.final.vcf ${projectResultsDir}/variants/
-	printf "."
 	rsync -a ${intermediateDir}/${sa}.final.vcf.table ${projectResultsDir}/variants/
 	printf "."
+
+	rsync -a ${intermediateDir}/${sa}.final.vcf.gz ${projectResultsDir}/variants/
+	printf "."
+	rsync -a ${intermediateDir}/${sa}.final.vcf.gz.tbi ${projectResultsDir}/variants/
+	printf "."
+
 
 	rsync -a ${intermediateDir}/${sa}.chosenSex.txt ${projectResultsDir}/general/
 	printf "."
@@ -181,7 +227,7 @@ printf " finished (9/11)\n"
 
 echo "Creating zip file"
 # Create zip file for all "small text" files
-CURRENT_DIR=`pwd`
+CURRENT_DIR=$(pwd)
 cd ${projectResultsDir}
 
 zip -gr ${projectResultsDir}/${project}.zip variants
@@ -198,9 +244,6 @@ echo "Zip file created: ${projectResultsDir}/${project}.zip (10/11)"
 
 md5sum ${project}.zip > ${projectResultsDir}/${project}.zip.md5
 echo "Made md5 file for ${projectResultsDir}/${project}.zip (11/11)"
-# add u+rwx,g+r+w rights for GAF group
-
-chmod -R u+rwX,g+rwX ${projectResultsDir}
 
 cd ${CURRENT_DIR}
 

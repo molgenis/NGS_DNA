@@ -6,61 +6,46 @@
 #string checkStage
 #string tempDir
 #string intermediateDir
-#string snpEffCallsHtml
-#string snpEffCallsVcf
-#string snpEffGenesTxt
+#string projectVariantCallsSnpEff_Annotated
+#string projectBatchGenotypedVariantCalls
 #string project
 #string logsDir 
 #string groupname
-#string projectVariantsMergedSorted
 #string tmpDataDir
 #string snpEffVersion
 #string javaVersion
 
 sleep 5
 
-makeTmpDir ${snpEffCallsHtml}
-tmpSnpEffCallsHtml=${MC_tmpFile}
+makeTmpDir ${projectVariantCallsSnpEff_Annotated}
+tmpProjectVariantCallsSnpEff_Annotated=${MC_tmpFile}
 
-makeTmpDir ${snpEffCallsVcf}
-tmpSnpEffCallsVcf=${MC_tmpFile}
-
-makeTmpDir ${snpEffGenesTxt}
-tmpSnpEffGenesTxt=${MC_tmpFile}
-
-#Function to check if array contains value
-array_contains () { 
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array}"; do
-        if [[ "$element" == "$seeking" ]]; then
-            in=0
-            break
-        fi
-    done
-    return $in
-}
-
-#Load GATK module
-${stage} ${javaVersion}
 ${stage} ${snpEffVersion}
 ${checkStage}
 
-#Run snpEff
-java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx4g -jar \
-$EBROOTSNPEFF/snpEff.jar \
-eff \
--v \
--c $EBROOTSNPEFF/snpEff.config \
--i vcf \
--o gatk \
-GRCh37.75 \
--stats ${tmpSnpEffCallsHtml} \
-${projectVariantsMergedSorted} \
-> ${tmpSnpEffCallsVcf}
+if [ -f ${projectBatchGenotypedVariantCalls} ]
+then
+    	#
+	##
+	###Annotate with SnpEff
+        ##
+	#
+	#Run snpEff
+	java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx4g -jar \
+	$EBROOTSNPEFF/snpEff.jar \
+	-v hg19 \
+	-noStats \
+	-noLog \
+	-lof \
+	-canon \
+	-ud 0 \
+	-c $EBROOTSNPEFF/snpEff.config \
+	${projectBatchGenotypedVariantCalls} \
+	> ${tmpProjectVariantCallsSnpEff_Annotated}
 
-    mv ${tmpSnpEffCallsHtml} ${snpEffCallsHtml}
-    mv ${tmpSnpEffCallsVcf} ${snpEffCallsVcf}
-    mv ${tmpSnpEffGenesTxt} ${snpEffGenesTxt}
+	mv ${tmpProjectVariantCallsSnpEff_Annotated} ${projectVariantCallsSnpEff_Annotated}
+	echo "mv ${tmpProjectVariantCallsSnpEff_Annotated} ${projectVariantCallsSnpEff_Annotated}"
 
+else
+	echo "skipped"
+fi
