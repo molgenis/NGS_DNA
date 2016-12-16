@@ -46,7 +46,7 @@ else
 
 	mv ${tmpMantaDir}/* ${mantaDir} 
 
-	if [ $capturingKit != *"wgs"* ]
+	if [[ $capturingKit != *"wgs"* ]]
 	then
 		mkdir ${mantaDir}/results/variants/real/	
 		
