@@ -73,9 +73,6 @@ echo "moved ${tmpGavinToCADD} to ${gavinToCADD}"
 
 echo "GAVIN round 1 is finished, uploading to CADD..."
 
-
-echo "navigate to /groups/umcg-gaf/tmp04/umcg-pneerincx/CADD_v1.3.manual/"
-cd /groups/umcg-gaf/tmp04/umcg-pneerincx/CADD_v1.3.manual/
 echo "starting to get CADD annotations locally for ${gavinToCADD}"
 
 bgzip -c ${gavinToCADD} > ${gavinToCADDgz}
