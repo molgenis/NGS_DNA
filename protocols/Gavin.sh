@@ -80,8 +80,6 @@ tabix -p vcf ${gavinToCADDgz}
 
 score.sh ${gavinToCADDgz} ${tmpGavinFromCADDgz}
 
-cd -
-
 mv ${tmpGavinFromCADDgz} ${gavinFromCADDgz}
 echo "moved ${tmpGavinFromCADDgz} ${gavinFromCADDgz}"
 

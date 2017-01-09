@@ -16,9 +16,11 @@ RUNID=runXX
 ## Normal user, please leave BATCH at _chr
 ## For expert modus: small batchsize (6) fill in '_small'  or per chromosome fill in _chr
 BATCH="_chr"
+samplesheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv 
+mac2unix $samplesheet
 
-SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv $thisDir) -1 ))
-sh ${EBROOTNGS_DNA}/gender.sh ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
+SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${samplesheet} $thisDir) -1 ))
+sh ${EBROOTNGS_DNA}/gender.sh $samplesheet
 echo "Samplesize is $SAMPLESIZE"
 if [ $SAMPLESIZE -gt 199 ]
 then
