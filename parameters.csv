@@ -30,6 +30,7 @@ sambambaVersion,sambamba/${sambambaVer}-${toolChain}
 sambambaVer,v0.6.4
 samtoolsVersion,SAMtools/1.2-${toolChain}
 snpEffVersion,snpEff/4.3-Java-1.7.0_80
+htsLibVersion,HTSlib/1.3.2-foss-2015b
 tabixVersion,tabix/0.2.6-${toolChain}
 vepVersion,VEP/${vepDBVersion}
 wkHtmlToPdfVersion,wkhtmltox/0.12.3

@@ -1,7 +1,7 @@
 genderFile=$1
 workingDir=$2
 
-##. ${workingDir}/config.cfg
+. ${workingDir}/config.cfg
 
 mkdir -p ${workingDir}/Gender/
 
@@ -9,9 +9,7 @@ maleSamples=${workingDir}/Gender/Male_samples.txt
 femaleSamples=${workingDir}/Gender/Female_samples.txt
 maleSampleNames=${workingDir}/Gender/Male_sampleNames.txt
 femaleSampleNames=${workingDir}/Gender/Female_sampleNames.txt
-mybamsDir=${workingDir}/mybams
-
-mybams="mybams"
+mybamsDir=${workingDir}/${bamsFolder}
 
 rm -f ${maleSamples}
 rm -f ${FemaleSamples}
@@ -30,9 +28,9 @@ then
 		ls -1 ${mybamsDir}/*${line}*.bam* >> ${maleSampleNames}
 	done<${maleSamples}
 	
-	mkdir -p ${workingDir}/Gender/Male/${mybams}
+	mkdir -p ${workingDir}/Gender/Male/${bamsFolder}
 	
-	cd ${workingDir}/Gender/Male/${mybams}
+	cd ${workingDir}/Gender/Male/${bamsFolder}
 	
 	while read line
 	do
@@ -50,10 +48,10 @@ then
 		ls -1 ${mybamsDir}/*${line}*.bam* >> ${femaleSampleNames}
 	done<${femaleSamples}
 	
-	mkdir -p ${workingDir}/Gender/Female/${mybams}
+	mkdir -p ${workingDir}/Gender/Female/${bamsFolder}
 	
 	
-	cd ${workingDir}/Gender/Female/${mybams}
+	cd ${workingDir}/Gender/Female/${bamsFolder}
 	
 	while read line
 	do

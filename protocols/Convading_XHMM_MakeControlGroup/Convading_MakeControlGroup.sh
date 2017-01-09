@@ -113,11 +113,12 @@ fi
 if [[ -z "${genderFile-}" ]]; then
 	genderFile="${workingDir}/umcg-ids.txt"
 fi
+
+module load NGS_DNA/3.3.0
 module load ngs-utils
 module load CoNVaDING/1.1.6
 module load GATK
 
-module load NGS_DNA/3.3.0-beta
 
 echo "bamsFolder=${bamsFolder}
 workingDir=${workingDir}
