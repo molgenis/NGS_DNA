@@ -22,8 +22,7 @@
 #string gavinFromCADD
 #string gavinToCADDgz
 #string gavinFromCADDgz
-#string tabixVersion
-#string caddVersion
+#string htsLibVersion
 
 #string gavinToolPackVersion
 #string gavinJar
@@ -49,9 +48,7 @@ tmpGavinOutputFinal=${MC_tmpFile}
 makeTmpDir ${gavinFromCADDgz}
 tmpGavinFromCADDgz=${MC_tmpFile}
 
-${stage} ${tabixVersion}
-${stage} ${caddVersion}
-
+${stage} ${htsLibVersion}
 ${stage} ${gavinToolPackVersion}
 
 ${checkStage}
