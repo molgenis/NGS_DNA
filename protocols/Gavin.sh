@@ -11,7 +11,6 @@
 #string snpEffVersion
 #string javaVersion
 
-#string sampleVariantsMergedGavin
 #string gavinClinVar
 #string gavinCGD
 #string gavinFDR
@@ -30,6 +29,7 @@
 #string gavinMergeBackToolJar
 #string gavinOutputFinalMerged
 #string gavinOutputFinalMergedRLV
+#string sampleFinalVcf
 
 sleep 3
 
@@ -53,7 +53,7 @@ ${stage} ${gavinToolPackVersion}
 
 ${checkStage}
 java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
--i ${sampleVariantsMergedGavin} \
+-i ${sampleFinalVcf} \
 -o ${tmpGavinOutputFirstPass} \
 -m CREATEFILEFORCADD \
 -a ${tmpGavinToCADD} \
@@ -81,7 +81,7 @@ mv ${tmpGavinFromCADDgz} ${gavinFromCADDgz}
 echo "moved ${tmpGavinFromCADDgz} ${gavinFromCADDgz}"
 
 java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
--i ${sampleVariantsMergedGavin} \
+-i ${sampleFinalVcf} \
 -o ${tmpGavinOutputFinal} \
 -m ANALYSIS \
 -a ${gavinFromCADDgz} \
@@ -98,7 +98,8 @@ echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
 echo "Merging ${sampleVariantsMergedGavin} and ${gavinOutputFinal}"
 
 java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
--i ${sampleVariantsMergedGavin} \
+-i ${sampleFinalVcf} \
+-r \
 -v ${gavinOutputFinal} \
 -o ${gavinOutputFinalMerged}
 
@@ -106,9 +107,8 @@ java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
 #gavinSplitRlvToolJar
 java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinSplitRlvToolJar} \
 -i ${gavinOutputFinalMerged} \
+-r \
 -o ${gavinOutputFinalMergedRLV}
-#perl -pi -e 's|ID=RLV_PRESENT,Number=1,Type=String,|ID=RLV_PRESENT,Number=1,Type=Float,|' ${gavinOutputFinalMergedRLV}
-#perl -pi -e 's|RLV_VARIANTSIGNIFICANCE,Number=1,Type=String,|RLV_VARIANTSIGNIFICANCE,Number=1,Type=Float,|' ${gavinOutputFinalMergedRLV}
 
 perl -pi -e 's|INFO=<ID=EXAC_AF,Number=.,Type=String|INFO=<ID=EXAC_AF,Number=.,Type=Float|' ${gavinOutputFinalMergedRLV}
 perl -pi -e 's|INFO=<ID=EXAC_AC_HOM,Number=.,Type=String|INFO=<ID=EXAC_AC_HOM,Number=.,Type=Integer|' ${gavinOutputFinalMergedRLV}
