@@ -106,7 +106,8 @@ then
 		then
 		
 			CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
-			nameOfSample=$(basename ${dedupBam%%.*})
+			BASE=$(basename ${dedupBam})
+			nameOfSample=${BASE%%.*}
 			
 			module load ${convadingVersion}
 				
