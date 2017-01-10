@@ -24,7 +24,6 @@ s17_GenderCheck,protocols/GenderCheck.sh,s11_GenderCalculate;s16b_CollectHSMetri
 s18a_VariantCalling,protocols/VariantCalling.sh,s17_GenderCheck
 s18d_GenotypeVariants,protocols/VariantGenotyping.sh,s18a_VariantCalling
 s19_SnpEff,protocols/SnpEff.sh,s18d_GenotypeVariants
-s19b_VEP,protocols/VEP.sh,s18d_GenotypeVariants
 s20_CmdLineAnnotator,protocols/CmdLineAnnotator.sh,s19_SnpEff
 s21_VariantAnnotator,protocols/VariantAnnotator.sh,s20_CmdLineAnnotator
 s22_MergeBatches,protocols/MergeBatches.sh,s21_VariantAnnotator
