@@ -62,6 +62,7 @@ perl -pi -e 's|BATCH="_chr"|BATCH="_small"|' ${workfolder}/generatedscripts/Plat
 perl -pi -e 's|ngsversion=.*|ngsversion="test";\\|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e 's|WORKFLOW=\${EBROOTNGS_DNA}/workflow.csv|WORKFLOW=\${EBROOTNGS_DNA}/test_workflow.csv|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 cp test/PlatinumSubset.csv ${workfolder}/generatedscripts/PlatinumSubset/
 
 cd ${workfolder}/generatedscripts/PlatinumSubset/
