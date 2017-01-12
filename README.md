@@ -9,3 +9,5 @@ performed SNP and INDEL discovery and genotyping using standard hard filtering p
 2. Sambamba: Fast processing of NGS alignment formats
 3. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data
 4. From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline
+
+
