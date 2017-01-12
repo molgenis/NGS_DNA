@@ -16,12 +16,22 @@ RUNID=runXX
 ## Normal user, please leave BATCH at _chr
 ## For expert modus: small batchsize (6) fill in '_small'  or per chromosome fill in _chr
 BATCH="_chr"
-samplesheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv 
+samplesheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
 mac2unix $samplesheet
 
-SAMPLESIZE=$(( $(sh ${EBROOTNGS_DNA}/samplesize.sh ${samplesheet} $thisDir) -1 ))
-sh ${EBROOTNGS_DNA}/gender.sh $samplesheet
+python ${EBROOTNGS_DNA}/samplesize.py ${samplesheet} $thisDir
+SAMPLESIZE=$(cat externalSampleIDs.txt | uniq | wc -l)
+
+python ${EBROOTNGS_DNA}/gender.py $samplesheet
+var=$(cat ${samplesheet}.tmp | wc -l)
+
+if [ $var != 0 ]
+then
+    	mv ${samplesheet}.tmp ${samplesheet}
+        echo "samplesheet updated with Gender column"
+fi
 echo "Samplesize is $SAMPLESIZE"
+
 if [ $SAMPLESIZE -gt 199 ]
 then
     	WORKFLOW=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv
