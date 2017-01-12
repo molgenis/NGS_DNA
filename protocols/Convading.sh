@@ -216,7 +216,7 @@ then
 					mv ${tmpConvadingStartWithBestScore}/* ${convadingStartWithBestScore}
 					printf " .. done\n"
 				else
-					mkdir -p ${convadingStartWithBestScore}
+					mkdir -p ${convadingStartWithBestScoreGender}
 				
 					perl ${EBROOTCONVADING}/CoNVaDING.pl \
                         		-mode StartWithBestScore \

@@ -50,7 +50,18 @@ tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protoc
 
 rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
 cp test/results/PlatinumSample.final.vcf /home/umcg-molgenis/NGS_DNA/PlatinumSample.final.vcf
-cp test/autotest_generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+cp generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+
+## Grep used version of molgenis compute out of the parameters file
+fgrep "computeVersion," parameters.csv > ${workfolder}/generatedscripts/PlatinumSubset/mcVersion.txt
+
+perl -pi -e 's|module load NGS_DNA/3.3.0|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e 's|PROJECT=projectXX|PROJECT=PlatinumSubset|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e 's|RUNID=runXX|RUNID=run01|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e 's||BATCH="_small"|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+
+perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 cp test/PlatinumSubset.csv ${workfolder}/generatedscripts/PlatinumSubset/
 
 cd ${workfolder}/generatedscripts/PlatinumSubset/
@@ -58,7 +69,7 @@ cd ${workfolder}/generatedscripts/PlatinumSubset/
 sh generate_template.sh 
 
 cd scripts
-perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\nmodule load Molgenis-Compute/\${computeVersion}|' *.sh
+#perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\nmodule load Molgenis-Compute/\${computeVersion}|' *.sh
 
 sh submit.sh
 
