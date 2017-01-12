@@ -1,5 +1,4 @@
 <h1>NGS_DNA</h1>
-
 The sequencer is producing reads (in FastQ format) and are aligned to the hg19 reference genome with BWA (Li & Durbin <sup>1</sup>).
 Sambamba (Tarasov et al.<sup>2</sup>)  is processing the aligned reads and then we applied GATK (McKenna et al. <sup>3</sup>) duplicate removal,
 performed SNP and INDEL discovery and genotyping using standard hard filtering parameters to GATK Best Practices recommendations (Van der Auwera et al.<sup>4</sup>)
