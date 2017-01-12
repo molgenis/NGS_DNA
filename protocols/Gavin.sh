@@ -95,7 +95,7 @@ echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
 
 #echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" ${gavinOutputFinal} | wc -l'
 
-echo "Merging ${sampleVariantsMergedGavin} and ${gavinOutputFinal}"
+echo "Merging ${sampleFinalVcf} and ${gavinOutputFinal}"
 
 java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
 -i ${sampleFinalVcf} \
