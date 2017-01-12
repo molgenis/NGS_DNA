@@ -15,7 +15,7 @@ RUNID=runXX
 
 ## Normal user, please leave BATCH at _chr
 ## For expert modus: small batchsize (6) fill in '_small'  or per chromosome fill in _chr
-BATCH="_small"
+BATCH="_chr"
 samplesheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
 mac2unix $samplesheet
 
