@@ -58,7 +58,7 @@ fgrep "computeVersion," parameters.csv > ${workfolder}/generatedscripts/Platinum
 perl -pi -e 's|module load NGS_DNA/3.3.0|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|PROJECT=projectXX|PROJECT=PlatinumSubset|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|RUNID=runXX|RUNID=run01|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
-perl -pi -e 's||BATCH="_small"|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e 's|BATCH="_chr"|BATCH="_small"|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 
 perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
