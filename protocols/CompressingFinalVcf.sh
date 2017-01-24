@@ -2,7 +2,7 @@
 
 #list externalSampleID
 #string tmpName
-#string tabixVersion
+#string htsLibVersion
 #string stage
 #string checkStage
 #string logsDir 
@@ -25,7 +25,7 @@ array_contains () {
 }
 
 #Load Tabix module
-${stage} ${tabixVersion}
+${stage} ${htsLibVersion}
 ${checkStage}
 
 INPUTS=()

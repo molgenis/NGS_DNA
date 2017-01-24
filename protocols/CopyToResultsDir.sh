@@ -157,7 +157,7 @@ do
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		printf "."
 	fi
-	if [ -f ${intermediateDir}/${sa}_step10.xcnv ]
+	if [ -f ${intermediateDir}/${sa}_step10.xcnv.final ]
 	then
 		echo "copying Convading data"	
 		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.totallist.txt ${projectResultsDir}/variants/cnv/
@@ -166,7 +166,7 @@ do
 		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log ${projectResultsDir}/variants/cnv/
 		cp ${intermediateDir}/Convading//CreateFinalList/${sa}/*.shortlist.finallist.txt ${projectResultsDir}/variants/cnv/
 		echo "copying XHMM results"
-		cp ${intermediateDir}/${sa}_step10.xcnv ${projectResultsDir}/variants/cnv/
+		cp ${intermediateDir}/${sa}_step10.xcnv.final ${projectResultsDir}/variants/cnv/
 	fi
 done
 printf " finished (7/11)\n"

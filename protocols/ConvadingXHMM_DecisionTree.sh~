@@ -1,0 +1,172 @@
+#MOLGENIS walltime=05:59:00 mem=10gb ppn=10
+
+#Parameter mapping
+#string tmpName
+#string stage
+#string checkStage
+#string samtoolsVersion
+#string sampleMergedBam
+#string sampleMergedBai
+#string sampleMergedBamIdx
+#string tempDir
+#list inputMergeBam,inputMergeBamIdx
+#string tmpDataDir
+#string project
+#string logsDir 
+#string groupname
+#string intermediateDir
+#string sambambaVersion
+#string sambambaTool
+
+sleep 5
+
+#Function to check if array contains value
+array_contains () {
+    local array="$1[@]"
+    local seeking=$2
+    local in=1
+    for element in "${!array-}"; do
+        if [[ "$element" == "$seeking" ]]; then
+            in=0
+            break
+        fi
+    done
+    return $in
+}
+
+makeTmpDir ${sampleMergedBam}
+tmpSampleMergedBam=${MC_tmpFile}
+
+. /groups/umcg-gdio/tmp04/umcg-mtfrans/CNV_detectie_scripts/Config.cfg
+
+
+Sample_Ratio () {
+	# Grep Sample Ratio and label it depending on value
+	
+	j=$(grep SAMPLE_RATIO: $INPUTFILE)
+	echo -e "${INPUTFILE%%.*}\t$j" > ${tmpdirectory}/${sample}_Sample_ratios_cardioset.txt
+	
+	awk -v SAMP=$sample 'BEGIN{OFS="\t"}{
+	if($3 <= "0.09"){
+        	print "Good"}
+	if($3 > "0.09" && $3 <= "0.2"){
+        	print "Bad"}
+	if($3 > "0.2"){
+        	print $1, $3"\tExtreme Sample Ratio" > SAMP"_Filterd_out.txt"}}' ${tmpdirectory}/${sample}_Sample_ratios_cardioset.txt
+	}
+}
+#string convadingLogfile
+#string convadingFinallist
+#string convadingLonglist
+#string convadingLonglistCombinedFiltered
+#string convadingShortlist
+#string convadingTotallist
+#string xhmmXcnvFinal
+#string externalSampleID
+
+for line in ${INPUTFILE}
+do
+  	ratio=$(Sample_Ratio.sh ${convadingLogfile})
+        convfinal=$(cat ${convadingFinallist} | wc -l)
+        Call_informatie=$(tail -n +2 ${convadingFinallist} | awk '{OFS="\t"}{print $0}')
+        if grep -q "${externalSampleID}" ${xhmmXcnvFinal}
+        then
+            	xhmm="true"
+        else
+            	xhmm="false"
+        fi
+	if [[ $xhmm == "true" || $convfinal -gt 1 ]]
+        then
+            	if [[ $ratio == *"Bad"* ]]
+                then
+                    	echo "Failed sample tree for sample: ${sample}"
+                        echo "Call: ${Call_informatie}"
+### Hier gebleven
+
+                        failed_tree=$(sh Failed_sample_tree.sh ${convadingFinallist} "f")
+                        echo $failed_tree
+                fi
+
+                if [[ $ratio == *"Good"* ]]
+                then
+                    	location=$(sh Locations.sh ${step5path}/${sample}.${finallist})
+                        if [[ $location == *"Call has overlap"* ]]
+                        then
+                            	echo "CoNVaDING XHMM tree for sample: ${sample}"
+                                echo "Call: ${Call_informatie}"
+                                #CallCX=$(grep "$line" ${step5path}/${sample}.${finallist_combined_filtered})
+                                echo "The call is final. Call is made by CoNVaDING and XHMM"
+
+                        fi
+                        if [[ $location == *"CoNVaDING only call"* ]]
+                        then
+                            	echo "CoNVaDING only tree for sample: ${sample}"
+                                echo "Call: ${Call_informatie}"
+                                convading_tree=$(sh CoNVaDING_only_tree.sh ${step5path}/${sample}.${finallist} "c")
+                                echo $convading_tree
+                        fi
+
+                        if [[ $location == *"XHMM only call"* ]]
+                        then
+                            	echo "XHMM only tree for sample: ${sample}"
+                                xhmm_tree=$(sh XHMM_only_tree.sh ${step5path}/${sample}.${finallist} "x")
+                                echo $xhmm_tree
+                        fi
+
+                fi
+
+                if [ -f ${sample}_Filterd_out.txt ]
+                then
+                    	echo "Sample ratio is extremely high"
+                fi
+        else
+            	echo "No call made in both programs"
+        fi
+done
+exitmakeTmpDir ${sampleMergedBamIdx}
+tmpSampleMergedBamIdx=${MC_tmpFile}
+
+${stage} ${sambambaVersion}
+${checkStage}
+
+#Create string with input BAM files for Picard
+#This check needs to be performed because Compute generates duplicate values in array
+INPUTS=()
+INPUTBAMS=()
+INPUTBAI=()
+INPUTBAIS=()
+
+for bamFile in "${inputMergeBam[@]}"
+do
+	array_contains INPUTS "$bamFile" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
+done
+
+if [ ${#INPUTS[@]} == 1 ]
+then
+
+	ln -sf $(basename ${inputMergeBam[0]}) ${sampleMergedBam}
+
+	#indexing because there is no index file coming out of the sorting step
+	printf "indexing..."
+	${EBROOTSAMBAMBA}/${sambambaTool} index ${sampleMergedBam} ${inputMergeBamIdx[0]}
+	printf "..finished\n"
+	
+	echo "ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}"
+	ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}
+
+	echo "nothing to merge because there is only one sample"
+
+else
+	${EBROOTSAMBAMBA}/${sambambaTool} merge \
+	${tmpSampleMergedBam} \
+	${INPUTS[@]}
+
+	mv ${tmpSampleMergedBam} ${sampleMergedBam}
+	mv ${tmpSampleMergedBamIdx} ${sampleMergedBamIdx}
+	echo "mv ${tmpSampleMergedBam} ${sampleMergedBam}"
+	echo "mv ${tmpSampleMergedBamIdx} ${sampleMergedBamIdx}"
+
+fi
+
+

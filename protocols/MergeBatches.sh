@@ -6,7 +6,7 @@
 #string checkStage
 #string gatkVersion
 #string gatkJar
-#string tabixVersion
+#string htsLibVersion
 #string tempDir
 #string intermediateDir
 #string projectVariantsMerged
@@ -24,7 +24,7 @@
 
 #Load module GATK,tabix
 ${stage} ${gatkVersion}
-${stage} ${tabixVersion}
+${stage} ${htsLibVersion}
 ${stage} ngs-utils
 ${checkStage}
 

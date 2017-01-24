@@ -9,12 +9,14 @@
 #string dedupBam
 #string intermediateDir
 #string DepthOfCoveragePerSample
+#string DepthOfCoveragePerSampleGender
 #string gatkVersion
 #string xhmmMergedSample
 #string xhmmMergedSampleGender
 #string xhmmDataDir
 #string xhmmDir
 #string xhmmDepthOfCoverage
+#string xhmmDepthOfCoverageGender
 #string xhmmVersion
 #string xhmmFilterSample
 #string xhmmFilterSampleGender
@@ -36,8 +38,11 @@
 #string ControlsVersioning
 #string cxControlsDir
 #string Gender
+#string externalSampleID
 
 nameOfSample=$(basename ${dedupBam%%.*})
+chrXCalls="unset"
+autosomalCalls="unset"
 
 if grep ${capturingKit} ${ControlsVersioning}
 then
@@ -56,64 +61,26 @@ then
 	#1
 	makeTmpDir ${DepthOfCoveragePerSample}
 	tmpDepthOfCoveragePerSample=${MC_tmpFile}
-	#2
-	makeTmpDir ${xhmmMergedSample}
-	tmpXhmmMergedSample=${MC_tmpFile}
-	makeTmpDir ${xhmmMergedSampleGender}
-	tmpXhmmMergedSampleGender=${MC_tmpFile}
-	#5
-	makeTmpDir ${xhmmFilterSample}
-	tmpXhmmFilterSample=${MC_tmpFile}
-	makeTmpDir ${xhmmFilterSampleGender}
-	tmpXhmmFilterSampleGender=${MC_tmpFile}
-	#6
-	makeTmpDir ${xhmmPCAfile}
-	tmpXhmmPCAfile=${MC_tmpFile}
-	makeTmpDir ${xhmmPCAfileGender}
-	tmpXhmmPCAfileGender=${MC_tmpFile}
-	#7
-	makeTmpDir ${xhmmPCANormalizedfile}
-	tmpXhmmPCANormalizedfile=${MC_tmpFile}
-	makeTmpDir ${xhmmPCANormalizedfileGender}
-	tmpXhmmPCANormalizedfileGender=${MC_tmpFile}
-	#8
-	makeTmpDir ${xhmmPCANormalizedfileFilteredZscores}
-	tmpXhmmPCANormalizedfileFilteredZscores=${MC_tmpFile}
-	makeTmpDir ${xhmmPCANormalizedfileFilteredZscoresGender}
-	tmpXhmmPCANormalizedfileFilteredZscoresGender=${MC_tmpFile}
-	#9
-	makeTmpDir ${xhmmSameFiltered}
-	tmpXhmmSameFiltered=${MC_tmpFile}
-	makeTmpDir ${xhmmSameFilteredGender}
-	tmpXhmmSameFilteredGender=${MC_tmpFile}
-	#10
-	makeTmpDir ${xhmmXcnv}
-	tmpXhmmXcnv=${MC_tmpFile}
-	makeTmpDir ${xhmmXcnvGender}
-	tmpXhmmXcnvGender=${MC_tmpFile}
-	
-	makeTmpDir ${xhmmAUXcnv}
-	tmpXhmmAUXcnv=${MC_tmpFile}
-	makeTmpDir ${xhmmAUXcnvGender}
-	tmpXhmmAUXcnvGender=${MC_tmpFile}
-	
-	makeTmpDir ${xhmmPosterior}
-	tmpXhmmPosterior=${MC_tmpFile}
-	makeTmpDir ${xhmmPosteriorGender}
-	tmpXhmmPosteriorGender=${MC_tmpFile}
-	
+
+	makeTmpDir ${DepthOfCoveragePerSampleGender}
+	tmpDepthOfCoveragePerSampleGender=${MC_tmpFile}
+
+	tmpPrefix=${tmpDepthOfCoveragePerSample}
+	tmpPrefixGender=${tmpDepthOfCoveragePerSampleGender}
+
 	ChrXRun="false"
 	run=()
 	run+=("autosomal")
 	if [ $size != 0 ]
 	then
-    		echo "the bedfile contains chrX regions, convading now be executed with a male or female controlsgroup"
         	chrXRun="true"
         	run+=("$Gender")
 	fi
-	
+	onlyHeader="false"
+	onlyHeaderGender="false"
 	for i in ${run[@]}
 	do
+		echo "analyzing $i"
 		module load ${xhmmVersion}
 	
 		cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
@@ -129,6 +96,7 @@ then
         		xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/Female/
         	else
         		echo "THIS CANNOT BE TRUE, no Male, Female or autosomal!!"
+			exit 1
         	fi
 		
 		if [ -d ${xhmmControlsDir} ]
@@ -165,39 +133,31 @@ then
 				#
 				## Step1
         			#
-				for bamFile in "${dedupBam[@]}"
-				do
-		        		array_contains INPUTS "$bamFile" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
-		        		array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
-				done
 		
 				## Creating bams directory
-				mkdir -p ${xhmmDepthOfCoverage}
+				#mkdir -p ${xhmmDepthOfCoverage}/Gender/
 		
 				rm -f ${xhmmDir}/${CAPT}.READS.bam.list
 		
-				for j in ${INPUTS[@]}
-				do
-		        		echo "$j" >> ${xhmmDir}/${CAPT}.READS.bam.list
-				done
+	        		echo "$dedupBam" > ${dedupBam}.READS.bam.list
 			
 				sID=$(basename $dedupBam)
 				sampleID=${sID%%.*}
 		
 				java -Xmx3072m -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \
 				-T DepthOfCoverage \
-				-I ${xhmmDir}/${CAPT}.READS.bam.list \
+				-I ${dedupBam}.READS.bam.list \
 				-L ${capturedBed} \
 				-R ${indexFile} \
 				-dt BY_SAMPLE -dcov 5000 -l INFO --omitDepthOutputAtEachBase --omitLocusTable \
 				--minBaseQuality 0 --minMappingQuality 20 --start 1 --stop 5000 --nBins 200 \
 				--includeRefNSites \
 				--countType COUNT_FRAGMENTS \
-				-o ${tmpDepthOfCoveragePerSample}.${CAPT}
+				-o ${tmpPrefix}
 		
-				mv ${tmpDepthOfCoveragePerSample}.${CAPT}* ${xhmmDepthOfCoverage}
-				echo "moved ${tmpDepthOfCoveragePerSample}.${CAPT}* ${xhmmDepthOfCoverage}"
-	
+				mv ${tmpPrefix}* ${xhmmDepthOfCoverage}/${externalSampleID}/
+				echo "moved ${tmpPrefix}* ${xhmmDepthOfCoverage}/$externalSampleID"
+				
 				echo "s1 finished"
 				touch ${intermediateDir}/XHMM_combined.${nameOfSample}.s1.finished
 			fi
@@ -208,31 +168,31 @@ then
 				#		
 				if [ "${i}" == "autosomal" ]
                 		then
-	
+					echo "${DepthOfCoveragePerSample}.sample_interval_summary" >  ${DepthOfCoveragePerSample}.sample_interval_summary.list
+					cat ${DepthOfCoveragePerSample}.sample_interval_summary.list ${xhmmControlsDir}/Controls.sample_interval_summary > ${DepthOfCoveragePerSample}.sample_interval_summary.biglist
+
 					$EBROOTXHMM/bin/xhmm --mergeGATKdepths \
-					-o ${tmpXhmmMergedSample} \
-					--GATKdepths ${DepthOfCoveragePerSample}.${CAPT}.sample_interval_summary \
-					--GATKdepthsList ${xhmmControlsDir}/Controls.sample_interval_summary
+					-o ${tmpPrefix}.step2.DATA.RD.txt \
+					--GATKdepthsList ${DepthOfCoveragePerSample}.sample_interval_summary.biglist 
 					
-					echo "AAA"
 					echo "${xhmmControlsDir}/Controls.sample_interval_summary"
 				
-					printf "moving ${tmpXhmmMergedSample} to ${xhmmMergedSample} .. "
-					mv ${tmpXhmmMergedSample} ${xhmmMergedSample}
+					printf "moving ${tmpPrefix}.step2.DATA.RD.txt to ${xhmmMergedSample} .. "
+					mv ${tmpPrefix}.step2.DATA.RD.txt ${xhmmMergedSample}
 					printf " .. done!"
 				
 				else
+					echo "${DepthOfCoveragePerSample}.sample_interval_summary" >  ${DepthOfCoveragePerSample}.sample_interval_summary.list
+                                        cat ${DepthOfCoveragePerSample}.sample_interval_summary.list ${xhmmControlsDir}/Controls.sample_interval_summary > ${DepthOfCoveragePerSampleGender}.sample_interval_summary.biglist
 					$EBROOTXHMM/bin/xhmm --mergeGATKdepths \
-                        		-o ${tmpXhmmMergedSampleGender} \
-                        		--GATKdepths ${DepthOfCoveragePerSample}.${CAPT}.sample_interval_summary \
-                        		--GATKdepthsList ${xhmmControlsDir}/Controls.sample_interval_summary
+                        		-o ${tmpPrefixGender}.step2.DATA.RD.txt \
+                        		--GATKdepthsList ${DepthOfCoveragePerSampleGender}.sample_interval_summary.biglist
 	
-					echo "BBB"
 					echo "${xhmmControlsDir}/Controls.sample_interval_summary"
 	
 					
-					printf "moving ${tmpXhmmMergedSampleGender} to ${xhmmMergedSampleGender} .. "
-        	        		mv ${tmpXhmmMergedSampleGender} ${xhmmMergedSampleGender}
+					printf "moving ${tmpPrefixGender}.step2.DATA.RD.txt to ${xhmmMergedSampleGender} .. "
+        	        		mv ${tmpPrefixGender}.step2.DATA.RD.txt ${xhmmMergedSampleGender}
         	        		printf " .. done!"
 		
 				fi
@@ -254,7 +214,7 @@ then
 					-r ${xhmmMergedSample} \
 					--centerData \
 					--centerType target \
-					-o ${tmpXhmmFilterSample} \
+					-o ${tmpPrefix}_step5.filtered_centered.RD.txt \
 					--outputExcludedTargets ${xhmmMergedSample}.filtered_centered.RD.txt.filtered_targets.txt \
 					--outputExcludedSamples ${xhmmMergedSample}.filtered_centered.RD.txt.filtered_samples.txt \
 					--excludeTargets ${xhmmExtremeGcContent} \
@@ -264,16 +224,16 @@ then
 					--maxMeanTargetRD 1500 \
 					--minMeanSampleRD 25 \
 					--maxMeanSampleRD 1000 \
-					--maxSdSampleRD 150
+					--maxSdSampleRD 200
 			
-					printf "moving ${tmpXhmmFilterSample} to ${xhmmFilterSample} .. "
-                        		mv ${tmpXhmmFilterSample} ${xhmmFilterSample}
+					printf "moving ${tmpPrefix}_step5.filtered_centered.RD.txt to ${xhmmFilterSample} .. "
+                        		mv ${tmpPrefix}_step5.filtered_centered.RD.txt ${xhmmFilterSample}
 				else
 					$EBROOTXHMM/bin/xhmm --matrix \
                                 	-r ${xhmmMergedSampleGender} \
                                 	--centerData \
                                 	--centerType target \
-                                	-o ${tmpXhmmFilterSampleGender} \
+					-o ${tmpPrefixGender}_step5.filtered_centered.RD.txt \
                                 	--outputExcludedTargets ${xhmmMergedSampleGender}.filtered_centered.RD.txt.filtered_targets.txt \
                                 	--outputExcludedSamples ${xhmmMergedSampleGender}.filtered_centered.RD.txt.filtered_samples.txt \
                                 	--excludeTargets ${xhmmExtremeGcContent} \
@@ -283,10 +243,10 @@ then
                                 	--maxMeanTargetRD 1500 \
                                 	--minMeanSampleRD 25 \
                                 	--maxMeanSampleRD 1000 \
-                                	--maxSdSampleRD 150
+                                	--maxSdSampleRD 200
 	
-                                	printf "moving ${tmpXhmmFilterSampleGender} to ${xhmmFilterSampleGender} .. "
-                                	mv ${tmpXhmmFilterSampleGender} ${xhmmFilterSampleGender}
+                                	printf "moving ${tmpPrefixGender}_step5.filtered_centered.RD.txt to ${xhmmFilterSampleGender} .. "
+                                	mv ${tmpPrefixGender}_step5.filtered_centered.RD.txt ${xhmmFilterSampleGender}
 				fi
 				echo "s5 finished"
 				touch ${intermediateDir}/XHMM_combined.${nameOfSample}.${i}.s5.finished
@@ -305,17 +265,17 @@ then
                         	then
 					$EBROOTXHMM/bin/xhmm --PCA \
 					-r ${xhmmFilterSample} \
-					--PCAfiles ${tmpXhmmPCAfile}
+					--PCAfiles ${tmpPrefix}_step6_RD.PCA
 			
-					mv ${tmpXhmmPCAfile}* $(dirname ${xhmmPCAfile})
-					echo "moved ${tmpXhmmPCAfile}* ${xhmmPCAfile}"
+					mv ${tmpPrefix}_step6_RD.PCA* $(dirname ${xhmmPCAfile})
+					echo "moved ${tmpPrefix}_step6_RD.PCA* ${xhmmPCAfile}"
 				else
 					$EBROOTXHMM/bin/xhmm --PCA \
                                 	-r ${xhmmFilterSampleGender} \
-                                	--PCAfiles ${tmpXhmmPCAfileGender}
+                                	--PCAfiles ${tmpPrefixGender}_step6_RD.PCA
 	
-                                	mv ${tmpXhmmPCAfileGender}* $(dirname ${xhmmPCAfileGender})
-                                	echo "moved ${tmpXhmmPCAfileGender}* ${xhmmPCAfileGender}"
+                                	mv  ${tmpPrefixGender}_step6_RD.PCA* $(dirname ${xhmmPCAfileGender})
+                                	echo "moved  ${tmpPrefixGender}_step6_RD.PCA* ${xhmmPCAfileGender}"
 				fi
 				touch ${intermediateDir}/XHMM_combined.${nameOfSample}.${i}.s6.finished
 				echo "s6 finished"
@@ -332,22 +292,22 @@ then
 					$EBROOTXHMM/bin/xhmm --normalize \
 					-r ${xhmmFilterSample} \
 					--PCAfiles ${xhmmPCAfile} \
-					--normalizeOutput ${tmpXhmmPCANormalizedfile} \
+					--normalizeOutput ${tmpPrefix}_step7.PCA_normalized.txt \
 					--PCnormalizeMethod PVE_mean \
 					--PVE_mean_factor 0.7
 		
-					mv ${tmpXhmmPCANormalizedfile} ${xhmmPCANormalizedfile} 
-					echo "moved ${tmpXhmmPCANormalizedfile} ${xhmmPCANormalizedfile}"
+					mv ${tmpPrefix}_step7.PCA_normalized.txt ${xhmmPCANormalizedfile} 
+					echo "moved ${tmpPrefix}_step7.PCA_normalized.txt ${xhmmPCANormalizedfile}"
 				else
 					$EBROOTXHMM/bin/xhmm --normalize \
                                 	-r ${xhmmFilterSampleGender} \
                                 	--PCAfiles ${xhmmPCAfileGender} \
-                                	--normalizeOutput ${tmpXhmmPCANormalizedfileGender} \
+                                	--normalizeOutput ${tmpPrefixGender}_step7.PCA_normalized.txt \
                                 	--PCnormalizeMethod PVE_mean \
                                 	--PVE_mean_factor 0.7
 	
-                                	mv ${tmpXhmmPCANormalizedfileGender} ${xhmmPCANormalizedfileGender}
-                                	echo "moved ${tmpXhmmPCANormalizedfileGender} ${xhmmPCANormalizedfileGender}"
+                                	mv ${tmpPrefixGender}_step7.PCA_normalized.txt ${xhmmPCANormalizedfileGender}
+                                	echo "moved ${tmpPrefixGender}_step7.PCA_normalized.txt ${xhmmPCANormalizedfileGender}"
 				fi
 				echo "s7 finished"
 				touch ${intermediateDir}/XHMM_combined.${nameOfSample}.${i}.s7.finished
@@ -365,26 +325,26 @@ then
 					--centerData \
 					--centerType sample \
 					--zScoreData \
-					-o ${tmpXhmmPCANormalizedfileFilteredZscores} \
+					-o ${tmpPrefix}_step8.PCA_normalized.filtered.sample_zscores.RD.txt \
 					--outputExcludedTargets ${xhmmPCANormalizedfileFilteredZscores}.filtered_targets.txt \
 					--outputExcludedSamples ${xhmmPCANormalizedfileFilteredZscores}.filtered_samples.txt \
 					--maxSdTargetRD 30
 					
-					mv ${tmpXhmmPCANormalizedfileFilteredZscores} ${xhmmPCANormalizedfileFilteredZscores}
-					echo "moved ${tmpXhmmPCANormalizedfileFilteredZscores} ${xhmmPCANormalizedfileFilteredZscores}"
+					mv ${tmpPrefix}_step8.PCA_normalized.filtered.sample_zscores.RD.txt ${xhmmPCANormalizedfileFilteredZscores}
+					echo "moved ${tmpPrefix}_step8.PCA_normalized.filtered.sample_zscores.RD.txt ${xhmmPCANormalizedfileFilteredZscores}"
 				else
 					$EBROOTXHMM/bin/xhmm --matrix \
                                 	-r ${xhmmPCANormalizedfileGender} \
                                 	--centerData \
                                 	--centerType sample \
                                 	--zScoreData \
-                                	-o ${tmpXhmmPCANormalizedfileFilteredZscoresGender} \
+                                	-o ${tmpPrefixGender}_step8.PCA_normalized.filtered.sample_zscores.RD.txt \
                                 	--outputExcludedTargets ${xhmmPCANormalizedfileFilteredZscoresGender}.filtered_targets.txt \
                                 	--outputExcludedSamples ${xhmmPCANormalizedfileFilteredZscoresGender}.filtered_samples.txt \
                                 	--maxSdTargetRD 30
 	
-                                	mv ${tmpXhmmPCANormalizedfileFilteredZscoresGender} ${xhmmPCANormalizedfileFilteredZscoresGender}
-                                	echo "moved ${tmpXhmmPCANormalizedfileFilteredZscoresGender} ${xhmmPCANormalizedfileFilteredZscoresGender}"
+                                	mv ${tmpPrefixGender}_step8.PCA_normalized.filtered.sample_zscores.RD.txt ${xhmmPCANormalizedfileFilteredZscoresGender}
+                                	echo "moved ${tmpPrefixGender}_step8.PCA_normalized.filtered.sample_zscores.RD.txt ${xhmmPCANormalizedfileFilteredZscoresGender}"
 				fi
 				echo "s8 finished"
 				touch ${intermediateDir}/XHMM_combined.${nameOfSample}.${i}.s8.finished
@@ -403,10 +363,10 @@ then
 					--excludeTargets ${xhmmPCANormalizedfileFilteredZscores}.filtered_targets.txt \
 					--excludeSamples ${xhmmMergedSample}.filtered_centered.RD.txt.filtered_samples.txt \
 					--excludeSamples ${xhmmPCANormalizedfileFilteredZscores}.filtered_samples.txt \
-					-o ${tmpXhmmSameFiltered}
+					-o ${tmpPrefix}_step9.same_filtered.RD.txt
 			
-					mv ${tmpXhmmSameFiltered} ${xhmmSameFiltered}
-					echo "moved ${tmpXhmmSameFiltered} ${xhmmSameFiltered}"
+					mv ${tmpPrefix}_step9.same_filtered.RD.txt ${xhmmSameFiltered}
+					echo "moved ${tmpPrefix}_step9.same_filtered.RD.txt ${xhmmSameFiltered}"
 				else
 					$EBROOTXHMM/bin/xhmm --matrix \
                                 	-r ${xhmmMergedSampleGender} \
@@ -414,10 +374,10 @@ then
                                 	--excludeTargets ${xhmmPCANormalizedfileFilteredZscoresGender}.filtered_targets.txt \
                                 	--excludeSamples ${xhmmMergedSampleGender}.filtered_centered.RD.txt.filtered_samples.txt \
                                 	--excludeSamples ${xhmmPCANormalizedfileFilteredZscoresGender}.filtered_samples.txt \
-                                	-o ${tmpXhmmSameFilteredGender}
+                                	-o ${tmpPrefixGender}_step9.same_filtered.RD.txt
 	
-                                	mv ${tmpXhmmSameFilteredGender} ${xhmmSameFilteredGender}
-                                	echo "moved ${tmpXhmmSameFilteredGender} ${xhmmSameFilteredGender}"
+                                	mv ${tmpPrefixGender}_step9.same_filtered.RD.txt ${xhmmSameFilteredGender}
+                                	echo "moved ${tmpPrefixGender}_step9.same_filtered.RD.txt ${xhmmSameFilteredGender}"
 				fi
 				echo "s9 finished"
 				touch ${intermediateDir}/XHMM_combined.${nameOfSample}.${i}.s9.finished
@@ -435,32 +395,46 @@ then
 					-p ${xhmmHighSenseParams} \
 					-r ${xhmmPCANormalizedfileFilteredZscores} \
 					-R ${xhmmSameFiltered} \
-					-c ${tmpXhmmXcnv} \
-					-a ${tmpXhmmAUXcnv} \
-					-s ${tmpXhmmPosterior}
-		
-					mv ${tmpXhmmXcnv} ${xhmmXcnv}			
-					mv ${tmpXhmmAUXcnv} ${xhmmAUXcnv}
-					mv ${tmpXhmmPosterior}.posteriors*.txt $(dirname ${xhmmPosterior})
-					echo "moved ${tmpXhmmXcnv} ${xhmmXcnv}"
-					echo "moved ${tmpXhmmAUXcnv} ${xhmmAUXcnv}"
-					echo "moved ${tmpXhmmPosterior}* $(dirname ${xhmmPosterior})"
+					-c ${tmpPrefix}_step10.xcnv \
+					-a ${tmpPrefix}_step10.aux_cnv \
+					-s ${tmpPrefix}_step10
+				
+                 			awk '{
+						if (NR==1){
+							print $0
+						}else{
+							if ($5 != "X")
+                               				{
+                                	       			print $0
+                               				}
+                        			}
+					}' ${tmpPrefix}_step10.xcnv > ${xhmmXcnv}.withoutX
+					cp ${tmpPrefix}_step10.xcnv ${xhmmXcnv}
+							
+			
 				else
 					$EBROOTXHMM/bin/xhmm --discover \
                                 	--discoverSomeQualThresh 0 \
                                 	-p ${xhmmHighSenseParams} \
                                 	-r ${xhmmPCANormalizedfileFilteredZscoresGender} \
                                 	-R ${xhmmSameFilteredGender} \
-                                	-c ${tmpXhmmXcnvGender} \
-                                	-a ${tmpXhmmAUXcnvGender} \
-                                	-s ${tmpXhmmPosteriorGender}
+                                	-c ${tmpPrefixGender}_step10.xcnv \
+                                	-a ${tmpPrefixGender}_step10.aux_cnv \
+                                	-s ${tmpPrefixGender}_step10
 	
-                                	mv ${tmpXhmmXcnvGender} ${xhmmXcnvGender}
-                                	mv ${tmpXhmmAUXcnvGender} ${xhmmAUXcnvGender}
-                                	mv ${tmpXhmmPosteriorGender}.posteriors*.txt $(dirname ${xhmmPosteriorGender})
-                                	echo "moved ${tmpXhmmXcnvGender} ${xhmmXcnvGender}"
-                                	echo "moved ${tmpXhmmAUXcnvGender} ${xhmmAUXcnvGender}"
-                                	echo "moved ${tmpXhmmPosteriorGender}* $(dirname ${xhmmPosteriorGender})"
+					## Only keep the calls from this sample
+					awk '{
+                                                if (NR==1){
+                                                        print $0
+                                                }else{
+                                                        if ($5 == "X")
+                                                        {
+                                                                print $0
+                                                        }
+                                                }
+                                        }' ${tmpPrefixGender}_step10.xcnv > ${xhmmXcnvGender}.chrX
+					cp ${tmpPrefixGender}_step10.xcnv ${xhmmXcnvGender}
+
 				fi
 				
 				touch ${intermediateDir}/XHMM_combined.${nameOfSample}.${i}.s10.finished
@@ -470,76 +444,80 @@ then
 			echo "XHMM step skipped since there are no controls for this group: ${cDir}/XHMM/"
 		fi
 	done
-	
-	if [ -f ${xhmmXcnv} ]
+
+	#
+	##cleaning up xcnv with X only calls in genderfile and autosomal in normal file 
+	#
+
+	if grep ${nameOfSample} ${xhmmXcnv}.withoutX
 	then
-		awk '{
-                	if ($3 !~ "X") 
-                	{
-                        	print $0
-                	}			
-        	}' ${xhmmXcnv} > ${xhmmXcnv}.withoutX
+		## There is a call for this sample		
+		echo "${nameOfSample} is in ${xhmmXcnv}.withoutX"	
+		grep ${nameOfSample} ${xhmmXcnv}.withoutX > ${xhmmXcnv}.filtered.withoutX
+		autosomalCalls="true"
 	
-		echo "chrX is cut out of ${xhmmXcnv}"
+	else
+		autosomalCalls="false"
+		## There is no call for this sample			
 	fi
-	
+
 	if [ -f ${xhmmXcnvGender} ]
-	then
-		awk '{
-			if ($3 ~ "X")
-			{
-                		print $0
-                	}
-		}' ${xhmmXcnvGender} >  ${xhmmXcnvGender}.onlyX
-		echo "only chrX is selected out of ${xhmmXcnv}"
+	then 
+		if grep ${nameOfSample} ${xhmmXcnvGender}.chrX
+		then
+			echo "${nameOfSample} is in ${xhmmXcnvGender}.chrX"
+			grep ${nameOfSample} ${xhmmXcnvGender}.chrX > ${xhmmXcnvGender}.filtered.chrX
+			chrXCalls="true"
+		else
+			chrXCalls="false"
+		fi
+	else
+		echo "panel does not contain X region"	
+	fi
+	echo "autosomalCalls:${autosomalCalls}"
+	echo "chrXCalls:${chrXCalls}"
 	
-		if [ -f ${xhmmXcnv}.withoutX ]
+	
+
+	if [ ${autosomalCalls} == "true" ]
+	then	
+		head -1 ${xhmmXcnv} > ${xhmmXcnv}.final
+		if [ ${chrXCalls} == "true" ]
 		then
 			echo "pasting withoutX and onlyX together into ${xhmmXcnv}.tmp"
-			cat ${xhmmXcnv}.withoutX ${xhmmXcnvGender}.onlyX >  ${xhmmXcnv}.tmp
-			echo "moving ${xhmmXcnv}.tmp to ${xhmmXcnv}"
-			mv ${xhmmXcnv}.tmp ${xhmmXcnv}
+			echo "cat ${xhmmXcnv}.filtered.withoutX ${xhmmXcnvGender}.filtered.chrX >> ${xhmmXcnv}.final"
+
+			cat ${xhmmXcnv}.filtered.withoutX ${xhmmXcnvGender}.filtered.chrX >> ${xhmmXcnv}.final
+
+			echo "creating ${xhmmXcnv}.final it will contain autosomal and chrX calls"
+	
+		else
+			## .xnv.final file will contain only autosomal calls ##
+			echo -e "#without X \n# no onlyX\n\n## .xnv.final file will contain only autosomal calls ####"
+			cat ${xhmmXcnv}.filtered.withoutX >> ${xhmmXcnv}.final
 		fi
-	fi 
-	
-	if [ -f ${xhmmAUXcnv} ]
-	then
-        	awk '{
-              		if ($3 !~ "X")
-                	{
-                        	print $0
-                	}    
-    		}' ${xhmmAUXcnv} > ${xhmmAUXcnv}.withoutX
-		echo "chrX is cut out of ${xhmmAUXcnv}"
-	
-	fi
-	
-	if [ -f ${xhmmAUXcnvGender} ]
-	then
-        	awk '{
-                	if ($3 ~ "X") 
-                	{
-                        	print $0
-                	}
-        	}' ${xhmmAUXcnvGender} > ${xhmmAUXcnvGender}.onlyX
-		echo "only chrX is selected out of ${xhmmAUXcnvGender} "
-	
-        	if [ -f	${xhmmAUXcnv}.withoutX ]
-        	then
-        		echo "pasting withoutX and onlyX together into ${xhmmAUXcnv}.tmp"
-	
-	        	cat ${xhmmAUXcnv}.withoutX ${xhmmAUXcnvGender}.onlyX >  ${xhmmAUXcnv}.tmp
-                	echo "moving ${xhmmAUXcnv}.tmp to ${xhmmAUXcnv}"
-                	mv ${xhmmAUXcnv}.tmp ${xhmmAUXcnv}
-        	fi
-	fi 
-	if ls ${DepthOfCoveragePerSample}* 1> /dev/null 2>&1
-	then
-		mv ${DepthOfCoveragePerSample}*  ${intermediateDir}
-		echo "moved all XHMM intermediate files from ${DepthOfCoveragePerSample}* to ${intermediateDir}"
+	elif [ ${chrXCalls} == "true" ]
+	then	
+		head -1 ${xhmmXcnvGender} > ${xhmmXcnv}.final
+			
+		## .xnv.final file will contain only chrX calls ##
+		echo -e "# no without X \n#onlyX\n\n## .xnv.final file will contain only chrX calls ####"
+		cat ${xhmmXcnvGender}.filtered.chrX >> ${xhmmXcnv}.final
+
 	else
-		echo "${DepthOfCoveragePerSample}* is already copied"
-	fi
+		if [ ${chrXCalls} == "unset" ]
+		then
+			echo "Panel does not contain chrX. No calls found in autosomal region, file will only contain a header"
+		else
+			echo -e "# no without X \n# no onlyX\n\n## .xnv.final file will only contain a header ###"
+		fi
+	
+		head -1 ${xhmmXcnv} > ${xhmmXcnv}.final
+	fi		
+	
+	cp ${xhmmXcnv}.final ${intermediateDir}
+	echo "copied ${xhmmXcnv}.final to ${intermediateDir}/$(basename ${xhmmXcnv}.final)"
+	
 	
 else
 	echo "for this bedfile there is no Controlsgroup"

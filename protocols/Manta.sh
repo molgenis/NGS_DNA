@@ -14,7 +14,7 @@
 #string capturingKit
 #string capturedBed
 #string bedToolsVersion
-#string tabixVersion
+#string htsLibVersion
 
 makeTmpDir ${mantaDir}
 tmpMantaDir=${MC_tmpFile}
@@ -22,8 +22,7 @@ tmpMantaDir=${MC_tmpFile}
 module load ${mantaVersion}
 module load ${pythonVersion}
 module load ${bedToolsVersion}
-module load ${tabixVersion}
-
+module load ${htsLibVersion}
 rm -rf ${mantaDir}
 
 bedfile=$(basename $capturingKit)
