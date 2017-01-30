@@ -36,9 +36,8 @@
 #string bedToolsVersion
 
 sleep 5
-
-module load $ngsversion
-module load  $bedToolsVersion
+module load ${ngsversion}
+module load ${bedToolsVersion}
 
 if [ ! -d ${decisionTreeDir} ]
 then
