@@ -17,6 +17,13 @@ with open(finallist,'r') as f:
         vier = call[4]
         vijf = call[5]
         zes = call[6]
+	chr.strip()
+	start.strip()
+	stop.strip()
+	gene.strip()
+	vier.strip()
+	vijf.strip()
+	zes.strip()
         totalinfo = []
         with open(totallist,'r') as t:
                 next(t)
@@ -56,6 +63,6 @@ with open(finallist,'r') as f:
                                        		good="yes"
 
 	if good == "yes":
-		print chr,"\t",start,"\t",stop,"\t",gene,"\t",vier,"\t",vijf,"\t",zes,"\t",boom,"\tCoNVaDING has good values"
+		print chr,"\t",start,"\t",stop,"\t",gene,"\t",vier,"\t",vijf,"\t",zes,"\t",boom,"\tCoNVaDING_has_good_values"
 	else:
-		print chr,"\t",start,"\t",stop,"\t",gene,"\t",vier,"\t",vijf,"\t",zes,"\t",boom,"\tCoNVaDING has no good values"
+		print chr,"\t",start,"\t",stop,"\t",gene,"\t",vier,"\t",vijf,"\t",zes,"\t",boom,"\tCoNVaDING_has_no_good_values"

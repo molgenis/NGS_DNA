@@ -20,7 +20,6 @@
 #string capturingKit
 #string coveragePerBaseDir
 #string coveragePerTargetDir
-#string GCC_Analysis
 
 #Load module
 module load ${pythonVersion}

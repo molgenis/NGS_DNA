@@ -10,7 +10,6 @@
 #string mantaDir
 #string mantaVersion
 #string pythonVersion
-#string GCC_Analysis
 #string capturingKit
 #string capturedBed
 #string bedToolsVersion
@@ -28,8 +27,8 @@ rm -rf ${mantaDir}
 bedfile=$(basename $capturingKit)
 
 if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" == *"DYS_v"* || "${bedfile}" == *"EPI_v"* \
-|| "${bedfile}" == *"LEVER_v"* || "${bedfile}" == *"MYO_v"* || "${bedfile}" == *"NEURO_v"* || "${bedfile}" == *"ONCO_v"* \
-|| "${bedfile}" == *"PCS_v"* || "${bedfile}" == *"TID_v"* ]]
+|| "${bedfile}" == *"FH_v"*|| "${bedfile}" == *"LEVER_v"* || "${bedfile}" == *"MYO_v"* || "${bedfile}" == *"NEURO_v"* \
+|| "${bedfile}" == *"ONCO_v"* || "${bedfile}" == *"PCS_v"* || "${bedfile}" == *"TID_v"* ]]
 then
     	echo "Manta is skipped"
 else

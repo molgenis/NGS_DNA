@@ -30,18 +30,31 @@
 #string unreliableCalls
 #string ngsversion
 #string longlistPlusPlus
+#string xhmmPlusPlus
+#string longlistPlusPlusFinal
 #string overlapLonglistCall
 
 sleep 5
 
-ml $ngsversion
+ml ${ngsversion}
+ml ${bedToolsVersion}
+
 if [ ! -d ${decisionTreeDir} ]
 then
 	mkdir -p ${decisionTreeDir}
 fi
 
 rm -f ${longlistPlusPlus}
+rm -f ${xhmmPlusPlus}
+rm -f ${combinedFiltered}.XHMM
+rm -f ${combinedFiltered}
+rm -f ${xhmmSampleTxt}
 
+#
+##
+### Functions
+##
+#
 Sample_Ratio () {
 	# Grep Sample Ratio and label it depending on value
 	inputFile=$1
@@ -56,7 +69,7 @@ Sample_Ratio () {
         		print "Bad"
 		}
 		if($3 > "0.2"){
-        		print $3"\tExtreme Sample Ratio"
+        		print $3"\tExtreme_Sample_Ratio"
 		}
 	}' ${sampleRatios}
 }
@@ -64,22 +77,24 @@ Sample_Ratio () {
 Locations () {
 	tail -n +2 ${convadingFinallist} | awk '{OFS="\t"}{print $1,$2,$3}' > ${convadingBed}
 	tail -n +2 ${xhmmXcnvFinal} |  awk '{print $3}' | awk -F'[:-]' '{OFS="\t"}{print $1,$2,$3}' > ${xhmmBed}
-	ml BEDTools
+	
+	rm -rf ${overlapCall}
+	rm -rf ${convadingOnlyCall}
+	rm -rf ${xhmmOnlyCall}
+
 	# overlap CoNVaDING and XHMM
-	#bedtools intersect -wa -a ${convadingBed} -b ${xhmmBed} | awk '{print "Call has overlap"}'
-	bedtools intersect -wa -a ${convadingBed} -b ${xhmmBed} | awk 'BEGIN {OFS="\t"}{print $1, $2, $3}' > ${overlapCall}
+	bedtools intersect -wa -a ${convadingBed} -b ${xhmmBed} | awk 'BEGIN {OFS="\t"}{print $1, $2, $3}' | uniq > ${overlapCall}
+	bedtools intersect -wa -a ${xhmmBed} -b ${convadingBed} | awk 'BEGIN {OFS="\t"}{print $1":"$2"-"$3}' | uniq > ${overlapCall}.XHMM
 	# no overlap
 	# CoNVaDING only calls
-	#bedtools intersect -v -a ${convadingBed}  -b ${xhmmBed} | awk '{print "CoNVaDING only call"}'
-	bedtools intersect -v -a ${convadingBed}  -b ${xhmmBed} | awk 'BEGIN {OFS="\t"}{print $0}' > ${convadingOnlyCall}
+	bedtools intersect -v -a ${convadingBed}  -b ${xhmmBed} | awk 'BEGIN {OFS="\t"}{print $0}' |uniq > ${convadingOnlyCall}
 	# XHMM only calls
-	#bedtools intersect -v -a ${xhmmBed} -b ${convadingBed} | awk '{print "XHMM only call"}'
-	bedtools intersect -v -a ${xhmmBed} -b ${convadingBed} | awk 'BEGIN {OFS="\t"}{print $0}' > ${xhmmOnlyCall}
+	bedtools intersect -v -a ${xhmmBed} -b ${convadingBed} | awk 'BEGIN {OFS="\t"}{print $0}' | uniq > ${xhmmOnlyCall}
 	
 	rm -f ${combinedFiltered} ${convadingFinallistFiltered} ${xhmmXcnvFinalFiltered}
 	if [ -s ${overlapCall} ]
 	then
-    		echo "Call has overlap"
+    		echo "Call_has_overlap"
         	while read line
         	do
           		if grep -q "$line" ${convadingFinallist}
@@ -87,11 +102,20 @@ Locations () {
                     		grep "$line" ${convadingFinallist}
                 	fi
         	done < ${overlapCall} >> ${combinedFiltered}
+
+		while read line
+                do
+			
+                  	if grep -q "$line" ${xhmmXcnvFinal}
+                        then
+                                grep "$line" ${xhmmXcnvFinal}
+                        fi
+                done < ${overlapCall}.XHMM >> ${combinedFiltered}.XHMM
 	fi
 	
 	if [ -s ${convadingOnlyCall} ]
 	then
-    		echo "CoNVaDING only call"
+    		echo "CoNVaDING_only_call"
         	while read line
         	do
           		if grep -q "$line" ${convadingFinallist}
@@ -105,7 +129,7 @@ Locations () {
 	if [ -s ${xhmmOnlyCall} ]
 	then
     		awk '{print $1":"$2"-"$3}' ${xhmmOnlyCall} > ${xhmmOnlyCallMerged}
-        	echo "XHMM only call"
+        	echo "XHMM_only_call"
         	while read line
         	do
           		if grep -q "$line" ${xhmmXcnvFinal}
@@ -121,11 +145,8 @@ Locations () {
 Locations_longlist () {
 	tail -n +2 ${convadingLonglist} | awk '{OFS="\t"}{print $1,$2,$3}' > ${convadingLonglistBed}
 	tail -n +2 ${xhmmXcnvFinal} |  awk '{print $3}' | awk -F'[:-]' '{OFS="\t"}{print $1,$2,$3}' > ${xhmmBed}
-
-	ml BEDTools
 	
 	# overlap CoNVaDING longlist and XHMM
-	#bedtools intersect -wa -a ${xhmmBed}  -b ${convadingLonglistBed} | awk '{print $0"\t Call is on CoNVaDING longlist"}'
 	bedtools intersect -wa -a ${convadingLonglistBed} -b ${xhmmBed} | awk 'BEGIN {OFS="\t"}{print $0}' > ${overlapLonglistCall}
 	
 	# no overlap
@@ -133,7 +154,6 @@ Locations_longlist () {
 	#bedtools intersect -v -a ${convadingLonglistBed} -b ${xhmmBed}  | awk '{print $0"\t CoNVaDING only call"}'
 	
 	# XHMM only calls
-	#bedtools intersect -v -a ${xhmmBed}  -b ${convadingLonglistBed} | awk '{print $0"\t XHMM only call"}'
 	bedtools intersect -v -a ${xhmmBed}  -b ${convadingLonglistBed} | awk 'BEGIN {OFS="\t"}{print $0}' > ${xhmmOnlyCall}
 	
 	cat ${xhmmOnlyCall}	
@@ -153,10 +173,10 @@ Locations_longlist () {
 		sizeXhmmXcnvFinal=$(($(cat ${xhmmXcnvFinal} | wc -l) -1))
 		if [ ${sizeXhmmXcnvFinal} == ${sizeOverlapLonglist} ]
 		then
-			echo "Complete on CoNVaDING longlist"
+			echo "Complete_on_CoNVaDING_longlist"
 		elif [ ${sizeXhmmXcnvFinal} > ${sizeOverlapLonglist} ]
 		then
-			echo "Partially on CoNVaDING longlist"
+			echo "Partially_on_CoNVaDING_longlist"
 			while read line
                 	do
                   		if grep -q "$line" ${xhmmXcnvFinal}
@@ -166,7 +186,7 @@ Locations_longlist () {
 			done<${xhmmOnlyCall} >> ${xhmmXcnvFinal}.filtered
 		fi
 	else
-		echo "not on CoNVaDING longlist"
+		echo "not_on_CoNVaDING_longlist"
 
 	fi
 	
@@ -175,59 +195,57 @@ Locations_longlist () {
 Single_exon () {
 	awk -v boom="$2" 'BEGIN{OFS="\t"}{
 	if($5 == 1){
-		print $0"\t"boom"\tSingle exon call"}
+		print $0"\t"boom"\tSingle_exon_call"}
 	if($5 > 1){
-		print "Call has multiple exons"}}' $1
+		print "Call_has_multiple_exons"}}' $1
 }
 
 Number_of_genes () {
 	
-	call=$(tail -n +2 ${convadingFinallist} | awk '{OFS="\t"}{print $0}')
 	no_of_genes=$(tail -n +2  ${convadingFinallist} | awk '{print $4}' | sort | uniq | wc -l)
 	
 	if [ $no_of_genes -lt 4 ]
 	then
-    		echo "Good number of genes"
+    		echo "Good_number_of_genes"
 	else
-		head -1 ${convadingFinallist} 
-    		tail -n +2 ${convadingFinallist} | awk -v boom="$2" '{print $0"\t"boom"\tToo many genes"}' 
-		#echo "${call}\tToo many genes"
+    		tail -n +2 ${convadingFinallist} | awk -v boom="$2" '{print $0"\t"boom"\tToo_many_genes"}' 
 	fi
 }
 
 Q_scores () {
-	if grep ${externalSampleID} ${xhmmXcnvFinal}
-	then
-    		head -1 ${xhmmXcnvFinal} > ${xhmmSampleTxt}
-        	grep ${externalSampleID} ${xhmmXcnvFinal} >> ${xhmmSampleTxt}
+      	awk -v b="$2" 'BEGIN{OFS="\t"}{
+        	if (NR>1){
+			if($10 >= 13 && $11 >= 13){
+                       		print $10,$11,"Q_scores_are_good"}
+               		else{
+               			print $0"\t"b"\tQ_scores_too_low"
+               		}
+		}
+        }' ${xhmmXcnvFinal}
 	
-        	awk -v b="$2" 'BEGIN{OFS="\t"}{
-                	if(NR>1 && $10 >= 13 && $11 >= 13){
-                        	print $10,$11,"Q_scores are good"}
-                	else{
-                     		if(NR==1){print $0"\tCall\tFilter"}
-                        	else{
-                             		print $0"\t"b"\tQ_scores too low"
-                        	}
-                	}
-        	}' ${xhmmSampleTxt}
-	fi
 }
 
 Shapiro_wilk () {
 
  awk -v b="$2" 'BEGIN{OFS="\t"}{
                 if($5 == $6){
-                        print $0,b"\tCall is final"
+                        print $0,b"\tCall_is_final"
                 }
                 if($6 == 0){
-                        print $0,b"\tunreliable call"
+                        print $0,b"\tunreliable_call"
                 }
                 else{
-                     	print $0,b"\tCall is final"
+                     	print $0,b"\tCall_is_final"
                 }
         }' $1
 }
+
+#
+##
+### TREES
+##
+#
+
 #
 ##
 ### Failed sample tree
@@ -242,20 +260,20 @@ Failed_Sample_Tree () {
 	qscore="unset"
 	shapiro="unset"
 	Call=""
-	if [[ "${location}" == *"Call has overlap"* ]]
+	if [[ "${location}" == *"Call_has_overlap"* ]]
 	then
     		echo "Call has overlap, program continues > "
 	      	exons=$(Single_exon ${combinedFiltered} $boom)
 	else
     		echo -e "$boom\tCall has no overlap, program stops. "
-		awk -v b="$boom" '{if (NR==1){print $0"\tCall\tFilter"}else{print $0"\t"b"\tNo overlap"}}' ${convadingFinallist} >> ${longlistPlusPlus}
+		awk -v b="$boom" '{if (NR==1){print $0"\tCall\tFilter"}else{print $0"\t"b"\tNo_overlap"}}' ${convadingFinallist} >> ${longlistPlusPlus}
         	trap - EXIT
                 exit 0
 	fi
 	
 	
 	# Tests if a call has multiple exons or a single exon
-	if [[ "${exons}" == *"Call has multiple exons"* ]]
+	if [[ "${exons}" == *"Call_has_multiple_exons"* ]]
 	then
     		echo "Call has multiple exons, program continues > "
 	       	genes=$(Number_of_genes ${combinedFiltered} $boom)
@@ -268,7 +286,7 @@ Failed_Sample_Tree () {
 	
 	
 	# Tests if a call has a good number of genes
-	if [[ "${genes}" == *"Good number of genes"* ]]
+	if [[ "${genes}" == *"Good_number_of_genes"* ]]
 	then
     		echo "Call has a good number of genes, program continues > "
         	##Conv values
@@ -282,40 +300,37 @@ Failed_Sample_Tree () {
 	
 	
 	# Tests if a call has good CoNVaDING values
-	if [[ "${values}" == *"CoNVaDING has good values"* ]]
+	if [[ "${values}" == *"CoNVaDING_has_good_values"* ]]
 	then
     		echo "CoNVaDING has good values, program continues > "
-	     	qscore=$(Q_scores ${combinedFiltered} )
+	     	qscore=$(Q_scores ${combinedFiltered} $boom)
 	else
     		echo -e "$boom\tCoNVaDING values are not good, program stops."
-		echo $values >> ${longlistPlusPlus}
-        	Callinfo=$(tail -n +2 ${combinedFiltered} | awk '{OFS="\t"}{print $0}')
-  #      	echo ${externalSampleID} ${Callinfo} "Bad CoNVaDING values" >> ${rejectedCalls}
+		echo "$values" >> ${longlistPlusPlus}
         	trap - EXIT
                 exit 0
 	fi
 	
 	
 	#Tests if a call has a good Q-score
-	if [[ "${qscore}" == *"Q_scores are good"* ]]
+	if [[ "${qscore}" == *"Q_scores_are_good"* ]]
 	then
     		echo "Q-scores are good, program continues > "
         	shapiro=$(Shapiro_wilk ${combinedFiltered} $boom)
 		
 	else
-		echo $qscore >> ${longlistPlusPlus}
+		echo "$qscore" >> ${longlistPlusPlus}
  		echo -e "$boom\tQ-scores are not good, program stops."
         	trap - EXIT
                 exit 0
 	fi
 
-	if [[ "${shapiro}" == *"Call is final"* ]]
+	if [[ "${shapiro}" == *"Call_is_final"* ]]
        	then
        		echo -e "$boom\tThe call is final."
-		head -1 ${convadingFinallist} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
-                awk '{print $0"\tC+X\tFinal"}' "${combinedFiltered}" >>  ${longlistPlusPlus}
+                awk '{print $0"\tF\tFinal"}' "${combinedFiltered}" >>  ${longlistPlusPlus}
        	else
-       		echo $shapiro >> ${longlistPlusPlus}        
+       		echo "$shapiro" >> ${longlistPlusPlus}        
 		echo -e "$boom\tCall is unreliable, no targets through Shapiro Wilk test."
               	cat ${unreliableCalls}
         fi
@@ -337,35 +352,33 @@ CoNVaDING_only_tree () {
 	values="unset"
 	shapiro="unset"
 
-	if [[ "${exons}" == *"Call has multiple exons"* ]]
+	if [[ "${exons}" == *"Call_has_multiple exons"* ]]
 	then
     		echo "Call has multiple exons, program continues > "
 		values=$(python ${EBROOTNGS_DNA}/CoNVaDING_filter.py ${convadingFinallistFiltered} ${convadingTotallist} $boom)
 	else
     		echo -e "$boom\tCall is single exon, program stops. "
-		awk -v b="$boom" '{if (NR==1){print $0"\tCall\tFilter"}else{print $0"\t"b"\tSingle Exon"}}' ${convadingFinallist} >> ${longlistPlusPlus}
+		awk -v b="$boom" '{if (NR>1){print $0"\t"b"\tSingle_Exon"}}' ${convadingFinallist} >> ${longlistPlusPlus}
         	trap - EXIT
                 exit 0
 	fi
 		
 	# Tests if a call has good CoNVaDING values
-	if [[ "${values}" == *"CoNVaDING has good values"* ]]
+	if [[ "${values}" == *"CoNVaDING_has_good_values"* ]]
 	then
     		echo "CoNVaDING has good values, program continues > "
         	shapiro=$(Shapiro_wilk ${convadingFinallistFiltered} $boom)
 	else
     		echo -e "$boom\tCoNVaDING values are not good, program stops."
-		head -1 ${convadingFinallist} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
 		echo "$values" >> ${longlistPlusPlus}
         	trap - EXIT
                 exit 0
 	fi
 	
-	if [[ "${shapiro}" == *"Call is final"* ]]
+	if [[ "${shapiro}" == *"Call_is_final"* ]]
         then
             	echo -e "$boom\tThe call is final."
-                head -1 ${convadingFinallist} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
-                awk '{print $0"\tC+X\tFinal"}' "${convadingFinallistFiltered}" >>  ${longlistPlusPlus}
+                awk '{print $0"\tC\tFinal"}' "${convadingFinallistFiltered}" >>  ${longlistPlusPlus}
         else
             	echo "$shapiro" >> ${longlistPlusPlus}
                 echo -e "$boom\tCall is unreliable, no targets through Shapiro Wilk test."
@@ -388,7 +401,7 @@ XHMM_only_tree () {
 	qscore=$(Q_scores ${convadingFinallist} $boom)
         values="unset"
         shapiro="unset"
-	if [[ "${qscore}" == *"Q_scores are good"* ]]
+	if [[ "${qscore}" == *"Q_scores_are_good"* ]]
 	then
     		echo "Q-scores are good, program continues > "
         	location_longlist=$(Locations_longlist ${convadingLonglist})
@@ -400,52 +413,46 @@ XHMM_only_tree () {
 	fi
 	
 	# Tests if call is on CoNVaDING longlist
-	if [[ "${location_longlist}" == *"Complete on CoNVaDING longlist"* ]]
+	if [[ "${location_longlist}" == *"Complete_on_CoNVaDING_longlist"* ]]
 	then
     		echo "Call is present on CoNVaDING longlist, program continues > "
         	values=$(python ${EBROOTNGS_DNA}/CoNVaDING_filter.py ${convadingLonglistCombinedFiltered} ${convadingTotallist} $boom)
-	elif [[ "${location_longlist}" == *"Partially on CoNVaDING longlist"* ]]
+	elif [[ "${location_longlist}" == *"Partially_on_CoNVaDING_longlist"* ]]
 	then
 		echo -e "$boom\tSome calls are on CoNVaDING longlist, program continues. "
 		values=$(python ${EBROOTNGS_DNA}/CoNVaDING_filter.py ${convadingLonglistCombinedFiltered} ${convadingTotallist} $boom)
 
 		echo -e "$boom\tSome calls are NOT on CoNVaDING longlist, program stops. "
-		echo "" >>  ${longlistPlusPlus}
-		head -1 ${xhmmXcnvFinal} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
-		awk '{print $0"\tX\tNo overlap on longlist"}' ${xhmmXcnvFinal}.filtered >>  ${longlistPlusPlus}
+		awk '{print $0"\tX\tNo_overlap_on_longlist"}' ${xhmmXcnvFinal}.filtered >>  ${xhmmPlusPlus}
 
 		trap - EXIT
                 exit 0
 
-	elif [[ "${location_longlist}" == *"not on CoNVaDING longlist"* ]]
+	elif [[ "${location_longlist}" == *"not_on_CoNVaDING_longlist"* ]]
 	then	
     		echo -e "$boom\tCall is not on CoNVaDING longlist, program stops. "
 
-		head -1 ${xhmmXcnvFinal} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
-		tail -n+2 ${xhmmXcnvFinal} | awk '{print $0"\tX\tNo overlap on longlist"}' >> ${longlistPlusPlus}
+		tail -n+2 ${xhmmXcnvFinal} | awk '{print $0"\tX\tNo_overlap_on_longlist"}' >> ${xhmmPlusPlus}
 
         	trap - EXIT
                 exit 0
 	fi
 	
 	# Tests if a call has good CoNVaDING values
-	if [[ "${values}" == *"CoNVaDING has good values"* ]]
+	if [[ "${values}" == *"CoNVaDING_has_good_values"* ]]
 	then
     		echo "CoNVaDING has good values, program continues > "
         	shapiro=$(Shapiro_wilk ${convadingLonglistCombinedFiltered} $boom)
 	else
 		echo -e "$boom\tCoNVaDING values are not good, program stops."
-                head -1 ${convadingFinallist} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
-
                 echo "$values" >> ${longlistPlusPlus}		
         	trap - EXIT
                 exit 0
 	fi
 
-	if [[ "${shapiro}" == *"Call is final"* ]]
+	if [[ "${shapiro}" == *"Call_is_final"* ]]
         then
             	echo -e "$boom\tThe call is final."
-                head -1 ${convadingFinallist} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
                 awk '{print $0"\tX\tFinal"}' "${convadingLonglistCombinedFiltered}" >>  ${longlistPlusPlus}
         else
             	echo "$shapiro" >> ${longlistPlusPlus}
@@ -457,13 +464,14 @@ XHMM_only_tree () {
         exit 0
 	
 }
+
 #
 ##
 ### MAIN
 ##
 #
 ratio=$(Sample_Ratio ${convadingLogfile})
-convfinal=$(cat ${convadingFinallist} | wc -l)
+convfinalSize=$(cat ${convadingFinallist} | wc -l)
 
 if grep -q "${externalSampleID}" ${xhmmXcnvFinal}
 then
@@ -472,35 +480,35 @@ else
         xhmm="false"
 fi
 
-if [[ $xhmm == "true" || $convfinal -gt 1 ]]
+if [[ "${xhmm}" == "true" || "${convfinalSize}" -gt 1 ]]
 then
         if [[ "${ratio}" == *"Bad"* ]]
         then
                 echo "Failed sample tree for sample: ${externalSampleID}"
                 failed_tree=$(Failed_Sample_Tree "F")
-                echo $failed_tree
+                echo "${failed_tree}"
         fi
 
         if [[ "${ratio}" == *"Good"* ]]
         then
                 location=$(Locations)
-                if [[ "${location}" == *"Call has overlap"* ]]
+                if [[ "${location}" == *"Call_has_overlap"* ]]
                 then
                         echo -e "c+x\tCoNVaDING XHMM tree for sample: ${externalSampleID}"
-                        #CallCX=$(grep "$line" ${combinedFiltered})
-			head -1 ${convadingFinallist} | awk '{print $0"\tCall\tFilter"}' >>  ${longlistPlusPlus}
 			awk '{print $0"\tC+X\tFinal"}' "${combinedFiltered}" >>  ${longlistPlusPlus}
+			awk '{print $0"\tC+X\tFinal"}' "${combinedFiltered}.XHMM"
+			awk '{print $0"\tC+X\tFinal"}' "${combinedFiltered}.XHMM" > ${xhmmPlusPlus}
 			echo "The call is final. Call is made by CoNVaDING and XHMM"
 
                 fi
-                if [[ "${location}" == *"CoNVaDING only call"* ]]
+                if [[ "${location}" == *"CoNVaDING_only_call"* ]]
                 then
                         echo "CoNVaDING only tree for sample: ${externalSampleID}"
                         convading_tree=$(CoNVaDING_only_tree "C")
 			echo $convading_tree
                 fi
 
-                if [[ "${location}" == *"XHMM only call"* ]]
+                if [[ "${location}" == *"XHMM_only_call"* ]]
                 then
                         echo "XHMM only tree for sample: ${externalSampleID}"
                         xhmm_tree=$(XHMM_only_tree "X")
@@ -509,13 +517,48 @@ then
 
         fi
 
-        if [[ "${ratio}" == *"Extreme Sample Ratio"* ]]
+        if [[ "${ratio}" == *"Extreme_Sample_Ratio"* ]]
         then
                 echo "Sample ratio is extremely high"
-		awk '{if (NR==1){print $0"\tCall\tFilter"}else{print $0"\tExtreme Sample Ratio"}}' ${convadingFinallist} >>  ${longlistPlusPlus}
+		awk '{if (NR>1){print $0"\tExtreme Sample Ratio"}}' ${convadingFinallist} >>  ${longlistPlusPlus}
         fi
 else
         echo "No call made in both programs"
 fi
 
-echo "Calls can be found here: ${longlistPlusPlus}"
+
+if [ -f ${longlistPlusPlus} ]
+then
+	SIZE=$(cat ${longlistPlusPlus} | wc -l)
+	echo "write header to ${longlistPlusPlusFinal}"
+	echo -e "CHR\tSTART\tSTOP\tGENE\tNUMBER_OF_TARGETS\tNUMBER_OF_TARGETS_PASS_SHAPIRO-WILK_TEST\tABBERATION\tCall\tFilter\tKB\tMID_BP\tTARGETS\tQ_EXACT\tQ_NON_DIPLOID\tQ_START\tQ_STOP\tMEAN_RD\tMEAN_ORIG_RD" > ${longlistPlusPlusFinal}
+	echo "longlistPlusPlus size = ${SIZE}"
+fi
+
+count=0
+while read line
+do
+	if [[ ${count} -ne 0 ]]
+	then
+		perl -pi -e 's| ||g' ${longlistPlusPlus}
+		if grep "$line" ${longlistPlusPlus}
+		then
+		
+			grep "$line" ${longlistPlusPlus}  >> ${longlistPlusPlusFinal}
+		else
+			echo -e "${line}\t-\t-"  >> ${longlistPlusPlusFinal}
+		fi
+	fi
+	count=$((count+1))	
+done<${convadingLonglist}
+
+if [ -f ${xhmmPlusPlus} ]
+then
+	SIZE=$(cat ${xhmmPlusPlus} | wc -l)
+	echo "cat ${xhmmPlusPlus} to ${longlistPlusPlusFinal}"
+	awk 'BEGIN{OFS="\t"}{$1="replacement"; print $0}' ${xhmmPlusPlus} > ${xhmmPlusPlus}.tmp
+	while read line; do VAL=$(echo "$line" | awk '{print $3}'); CHR=$(echo "$VAL" | awk '{print $1}' FS=":"); POS=$(echo "$VAL" | awk '{print $2}' FS=":" | awk '{print $1,$2}' FS="-" OFS="\t"); REMAIN=$(echo $line | awk '{for(i=4;i<=NF;++i)printf "\t" $i}' ); FIRST=$(echo "$line" | awk '{print $1,$2}' FS="\t"); echo -e -n "$FIRST\t$CHR\t$POS\t$REMAIN\n";done<${xhmmPlusPlus}.tmp | awk 'BEGIN {OFS="\t"}{print $3,$4,$5,"-",$10,"-",$2,$18,$19,$6,$8,$9,$11,$12,$13,$14,$15,$16,$17}' >> ${longlistPlusPlusFinal}
+#	awk -F'[:-]' '{OFS="\t"}{print $1,$2,$3}' ${xhmmPlusPlus}.tmp | awk 'BEGIN {OFS="\t"}{print $3,$4,$5,"-",$10,"-",$2,$18,$19,$6,$8,$9,$11,$12,$13,$14,$15,$16,$17}' >> ${longlistPlusPlusFinal}
+fi
+
+echo "Calls can be found here: ${longlistPlusPlusFinal}"
