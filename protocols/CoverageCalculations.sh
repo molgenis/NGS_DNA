@@ -13,7 +13,6 @@
 #string indexFile
 #string capturedIntervalsPerBase
 #string capturedBed
-#string GCC_Analysis
 #string sampleNameID
 #string capturingKit
 #string coveragePerBaseDir
@@ -26,7 +25,7 @@ module load ${ngsUtilsVersion}
 
 ### Per base bed files
 bedfile=$(basename $capturingKit)
-if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" == *"DYS_v"* || "${bedfile}" == *"EPI_v"* \
+if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" == *"DYS_v"* || "${bedfile}" == *"EPI_v"* || "${bedfile}" == *"FH_v"* \
 || "${bedfile}" == *"LEVER_v"* || "${bedfile}" == *"MYO_v"* || "${bedfile}" == *"NEURO_v"* || "${bedfile}" == *"ONCO_v"* \
 || "${bedfile}" == *"PCS_v"* || "${bedfile}" == *"TID_v"* ]]
 then

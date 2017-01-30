@@ -476,12 +476,13 @@ then
             		rm ${xhmmWorkingDir}/sample_interval_summary.Controls
         	fi
 	
+        	echo "### COPYING XHMM controls to final destination"
+        	cp -r ${xhmmWorkingDir}/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
+	
 		for i in $(ls ${pathToFinalControls}/${version}/XHMM//PerSample/*.sample_interval_summary )
         	do
           		echo "$i" >> ${xhmmWorkingDir}/sample_interval_summary.Controls
         	done
-        	echo "### COPYING XHMM controls to final destination"
-        	cp -r ${xhmmWorkingDir}/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/PerSample/
 	
 		cp ${xhmmWorkingDir}/sample_interval_summary.Controls ${pathToFinalControls}/${version}/XHMM/Controls.sample_interval_summary
 	

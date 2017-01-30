@@ -1,0 +1,24 @@
+step,protocol,dependencies
+s01_SpikePhiX,protocols/SpikePhiX.sh,
+s02_CheckIlluminaEncoding,protocols/CheckIlluminaEncoding.sh,s01_SpikePhiX
+s03_FastQC,protocols/FastQC.sh,s02_CheckIlluminaEncoding
+s04_BwaAlign,protocols/BwaAlign.sh,s02_CheckIlluminaEncoding
+s05_SamToBam,protocols/SamToBam.sh,s04_BwaAlign
+s06_SortBam,protocols/SortBam.sh,s05_SamToBam
+s07_MergeBam,protocols/MergeBam.sh,s06_SortBam;inputMergeBam=alignedSortedBam;inputMergeBamIdx=alignedSortedBamIdx
+s08_MarkDuplicates,protocols/MarkDuplicates.sh,s07_MergeBam
+s09a_VariantCalling,protocols/VariantCalling.sh,s08_MarkDuplicates
+s09d_GenotypeVariants,protocols/VariantGenotyping.sh,s09a_VariantCalling
+s10_MergeBatches,protocols/MergeBatches.sh,s09d_VariantAnnotator
+s11_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s10_MergeBatches
+s12a_SnpFiltration,protocols/SnpFiltration.sh,s11_SplitIndelsAndSNPs
+s12b_IndelFiltration,protocols/IndelFiltration.sh,s11_SplitIndelsAndSNPs
+s13_MergeIndelsAndSnps,protocols/MergeIndelsAndSnps.sh,s12b_IndelFiltration;s12a_SnpFiltration
+s14a_CompressingSampleVcf,protocols/CompressingFinalVcf.sh,s13_MergeIndelsAndSnps;finalVcf=sampleFinalVcf
+s14b_CompressingProjectVcf,protocols/CompressingFinalVcf.sh,s13_MergeIndelsAndSnps;finalVcf=projectFinalVcf
+s15_CountAllFinishedFiles,protocols/CountAllFinishedFiles.sh,s14a_CompressingSampleVcf;s14b_CompressingProjectVcf
+s16_CopyToResultsDir,protocols/CopyToResultsDir.sh,s15_CountAllFinishedFiles
+
+
+### s10 moet gekoppeld worden aan s09d
+### VariantCalling moet snappen dat er geen geslacht bekend is

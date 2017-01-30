@@ -45,7 +45,7 @@
 #string sambambaVersion
 #string samtoolsVersion
 #string snpEffVersion
-#string tabixVersion
+#string htsLibVersion
 #string wkHtmlToPdfVersion
 #string capturingKit
 #string ngsversion
@@ -287,7 +287,7 @@ ${rVersion}
 ${sambambaVersion}
 ${samtoolsVersion}
 ${snpEffVersion}
-${tabixVersion}
+${htsLibVersion}
 ${molgenisAnnotatorVersion}
 hpoVersion: ${hpoVersion}
 </pre>
