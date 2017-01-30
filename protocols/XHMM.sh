@@ -95,8 +95,10 @@ then
         	then
         		xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/Female/
         	else
-        		echo "THIS CANNOT BE TRUE, no Male, Female or autosomal!!"
-			exit 1
+        		echo "THIS CANNOT BE TRUE, no Male, Female or autosomal!! --> Gender is $i"
+			
+			trap - EXIT
+                	exit 0
         	fi
 		
 		if [ -d ${xhmmControlsDir} ]
