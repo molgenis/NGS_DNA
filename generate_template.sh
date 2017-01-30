@@ -1,6 +1,6 @@
 #!/bin/bash
 
-module load NGS_DNA/3.3.0
+module load NGS_DNA/3.3.1
 module list 
 HOST=$(hostname)
 thisDir=$(pwd)
