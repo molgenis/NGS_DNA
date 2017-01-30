@@ -168,6 +168,12 @@ do
 		echo "copying XHMM results"
 		cp ${intermediateDir}/${sa}_step10.xcnv.final ${projectResultsDir}/variants/cnv/
 	fi
+
+	if [ -f ${intermediateDir}/${sa}.longlistplusplusFinal.txt ]
+	then
+		echo "copying output decision tree to results/variants/cnv/"
+		rsync -a ${intermediateDir}/${sa}.longlistplusplusFinal.txt ${projectResultsDir}/variants/cnv/
+	fi
 done
 printf " finished (7/11)\n"
 
