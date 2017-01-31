@@ -40,7 +40,8 @@
 #string Gender
 #string externalSampleID
 
-nameOfSample=$(basename ${dedupBam%%.*})
+basenameDedupBam==$(basename ${dedupBam})
+nameOfSample=${basenameDedupBam%%.*}
 chrXCalls="unset"
 autosomalCalls="unset"
 
@@ -78,6 +79,8 @@ then
 	fi
 	onlyHeader="false"
 	onlyHeaderGender="false"
+
+	echo 
 	for i in ${run[@]}
 	do
 		echo "analyzing $i"
@@ -516,10 +519,11 @@ then
 	
 		head -1 ${xhmmXcnv} > ${xhmmXcnv}.final
 	fi		
-	
-	cp ${xhmmXcnv}.final ${intermediateDir}
-	echo "copied ${xhmmXcnv}.final to ${intermediateDir}/$(basename ${xhmmXcnv}.final)"
-	
+	if [ -f ${xhmmXcnv}.final ]
+	then	
+		cp ${xhmmXcnv}.final ${intermediateDir}
+		echo "copied ${xhmmXcnv}.final to ${intermediateDir}/$(basename ${xhmmXcnv}.final)"
+	fi	
 	
 else
 	echo "for this bedfile there is no Controlsgroup"
