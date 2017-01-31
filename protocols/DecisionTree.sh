@@ -75,13 +75,15 @@ Sample_Ratio () {
 }
 
 Locations () {
+	boom=$1
 	tail -n +2 ${convadingFinallist} | awk '{OFS="\t"}{print $1,$2,$3}' > ${convadingBed}
 	tail -n +2 ${xhmmXcnvFinal} |  awk '{print $3}' | awk -F'[:-]' '{OFS="\t"}{print $1,$2,$3}' > ${xhmmBed}
 	
 	rm -rf ${overlapCall}
 	rm -rf ${convadingOnlyCall}
 	rm -rf ${xhmmOnlyCall}
-
+	rm -rf ${combinedFiltered}.failedSampleTree
+	rm -rf ${combinedFiltered}
 	# overlap CoNVaDING and XHMM
 	bedtools intersect -wa -a ${convadingBed} -b ${xhmmBed} | awk 'BEGIN {OFS="\t"}{print $1, $2, $3}' | uniq > ${overlapCall}
 	bedtools intersect -wa -a ${xhmmBed} -b ${convadingBed} | awk 'BEGIN {OFS="\t"}{print $1":"$2"-"$3}' | uniq > ${overlapCall}.XHMM
@@ -94,14 +96,24 @@ Locations () {
 	rm -f ${combinedFiltered} ${convadingFinallistFiltered} ${xhmmXcnvFinalFiltered}
 	if [ -s ${overlapCall} ]
 	then
-    		echo "Call_has_overlap"
         	while read line
         	do
           		if grep -q "$line" ${convadingFinallist}
                 	then
-                    		grep "$line" ${convadingFinallist}
-                	fi
+                    		grep "$line" ${convadingFinallist} 
+			fi
         	done < ${overlapCall} >> ${combinedFiltered}
+
+ 		if [[ "${boom}" == "F" && -s ${convadingOnlyCall} ]]
+        	then
+        	        echo "Call_has_partial_overlap"
+        	        while read part 
+			do
+				grep "$part" ${convadingFinallist}
+			done<${convadingOnlyCall} >>  ${combinedFiltered}.failedSampleTree
+		else
+			echo "Call_has_overlap"
+        	fi
 
 		while read line
                 do
@@ -111,7 +123,16 @@ Locations () {
                                 grep "$line" ${xhmmXcnvFinal}
                         fi
                 done < ${overlapCall}.XHMM >> ${combinedFiltered}.XHMM
+
+	elif [[ "${boom}" == "F" && -s ${convadingOnlyCall} ]]
+	then
+		echo "Call_has_no_overlap"
+		while read part	
+                do
+			grep "$part" ${convadingFinallist}
+		done<${convadingOnlyCall} >>  ${combinedFiltered}.failedSampleTree					
 	fi
+
 	
 	if [ -s ${convadingOnlyCall} ]
 	then
@@ -254,7 +275,7 @@ Shapiro_wilk () {
 Failed_Sample_Tree () {
 	boom=$1
 	# Tests if locations overlap
-	location=$(Locations)
+	location=$(Locations $boom)
 	exons="unset"
 	values="unset"
 	qscore="unset"
@@ -264,9 +285,22 @@ Failed_Sample_Tree () {
 	then
     		echo "Call has overlap, program continues > "
 	      	exons=$(Single_exon ${combinedFiltered} $boom)
+	elif [[ "${location}" == *"Call_has_partial_overlap"* ]]
+	then
+		echo "Call has partially overlap, program continues > "
+                exons=$(Single_exon ${combinedFiltered} $boom)
+
+    		echo -e "$boom\tCall has partially no overlap, program stops. "
+		awk -v b="$boom" '{print $0"\t"b"\tNo_overlap"}' ${combinedFiltered}.failedSampleTree >> ${longlistPlusPlus}
+	elif [[ "${location}" == *"Call_has_no_overlap"* ]]
+	then
+		echo -e "$boom\tCall has no overlap, program stops. "
+                awk -v b="$boom" '{print $0"\t"b"\tNo_overlap"}' ${combinedFiltered}.failedSampleTree >> ${longlistPlusPlus}
+                trap - EXIT
+                exit 0
 	else
     		echo -e "$boom\tCall has no overlap, program stops. "
-		awk -v b="$boom" '{if (NR==1){print $0"\tCall\tFilter"}else{print $0"\t"b"\tNo_overlap"}}' ${convadingFinallist} >> ${longlistPlusPlus}
+		awk -v b="$boom" '{print $0"\t"b"\tNo_overlap"}' ${convadingFinallist} >> ${longlistPlusPlus}
         	trap - EXIT
                 exit 0
 	fi
@@ -491,7 +525,7 @@ then
 
         if [[ "${ratio}" == *"Good"* ]]
         then
-                location=$(Locations)
+                location=$(Locations $boom)
                 if [[ "${location}" == *"Call_has_overlap"* ]]
                 then
                         echo -e "c+x\tCoNVaDING XHMM tree for sample: ${externalSampleID}"
@@ -499,7 +533,7 @@ then
 			awk '{print $0"\tC+X\tFinal"}' "${combinedFiltered}.XHMM"
 			awk '{print $0"\tC+X\tFinal"}' "${combinedFiltered}.XHMM" > ${xhmmPlusPlus}
 			echo "The call is final. Call is made by CoNVaDING and XHMM"
-
+		
                 fi
                 if [[ "${location}" == *"CoNVaDING_only_call"* ]]
                 then
