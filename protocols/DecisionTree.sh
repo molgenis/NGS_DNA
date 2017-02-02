@@ -525,6 +525,7 @@ then
 
         if [[ "${ratio}" == *"Good"* ]]
         then
+		boom="undefined"
                 location=$(Locations $boom)
                 if [[ "${location}" == *"Call_has_overlap"* ]]
                 then
