@@ -334,7 +334,7 @@ rejectedCalls,${cSampleNameID}_Rejected_Calls.txt
 unreliableCalls,${cSampleNameID}_Unreliable_calls.txt
 filteredOut,${cSampleNameID}_Filterd_out.txt
 xhmmSampleTxt,${cSampleNameID}_xhmm.txt
-sampleRatios,{cSampleNameID}_Sample_ratios.txt
+sampleRatios,${cSampleNameID}_Sample_ratios.txt
 longlistPlusPlus,${intermediateDir}/${externalSampleID}.longlistplusplus.txt
 xhmmPlusPlus,${intermediateDir}/${externalSampleID}.xhmmplusplus.txt
 longlistPlusPlusFinal,${intermediateDir}/${externalSampleID}.longlistplusplusFinal.txt
