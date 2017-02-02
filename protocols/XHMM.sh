@@ -40,7 +40,7 @@
 #string Gender
 #string externalSampleID
 
-basenameDedupBam==$(basename ${dedupBam})
+basenameDedupBam=$(basename ${dedupBam})
 nameOfSample=${basenameDedupBam%%.*}
 chrXCalls="unset"
 autosomalCalls="unset"
@@ -80,7 +80,6 @@ then
 	onlyHeader="false"
 	onlyHeaderGender="false"
 
-	echo 
 	for i in ${run[@]}
 	do
 		echo "analyzing $i"
