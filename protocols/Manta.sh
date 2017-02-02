@@ -18,11 +18,6 @@
 makeTmpDir ${mantaDir}
 tmpMantaDir=${MC_tmpFile}
 
-module load ${mantaVersion}
-module load ${pythonVersion}
-module load ${bedToolsVersion}
-module load ${htsLibVersion}
-rm -rf ${mantaDir}
 
 bedfile=$(basename $capturingKit)
 
@@ -32,6 +27,12 @@ if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" 
 then
     	echo "Manta is skipped"
 else
+	module load ${mantaVersion}
+	module load ${pythonVersion}
+	module load ${bedToolsVersion}
+	module load ${htsLibVersion}
+	rm -rf ${mantaDir}
+
 	mkdir ${mantaDir}
 
 	python ${EBROOTMANTA}/bin/configManta.py \
