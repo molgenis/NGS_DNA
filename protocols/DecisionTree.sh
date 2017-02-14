@@ -23,7 +23,6 @@
 #string convadingFinallistFiltered 
 #string xhmmXcnvFinalFiltered
 #string rejectedCalls
-#string xhmmSampleTxt
 #string sampleRatios
 #string filteredOut
 #string decisionTreeDir
@@ -43,12 +42,17 @@ if [ ! -d ${decisionTreeDir} ]
 then
 	mkdir -p ${decisionTreeDir}
 fi
-
 rm -f ${longlistPlusPlus}
 rm -f ${xhmmPlusPlus}
+
 rm -f ${combinedFiltered}.XHMM
 rm -f ${combinedFiltered}
-rm -f ${xhmmSampleTxt}
+rm -f ${combinedFiltered}.failedSampleTree
+
+rm -f ${xhmmXcnvFinal}.filtered
+
+rm -f ${convadingLonglistCombinedFiltered}
+rm -f ${convadingFinallistFiltered}
 
 #
 ##
@@ -94,6 +98,7 @@ Locations () {
 	bedtools intersect -v -a ${xhmmBed} -b ${convadingBed} | awk 'BEGIN {OFS="\t"}{print $0}' | uniq > ${xhmmOnlyCall}
 	
 	rm -f ${combinedFiltered} ${convadingFinallistFiltered} ${xhmmXcnvFinalFiltered}
+	partialDone="false"
 	if [ -s ${overlapCall} ]
 	then
         	while read line
@@ -107,6 +112,7 @@ Locations () {
  		if [[ "${boom}" == "F" && -s ${convadingOnlyCall} ]]
         	then
         	        echo "Call_has_partial_overlap"
+			partialDone="true"
         	        while read part 
 			do
 				grep "$part" ${convadingFinallist}
@@ -124,13 +130,13 @@ Locations () {
                         fi
                 done < ${overlapCall}.XHMM >> ${combinedFiltered}.XHMM
 
-	elif [[ "${boom}" == "F" && -s ${convadingOnlyCall} ]]
+	elif [[ "${boom}" == "F" && -s ${convadingOnlyCall} && "${partialDone}" == "false" ]]
 	then
 		echo "Call_has_no_overlap"
 		while read part	
                 do
 			grep "$part" ${convadingFinallist}
-		done<${convadingOnlyCall} >>  ${combinedFiltered}.failedSampleTree					
+		done<${convadingOnlyCall} >>  ${combinedFiltered}.failedSampleTree			
 	fi
 
 	
@@ -189,7 +195,7 @@ Locations_longlist () {
                        	then
                        		grep "$line" ${convadingLonglist} >> ${convadingLonglistCombinedFiltered}
                       	fi
-               	done <${overlapLonglistCall} >> ${convadingLonglistCombinedFiltered}
+               	done <${overlapLonglistCall}
 
 		sizeXhmmXcnvFinal=$(($(cat ${xhmmXcnvFinal} | wc -l) -1))
 		if [ ${sizeXhmmXcnvFinal} == ${sizeOverlapLonglist} ]
@@ -229,7 +235,7 @@ Number_of_genes () {
 	then
     		echo "Good_number_of_genes"
 	else
-    		tail -n +2 ${convadingFinallist} | awk -v boom="$2" '{print $0"\t"boom"\tToo_many_genes"}' 
+    		awk -v boom="$2" '{print $0"\t"boom"\tToo_many_genes"}' $1
 	fi
 }
 
@@ -562,24 +568,29 @@ else
 fi
 
 
-if [ -f ${longlistPlusPlus} ]
-then
-	SIZE=$(cat ${longlistPlusPlus} | wc -l)
+#if [ -f ${longlistPlusPlus} ]
+#then
+#	SIZE=$(cat ${longlistPlusPlus} | wc -l)
 	echo "write header to ${longlistPlusPlusFinal}"
 	echo -e "CHR\tSTART\tSTOP\tGENE\tNUMBER_OF_TARGETS\tNUMBER_OF_TARGETS_PASS_SHAPIRO-WILK_TEST\tABBERATION\tCall\tFilter\tKB\tMID_BP\tTARGETS\tQ_EXACT\tQ_NON_DIPLOID\tQ_START\tQ_STOP\tMEAN_RD\tMEAN_ORIG_RD" > ${longlistPlusPlusFinal}
-	echo "longlistPlusPlus size = ${SIZE}"
-fi
+#	echo "longlistPlusPlus size = ${SIZE}"
+#fi
 
 count=0
 while read line
 do
 	if [[ ${count} -ne 0 ]]
 	then
-		perl -pi -e 's| ||g' ${longlistPlusPlus}
-		if grep "$line" ${longlistPlusPlus}
+		if [ -f  ${longlistPlusPlus} ]
 		then
+			perl -pi -e 's| ||g' ${longlistPlusPlus}
+			if grep "$line" ${longlistPlusPlus}
+			then
 		
-			grep "$line" ${longlistPlusPlus}  >> ${longlistPlusPlusFinal}
+				grep "$line" ${longlistPlusPlus}  >> ${longlistPlusPlusFinal}
+			else
+				echo -e "${line}\t-\t-"  >> ${longlistPlusPlusFinal}
+			fi
 		else
 			echo -e "${line}\t-\t-"  >> ${longlistPlusPlusFinal}
 		fi
