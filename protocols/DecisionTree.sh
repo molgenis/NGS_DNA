@@ -572,7 +572,7 @@ fi
 #then
 #	SIZE=$(cat ${longlistPlusPlus} | wc -l)
 	echo "write header to ${longlistPlusPlusFinal}"
-	echo -e "CHR\tSTART\tSTOP\tGENE\tNUMBER_OF_TARGETS\tNUMBER_OF_TARGETS_PASS_SHAPIRO-WILK_TEST\tABBERATION\tCall\tFilter\tKB\tMID_BP\tTARGETS\tQ_EXACT\tQ_NON_DIPLOID\tQ_START\tQ_STOP\tMEAN_RD\tMEAN_ORIG_RD" > ${longlistPlusPlusFinal}
+	echo -e "CHR\tSTART\tSTOP\tGENE\tNUMBER_OF_TARGETS\tNUMBER_OF_TARGETS_PASS_SHAPIRO-WILK_TEST\tABBERATION\tCall\tFilter\tKB\tMID_BP\tTARGETS\tQ_EXACT\tQ_SOME\tQ_NON_DIPLOID\tQ_START\tQ_STOP\tMEAN_RD\tMEAN_ORIG_RD" > ${longlistPlusPlusFinal}
 #	echo "longlistPlusPlus size = ${SIZE}"
 #fi
 
