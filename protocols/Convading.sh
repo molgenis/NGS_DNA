@@ -313,5 +313,6 @@ then
 	
 	done
 else
+	touch ${intermediateDir}/convading.skipped
     	echo "for this bedfile there is no Controlsgroup"
 fi
