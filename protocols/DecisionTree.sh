@@ -32,6 +32,7 @@
 #string xhmmPlusPlus
 #string longlistPlusPlusFinal
 #string overlapLonglistCall
+#string intermediateDir
 #string bedToolsVersion
 
 sleep 5
