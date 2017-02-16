@@ -157,18 +157,23 @@ do
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/
 		printf "."
 	fi
-	if [ -f ${intermediateDir}/${sa}_step10.xcnv.final ]
-	then
-		echo "copying Convading data"	
-		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.totallist.txt ${projectResultsDir}/variants/cnv/
-		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.shortlist.txt ${projectResultsDir}/variants/cnv/
-		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.longlist.txt ${projectResultsDir}/variants/cnv/
-		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log ${projectResultsDir}/variants/cnv/
-		cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log.sampleRatio ${projectResultsDir}/variants/cnv/${sa}.sampleRatio.txt
-		cp ${intermediateDir}/Convading//CreateFinalList/${sa}/*.shortlist.finallist.txt ${projectResultsDir}/variants/cnv/
-		echo "copying XHMM results"
-		cp ${intermediateDir}/${sa}_step10.xcnv.final ${projectResultsDir}/variants/cnv/
-	fi
+
+	if ls ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log 1> /dev/null 2>&1
+        then
+                echo "copying Convading data"
+                cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.totallist.txt ${projectResultsDir}/variants/cnv/
+                cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.shortlist.txt ${projectResultsDir}/variants/cnv/
+                cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.longlist.txt ${projectResultsDir}/variants/cnv/
+                cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log ${projectResultsDir}/variants/cnv/
+                cp ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log.sampleRatio ${projectResultsDir}/variants/cnv/${sa}.sampleRatio.txt
+                cp ${intermediateDir}/Convading//CreateFinalList/${sa}/*.shortlist.finallist.txt ${projectResultsDir}/variants/cnv/
+        fi
+        if [ -f ${intermediateDir}/${sa}_step10.xcnv.final ]
+        then
+
+                echo "copying XHMM results"
+                cp ${intermediateDir}/${sa}_step10.xcnv.final ${projectResultsDir}/variants/cnv/
+        fi
 
 	if [ -f ${intermediateDir}/${sa}.longlistplusplusFinal.txt ]
 	then
