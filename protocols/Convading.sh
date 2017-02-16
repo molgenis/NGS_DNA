@@ -9,6 +9,7 @@
 #string dedupBam
 #string convadingInputBamsDir
 #string convadingStartWithBam
+#string convadingLogfile
 #string convadingStartWithMatchScore
 #string convadingStartWithBestScore
 #string convadingStartWithMatchScoreGender
@@ -215,6 +216,8 @@ then
 					printf "moving ${tmpConvadingStartWithBestScore} to ${convadingStartWithBestScore} .. "
 					mv ${tmpConvadingStartWithBestScore}/* ${convadingStartWithBestScore}
 					printf " .. done\n"
+					
+					
 				else
 					mkdir -p ${convadingStartWithBestScoreGender}
 				
@@ -230,31 +233,58 @@ then
 	                		printf " .. done\n"
 			
 				fi
-				
+
+				if [ -d ${convadingStartWithBestScore} ]
+                               	then
+	
+                                        for z in $(ls ${convadingStartWithBestScore}/*.txt)
+                                        do
+                                                BEFORE=$(cat $z | wc -l)
+                                                BAS=$(basename $z)
+                                                awk '{
+                                                        if ($1 != "X"){
+                                                                print $0
+                                                        }
+                                                }' $z > ${convadingStartWithBestScore}/${BAS}.tmp
+			
+                                                AFTER=$(cat ${convadingStartWithBestScore}/${BAS}.tmp | wc -l)
+                                                if [ $BEFORE -eq $AFTER ]
+                                                then
+                                                    	echo "no calls on X for ${z}"
+                                                else
+                                                        echo "removing all X calls from ${z} to ${convadingStartWithBestScore}/${BAS}"
+                                                fi
+						echo "moving ${convadingStartWithBestScore}/${BAS}.tmp to ${convadingStartWithBestScore}/${BAS}"
+                                        	mv ${convadingStartWithBestScore}/${BAS}.tmp ${convadingStartWithBestScore}/${BAS}
+						
+					done
+					grep "SAMPLE_RATIO:" ${convadingLogfile} | awk '{print $2}' > ${convadingLogfile}.sampleRatio
+                                fi
+
+				if [ -d ${convadingStartWithBestScoreGender} ]
+				then 
+			
+					for z in $(ls ${convadingStartWithBestScoreGender}/*.txt)
+					do
+						BEFORE=$(cat $z | wc -l)
+						BAS=$(basename $z)
+						awk '{
+							if ($1 == "X"){
+								print $0
+							}
+						}' $z > ${convadingStartWithBestScore}/${BAS} 
+						AFTER=$(cat ${convadingStartWithBestScore}/${BAS} | wc -l)
+						if [ $BEFORE -eq $AFTER ]
+						then
+							echo "no calls on X for ${z}"
+						else
+							echo "writing all X calls from ${z} to ${convadingStartWithBestScore}/${BAS}"
+						fi
+					done
+				fi	
 				touch ${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished
 			fi
-			if [ -d ${convadingStartWithBestScoreGender} ]
-			then 
-		
-				for z in $(ls ${convadingStartWithBestScoreGender}/*.txt)
-				do
-					BEFORE=$(cat $z | wc -l)
-					BAS=$(basename $z)
-					awk '{
-						if ($1 == "X"){
-							print $0
-						}
-					}' $z >> ${convadingStartWithBestScore}/${BAS} 
-					AFTER=$(cat ${convadingStartWithBestScore}/${BAS} | wc -l)
-					if [ $BEFORE -eq $AFTER ]
-					then
-						echo "no calls on X for ${z}"
-					else
-						echo "writing all X calls from ${z} to ${convadingStartWithBestScore}/${BAS}"
-					fi
-				done
-			fi	
-		
+			
 			##STEP 5
 			if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step5.finished ]
 			then
