@@ -10,7 +10,6 @@
 #string insertSizeMetrics
 #string flagstatMetrics
 #string externalSampleID
-#string ngsUtilsVersion
 #string pythonVersion
 #string logsDir 
 #string groupname
