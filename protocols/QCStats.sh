@@ -19,6 +19,7 @@
 #string capturingKit
 #string coveragePerBaseDir
 #string coveragePerTargetDir
+#string sampleNameID
 
 #Load module
 module load ${pythonVersion}
@@ -39,7 +40,7 @@ printf "Sample:\t${externalSampleID}\n" > ${qcMetrics}
 #If paired-end do fastqc for both ends, else only for one
 python ${EBROOTNGS_DNA}/report/pull_DNA_Seq_Stats.py \
 -a ${alignmentMetrics} \
--c ${sampleConcordanceFile} \
+-c ${sampleNameID}.concordance.txt \
 -s ${hsMetrics} \
 -i ${insertSizeMetrics} \
 -f ${flagstatMetrics} \
