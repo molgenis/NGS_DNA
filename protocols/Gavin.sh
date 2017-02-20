@@ -65,8 +65,8 @@ java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
 mv ${tmpGavinOutputFirstPass} ${gavinOutputFirstPass}
 echo "moved ${tmpGavinOutputFirstPass} to ${gavinOutputFirstPass}"
 
-mv ${tmpGavinToCADD} ${gavinToCADD}
-echo "moved ${tmpGavinToCADD} to ${gavinToCADD}"
+awk '{if ($1 != "NC_001422.1"){print $0}}' ${tmpGavinToCADD} > ${gavinToCADD}
+echo "updated ${tmpGavinToCADD} => ${gavinToCADD}"
 
 echo "GAVIN round 1 is finished, uploading to CADD..."
 
