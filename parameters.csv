@@ -22,8 +22,6 @@ javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-${toolChain}
 molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
 ngsUtilsVersion,ngs-utils/16.10.2
-plink1Version,PLINK/1.07-x86_64
-plink2Version,plink/1.9-foss-2015b
 plinkSeqVersion,plinkseq/x86_64-0.10
 picardVersion,picard/1.130-Java-1.7.0_80
 pythonVersion,Python/2.7.10-${toolChain}
@@ -54,7 +52,6 @@ sourcesDir,${appsDir}/sources/
 dbSNPDir,${dataDir}/dbSNP/
 dbNSFPDir,${dataDir}/dbNSFP/
 inhouseIntervalsDir,${dataDir}/UMCG/
-inputData,${tmpDataDir}/inputData/
 hpoDir,${dataDir}/HPO/
 sequenomDir,${dataDir}/Sequenom/
 tmpDataDir,${workDir}/${tmpName}/
@@ -96,7 +93,6 @@ capturedIntervalsPerBase,${captured}.uniq.per_base.bed
 coveragePerBaseDir,${inhouseIntervalsDir}/Diagnostics/CoveragePerBase/
 coveragePerTargetDir,${inhouseIntervalsDir}/Diagnostics/CoveragePerTarget/
 capturedExomeIntervals,${dataDir}/UMCG/All_Exon_v1/${indexFileID}/${nameBed}.interval_list
-capturedExomeBed,${dataDir}/UMCG/All_Exon_v1/${indexFileID}/${nameBed}.bed
 
 #### Projects ####
 projectDir,${tmpDataDir}/projects/${project}/${runid}
@@ -342,10 +338,3 @@ sampleRatios,${cSampleNameID}_Sample_ratios.txt
 longlistPlusPlus,${intermediateDir}/${externalSampleID}.longlistplusplus.txt
 xhmmPlusPlus,${intermediateDir}/${externalSampleID}.xhmmplusplus.txt
 longlistPlusPlusFinal,${intermediateDir}/${externalSampleID}.longlistplusplusFinal.txt
-
-
-sampleConcordanceFile,${intermediateDir}/${externalSampleID}.ConcordanceFile.txt
-arrayTmpMap,${intermediateDir}/${externalSampleID}.concordance.tmp.map
-arrayMapFile,${intermediateDir}/${externalSampleID}.concordance.map
-familyList,${intermediateDir}/${externalSampleID}.familyList.txt
-arrayFileLocation,${inputData}/${arrayFile}
