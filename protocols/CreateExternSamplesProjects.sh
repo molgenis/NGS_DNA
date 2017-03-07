@@ -26,7 +26,7 @@
 #string outputdir
 #string workflowpath
 
-#list internalSampleID
+#list externalSampleID
 #string project
 #string logsDir 
 #string ngsversion
@@ -61,8 +61,8 @@ cd ${projectRawTmpDataDir}
 #
 
 
-n_elements=${internalSampleID[@]}
-max_index=${#internalSampleID[@]}-1
+n_elements=${externalSampleID[@]}
+max_index=${#externalSampleID[@]}-1
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
 	if [[ ${seqType[samplenumber]} == "SR" ]]

@@ -21,6 +21,7 @@
 #string sortVCFpl
 #string indexFile
 #string indexFileFastaIndex
+#string extension
 
 #Load module GATK,tabix
 ${stage} ${gatkVersion}
@@ -54,9 +55,9 @@ INPUTS=()
 
 for b in "${batchID[@]}"
 do
-	if [ -f ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf ]
+	if [ -f ${projectPrefix}.batch-${b}.${extension} ]
 	then
-		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf")
+		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.${extension}")
 	fi
 done
 

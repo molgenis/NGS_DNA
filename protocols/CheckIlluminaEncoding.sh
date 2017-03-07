@@ -1,10 +1,10 @@
-#MOLGENIS nodes=1 ppn=1 mem=1gb walltime=03:00:00
+#MOLGENIS nodes=1 ppn=1 mem=1gb walltime=08:59:00
 
 #Parameter mapping
 #string tmpName
 #string seqType
-#string peEnd1BarcodeFqGz
-#string peEnd2BarcodeFqGz
+#string peEnd1BarcodePhiXFqGz
+#string peEnd2BarcodePhiXFqGz
 #string srBarcodeFqGz
 #string intermediateDir
 #string tmpDataDir
@@ -19,7 +19,7 @@ checkIlluminaEncoding() {
 barcodeFqGz=$1
 echo ${barcodeFqGz}
 
-lines=(`zcat ${barcodeFqGz} | head -8000 | tail -192 | awk 'NR % 4 == 0'`)
+lines=($(zcat ${barcodeFqGz} | head -8000 | tail -192 | awk 'NR % 4 == 0'))
 count=1
 nodecision=0
 numberoflines=0
@@ -75,11 +75,11 @@ then
 	encoding="1.9"
 fi
 
-if [ "${encoding}" == "1.9"  ]
+if [ "${encoding}" == "1.9" ]
 then
 	echo "encoding is Illumina 1.8 - Sanger / Illumina 1.9"
 else
-	#make fasta out of the fq.gz file
+	#make fastQ out of the fq.gz file
         gzip -d -c ${barcodeFqGz} > ${barcodeFqGz}.fq
 	mkdir -p ${projectRawTmpDataDir}/IlluminaEncoding1.5
         mv ${barcodeFqGz} ${projectRawTmpDataDir}/IlluminaEncoding1.5/
@@ -101,8 +101,8 @@ then
 
 elif [ "${seqType}" == "PE" ]
 then
-        checkIlluminaEncoding ${peEnd1BarcodeFqGz}
-        checkIlluminaEncoding ${peEnd2BarcodeFqGz}
+        checkIlluminaEncoding ${peEnd1BarcodePhiXFqGz}
+        checkIlluminaEncoding ${peEnd2BarcodePhiXFqGz}
 else
 	echo "SeqType unknown"
 	exit 1
