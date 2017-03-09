@@ -8,6 +8,7 @@ targetedInsertSize,200
 checkStage,module list
 
 ### Tool versions ####
+bbMapVersion,BBMap/35.69-Java-1.7.0_80
 bedToolsVersion,BEDTools/2.25.0-foss-2015b
 bwaVersion,BWA/0.7.12-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
@@ -33,6 +34,7 @@ snpEffVersion,snpEff/4.3-Java-1.7.0_80
 htsLibVersion,HTSlib/1.3.2-foss-2015b
 tabixVersion,tabix/0.2.6-${toolChain}
 vepVersion,VEP/${vepDBVersion}
+verifyBamIDVersion,verifyBamID/1.1.3-foss-2015b 
 wkHtmlToPdfVersion,wkhtmltox/0.12.3
 xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain}
 hpoVersion,90
@@ -211,6 +213,12 @@ projectFinalVcf,${projectPrefix}.final.vcf
 
 fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 
-noExtension,variant.calls.genotyped.vcf
+noExtension,variant.calls.genotyped.vcf.PBToutput.vcf
 annotatedExtension,variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
 
+peEnd1BarcodeFastQcZip,${intermediateDir}/${filePrefix}_${barcode}_1.fq_fastqc.zip
+peEnd2BarcodeFastQcZip,${intermediateDir}/${filePrefix}_${barcode}_2.fq_fastqc.zip
+srBarcodeFastQcZip,${intermediateDir}/${filePrefix}_${barcode}.fq_fastqc.zip
+barcodeFastQcFolder,${intermediateDir}/${filePrefix}_${barcode}.fq_fastqc
+barcodeFastQcFolderPE1,${intermediateDir}/${filePrefix}_${barcode}_1.fq_fastqc
+barcodeFastQcFolderPE2,${intermediateDir}/${filePrefix}_${barcode}_2.fq_fastqc

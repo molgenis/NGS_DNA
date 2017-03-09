@@ -12,13 +12,14 @@
 
 ml $gatkVersion
  
-if [ -f ${projectBatchGenotypedVariantCalls} ]
+if [ -f "${projectBatchGenotypedVariantCalls}" ]
 then
 java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar ${EBROOTGATK}/${gatkJar} \
    -T PhaseByTransmission \
    -R ${indexFile} \
-   -V ${projectBatchGenotypedVariantCalls} \
+   -V "${projectBatchGenotypedVariantCalls}" \
+   -mvf "${projectBatchGenotypedVariantCalls}".mvf \
    -ped ${intermediateDir}/children.ped \
-   -o ${projectBatchGenotypedVariantCalls}.PBToutput.vcf
+   -o "${projectBatchGenotypedVariantCalls}".PBToutput.vcf
 
 fi
