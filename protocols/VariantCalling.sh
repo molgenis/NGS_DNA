@@ -108,8 +108,6 @@ else
         		$inputs \
 			-dontUseSoftClippedBases \
 	        	--dbsnp ${dbSnp} \
-       			-stand_emit_conf 20.0 \
-        		-stand_call_conf 10.0 \
         		-o "${tmpSampleBatchVariantCalls}" \
         		-L "${capturedBatchBed}" \
         		--emitRefConfidence GVCF \
@@ -124,8 +122,6 @@ else
 			--dbsnp ${dbSnp}\
 			${inputs} \
 			-dontUseSoftClippedBases \
-			-stand_call_conf 10.0 \
-			-stand_emit_conf 20.0 \
 			-o "${tmpSampleBatchVariantCalls}" \
 			-L "${capturedBatchBed}" \
 			--emitRefConfidence GVCF \
@@ -149,8 +145,6 @@ else
                         --dbsnp ${dbSnp}\
                         ${inputs} \
                         -dontUseSoftClippedBases \
-                        -stand_call_conf 10.0 \
-                        -stand_emit_conf 20.0 \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
@@ -164,8 +158,6 @@ else
                         --dbsnp ${dbSnp}\
                         ${inputs} \
                         -dontUseSoftClippedBases \
-                        -stand_call_conf 10.0 \
-                        -stand_emit_conf 20.0 \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
                         --emitRefConfidence GVCF \
@@ -180,8 +172,6 @@ else
                 $inputs \
                 -dontUseSoftClippedBases \
                 --dbsnp ${dbSnp} \
-                -stand_emit_conf 20.0 \
-                -stand_call_conf 10.0 \
                 -o "${tmpSampleBatchVariantCalls}" \
                 -L "${capturedBatchBed}" \
 		--emitRefConfidence GVCF \
