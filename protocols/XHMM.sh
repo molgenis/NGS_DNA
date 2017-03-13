@@ -44,7 +44,7 @@ basenameDedupBam=$(basename ${dedupBam})
 nameOfSample=${basenameDedupBam%%.*}
 chrXCalls="unset"
 autosomalCalls="unset"
-
+genderUnknown="false"
 if grep ${capturingKit} ${ControlsVersioning}
 then
 	
@@ -74,8 +74,14 @@ then
 	run+=("autosomal")
 	if [ $size != 0 ]
 	then
-        	chrXRun="true"
-        	run+=("$Gender")
+		if [ $Gender == "Unknown" ]
+		then
+			genderUnknown="true"
+        		echo "Gender is unknown, there will be no analysis gender based"
+		else
+			chrXRun="true"
+	        	run+=("$Gender")
+		fi
 	fi
 	onlyHeader="false"
 	onlyHeaderGender="false"
@@ -96,11 +102,6 @@ then
         	elif [[ "${i}" == "Female" || "${i}" == "Vrouw" ]]
         	then
         		xhmmControlsDir=${cxControlsDir}/${cDir}/XHMM/Female/
-        	else
-        		echo "THIS CANNOT BE TRUE, no Male, Female or autosomal!! --> Gender is $i"
-			
-			trap - EXIT
-                	exit 0
         	fi
 		
 		if [ -d ${xhmmControlsDir} ]
@@ -139,7 +140,6 @@ then
         			#
 		
 				## Creating bams directory
-				#mkdir -p ${xhmmDepthOfCoverage}/Gender/
 		
 				rm -f ${xhmmDir}/${CAPT}.READS.bam.list
 		
@@ -523,6 +523,10 @@ then
 		cp ${xhmmXcnv}.final ${intermediateDir}
 		echo "copied ${xhmmXcnv}.final to ${intermediateDir}/$(basename ${xhmmXcnv}.final)"
 	fi	
+
+	if [ "${genderUnknown}" == "true" ]
+	then
+		echo "Gender is unknown, there will be no analysis gender based"
 	
 else
 	echo "for this bedfile there is no Controlsgroup"
