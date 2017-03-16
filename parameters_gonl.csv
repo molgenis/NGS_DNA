@@ -14,6 +14,7 @@ bwaVersion,BWA/0.7.12-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
+cutadaptVersion,cutadapt/1.9.1-foss-2015b-Python-2.7.10
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.6-Java-1.8.0_74
@@ -72,8 +73,8 @@ projectRawArrayTmpDataDir,${projectDir}/rawdata/array/
 
 #### INDEX FILES #####
 buildID,b38
-indexFileID,GRCh38_HMF_AS1
-indicesDir,${dataDir}/GRC/GRCh38/analysis_sets/
+indexFileID,GRCh38_HMF_AS1_new
+indicesDir,${dataDir}/GRC/GRCh38/analysis_sets/updated/
 indexFileFastaIndex,${indicesDir}/${indexFileID}.fa.fai
 indexFile,${indicesDir}/${indexFileID}.fa
 indexFileDictionary,${indicesDir}/${indexFileID}.dict
@@ -146,6 +147,8 @@ KGPhase1IndelsVcfIdx,${KGPhase1IndelsVcf}.idx
 MillsGoldStandardDir,${indicesDir}/Mills_and_1000G_gold_standard/
 MillsGoldStandardIndelsVcf,${MillsGoldStandardDir}/1000G_phase1.indels_Mills_and_1000G_gold_standard.indels.b37.human_g1k_v37.vcf
 MillsGoldStandardChr1Intervals,${MillsGoldStandardDir}/1000G_phase1.indels_Mills_and_1000G_gold_standard.indels.b37.human_g1k_v37.chr1.intervals
+MillsGoldStandardIndelsb38Vcf,${indicesDir}/Mills_and_1000G_gold_standard.indels.b38.primary_assembly.vcf
+
 
 ### Protocols 11, 12, 13 and 14 (CheckSex, Manta, CoveragePerBase, SequonomConcordanceCheck, CollectBamMetrics) ###
 whichSex,${sampleNameID}.chosenSex.txt
@@ -222,3 +225,5 @@ srBarcodeFastQcZip,${intermediateDir}/${filePrefix}_${barcode}.fq_fastqc.zip
 barcodeFastQcFolder,${intermediateDir}/${filePrefix}_${barcode}.fq_fastqc
 barcodeFastQcFolderPE1,${intermediateDir}/${filePrefix}_${barcode}_1.fq_fastqc
 barcodeFastQcFolderPE2,${intermediateDir}/${filePrefix}_${barcode}_2.fq_fastqc
+
+walltimeCheckIllumina,08:59:00

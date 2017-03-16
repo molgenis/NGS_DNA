@@ -1,9 +1,9 @@
 step,protocol,dependencies
 s00_FastQC,protocols/FastQC.sh,
-s01_TrimReads,protocols/TrimReads.sh,s00_FastQC
-s02_CheckIlluminaEncoding,protocols/CheckIlluminaEncoding.sh,s01_TrimReads
-s03_SpikePhiX,protocols/SpikePhiX.sh,s02_CheckIlluminaEncoding
-s04_BwaAlign,protocols/BwaAlign.sh,s03_SpikePhiX
+s01_MaskAdapters,protocols/MaskAdapters.sh,s00_FastQC
+s02_SpikePhiX,protocols/SpikePhiX.sh,s01_MaskAdapters
+s03_CheckIlluminaEncoding,protocols/CheckIlluminaEncoding.sh,s02_SpikePhiX
+s04_BwaAlign,protocols/BwaAlign.sh,s03_CheckIlluminaEncoding
 s05_SamToBam,protocols/SamToBam.sh,s04_BwaAlign
 s06_SortBam,protocols/SortBam.sh,s05_SamToBam
 s07_MergeBam,protocols/MergeBam.sh,s06_SortBam;inputMergeBam=alignedSortedBam;inputMergeBamIdx=alignedSortedBamIdx
@@ -17,7 +17,7 @@ s12a_SnpFiltration,protocols/SnpFiltration.sh,s11_SplitIndelsAndSNPs
 s12b_IndelFiltration,protocols/IndelFiltration.sh,s11_SplitIndelsAndSNPs
 s13_MergeIndelsAndSnps,protocols/MergeIndelsAndSnps.sh,s12b_IndelFiltration;s12a_SnpFiltration
 s14_VerifyBamID,protocols/VerifyBamID.sh,s13_MergeIndelsAndSnps
-s15a_CompressingSampleVcf,protocols/CompressingFinalVcf.sh,s14_MergeIndelsAndSnps;finalVcf=sampleFinalVcf
-s15b_CompressingProjectVcf,protocols/CompressingFinalVcf.sh,s14_MergeIndelsAndSnps;finalVcf=projectFinalVcf
+s15a_CompressingSampleVcf,protocols/CompressingFinalVcf.sh,s13_MergeIndelsAndSnps;finalVcf=sampleFinalVcf
+s15b_CompressingProjectVcf,protocols/CompressingFinalVcf.sh,s13_MergeIndelsAndSnps;finalVcf=projectFinalVcf
 s16_CountAllFinishedFiles,protocols/CountAllFinishedFiles.sh,s15a_CompressingSampleVcf;s15b_CompressingProjectVcf
 s17_CopyToResultsDir,protocols/CopyToResultsDir.sh,s16_CountAllFinishedFiles
