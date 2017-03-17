@@ -22,7 +22,7 @@ declare MC_jobDependencies=''
 #     bash submit.sh --qos=SomeLevel
 # if you don't want to use the default QoS.
 #
-MC_sbatchOptions="${@}"
+MC_submitOptions="${@}"
 
 #
 ##
@@ -56,7 +56,7 @@ function cancelJobs () {
 function processJob () {
 	local jobName="${1}"
 	local jobScript="${jobName}.sh"
-	local sbatchOptions="${2:-}" # Optional.
+	local submitOptions="${2:-}" # Optional.
 	local dependencies="${3:-}"  # Optional.
 	local n=1
 	local max=5
@@ -78,10 +78,10 @@ function processJob () {
 	#
 	set +e
 	while (true); do
-		local sbatchCommand="sbatch ${sbatchOptions} ${dependencies} ${jobScript}"
+		local submitCommand="sbatch ${submitOptions} ${dependencies} ${jobScript}"
 		echo "INFO: Trying to submit batch job:"
-		echo "          ${sbatchCommand}"
-		output=$(${sbatchCommand} 2>&1)
+		echo "          ${submitCommand}"
+		output=$(${submitCommand} 2>&1)
 		if [[ ${?} -eq 0 ]]; then
 			echo "      ${output}"
 			MC_jobID=${output##"Submitted batch job "}
@@ -90,7 +90,7 @@ function processJob () {
 		else
 			if [[ $n -lt ${max} ]]; then
 				echo "ERROR: Attempt ${n}/${max} failed for command:"
-				echo "           ${sbatchCommand}"
+				echo "           ${submitCommand}"
 				echo "      ${output}"
 				echo "WARN: Sleeping for ${delay} seconds before trying again."
 				sleep "${delay}"
@@ -171,13 +171,16 @@ MC_jobDependencies='--dependency=afterok'
 		MC_jobDependencies+=":$${d}"
 	fi
 </#foreach>
-if ! <#noparse>${MC_jobDependenciesExist}</#noparse>; then
+<#noparse>
+if ! ${MC_jobDependenciesExist}; then
 	MC_jobDependencies=''
 fi
+</#noparse>
+
 #
-# Process job: either skip if job if previously finished successfully or submit job to batch scheduler.
+# Process job: either skip if job previously finished successfully or submit job to batch scheduler.
 #
-processJob "${t.name}" <#noparse>"${MC_sbatchOptions}" "${MC_jobDependencies}"</#noparse>
+processJob "${t.name}" <#noparse>"${MC_submitOptions}" "${MC_jobDependencies}"</#noparse>
 ${t.name}=<#noparse>"${MC_jobID}"</#noparse>
 
 </#foreach>
