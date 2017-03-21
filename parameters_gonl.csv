@@ -109,9 +109,12 @@ projectQcDir,${projectDir}/qc/
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
+peEnd1BarcodeTrimmedFqGz,${rawFile}_trimmed_1.${rawFileExt}
+peEnd2BarcodeTrimmedFqGz,${rawFile}_trimmed_2.${rawFileExt}
 peEnd1BarcodePhiXFqGz,${rawFile}.phiX_1.${rawFileExt}
 peEnd2BarcodePhiXFqGz,${rawFile}.phiX_2.${rawFileExt}
 srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
+srBarcodeTrimmedFqGz,${rawFile}_trimmed.phiX.${rawFileExt}
 peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
 peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
 srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
@@ -227,3 +230,6 @@ barcodeFastQcFolderPE1,${intermediateDir}/${filePrefix}_${barcode}_1.fq_fastqc
 barcodeFastQcFolderPE2,${intermediateDir}/${filePrefix}_${barcode}_2.fq_fastqc
 
 walltimeCheckIllumina,08:59:00
+wgsMetrics,${dedupBam}.wgs_metrics
+bioPetVersion,Biopet/0.8.0-26269612
+bioPetJar,Biopet-0.8.0-26269612.jar
