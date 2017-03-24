@@ -214,7 +214,7 @@ gavinFromCADD,${sampleNameID}.GAVIN.fromCadd.tsv
 gavinToCADDgz,${sampleNameID}.GAVIN.toCadd.tsv.gz
 gavinFromCADDgz,${sampleNameID}.GAVIN.fromCadd.tsv.gz
 gavinOutputFinalMerged,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.vcf
-gavinOutputFinalMergedRLV,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.rlv.vcf
+gavinOutputFinalMergedRLV,${sampleNameID}.GAVIN.rlv.vcf
 vepDataDir,${dataDir}/Ensembl/VEP/${vepDBVersion}
 sampleVariantsMergedGavin,${sampleNameID}.variant.calls.GATK.vcf
 projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.VEP.vcf
