@@ -129,41 +129,10 @@ def parse_concordance_file(concordance_path):
     """Given a path to a concordance output file, return a
     dictionary consisting of its column, value mappings.
     """
-    data_mark = 'name'
-    tokens = []
-    with open(concordance_path, 'r') as source:
-        line = source.readline().strip()
-        fsize = os.fstat(source.fileno()).st_size
-        while True:
-            if not line.startswith(data_mark):
-                # encountering EOF before metrics is an error
-                if source.tell() == fsize:
-                    raise ValueError("Metrics not found inside %r" % \
-                            concordance_path)
-                line = source.readline().strip()
-            else:
-                break
 
-        assert line.startswith(data_mark)
-        # split header line and append to tokens
-        tokens.append(line.split('\t'))
-        # and the values (one row after)
-        tokens.append(source.readline().strip().split('\t'))
-    data = {}
-    for col, value in zip(tokens[0], tokens[1]):
-      if col not in COLNAMES_INSERTSIZE:
-        continue;
-      else:
-        if not value:
-            data[COLNAMES_CONCORDANCE[col]] = None
-        elif col.startswith('PCT') or col.startswith('MEDIAN'):
-            if value != '?':
-                data[COLNAMES_CONCORDANCE[col]] = float(value)
-            else:
-                warnings.warn("Undefined value for %s in %s: %s" % (col,
-                    concordance_path, value))
-                data[COLNAMES_CONCORDANCE[col]] = None
-    return data
+    with open (concordance_path, 'r') as source:
+	line = source.readline().strip()
+    return {'Overall concordance' : line}
 
 def parse_insertSize_metrics_file(insertSize_metrics_path):
     """Given a path to a Picard CollectMultipleMetrics [insertSize] output file, return a
