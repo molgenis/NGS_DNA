@@ -16,11 +16,11 @@ declare MC_jobDependenciesExist=false
 declare MC_jobDependencies=''
 #
 # Get commandline arguments.
-# Any arguments specified are assumed to be sbatch options 
-# and passed on to sbatch unparsed "as is"...
-# You can for example specify a Quality of Service (QoS) level using
-#     bash submit.sh --qos=SomeLevel
-# if you don't want to use the default QoS.
+# Any arguments specified are assumed to be qsub options 
+# and passed on to qsub unparsed "as is"...
+# You can for example specify a queue as
+#     bash submit.sh -q all.q
+# if you don't want to use the default queue.
 #
 MC_submitOptions="${@}"
 
@@ -40,7 +40,7 @@ function cancelJobs () {
 	while IFS=':' read -r jobName jobID; do
 		echo -n "INFO: Cancelling job ${jobName} (${jobID})... "
 		set +e
-		scancel -Q "${jobID}"
+		qdel "${jobID}"
 		local status=${?}
 		set -e
 		if [ ${status} = 0 ]; then
@@ -78,13 +78,13 @@ function processJob () {
 	#
 	set +e
 	while (true); do
-		local submitCommand="sbatch ${submitOptions} ${dependencies} ${jobScript}"
+		local submitCommand="qsub -terse ${submitOptions} ${dependencies} ${jobScript}"
 		echo "INFO: Trying to submit batch job:"
 		echo "          ${submitCommand}"
 		output=$(${submitCommand} 2>&1)
 		if [[ ${?} -eq 0 ]]; then
 			echo "      ${output}"
-			MC_jobID=${output##"Submitted batch job "}
+			MC_jobID=${output}
 			echo "${jobName}:${MC_jobID}" >> ${MC_submittedJobIDs}
 			break
 		else
@@ -164,15 +164,17 @@ touch molgenis.submit.started
 # Build dependency string.
 #
 MC_jobDependenciesExist=false
-MC_jobDependencies='--dependency=afterok'
+MC_jobDependencies='-hold_jid '
 <#foreach d in t.previousTasks>
 	if [[ -n "$${d}" ]]; then
 		MC_jobDependenciesExist=true
-		MC_jobDependencies+=":$${d}"
+		MC_jobDependencies+="$${d},"
 	fi
 </#foreach>
 <#noparse>
-if ! ${MC_jobDependenciesExist}; then
+if ${MC_jobDependenciesExist}; then
+	MC_jobDependencies=${MC_jobDependencies%%","}
+else
 	MC_jobDependencies=''
 fi
 </#noparse>
