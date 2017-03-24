@@ -73,8 +73,8 @@ projectRawArrayTmpDataDir,${projectDir}/rawdata/array/
 
 #### INDEX FILES #####
 buildID,b38
-indexFileID,GRCh38_HMF_AS1_new
-indicesDir,${dataDir}/GRC/GRCh38/analysis_sets/updated/
+indexFileID,GRCh38_AS1
+indicesDir,${dataDir}/GRC/GRCh38/analysis_sets/
 indexFileFastaIndex,${indicesDir}/${indexFileID}.fa.fai
 indexFile,${indicesDir}/${indexFileID}.fa
 indexFileDictionary,${indicesDir}/${indexFileID}.dict
@@ -109,15 +109,16 @@ projectQcDir,${projectDir}/qc/
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
-peEnd1BarcodeTrimmedFqGz,${rawFile}_trimmed_1.${rawFileExt}
-peEnd2BarcodeTrimmedFqGz,${rawFile}_trimmed_2.${rawFileExt}
 peEnd1BarcodePhiXFqGz,${rawFile}.phiX_1.${rawFileExt}
 peEnd2BarcodePhiXFqGz,${rawFile}.phiX_2.${rawFileExt}
-srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
-srBarcodeTrimmedFqGz,${rawFile}_trimmed.phiX.${rawFileExt}
 peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
 peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
+peEnd1BarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.fq
+peEnd2BarcodeTrimmedFq,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.fq
 srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
+srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
+srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
+
 bwaAlignCores,8
 humanPhiXdir,${dataDir}/inSilico/humanPhiX
 simulatedPhiXVariants,${humanPhiXdir}/InSilicoData.chrNC_001422.1.variant.calls.vcf
@@ -231,5 +232,5 @@ barcodeFastQcFolderPE2,${intermediateDir}/${filePrefix}_${barcode}_2.fq_fastqc
 
 walltimeCheckIllumina,08:59:00
 wgsMetrics,${dedupBam}.wgs_metrics
-bioPetVersion,Biopet/0.8.0-26269612
-bioPetJar,Biopet-0.8.0-26269612.jar
+bioPetVersion,Biopet/0.9.0-SNAPSHOT-2299e7a9
+bioPetJar,Biopet-0.9.0-SNAPSHOT-2299e7a9.jar

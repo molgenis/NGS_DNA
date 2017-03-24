@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=6gb ppn=8
+#MOLGENIS walltime=23:59:00 mem=13gb ppn=8
 
 #Parameter mapping
 #string tmpName
@@ -43,6 +43,6 @@ done
 java -jar -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g ${EBROOTGATK}/${gatkJar} \
    -T PrintReads \
    -R ${indexFile} \
-   -I ${INPUTS[@]} \
+   ${INPUTS[@]} \
    -BQSR ${inputMergeBam}.recalibrated.table \
    -o ${inputMergeBam}.recalibrated.bam

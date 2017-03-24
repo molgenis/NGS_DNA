@@ -53,7 +53,7 @@ done
 SAMPLESIZE=$(cat ${projectJobsDir}/${project}.csv | wc -l)
 
 ## number of batches (+1 is because bash is rounding down) 
-numberofbatches=$(($SAMPLESIZE / 200))
+numberofbatches=$(($SAMPLESIZE / 196))
 gvcfSize=0
 for b in $(seq 0 $numberofbatches)
 do
@@ -64,9 +64,9 @@ do
 		VAR=$(($i % ($numberofbatches + 1)))
 		if [ $VAR -eq $b ] 
 		then
-			if [ -f ${intermediateDir}/${s}.batch-${batchID}.variant.calls.g.vcf ] 
+			if [ -f ${intermediateDir}/gVCF/${s}.batch-${batchID}.variant.calls.g.vcf.gz ] 
 			then
-				ALLGVCFs+=("--variant ${intermediateDir}/${s}.batch-${batchID}.variant.calls.g.vcf")
+				ALLGVCFs+=("--variant ${intermediateDir}/gVCF/${s}.batch-${batchID}.variant.calls.g.vcf.gz")
 			fi
 		fi
 		i=$((i+1))

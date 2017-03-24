@@ -26,6 +26,7 @@ set -o pipefail
 #string alignedSortedBam
 #string picardVersion
 #string picardJar
+#string cutadaptVersion
 
 
 makeTmpDir ${alignedSam} 
@@ -41,12 +42,15 @@ ${checkStage}
 
 READGROUPLINE="@RG\tID:${lane}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
 
+rm -f  ${tmpAlignedSam}
+
 mkfifo -m 0644 ${tmpAlignedSam}
 
 #If paired-end use two fq files as input, else only one
 if [ "${seqType}" == "PE" ]
 then
 	#Run BWA for paired-end
+
     	bwa mem \
     	-M \
     	-R $READGROUPLINE \

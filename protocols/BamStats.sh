@@ -20,6 +20,7 @@ java -jar ${EBROOTBIOPET}/${bioPetJar} \
 tool BamStats \
 -b ${dedupBam} \
 -R ${indexFile} \
+--tsvOutputs \
 -o ${tmpIntermediateDir}
 
 ### Flagstat results

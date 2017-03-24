@@ -1,4 +1,4 @@
-#MOLGENIS nodes=1 ppn=4 mem=4gb walltime=05:00:00
+#MOLGENIS ppn=4 mem=8gb walltime=07:00:00
 
 #Parameter mapping
 #string logsDir
@@ -9,7 +9,10 @@
 #string srBarcodeFqGz
 #string peEnd1BarcodeTrimmedFqGz
 #string peEnd2BarcodeTrimmedFqGz
+#string peEnd1BarcodeTrimmedFq
+#string peEnd2BarcodeTrimmedFq
 #string srBarcodeTrimmedFqGz
+#string srBarcodeTrimmedFq
 
 #string intermediateDir
 #string cutadaptVersion
@@ -17,9 +20,9 @@
 #string groupname
 #string tmpName
 
-
 #Load module
 module load ${cutadaptVersion}
+module load pigz
 module list
 
 
@@ -28,23 +31,34 @@ if [[ "${seqType}" == "PE" ]]
 then
 	cutadapt --format=fastq \
 	-a AGATCGGAAGAG \
-	-o ${peEnd1BarcodeTrimmedFqGz} \
-	-p ${peEnd2BarcodeTrimmedFqGz} \
+	-A GAGAAGGCTAGA \
+	--minimum-length 20 \
+	-o ${peEnd1BarcodeTrimmedFq} \
+	-p ${peEnd2BarcodeTrimmedFq} \
 	${peEnd1BarcodeFqGz} ${peEnd2BarcodeFqGz}
+	
+	echo "adapters masked, now gzipping with pigz"
 
-	echo "adapters masked"
+	pigz ${peEnd1BarcodeTrimmedFq}
+	pigz ${peEnd2BarcodeTrimmedFq}
 
-	mv ${peEnd1BarcodeTrimmedFqGz} ${peEnd1BarcodeFqGz}
-	mv ${peEnd2BarcodeTrimmedFqGz} ${peEnd2BarcodeFqGz}
-	echo -e "\ncutadapt finished succesfull. Moving temp files to final.\n\n"
+	echo "copying ${peEnd1BarcodeTrimmedFqGz} ${peEnd1BarcodeFqGz}"
+	echo "copying ${peEnd2BarcodeTrimmedFqGz} ${peEnd2BarcodeFqGz}"
+
+	cp ${peEnd1BarcodeTrimmedFqGz} ${peEnd1BarcodeFqGz}
+	cp ${peEnd2BarcodeTrimmedFqGz} ${peEnd2BarcodeFqGz}
+
+	
 	
 elif [[ "${seqType}" == "SR" ]]
 then
 	cutadapt --format=fastq	\
         -a AGATCGGAAGAG \
-        -o ${srBarcodeTrimmedFqGz} \
+	-A GAGAAGGCTAGA \
+        -o ${srBarcodeTrimmedFq} \
 	${srBarcodeFqGz}
 		
+	pigz ${srBarcodeTrimmedFq} 
 	mv ${srBarcodeTrimmedFqGz} {srBarcodeFqGz}
 	echo -e "\ncutadapt finished succesfull. Moving temp files to final.\n\n"
 fi
