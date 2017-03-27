@@ -46,9 +46,9 @@ chrXCalls="unset"
 autosomalCalls="unset"
 genderUnknown="false"
 
-if [[ $project == *"smMIP"* ]]
+if [[ "${project}" == *"smMIP"* ]]
 then
-        touch ${intermediateDir}/convading.skipped
+        touch ${intermediateDir}/xhmm.skipped
         echo "this is a smMIP run, xhmm cannot be executed"
 else
 	if grep ${capturingKit} ${ControlsVersioning}
@@ -533,7 +533,7 @@ else
 		if [ "${genderUnknown}" == "true" ]
 		then
 			echo "Gender is unknown, there will be no analysis gender based"
-		
+		fi		
 	else
 		echo "for this bedfile there is no Controlsgroup"
 	fi
