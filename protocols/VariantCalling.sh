@@ -11,8 +11,7 @@
 #string indexFile
 #string capturedBatchBed
 #string femaleCapturedBatchBed
-#string dbSNP137Vcf
-#string dbSNP137VcfIdx
+#string dbSnp
 #string sampleBatchVariantCalls
 #string sampleBatchVariantCallsIndex
 #string sampleBatchVariantCallsMaleNONPAR
@@ -46,22 +45,22 @@ array_contains () {
 ${stage} ${gatkVersion}
 ${checkStage}
 
-makeTmpDir ${sampleBatchVariantCalls}
+makeTmpDir "${sampleBatchVariantCalls}"
 tmpSampleBatchVariantCalls=${MC_tmpFile}
 
-makeTmpDir ${sampleBatchVariantCallsIndex}
+makeTmpDir "${sampleBatchVariantCallsIndex}"
 tmpSampleBatchVariantCallsIndex=${MC_tmpFile}
 
-makeTmpDir ${sampleBatchVariantCallsMaleNONPAR}
+makeTmpDir "${sampleBatchVariantCallsMaleNONPAR}"
 tmpSampleBatchVariantCallsMaleNONPAR=${MC_tmpFile}
 
-makeTmpDir ${sampleBatchVariantCallsMaleNONPARIndex}
+makeTmpDir "${sampleBatchVariantCallsMaleNONPARIndex}"
 tmpSampleBatchVariantCallsMaleNONPARIndex=${MC_tmpFile} 
 
-makeTmpDir ${sampleBatchVariantCallsFemale}
+makeTmpDir "${sampleBatchVariantCallsFemale}"
 tmpSampleBatchVariantCallsFemale=${MC_tmpFile}
 
-makeTmpDir ${sampleBatchVariantCallsFemaleIndex}
+makeTmpDir "${sampleBatchVariantCallsFemaleIndex}"
 tmpSampleBatchVariantCallsFemaleIndex=${MC_tmpFile}
 
 MALE_BAMS=()
@@ -73,9 +72,9 @@ do
 done
 baitBatchLength=""
 sex=$(less ${intermediateDir}/${externalSampleID}.chosenSex.txt | awk 'NR==2')
-if [ -f ${capturedBatchBed} ] 
+if [ -f "${capturedBatchBed}" ] 
 then
-	baitBatchLength=`cat ${capturedBatchBed} | wc -l`
+	baitBatchLength=`cat "${capturedBatchBed}" | wc -l`
 fi
 
 if [ ! -d ${intermediateDir}/gVCF ]
@@ -86,15 +85,15 @@ fi
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
 inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
 
-if [[ ! -f ${capturedBatchBed} ||  ${baitBatchLength} -eq 0 ]]
+if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"  
 else
-	if [[ ${capturedBatchBed} == *batch-[0-9]*X.bed || ${capturedBatchBed} == *batch-Xnp.bed || ${capturedBatchBed} == *batch-Xp.bed ]]
+	if [[ "${capturedBatchBed}" == *batch-[0-9]*X.bed || "${capturedBatchBed}" == *batch-Xnp.bed || "${capturedBatchBed}" == *batch-Xp.bed ]]
 	then
-		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" || ${capturedBatchBed} == *batch-Xp.bed ]]
+		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" || "${capturedBatchBed}" == *batch-Xp.bed ]]
 		then
-			if [ ${capturedBatchBed} == *batch-Xp.bed ]
+			if [ "${capturedBatchBed}" == *batch-Xp.bed ]
 			then
 				echo "Par region of X, both female and male are diploid for this region"
 			else
@@ -108,11 +107,9 @@ else
         		-R ${indexFile} \
         		$inputs \
 			-dontUseSoftClippedBases \
-	        	--dbsnp ${dbSNP137Vcf} \
-       			-stand_emit_conf 20.0 \
-        		-stand_call_conf 10.0 \
-        		-o ${tmpSampleBatchVariantCalls} \
-        		-L ${capturedBatchBed} \
+	        	--dbsnp ${dbSnp} \
+        		-o "${tmpSampleBatchVariantCalls}" \
+        		-L "${capturedBatchBed}" \
         		--emitRefConfidence GVCF \
 			-ploidy 2 
 		elif [ "${sex}" == "Male" ]
@@ -122,13 +119,11 @@ else
 			${EBROOTGATK}/${gatkJar} \
 			-T HaplotypeCaller \
 			-R ${indexFile} \
-			--dbsnp ${dbSNP137Vcf}\
+			--dbsnp ${dbSnp}\
 			${inputs} \
 			-dontUseSoftClippedBases \
-			-stand_call_conf 10.0 \
-			-stand_emit_conf 20.0 \
-			-o ${tmpSampleBatchVariantCalls} \
-			-L ${capturedBatchBed} \
+			-o "${tmpSampleBatchVariantCalls}" \
+			-L "${capturedBatchBed}" \
 			--emitRefConfidence GVCF \
 			-ploidy 1
 
@@ -147,13 +142,11 @@ else
                         ${EBROOTGATK}/${gatkJar} \
                         -T HaplotypeCaller \
                         -R ${indexFile} \
-                        --dbsnp ${dbSNP137Vcf}\
+                        --dbsnp ${dbSnp}\
                         ${inputs} \
                         -dontUseSoftClippedBases \
-                        -stand_call_conf 10.0 \
-                        -stand_emit_conf 20.0 \
-                        -o ${tmpSampleBatchVariantCalls} \
-                        -L ${femaleCapturedBatchBed} \
+                        -o "${tmpSampleBatchVariantCalls}" \
+                        -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
                         -ploidy 2
         	elif [ "${sex}" == "Male" ]
@@ -162,13 +155,11 @@ else
                         ${EBROOTGATK}/${gatkJar} \
                         -T HaplotypeCaller \
                         -R ${indexFile} \
-                        --dbsnp ${dbSNP137Vcf}\
+                        --dbsnp ${dbSnp}\
                         ${inputs} \
                         -dontUseSoftClippedBases \
-                        -stand_call_conf 10.0 \
-                        -stand_emit_conf 20.0 \
-                        -o ${tmpSampleBatchVariantCalls} \
-                        -L ${capturedBatchBed} \
+                        -o "${tmpSampleBatchVariantCalls}" \
+                        -L "${capturedBatchBed}" \
                         --emitRefConfidence GVCF \
                         -ploidy 2
 		fi
@@ -180,11 +171,9 @@ else
                 -R ${indexFile} \
                 $inputs \
                 -dontUseSoftClippedBases \
-                --dbsnp ${dbSNP137Vcf} \
-                -stand_emit_conf 20.0 \
-                -stand_call_conf 10.0 \
-                -o ${tmpSampleBatchVariantCalls} \
-                -L ${capturedBatchBed} \
+                --dbsnp ${dbSnp} \
+                -o "${tmpSampleBatchVariantCalls}" \
+                -L "${capturedBatchBed}" \
 		--emitRefConfidence GVCF \
                 -ploidy 2
 	fi
@@ -192,11 +181,11 @@ else
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
-        	mv ${tmpSampleBatchVariantCalls} ${sampleBatchVariantCalls}
-        	mv ${tmpSampleBatchVariantCallsIndex} ${sampleBatchVariantCallsIndex}
+        	mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
+        	mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
 			
-		cp ${sampleBatchVariantCalls} ${intermediateDir}/gVCF/
-		cp ${sampleBatchVariantCallsIndex} ${intermediateDir}/gVCF/
+		cp "${sampleBatchVariantCalls}" ${intermediateDir}/gVCF/
+		cp "${sampleBatchVariantCallsIndex}" ${intermediateDir}/gVCF/
 	else
 		echo "ERROR: output file is missing"
 		exit 1

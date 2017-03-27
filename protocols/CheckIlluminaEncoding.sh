@@ -1,10 +1,10 @@
-#MOLGENIS nodes=1 ppn=1 mem=1gb walltime=03:00:00
+#MOLGENIS nodes=1 ppn=1 mem=1gb
 
 #Parameter mapping
 #string tmpName
 #string seqType
-#string peEnd1BarcodeFqGz
-#string peEnd2BarcodeFqGz
+#string peEnd1BarcodePhiXFqGz
+#string peEnd2BarcodePhiXFqGz
 #string srBarcodeFqGz
 #string intermediateDir
 #string tmpDataDir
@@ -19,7 +19,7 @@ checkIlluminaEncoding() {
 barcodeFqGz=$1
 echo ${barcodeFqGz}
 
-lines=(`zcat ${barcodeFqGz} | head -8000 | tail -192 | awk 'NR % 4 == 0'`)
+lines=($(zcat ${barcodeFqGz} | head -8000 | tail -192 | awk 'NR % 4 == 0'))
 count=1
 nodecision=0
 numberoflines=0
@@ -75,19 +75,14 @@ then
 	encoding="1.9"
 fi
 
-if [ "${encoding}" == "1.9"  ]
+if [ "${encoding}" == "1.9" ]
 then
 	echo "encoding is Illumina 1.8 - Sanger / Illumina 1.9"
 else
-	#make fasta out of the fq.gz file
-        gzip -d -c ${barcodeFqGz} > ${barcodeFqGz}.fq
-	mkdir -p ${projectRawTmpDataDir}/IlluminaEncoding1.5
-        mv ${barcodeFqGz} ${projectRawTmpDataDir}/IlluminaEncoding1.5/
-	echo "start encoding for ${barcodeFqGz}.fq"
-        #convert Phreds+64 to Phred+33 (Illumna 1.5 TO Illumina / Sanger 1.9)
-        sed -e '4~4y/@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghi/!"#$%&'\''()*+,-.\/0123456789:;<=>?@ABCDEFGHIJ/' ${barcodeFqGz}.fq > ${barcodeFqGz}.fq.encoded
-        gzip ${barcodeFqGz}.fq.encoded
-        mv ${barcodeFqGz}.fq.encoded.gz ${barcodeFqGz}
+	#make fastQ out of the fq.gz file
+	pigz -dc ${barcodeFqGz} | sed -e '4~4y/@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghi/!"#$%&'\''()*+,-.\/0123456789:;<=>?@ABCDEFGHIJ/' | pigz > ${barcodeFqGz}.fq.encoded.gz
+	echo "copying ${barcodeFqGz}.fq.encoded.gz to ${barcodeFqGz}"
+        cp ${barcodeFqGz}.fq.encoded.gz ${barcodeFqGz}
 fi
 
 }
@@ -101,8 +96,8 @@ then
 
 elif [ "${seqType}" == "PE" ]
 then
-        checkIlluminaEncoding ${peEnd1BarcodeFqGz}
-        checkIlluminaEncoding ${peEnd2BarcodeFqGz}
+        checkIlluminaEncoding ${peEnd1BarcodePhiXFqGz}
+        checkIlluminaEncoding ${peEnd2BarcodePhiXFqGz}
 else
 	echo "SeqType unknown"
 	exit 1
