@@ -106,7 +106,9 @@ printf "Copying alignment stats (lane and sample) to results directory "
 for sample in "${UNIQUESAMPLES[@]}"
 do
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.alignment_summary_metrics ${projectResultsDir}/qc/statistics/
-	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.gc_bias_metrics ${projectResultsDir}/qc/statistics/
+	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.gc_bias.summary_metrics ${projectResultsDir}/qc/statistics/
+	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.gc_bias.pdf ${projectResultsDir}/qc/statistics/
+	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.gc_bias.detail_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.quality_by_cycle_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.quality_distribution_metrics ${projectResultsDir}/qc/statistics/
 	rsync -a ${intermediateDir}/${sample}.merged.dedup.bam.hs_metrics ${projectResultsDir}/qc/statistics/
