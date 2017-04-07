@@ -73,8 +73,8 @@ projectRawArrayTmpDataDir,${projectDir}/rawdata/array/
 
 #### INDEX FILES #####
 buildID,b38
-indexFileID,GRCh38_AS1
-indicesDir,${dataDir}/GRC/GRCh38/analysis_sets/
+indexFileID,reference
+indicesDir,${dataDir}/UCSC/GRCh38/GRCh38_no_alt_plus_hs38d1_analysis_set/
 indexFileFastaIndex,${indicesDir}/${indexFileID}.fa.fai
 indexFile,${indicesDir}/${indexFileID}.fa
 indexFileDictionary,${indicesDir}/${indexFileID}.dict
@@ -234,3 +234,4 @@ walltimeCheckIllumina,08:59:00
 wgsMetrics,${dedupBam}.wgs_metrics
 bioPetVersion,Biopet/0.9.0-SNAPSHOT-2299e7a9
 bioPetJar,Biopet-0.9.0-SNAPSHOT-2299e7a9.jar
+pigzVersion,pigz/2.3.1-foss-2015b

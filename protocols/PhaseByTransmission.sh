@@ -18,8 +18,8 @@ java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar ${EBROOTGA
    -T PhaseByTransmission \
    -R ${indexFile} \
    -V "${projectBatchGenotypedVariantCalls}" \
-   -mvf "${projectBatchGenotypedVariantCalls}".mvf \
+   -mvf "${projectBatchGenotypedVariantCalls}.mvf" \
    -ped ${intermediateDir}/children.ped \
-   -o "${projectBatchGenotypedVariantCalls}".PBToutput.vcf
+   -o "${projectBatchGenotypedVariantCalls}.PBToutput.vcf"
 
 fi

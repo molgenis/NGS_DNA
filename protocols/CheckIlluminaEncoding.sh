@@ -12,8 +12,10 @@
 #string groupname
 #string project
 #string projectRawTmpDataDir
-
+#string pigzVersion
 sleep 10
+
+module load ${pigzVersion}
 
 checkIlluminaEncoding() {
 barcodeFqGz=$1
