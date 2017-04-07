@@ -27,7 +27,7 @@ set -o pipefail
 #string picardVersion
 #string picardJar
 #string cutadaptVersion
-
+#string Library
 
 makeTmpDir ${alignedSam} 
 tmpAlignedSam=${MC_tmpFile}
@@ -39,9 +39,13 @@ tmpAlignedSortedBam=${MC_tmpFile}
 ${stage} ${bwaVersion}
 ${stage} ${picardVersion}
 ${checkStage}
-
-READGROUPLINE="@RG\tID:${lane}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
-
+READGROUPLINE=""
+if [ "${Library}" == "" ]
+then
+	READGROUPLINE="@RG\tID:${filePrefix}_${lane}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
+else
+	READGROUPLINE="@RG\tID:${filePrefix}_${lane}\tPL:illumina\tLB:${Library}\tSM:${externalSampleID}"	
+fi
 rm -f  ${tmpAlignedSam}
 
 mkfifo -m 0644 ${tmpAlignedSam}
