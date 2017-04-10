@@ -56,7 +56,7 @@ cp generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_t
 ## Grep used version of molgenis compute out of the parameters file
 fgrep "computeVersion," parameters.csv > ${workfolder}/generatedscripts/PlatinumSubset/mcVersion.txt
 
-perl -pi -e 's|module load NGS_DNA/3.3.1|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e 's|module load NGS_DNA/3.3.3|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|PROJECT=projectXX|PROJECT=PlatinumSubset|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|RUNID=runXX|RUNID=run01|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|BATCH="_chr"|BATCH="_small"|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
