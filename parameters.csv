@@ -349,7 +349,7 @@ xhmmPlusPlus,${intermediateDir}/${externalSampleID}.xhmmplusplus.txt
 longlistPlusPlusFinal,${intermediateDir}/${externalSampleID}.longlistplusplusFinal.txt
 
 noExtension,variant.calls.genotyped.vcf
-annotatedExtension,variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
+annotatedExtension,variant.calls.snpeff.exac.gonl.cadd.vcf
 
 sampleConcordanceFile,${intermediateDir}/${externalSampleID}.ConcordanceFile.txt
 arrayTmpMap,${intermediateDir}/${externalSampleID}.concordance.tmp.map
