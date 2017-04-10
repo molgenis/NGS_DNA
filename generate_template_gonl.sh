@@ -19,10 +19,10 @@ BATCH="_b38_chr"
 samplesheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
 mac2unix $samplesheet
 
-python ${EBROOTNGS_DNA}/samplesize.py ${samplesheet} $thisDir
+python ${EBROOTNGS_DNA}/scripts/samplesize.py ${samplesheet} $thisDir
 SAMPLESIZE=$(cat externalSampleIDs.txt | uniq | wc -l)
 
-python ${EBROOTNGS_DNA}/gender.py $samplesheet
+python ${EBROOTNGS_DNA}/scripts/gender.py $samplesheet
 var=$(cat ${samplesheet}.tmp | wc -l)
 
 if [ $var != 0 ]
@@ -51,16 +51,16 @@ fi
 
 echo "tmpName,${TMPDIRECTORY}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv 
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters.csv > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
 ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
 
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \

@@ -49,16 +49,16 @@ perl -pi -e 's|Ensembl.GRCh37.75-AllExons_\+20_-20bp_AgilentV5_AllExon_SSID_CGD_
 
 echo "tmpName,${TMPDIRECTORY}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv 
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
+perl ${EBROOTNGS_DNA}/scriptsconvertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters.csv > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv
 
-perl ${EBROOTNGS_DNA}/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
 ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
 
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
