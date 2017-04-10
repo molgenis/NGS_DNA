@@ -106,7 +106,6 @@ else
         		-T HaplotypeCaller \
         		-R ${indexFile} \
         		$inputs \
-			-dontUseSoftClippedBases \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
         		-L "${capturedBatchBed}" \
@@ -121,7 +120,6 @@ else
 			-R ${indexFile} \
 			--dbsnp ${dbSnp}\
 			${inputs} \
-			-dontUseSoftClippedBases \
 			-o "${tmpSampleBatchVariantCalls}" \
 			-L "${capturedBatchBed}" \
 			--emitRefConfidence GVCF \
@@ -144,7 +142,6 @@ else
                         -R ${indexFile} \
                         --dbsnp ${dbSnp}\
                         ${inputs} \
-                        -dontUseSoftClippedBases \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
@@ -157,7 +154,6 @@ else
                         -R ${indexFile} \
                         --dbsnp ${dbSnp}\
                         ${inputs} \
-                        -dontUseSoftClippedBases \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
                         --emitRefConfidence GVCF \
@@ -170,7 +166,6 @@ else
                 -T HaplotypeCaller \
                 -R ${indexFile} \
                 $inputs \
-                -dontUseSoftClippedBases \
                 --dbsnp ${dbSnp} \
                 -o "${tmpSampleBatchVariantCalls}" \
                 -L "${capturedBatchBed}" \

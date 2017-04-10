@@ -17,7 +17,7 @@ convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,cutadapt/1.9.1-foss-2015b-Python-2.7.10
 dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
-gatkVersion,GATK/3.6-Java-1.8.0_74
+gatkVersion,GATK/3.7-Java-1.8.0_74
 gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
@@ -25,12 +25,13 @@ mantaVersion,manta/1.0.1-${toolChain}
 molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
 ngsUtilsVersion,ngs-utils/16.10.2
 plinkSeqVersion,plinkseq/x86_64-0.10
-picardVersion,picard/1.130-Java-1.7.0_80
+picardVersion,picard/2.9.0-Java-1.8.0_74
 pythonVersion,Python/2.7.10-${toolChain}
 rVersion,R/3.2.1-${toolChain}
 sambambaVersion,sambamba/${sambambaVer}-${toolChain}
 sambambaVer,v0.6.4
 samtoolsVersion,SAMtools/1.2-${toolChain}
+seqTkVersion,seqtk/1.2-foss-2015b
 snpEffVersion,snpEff/4.3-Java-1.7.0_80
 htsLibVersion,HTSlib/1.3.2-foss-2015b
 tabixVersion,tabix/0.2.6-${toolChain}
@@ -181,8 +182,8 @@ collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 ### Protocols 18a 18b 18c and  (gVCF VariantCalling, VariantCombine, VariantGenotyping) ###
 dbSNP137Vcf,${dbSNPDir}/dbsnp_137.b37.vcf
 dbSNP137VcfIdx,${dbSNP137Vcf}.idx
-b38Dir,${dataDir}/ftp.broadinstitute.org/bundle/2.8/hg38/
-dbSNPb38Vcf,${b38Dir}/dbsnp_144.hg38.vcf.gz
+b38Dir,${dbSNPDir}/b38/
+dbSNPb38Vcf,${b38Dir}/ucsc_All_20161122.vcf.gz
 dbSNPb38VcfIndex,${dbSNPb38Vcf}.tbi
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
