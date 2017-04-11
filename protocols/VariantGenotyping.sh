@@ -73,8 +73,6 @@ java -Xmx16g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
 	-T GenotypeGVCFs \
 	-R ${indexFile} \
 	-L "${capturedBatchBed}" \
-        -stand_emit_conf 20.0 \
-	-stand_call_conf 10.0 \
 	--dbsnp ${dbSnp} \
 	-o ${tmpProjectBatchGenotypedVariantCalls} \
 	${ALLGVCFs[@]} 

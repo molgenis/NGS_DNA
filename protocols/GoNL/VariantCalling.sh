@@ -108,7 +108,6 @@ else
         		-R ${indexFile} \
         		$inputs \			
 			--BQSR ${sampleMergedBam}.recalibrated.table \
-			-dontUseSoftClippedBases \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
         		-L "${capturedBatchBed}" \
@@ -148,7 +147,6 @@ else
                         --dbsnp ${dbSnp}\
 			--BQSR ${sampleMergedBam}.recalibrated.table \
                         ${inputs} \
-                        -dontUseSoftClippedBases \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
@@ -162,7 +160,6 @@ else
                         --dbsnp ${dbSnp} \
 			--BQSR ${sampleMergedBam}.recalibrated.table \
                         ${inputs} \
-                        -dontUseSoftClippedBases \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
                         --emitRefConfidence GVCF \
@@ -175,7 +172,6 @@ else
                 -T HaplotypeCaller \
                 -R ${indexFile} \
                 $inputs \
-                -dontUseSoftClippedBases \
                 --BQSR ${sampleMergedBam}.recalibrated.table \
                 --dbsnp ${dbSnp} \
                 -o "${tmpSampleBatchVariantCalls}" \

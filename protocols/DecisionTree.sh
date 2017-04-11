@@ -334,7 +334,7 @@ then
 		then
     			echo "Call has a good number of genes, program continues > "
         		##Conv values
-			values=$(python ${EBROOTNGS_DNA}/CoNVaDING_filter.py ${combinedFiltered} ${convadingTotallist} $boom)
+			values=$(python ${EBROOTNGS_DNA}/scripts/CoNVaDING_filter.py ${combinedFiltered} ${convadingTotallist} $boom)
 		else
     			echo -e "$boom\tCall has too many genes, program stops."
 			echo "${genes}" >> ${longlistPlusPlus}
@@ -399,7 +399,7 @@ then
 		if [[ "${exons}" == *"Call_has_multiple exons"* ]]
 		then
     			echo "Call has multiple exons, program continues > "
-			values=$(python ${EBROOTNGS_DNA}/CoNVaDING_filter.py ${convadingFinallistFiltered} ${convadingTotallist} $boom)
+			values=$(python ${EBROOTNGS_DNA}/scripts/CoNVaDING_filter.py ${convadingFinallistFiltered} ${convadingTotallist} $boom)
 		else
     			echo -e "$boom\tCall is single exon, program stops. "
 			awk -v b="$boom" '{if (NR>1){print $0"\t"b"\tSingle_Exon"}}' ${convadingFinallist} >> ${longlistPlusPlus}
@@ -460,11 +460,11 @@ then
 		if [[ "${location_longlist}" == *"Complete_on_CoNVaDING_longlist"* ]]
 		then
     			echo "Call is present on CoNVaDING longlist, program continues > "
-        		values=$(python ${EBROOTNGS_DNA}/CoNVaDING_filter.py ${convadingLonglistCombinedFiltered} ${convadingTotallist} $boom)
+        		values=$(python ${EBROOTNGS_DNA}/scripts/CoNVaDING_filter.py ${convadingLonglistCombinedFiltered} ${convadingTotallist} $boom)
 		elif [[ "${location_longlist}" == *"Partially_on_CoNVaDING_longlist"* ]]
 		then
 			echo -e "$boom\tSome calls are on CoNVaDING longlist, program continues. "
-			values=$(python ${EBROOTNGS_DNA}/CoNVaDING_filter.py ${convadingLonglistCombinedFiltered} ${convadingTotallist} $boom)
+			values=$(python ${EBROOTNGS_DNA}/scripts/CoNVaDING_filter.py ${convadingLonglistCombinedFiltered} ${convadingTotallist} $boom)
 	
 			echo -e "$boom\tSome calls are NOT on CoNVaDING longlist, program stops. "
 			awk '{print $0"\tX\tNo_overlap_on_longlist"}' ${xhmmXcnvFinal}.filtered >>  ${xhmmPlusPlus}

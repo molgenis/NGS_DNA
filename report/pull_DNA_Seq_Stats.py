@@ -48,11 +48,6 @@ COLNAMES_ALIGNMENT = {
 	'STRAND_BALANCE' : 'strandBalance'	
 }
 
-COLNAMES_CONCORDANCE = {
-	'nSNPs':'nSNPs',
- 	'Overall_concordance': 'overallConcordance'
-}
-
 import re
 
 def natural_sort(l): 
@@ -125,15 +120,6 @@ def parse_hs_metrics_file(hs_metrics_path):
 	elif col == "BAIT_SET":
 	    data[COLNAMES_HS[col]] = value
     return data
-def parse_concordance_file(concordance_path):
-    """Given a path to a concordance output file, return a
-    dictionary consisting of its column, value mappings.
-    """
-
-    with open (concordance_path, 'r') as source:
-	line = source.readline().strip()
-    return {'Overall concordance' : line}
-
 def parse_insertSize_metrics_file(insertSize_metrics_path):
     """Given a path to a Picard CollectMultipleMetrics [insertSize] output file, return a
     dictionary consisting of its column, value mappings.
@@ -265,25 +251,22 @@ def main(argv):
   Main entry point.
   """
   alignmentMetrics= ''
-  concordance= ''
   hsMetrics= ''
   insertSizeMetrics= ''
   flagstats = ''
    
   try:
-    opts, args = getopt.getopt(argv,"h:a:c:s:i:f:",["alignmentMetrics=","concordance=","hsMetrics=","insertSizeMetrics=","flagstats="])
+    opts, args = getopt.getopt(argv,"h:a:s:i:f:",["alignmentMetrics=","hsMetrics=","insertSizeMetrics=","flagstats="])
          
   except getopt.GetoptError:
-    print 'pull_DNA_Seq_Stats.py\n -a <alignmentMetrics>\n -c <concordance>\n -s <hsMetrics>\n -i <insertSizeMetrics>\n -f <flagstats>\n'
+    print 'pull_DNA_Seq_Stats.py\n -a <alignmentMetrics>\n -s <hsMetrics>\n -i <insertSizeMetrics>\n -f <flagstats>\n'
     sys.exit(2)
   for opt, arg in opts:
     if opt == '-h':
-      print 'pull_DNA_Seq_Stats.py\n -a <alignmentMetrics>\n -c <concordance>\n -s <hsMetrics>\n -i <insertSizeMetrics>\n -f <flagstats>\n'
+      print 'pull_DNA_Seq_Stats.py\n -a <alignmentMetrics>\n -s <hsMetrics>\n -i <insertSizeMetrics>\n -f <flagstats>\n'
       sys.exit(2)
     elif opt in ("-a", "--alignmentMetrics"):
        alignmentMetrics = arg
-    elif opt in ("-c", "--concordance"):
-       concordance = arg
     elif opt in ("-s", "--hsMetrics"):
        hsMetrics = arg
     elif opt in ("-i", "--insertSizeMetrics"):
@@ -294,7 +277,6 @@ def main(argv):
   insertSizeFile = insertSizeMetrics
   flagstatFile = flagstats
   hsMetrics = hsMetrics
-  concordance = concordance
   alignmentMetrics = alignmentMetrics
   data = {}
     
@@ -305,17 +287,11 @@ def main(argv):
   data['map2Full'] = getFlagstat(flagstatFile)
   data['hsMetrics'] = parse_hs_metrics_file(hsMetrics)
   data['alignmentMetrics'] = parse_alignment_metrics_file(alignmentMetrics)
-  data['concordance'] = parse_concordance_file(concordance)
 
   #print alignmentMetrics stats in tablular format
   alignmentMetrics = data['alignmentMetrics']
   for key in alignmentMetrics.keys():
     print("{0:<30s}\t{1:<40}".format(key, alignmentMetrics[key]))
-
-  #print concordance stats in tablular format
-  concordance = data['concordance']
-  for key in concordance.keys():
-    print("{0:<30s}\t{1:<40}".format(key, concordance[key]))
 
   #print hsMetrics stats in tablular format
   hsMetrics = data['hsMetrics']
