@@ -49,7 +49,6 @@ cp workflow.csv test_workflow.csv
 tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
 
 rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
-cp test/results/PlatinumSample.final.vcf /home/umcg-molgenis/NGS_DNA/PlatinumSample.final.vcf
 cp test/results/PlatinumSample_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_True.final.vcf.gz
 cp generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 
