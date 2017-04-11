@@ -10,15 +10,13 @@ checkStage,module list
 ### Tool versions ####
 bbMapVersion,BBMap/35.69-Java-1.7.0_80
 bedToolsVersion,BEDTools/2.25.0-foss-2015b
-bwaVersion,BWA/0.7.12-${toolChain}
+bwaVersion,BWA/0.7.15-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,cutadapt/1.9.1-foss-2015b-Python-2.7.10
-dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.7-Java-1.8.0_74
-gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-${toolChain}
