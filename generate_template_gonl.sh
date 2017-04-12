@@ -1,6 +1,6 @@
 #!/bin/bash
 
-module load NGS_DNA/3.3.3
+module load NGS_DNA/3.4.0
 module list 
 HOST=$(hostname)
 thisDir=$(pwd)
@@ -54,7 +54,7 @@ echo "tmpName,${TMPDIRECTORY}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_p
 perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv
 
-perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters.csv > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_gonl.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 
 perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
@@ -70,7 +70,7 @@ sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv \
 -p ${EBROOTNGS_DNA}/batchIDList${BATCH}.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv \
--w ${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv \
+-w ${EBROOTNGS_DNA}/create_external_samples_ngs_projects_workflow.csv \
 -rundir ${WORKDIR}/generatedscripts/${PROJECT}/scripts \
 --runid ${RUNID} \
 -o "workflowpath=${WORKFLOW};\
