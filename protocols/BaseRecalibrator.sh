@@ -16,6 +16,7 @@
 #string dbSnp
 #string inputMergeBam
 #string sambambaVersion
+#string sambambaTool
 sleep 5
 
 ${stage} ${gatkVersion}
@@ -43,7 +44,7 @@ do
         array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("-I $bamFile")    # If bamFile does not exist in array add it
 done
 
-${EBROOTSAMBAMBA}/sambamba_v0.6.4 index ${inputMergeBam}
+${EBROOTSAMBAMBA}/${sambambaTool} index ${inputMergeBam}
 
 java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx9g -jar ${EBROOTGATK}/${gatkJar} \
    -T BaseRecalibrator \
