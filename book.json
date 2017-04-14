@@ -4,7 +4,7 @@
   "plugins": ["edit-link", "prism", "-fontsettings", "-highlight", "github"],
   "pluginsConfig": {
     "edit-link": {
-      "base": "https://github.com/molgenis/molgenis-pipelines/tree/master/docs",
+      "base": "https://github.com/molgenis/NGS_DNA/tree/master/docs",
       "label": "Edit This Page"
     },
     "github": {
