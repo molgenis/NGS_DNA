@@ -10,8 +10,7 @@
 #string intermediateDir
 #string indexFile
 #string capturedBatchBed
-#string dbSNP137Vcf
-#string dbSNP137VcfIdx
+#string dbSnp
 #string projectBatchGenotypedVariantCalls
 #string project
 #string projectBatchCombinedVariantCalls
@@ -37,7 +36,7 @@ array_contains () {
     return $in
 }
 
-makeTmpDir ${projectBatchGenotypedVariantCalls}
+makeTmpDir "${projectBatchGenotypedVariantCalls}"
 tmpProjectBatchGenotypedVariantCalls=${MC_tmpFile}
 
 #Load GATK module
@@ -52,9 +51,9 @@ if [ $SAMPLESIZE -gt 200 ]
 then
 	for b in $(seq 0 $numberofbatches)
 	do
-		if [ -f ${projectBatchCombinedVariantCalls}.$b ]
+		if [ -f "${projectBatchCombinedVariantCalls}".$b ]
 		then
- 			ALLGVCFs+=(--variant ${projectBatchCombinedVariantCalls}.$b)
+ 			ALLGVCFs+=(--variant "${projectBatchCombinedVariantCalls}".$b)
 		fi
 	done
 else
@@ -71,14 +70,14 @@ if [ ${GvcfSize} -ne 0 ]
 then
 java -Xmx16g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
 	${EBROOTGATK}/${gatkJar} \
-	 -T GenotypeGVCFs \
-	 -R ${indexFile} \
-	 -L ${capturedBatchBed} \
-	 --dbsnp ${dbSNP137Vcf} \
-	 -o ${tmpProjectBatchGenotypedVariantCalls} \
+	-T GenotypeGVCFs \
+	-R ${indexFile} \
+	-L "${capturedBatchBed}" \
+	--dbsnp ${dbSnp} \
+	-o ${tmpProjectBatchGenotypedVariantCalls} \
 	${ALLGVCFs[@]} 
 
-	mv ${tmpProjectBatchGenotypedVariantCalls} ${projectBatchGenotypedVariantCalls}
+	mv "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
 	echo "moved ${tmpProjectBatchGenotypedVariantCalls} to ${projectBatchGenotypedVariantCalls} "
 else
 	echo ""
