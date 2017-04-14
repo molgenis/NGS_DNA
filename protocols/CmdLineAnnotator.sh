@@ -79,7 +79,7 @@ then
 	
 	mv ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} 
 	echo "Finished CADD-SNVs annotation"
-
+	perl -i -wpe 'my @t = split("\t",$_);$t[7] =~ s/ /_/g if ($t[7]);$t[7] =~ s/;$//g if ($t[7]);$_ = join("\t",@t)' ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}
 	echo "annotation step done, the fully annotated vcf file is: ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}"
 else
 	echo "skipped, ${projectBatchGenotypedVariantCalls} is not existing"

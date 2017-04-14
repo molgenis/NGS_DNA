@@ -24,6 +24,7 @@
 #string logsDir 
 #string groupname
 #string dedupBam
+#string sampleMergedBam
 
 sleep 5
 
@@ -89,11 +90,11 @@ if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"  
 else
-	if [[ "${capturedBatchBed}" == *batch-[0-9]*X.bed || "${capturedBatchBed}" == *batch-Xnp.bed || "${capturedBatchBed}" == *batch-Xp.bed ]]
+	if [[ "${capturedBatchBed}" == *batch-[0-9]*chrX.bed || "${capturedBatchBed}" == *batch-chrXnp.bed || "${capturedBatchBed}" == *batch-chrXp.bed ]]
 	then
-		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" || "${capturedBatchBed}" == *batch-Xp.bed ]]
+		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" || "${capturedBatchBed}" == *batch-chrXp.bed ]]
 		then
-			if [ "${capturedBatchBed}" == *batch-Xp.bed ]
+			if [ "${capturedBatchBed}" == *batch-chrXp.bed ]
 			then
 				echo "Par region of X, both female and male are diploid for this region"
 			else
@@ -105,7 +106,8 @@ else
         		${EBROOTGATK}/${gatkJar} \
         		-T HaplotypeCaller \
         		-R ${indexFile} \
-        		$inputs \
+        		$inputs \			
+			--BQSR ${sampleMergedBam}.recalibrated.table \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
         		-L "${capturedBatchBed}" \
@@ -118,8 +120,10 @@ else
 			${EBROOTGATK}/${gatkJar} \
 			-T HaplotypeCaller \
 			-R ${indexFile} \
-			--dbsnp ${dbSnp}\
+			--dbsnp ${dbSnp} \
+			--BQSR ${sampleMergedBam}.recalibrated.table \
 			${inputs} \
+			-dontUseSoftClippedBases \
 			-o "${tmpSampleBatchVariantCalls}" \
 			-L "${capturedBatchBed}" \
 			--emitRefConfidence GVCF \
@@ -129,7 +133,7 @@ else
 			echo "The sex has not a known option (Male, Female, Unknown)"
 			exit 1
 		fi
-	elif [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
+	elif [[ "${capturedBatchBed}" == *batch-[0-9]*chrY.bed || "${capturedBatchBed}" == *batch-chrY.bed ]]
 	then
 		echo "Y"
 		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
@@ -141,6 +145,7 @@ else
                         -T HaplotypeCaller \
                         -R ${indexFile} \
                         --dbsnp ${dbSnp}\
+			--BQSR ${sampleMergedBam}.recalibrated.table \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
@@ -152,7 +157,8 @@ else
                         ${EBROOTGATK}/${gatkJar} \
                         -T HaplotypeCaller \
                         -R ${indexFile} \
-                        --dbsnp ${dbSnp}\
+                        --dbsnp ${dbSnp} \
+			--BQSR ${sampleMergedBam}.recalibrated.table \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
@@ -166,6 +172,7 @@ else
                 -T HaplotypeCaller \
                 -R ${indexFile} \
                 $inputs \
+                --BQSR ${sampleMergedBam}.recalibrated.table \
                 --dbsnp ${dbSnp} \
                 -o "${tmpSampleBatchVariantCalls}" \
                 -L "${capturedBatchBed}" \

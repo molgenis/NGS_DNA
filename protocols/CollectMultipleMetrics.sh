@@ -25,13 +25,14 @@ ${stage} ${picardVersion}
 makeTmpDir ${collectBamMetricsPrefix}
 tmpCollectBamMetricsPrefix=${MC_tmpFile}
 
-#Run Picard CollectAlignmentSummaryMetrics, CollectInsertSizeMetrics, QualityScoreDistribution and MeanQualityByCycle
+#Run Picard CollectAlignmentSummaryMetrics, CollectInsertSizeMetrics, CollectGcBiasMetrics, QualityScoreDistribution and MeanQualityByCycle
 java -jar -Xmx4g ${EBROOTPICARD}/${picardJar} ${collectMultipleMetricsJar} \
 I=${dedupBam} \
 R=${indexFile} \
 O=${tmpCollectBamMetricsPrefix} \
 PROGRAM=CollectAlignmentSummaryMetrics \
 PROGRAM=CollectInsertSizeMetrics \
+#PROGRAM=CollectGcBiasMetrics \
 PROGRAM=QualityScoreDistribution \
 PROGRAM=MeanQualityByCycle \
 VALIDATION_STRINGENCY=LENIENT \
@@ -43,6 +44,9 @@ mv ${tmpCollectBamMetricsPrefix}.quality_distribution_metrics ${dedupBam}.qualit
 mv ${tmpCollectBamMetricsPrefix}.quality_distribution.pdf ${dedupBam}.quality_distribution.pdf
 mv ${tmpCollectBamMetricsPrefix}.quality_by_cycle_metrics ${dedupBam}.quality_by_cycle_metrics
 mv ${tmpCollectBamMetricsPrefix}.quality_by_cycle.pdf ${dedupBam}.quality_by_cycle.pdf
+#mv ${tmpCollectBamMetricsPrefix}.gc_bias.pdf ${dedupBam}.gc_bias.pdf
+#mv ${tmpCollectBamMetricsPrefix}.gc_bias.summary_metrics ${dedupBam}.gc_bias.summary_metrics
+#mv ${tmpCollectBamMetricsPrefix}.gc_bias.detail_metrics ${dedupBam}.gc_bias.detail_metrics
 
 #If paired-end data *.insert_size_metrics files also need to be moved
 if [ "${seqType}" == "PE" ]

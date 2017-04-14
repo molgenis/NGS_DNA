@@ -40,7 +40,6 @@ printf "Sample:\t${externalSampleID}\n" > ${qcMetrics}
 #If paired-end do fastqc for both ends, else only for one
 python ${EBROOTNGS_DNA}/report/pull_DNA_Seq_Stats.py \
 -a ${alignmentMetrics} \
--c ${sampleConcordanceFile} \
 -s ${hsMetrics} \
 -i ${insertSizeMetrics} \
 -f ${flagstatMetrics} \

@@ -39,6 +39,7 @@ java -XX:ParallelGCThreads=4 -jar -Xmx4g ${EBROOTPICARD}/${picardJar} ${gcBiasMe
 R=${indexFile} \
 I=${dedupBam} \
 O=${tmpGcBiasMetrics} \
+S=${tmpGcBiasMetrics}.summary_metrics.txt \
 CHART=${tmpGcBiasMetrics}.pdf \
 VALIDATION_STRINGENCY=LENIENT \
 TMP_DIR=${tempDir}

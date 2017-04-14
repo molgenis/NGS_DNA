@@ -15,7 +15,7 @@ RUNID=runXX
 
 ## Normal user, please leave BATCH at _chr
 ## For expert modus: small batchsize (6) fill in '_small'  or per chromosome fill in _chr
-BATCH="_chr"
+BATCH="_b38_chr"
 samplesheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
 mac2unix $samplesheet
 
@@ -36,7 +36,7 @@ if [ $SAMPLESIZE -gt 199 ]
 then
     	WORKFLOW=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv
 else
-        WORKFLOW=${EBROOTNGS_DNA}/workflow.csv
+        WORKFLOW=${EBROOTNGS_DNA}/workflow_gonl.csv
 fi
 
 if [ -f .compute.properties ];
@@ -44,7 +44,7 @@ then
      rm .compute.properties
 fi
 
-if [ -f ${WORKDIR}/generatedscripts/${PROJECT}/out.csv  ];
+if [ -f ${WORKDIR}/generatedscripts/${PROJECT}/out.csv ];
 then
     	rm -rf ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 fi
@@ -54,7 +54,7 @@ echo "tmpName,${TMPDIRECTORY}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_p
 perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv
 
-perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters.csv > \
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_gonl.csv > \
 ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
 
 perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
@@ -70,7 +70,7 @@ sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv \
 -p ${EBROOTNGS_DNA}/batchIDList${BATCH}.csv \
 -p ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv \
--w ${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv \
+-w ${EBROOTNGS_DNA}/create_external_samples_ngs_projects_workflow.csv \
 -rundir ${WORKDIR}/generatedscripts/${PROJECT}/scripts \
 --runid ${RUNID} \
 -o "workflowpath=${WORKFLOW};\
