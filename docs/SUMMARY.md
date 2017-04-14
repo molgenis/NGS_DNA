@@ -16,6 +16,7 @@
   - [Samplesheet](ngs-samplesheets.md)
 
 - Releases
+  -[latest](ngs-latestrelease.md)
   - 3.4
     - [3.4.0 (Lion)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.0)
   - 3.3
