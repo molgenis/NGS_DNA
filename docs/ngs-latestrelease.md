@@ -1,10 +1,10 @@
-##Latest release
+#Latest release
 
 download here: https://github.com/molgenis/NGS_DNA/releases/tag/3.4.0
 
-Release notes 3.4.0:
+##Release notes 3.4.0:
 
-## GoNL part
+### GoNL part
 Final version GoNL pipeline on b38, reference genome is ucsc build 38 *ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz*
 
 **new files**
@@ -15,7 +15,7 @@ Final version GoNL pipeline on b38, reference genome is ucsc build 38 *ftp://ftp
 **Version updates**
 * dbSNP version 149 (All_20161122.vcf.gz)
 
-## Regular pipeline updates
+### Regular pipeline updates
 **Version updates** 
 * GATK 3.6 --> 3.7 
 * picard 1.130 --> 2.9
