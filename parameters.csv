@@ -9,12 +9,11 @@ checkStage,module list
 
 ### Tool versions ####
 bedToolsVersion,BEDTools/2.25.0-foss-2015b
-bwaVersion,BWA/0.7.12-${toolChain}
+bwaVersion,BWA/0.7.15-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,cutadapt/1.9.1-foss-2015b-Python-2.7.10
-dellyVersion,v0.7.1
 fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
 gatkVersion,GATK/3.7-Java-1.8.0_74
 gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
@@ -22,7 +21,7 @@ iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-${toolChain}
 molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
-ngsUtilsVersion,ngs-utils/16.10.2
+ngsUtilsVersion,ngs-utils/16.12.1
 plink1Version,PLINK/1.07-x86_64
 plink2Version,plink/1.9-foss-2015b
 plinkSeqVersion,plinkseq/x86_64-0.10
@@ -30,7 +29,7 @@ picardVersion,picard/2.9.0-Java-1.8.0_74
 pythonVersion,Python/2.7.10-${toolChain}
 rVersion,R/3.2.1-${toolChain}
 sambambaVersion,sambamba/${sambambaVer}-${toolChain}
-sambambaVer,v0.6.4
+sambambaVer,v0.6.6
 samtoolsVersion,SAMtools/1.2-${toolChain}
 seqTkVersion,seqtk/1.2-foss-2015b
 snpEffVersion,snpEff/4.3-Java-1.7.0_80

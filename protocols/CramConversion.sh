@@ -47,5 +47,5 @@ cd -
 #-r ${indexFile} \
 #-m \
 #-t 8 \
-#${tmpDedupBamCram} \
-#${tmpDedupBamCramBam}
+# ${tmpDedupBamCram} \
+# ${tmpDedupBamCramBam}
