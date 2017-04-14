@@ -16,14 +16,14 @@
   - [Samplesheet](ngs-samplesheets.md)
 
 - Releases
-  -3.4
+  - 3.4
     - [3.4.0 (Lion)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.0)
-  -3.3
+  - 3.3
     - [3.3.3 (Koala)](https://github.com/molgenis/NGS_DNA/releases/tag/3.3.3)
     - [3.3.2 (Jackal)](https://github.com/molgenis/NGS_DNA/releases/tag/3.3.2)
     - [3.3.1 (Iguana)](https://github.com/molgenis/NGS_DNA/releases/tag/3.3.1)
     - [3.3.0 (Hummingbird)](https://github.com/molgenis/NGS_DNA/releases/tag/3.3.0)
-  -3.2
+  - 3.2
     - [3.2.6 (Gibbon)](https://github.com/molgenis/NGS_DNA/releases/tag/3.2.6)
     - [3.2.5 (Flamengo)](https://github.com/molgenis/NGS_DNA/releases/tag/3.2.5)
     - [3.2.4 (Emu)](https://github.com/molgenis/NGS_DNA/releases/tag/3.2.4)
