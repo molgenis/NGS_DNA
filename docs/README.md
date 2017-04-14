@@ -1,7 +1,7 @@
 <h1>NGS_DNA pipeline</h1>
 
 <h2>Manual</h2>
-Find manual on installation and use at https://molgenis.gitbooks.io/molgenis-pipelines/
+Find manual on installation and use at https://molgenis.gitbooks.io/ngs_dna
 
 
 <h2>Summary</h2>
