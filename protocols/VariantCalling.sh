@@ -107,6 +107,7 @@ else
         		-T HaplotypeCaller \
         		-R ${indexFile} \
         		$inputs \
+			-newQual \
 			--BQSR ${mergedBamRecalibratedTable} \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
@@ -122,6 +123,7 @@ else
 			-R ${indexFile} \
 			--BQSR ${mergedBamRecalibratedTable} \
 			--dbsnp ${dbSnp}\
+                        -newQual \
 			${inputs} \
 			-o "${tmpSampleBatchVariantCalls}" \
 			-L "${capturedBatchBed}" \
@@ -144,6 +146,7 @@ else
                         -T HaplotypeCaller \
                         -R ${indexFile} \
                         --dbsnp ${dbSnp}\
+                        -newQual \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
@@ -156,7 +159,8 @@ else
                         ${EBROOTGATK}/${gatkJar} \
                         -T HaplotypeCaller \
                         -R ${indexFile} \
-                        --dbsnp ${dbSnp}\
+                        --dbsnp ${dbSnp} \
+                        -newQual \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
@@ -171,6 +175,7 @@ else
                 -T HaplotypeCaller \
                 -R ${indexFile} \
                 $inputs \
+		-newQual \
 		--BQSR ${mergedBamRecalibratedTable} \
                 --dbsnp ${dbSnp} \
                 -o "${tmpSampleBatchVariantCalls}" \
