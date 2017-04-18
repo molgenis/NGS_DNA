@@ -4,7 +4,7 @@ s02_CheckIlluminaEncoding,protocols/CheckIlluminaEncoding.sh,s01_SpikePhiX
 s03_FastQC,protocols/FastQC.sh,s02_CheckIlluminaEncoding
 s04_BwaAlignAndSortSam,protocols/BwaAlignAndSortSam.sh,s02_CheckIlluminaEncoding
 s05_MergeBam,protocols/MergeBam.sh,s04_BwaAlignAndSortSam;inputMergeBam=alignedSortedBam;inputMergeBamIdx=alignedSortedBamIdx
-s06_BaseRecalibrator,protocols/BaseRecalibrator.sh,s05_MergeBam;dbSnp=dbSNP137Vcf;inputMergeBam=sampleMergedBam;inputMergeBamIdx=sampleMergedBamIdx
+s06_BaseRecalibrator,protocols/BaseRecalibrator.sh,s05_MergeBam;dbSnp=dbSNP137Vcf
 s07_MarkDuplicates,protocols/MarkDuplicates.sh,s05_MergeBam
 s08_Flagstat,protocols/FlagstatMetrics.sh,s07_MarkDuplicates
 s09a_Manta,protocols/Manta.sh,s07_MarkDuplicates

@@ -24,6 +24,7 @@
 #string logsDir 
 #string groupname
 #string dedupBam
+#string mergedBamRecalibratedTable
 
 sleep 5
 
@@ -106,6 +107,7 @@ else
         		-T HaplotypeCaller \
         		-R ${indexFile} \
         		$inputs \
+			--BQSR ${mergedBamRecalibratedTable} \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
         		-L "${capturedBatchBed}" \
@@ -118,6 +120,7 @@ else
 			${EBROOTGATK}/${gatkJar} \
 			-T HaplotypeCaller \
 			-R ${indexFile} \
+			--BQSR ${mergedBamRecalibratedTable} \
 			--dbsnp ${dbSnp}\
 			${inputs} \
 			-o "${tmpSampleBatchVariantCalls}" \
@@ -141,6 +144,7 @@ else
                         -T HaplotypeCaller \
                         -R ${indexFile} \
                         --dbsnp ${dbSnp}\
+			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
@@ -153,6 +157,7 @@ else
                         -T HaplotypeCaller \
                         -R ${indexFile} \
                         --dbsnp ${dbSnp}\
+			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
@@ -166,6 +171,7 @@ else
                 -T HaplotypeCaller \
                 -R ${indexFile} \
                 $inputs \
+		--BQSR ${mergedBamRecalibratedTable} \
                 --dbsnp ${dbSnp} \
                 -o "${tmpSampleBatchVariantCalls}" \
                 -L "${capturedBatchBed}" \
