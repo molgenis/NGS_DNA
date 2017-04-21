@@ -107,7 +107,7 @@ else
         		-T HaplotypeCaller \
         		-R ${indexFile} \
         		$inputs \
-			-newQual \
+#			-newQual \
 			--BQSR ${mergedBamRecalibratedTable} \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
@@ -123,7 +123,7 @@ else
 			-R ${indexFile} \
 			--BQSR ${mergedBamRecalibratedTable} \
 			--dbsnp ${dbSnp}\
-                        -newQual \
+  #                      -newQual \
 			${inputs} \
 			-o "${tmpSampleBatchVariantCalls}" \
 			-L "${capturedBatchBed}" \
@@ -146,7 +146,7 @@ else
                         -T HaplotypeCaller \
                         -R ${indexFile} \
                         --dbsnp ${dbSnp}\
-                        -newQual \
+ #                       -newQual \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
@@ -160,7 +160,7 @@ else
                         -T HaplotypeCaller \
                         -R ${indexFile} \
                         --dbsnp ${dbSnp} \
-                        -newQual \
+#                        -newQual \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
