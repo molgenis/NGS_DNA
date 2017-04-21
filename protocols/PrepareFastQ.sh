@@ -18,8 +18,8 @@
 #list externalSampleID
 #string intermediateDir
 
-#string phiXEnd1
-#string phiXEnd2
+#string phiXEnd1Gz
+#string phiXEnd2Gz
 #string seqTkVersion
 #string pigzVersion
 
