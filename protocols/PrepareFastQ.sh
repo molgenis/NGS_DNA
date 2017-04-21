@@ -9,6 +9,8 @@
 #string srBarcodeFqGz
 #string peEnd1BarcodePhiXRecodedFqGz
 #string peEnd2BarcodePhiXRecodedFqGz
+#string peEnd1BarcodePhiXFqGz
+#string peEnd2BarcodePhiXFqGz
 
 #string intermediateDir
 #string cutadaptVersion
@@ -52,7 +54,7 @@ done
 
 echo "starting with phiX part"
 # Spike phiX only once
-samp=$(tail -10 ${TMPDIR}/${peEnd1BarcodeFqGz})
+samp=$(tail -10 ${peEnd1BarcodeFqGz})
 phiX=$(tail -10 ${phiXEnd1Gz})
 
 if [ "$samp" = "$phiX" ]; 
@@ -63,8 +65,8 @@ else
 	if [ "${seqType}" == "PE" ]
 	then
 		echo "Append phiX reads"
-		cat ${phiXEnd1Gz} >> ${TMPDIR}/${peEnd1BarcodeFqGz}
-		cat ${phiXEnd2Gz} >> ${TMPDIR}/${peEnd2BarcodeFqGz}
+		cat ${peEnd1BarcodeFqGz} ${phiXEnd1Gz} >> ${peEnd1BarcodePhiXFqGz}
+		cat ${peEnd2BarcodeFqGz} ${phiXEnd2Gz} >> ${peEnd2BarcodePhiXFqGz}
 	fi
 fi
 echo -e "finished with phiX part...\nstarting with IlluminaEncoding"
@@ -151,8 +153,8 @@ fi
 #If paired-end do fastqc for both ends, else only for one
 if [ "${seqType}" == "PE" ]
 then
-        checkIlluminaEncoding ${TMPDIR}/${peEnd1BarcodeFqGz} ${peEnd1BarcodePhiXRecodedFqGz}
-        checkIlluminaEncoding ${TMPDIR}/${peEnd2BarcodeFqGz} ${peEnd2BarcodePhiXRecodedFqGz}
+        checkIlluminaEncoding ${peEnd1BarcodePhiXFqGz} ${peEnd1BarcodePhiXRecodedFqGz}
+        checkIlluminaEncoding ${peEnd2BarcodePhiXFqGz} ${peEnd2BarcodePhiXRecodedFqGz}
 else
 	echo "SeqType unknown"
 	exit 1
