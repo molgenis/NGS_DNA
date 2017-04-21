@@ -117,6 +117,8 @@ peEnd2BarcodeTrimmedPhiXRecodedFqGz,${rawFile}_2.phiX.recoded.${rawFileExt}
 peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
 peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
 srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
+srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
+srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
 bwaAlignCores,8
 humanPhiXdir,${dataDir}/inSilico/humanPhiX
 simulatedPhiXVariants,${humanPhiXdir}/InSilicoData.chrNC_001422.1.variant.calls.vcf
