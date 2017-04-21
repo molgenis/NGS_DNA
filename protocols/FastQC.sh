@@ -3,8 +3,8 @@
 #Parameter mapping
 #string tmpName
 #string seqType
-#string peEnd1BarcodeFqGz
-#string peEnd2BarcodeFqGz
+#string fastq1
+#string fastq2
 #string srBarcodeFqGz
 #string stage
 #string checkStage
