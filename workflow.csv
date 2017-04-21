@@ -1,5 +1,5 @@
 step,protocol,dependencies
-s01_PrepareFastQ,protocols/GoNL/PrepareFastQ.sh,
+s01_PrepareFastQ,protocols/PrepareFastQ.sh,
 s03_FastQC,protocols/FastQC.sh,s01_PrepareFastQ;fastq1=peEnd1BarcodePhiXRecodedFqGz;fastq2=peEnd2BarcodePhiXRecodedFqGz
 s04_BwaAlignAndSortSam,protocols/BwaAlignAndSortSam.sh,s01_PrepareFastQ;fastq1=peEnd1BarcodePhiXRecodedFqGz;fastq2=peEnd2BarcodePhiXRecodedFqGz
 s05_MergeBam,protocols/MergeBam.sh,s04_BwaAlignAndSortSam;inputMergeBam=alignedSortedBam;inputMergeBamIdx=alignedSortedBamIdx
