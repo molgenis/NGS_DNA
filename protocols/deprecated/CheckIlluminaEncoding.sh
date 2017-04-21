@@ -13,9 +13,11 @@
 #string project
 #string projectRawTmpDataDir
 #string seqTkVersion
+#string pigzVersion
 sleep 10
 
 module load ${seqTkVersion}
+module load ${pigzVersion}
 checkIlluminaEncoding() {
 barcodeFqGz=$1
 echo ${barcodeFqGz}
@@ -81,7 +83,8 @@ then
 	echo "encoding is Illumina 1.8 - Sanger / Illumina 1.9"
 else
 	#make fastQ out of the fq.gz file
-	seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFqGz}.fq.encoded.gz
+	seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFqGz}.fq.encoded
+	pigz ${barcodeFqGz}.fq.encoded
 	echo "copying ${barcodeFqGz}.fq.encoded.gz to ${barcodeFqGz}"
         cp ${barcodeFqGz}.fq.encoded.gz ${barcodeFqGz}
 fi

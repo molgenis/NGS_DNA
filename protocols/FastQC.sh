@@ -26,8 +26,8 @@ tmpIntermediateDir=${MC_tmpFile}
 #If paired-end do fastqc for both ends, else only for one
 if [ "${seqType}" == "PE" ]
 then
-	fastqc ${peEnd1BarcodeFqGz} \
-	${peEnd2BarcodeFqGz} \
+	fastqc ${fastq1} \
+	${fastq2} \
 	-o ${tmpIntermediateDir}
 	echo -e "\nFastQC finished succesfull. Moving temp files to final.\n\n"
 	cp -r ${tmpIntermediateDir}/* ${intermediateDir}

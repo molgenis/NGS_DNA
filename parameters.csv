@@ -112,9 +112,8 @@ projectQcDir,${projectDir}/qc/
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
-peEnd1BarcodePhiXFqGz,${rawFile}.phiX_1.${rawFileExt}
-peEnd2BarcodePhiXFqGz,${rawFile}.phiX_2.${rawFileExt}
-srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
+peEnd1BarcodeTrimmedPhiXRecodedFqGz,${rawFile}_1..phiX.recoded.${rawFileExt}
+peEnd2BarcodeTrimmedPhiXRecodedFqGz,${rawFile}_2.phiX.recoded.${rawFileExt}
 peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
 peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
 srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
