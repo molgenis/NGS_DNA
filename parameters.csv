@@ -9,7 +9,7 @@ checkStage,module list
 
 ### Tool versions ####
 bedToolsVersion,BEDTools/2.25.0-foss-2015b
-bwaVersion,BWA/0.7.15-${toolChain}
+bwaVersion,BWA/0.7.12-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
@@ -357,3 +357,4 @@ familyList,${intermediateDir}/${externalSampleID}.familyList.txt
 arrayFileLocation,${inputData}/${arrayFile}
 
 mergedBamRecalibratedTable,${sampleMergedBam}.recalibrated.table
+pigzVersion,pigz/2.3.1-foss-2015b
