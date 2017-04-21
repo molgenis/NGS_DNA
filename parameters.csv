@@ -9,7 +9,7 @@ checkStage,module list
 
 ### Tool versions ####
 bedToolsVersion,BEDTools/2.25.0-foss-2015b
-bwaVersion,BWA/0.7.12-${toolChain}
+bwaVersion,BWA/0.7.15-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
@@ -29,7 +29,7 @@ picardVersion,picard/2.9.0-Java-1.8.0_74
 pythonVersion,Python/2.7.10-${toolChain}
 rVersion,R/3.2.1-${toolChain}
 sambambaVersion,sambamba/${sambambaVer}-${toolChain}
-sambambaVer,v0.6.6
+sambambaVer,v0.6.4
 samtoolsVersion,SAMtools/1.2-${toolChain}
 seqTkVersion,seqtk/1.2-foss-2015b
 snpEffVersion,snpEff/4.3-Java-1.7.0_80
