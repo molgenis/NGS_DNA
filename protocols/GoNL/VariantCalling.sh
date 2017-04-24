@@ -24,7 +24,7 @@
 #string logsDir 
 #string groupname
 #string dedupBam
-#string sampleMergedBam
+#string mergedBamRecalibratedTable
 
 sleep 5
 
@@ -107,7 +107,8 @@ else
         		-T HaplotypeCaller \
         		-R ${indexFile} \
         		$inputs \			
-			--BQSR ${sampleMergedBam}.recalibrated.table \
+			--BQSR ${mergedBamRecalibratedTable} \
+			-newQuals \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
         		-L "${capturedBatchBed}" \
@@ -121,9 +122,9 @@ else
 			-T HaplotypeCaller \
 			-R ${indexFile} \
 			--dbsnp ${dbSnp} \
-			--BQSR ${sampleMergedBam}.recalibrated.table \
+                        -newQuals \
+			--BQSR ${mergedBamRecalibratedTable} \
 			${inputs} \
-			-dontUseSoftClippedBases \
 			-o "${tmpSampleBatchVariantCalls}" \
 			-L "${capturedBatchBed}" \
 			--emitRefConfidence GVCF \
@@ -144,8 +145,9 @@ else
                         ${EBROOTGATK}/${gatkJar} \
                         -T HaplotypeCaller \
                         -R ${indexFile} \
-                        --dbsnp ${dbSnp}\
-			--BQSR ${sampleMergedBam}.recalibrated.table \
+                        --dbsnp ${dbSnp} \
+                        -newQuals \
+			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
@@ -158,7 +160,8 @@ else
                         -T HaplotypeCaller \
                         -R ${indexFile} \
                         --dbsnp ${dbSnp} \
-			--BQSR ${sampleMergedBam}.recalibrated.table \
+                        -newQuals \
+			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
@@ -171,8 +174,9 @@ else
                 ${EBROOTGATK}/${gatkJar} \
                 -T HaplotypeCaller \
                 -R ${indexFile} \
+                -newQuals \
                 $inputs \
-                --BQSR ${sampleMergedBam}.recalibrated.table \
+		--BQSR ${mergedBamRecalibratedTable} \
                 --dbsnp ${dbSnp} \
                 -o "${tmpSampleBatchVariantCalls}" \
                 -L "${capturedBatchBed}" \

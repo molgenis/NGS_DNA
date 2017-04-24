@@ -13,8 +13,8 @@ bwaVersion,BWA/0.7.15-${toolChain}
 computeVersion,v16.08.1-Java-1.8.0_74
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
-cutadaptVersion,cutadapt/1.9.1-foss-2015b-Python-2.7.10
-fastqcVersion,FastQC/0.11.3-Java-1.7.0_80
+cutadaptVersion,cutadapt/1.13-foss-2015b-Python-2.7.10
+fastqcVersion,FastQC/0.11.5-Java-1.7.0_80
 gatkVersion,GATK/3.7-Java-1.8.0_74
 gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
@@ -112,12 +112,15 @@ projectQcDir,${projectDir}/qc/
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
-peEnd1BarcodePhiXFqGz,${rawFile}.phiX_1.${rawFileExt}
-peEnd2BarcodePhiXFqGz,${rawFile}.phiX_2.${rawFileExt}
-srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
+peEnd1BarcodePhiXRecodedFqGz,${rawFile}_1.phiX.recoded.${rawFileExt}
+peEnd2BarcodePhiXRecodedFqGz,${rawFile}_2.phiX.recoded.${rawFileExt}
+peEnd1BarcodePhiXFqGz,${rawFile}_1.phiX.${rawFileExt}
+peEnd2BarcodePhiXFqGz,${rawFile}_2.phiX.${rawFileExt}
 peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
 peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
 srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
+srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
+srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
 bwaAlignCores,8
 humanPhiXdir,${dataDir}/inSilico/humanPhiX
 simulatedPhiXVariants,${humanPhiXdir}/InSilicoData.chrNC_001422.1.variant.calls.vcf
@@ -355,3 +358,6 @@ arrayTmpMap,${intermediateDir}/${externalSampleID}.concordance.tmp.map
 arrayMapFile,${intermediateDir}/${externalSampleID}.concordance.map
 familyList,${intermediateDir}/${externalSampleID}.familyList.txt
 arrayFileLocation,${inputData}/${arrayFile}
+
+mergedBamRecalibratedTable,${sampleMergedBam}.recalibrated.table
+pigzVersion,pigz/2.3.1-foss-2015b

@@ -14,9 +14,10 @@
 #string gatkVersion
 #string gatkJar
 #string dbSnp
-#string inputMergeBam
+#string sampleMergedBam
 #string sambambaVersion
 #string sambambaTool
+#string mergedBamRecalibratedTable
 sleep 5
 
 ${stage} ${gatkVersion}
@@ -38,13 +39,17 @@ array_contains () {
     return $in
 }
 
-for bamFile in "${inputMergeBam[@]}"
+for bamFile in "${sampleMergedBam[@]}"
 do
   	array_contains INPUTS "$bamFile" || INPUTS+=("-I $bamFile")    # If bamFile does not exist in array add it
         array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("-I $bamFile")    # If bamFile does not exist in array add it
 done
 
-${EBROOTSAMBAMBA}/${sambambaTool} index ${inputMergeBam}
+makeTmpDir ${mergedBamRecalibratedTable}
+tmpMergedBamRecalibratedTable=${MC_tmpFile}
+
+${EBROOTSAMBAMBA}/${sambambaTool} index ${sampleMergedBam}
+
 
 java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx9g -jar ${EBROOTGATK}/${gatkJar} \
    -T BaseRecalibrator \
@@ -52,4 +57,7 @@ java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx9g -jar ${EBROOTGAT
    ${INPUTS[@]} \
    -nct 3 \
    -knownSites ${dbSnp} \
-   -o ${inputMergeBam}.recalibrated.table
+   -o ${tmpMergedBamRecalibratedTable}
+
+mv ${tmpMergedBamRecalibratedTable}  ${mergedBamRecalibratedTable}
+echo "moved ${tmpMergedBamRecalibratedTable}  ${mergedBamRecalibratedTable}"

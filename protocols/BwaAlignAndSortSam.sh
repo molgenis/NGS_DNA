@@ -11,8 +11,8 @@ set -o pipefail
 #string bwaVersion
 #string indexFile
 #string bwaAlignCores
-#string peEnd1BarcodePhiXFqGz
-#string peEnd2BarcodePhiXFqGz
+#string fastq1
+#string fastq2
 #string srBarcodeFqGz
 #string alignedSam
 #string lane
@@ -38,8 +38,8 @@ tmpAlignedSortedBam=${MC_tmpFile}
 ${stage} ${bwaVersion}
 ${stage} ${picardVersion}
 ${checkStage}
-READGROUPLINE=""
-	READGROUPLINE="@RG\tID:${filePrefix}_${lane}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
+
+READGROUPLINE="@RG\tID:${filePrefix}_${lane}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
 rm -f  ${tmpAlignedSam}
 
 mkfifo -m 0644 ${tmpAlignedSam}
@@ -54,8 +54,8 @@ then
     	-R $READGROUPLINE \
     	-t ${bwaAlignCores} \
     	${indexFile} \
-    	${peEnd1BarcodePhiXFqGz} \
-    	${peEnd2BarcodePhiXFqGz} \
+    	${fastq1} \
+    	${fastq2} \
     	> ${tmpAlignedSam} &
 
 	java -Djava.io.tmpdir=${tempDir} -Xmx29G -XX:ParallelGCThreads=4 -jar ${EBROOTPICARD}/${picardJar} SortSam \
@@ -65,11 +65,6 @@ then
         CREATE_INDEX=true 
 
 	mv ${tmpAlignedSortedBam} ${alignedSortedBam}
-	echo "removing FastQ files with PhiX reads, run SpikePhiX step to get a FastQ file with PhiX reads"
-	rm ${peEnd1BarcodePhiXFqGz}
-	rm ${peEnd2BarcodePhiXFqGz}
-
-	echo "phiX appended fastq files are deleted"
 
 else
     	#Run BWA for single-read
