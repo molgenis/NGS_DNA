@@ -108,12 +108,15 @@ projectQcDir,${projectDir}/qc/
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
+peEnd1BarcodeTrimmedPhiXRecodedFqGz,${rawFile}_1.trimmed.phiX.recoded.${rawFileExt}
+peEnd2BarcodeTrimmedPhiXRecodedFqGz,${rawFile}_2.trimmed.phiX.recoded.${rawFileExt}
+peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
 peEnd1BarcodePhiXFqGz,${rawFile}.phiX_1.${rawFileExt}
 peEnd2BarcodePhiXFqGz,${rawFile}.phiX_2.${rawFileExt}
 peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
 peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
-peEnd1BarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.fq
-peEnd2BarcodeTrimmedFq,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.fq
+peEnd1BarcodeTrimmedFq,${filePrefix}_${barcode}_1.trimmed.fq
+peEnd2BarcodeTrimmedFq,${filePrefix}_${barcode}_2.trimmed.fq
 srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
 srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
 srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
@@ -124,8 +127,10 @@ simulatedPhiXVariants,${humanPhiXdir}/InSilicoData.chrNC_001422.1.variant.calls.
 inSilicoConcordanceFile,${intermediateDir}/inSilicoConcordance.txt
 rawFileExt,fq.gz
 phiXPrefix,150504_WGSIM_9999_ZZZZZZZZXX
-phiXEnd1Gz,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L9_ZZZZZZ_1.${rawFileExt}
-phiXEnd2Gz,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L9_ZZZZZZ_2.${rawFileExt}
+phiXEnd1Gz,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L9_ZZZZZZ_1.fq.gz
+phiXEnd2Gz,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L9_ZZZZZZ_2.fq.gz
+phiXEnd1,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L9_ZZZZZZ_1.fq
+phiXEnd2,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L9_ZZZZZZ_2.fq
 
 ### Protocols 5, 6, 7, 8 and 9 (SamToBam, SortBam, MergeBam, MarkDuplicates) ###
 samToBamJar,SamFormatConverter
