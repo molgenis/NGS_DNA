@@ -63,16 +63,6 @@ then
 	${peEnd1BarcodeFqGz} ${peEnd2BarcodeFqGz}
 	
 	echo "adapters masked, now gzipping with pigz"
-
-	pigz ${peEnd1BarcodeTrimmedFq}
-	pigz ${peEnd2BarcodeTrimmedFq}
-
-	echo "copying ${peEnd1BarcodeTrimmedFqGz} ${peEnd1BarcodeFqGz}"
-	echo "copying ${peEnd2BarcodeTrimmedFqGz} ${peEnd2BarcodeFqGz}"
-
-	cp ${peEnd1BarcodeTrimmedFqGz} ${peEnd1BarcodeFqGz}
-	cp ${peEnd2BarcodeTrimmedFqGz} ${peEnd2BarcodeFqGz}
-
 	
 	
 elif [[ "${seqType}" == "SR" ]]
