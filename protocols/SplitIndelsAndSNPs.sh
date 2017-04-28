@@ -33,7 +33,6 @@ java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -T SelectVariants \
 --variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedIndelsVcf} \
--L ${capturedIntervals} \
 --selectTypeToInclude INDEL \
 -sn ${externalSampleID}
 
@@ -48,7 +47,6 @@ java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -T SelectVariants \
 --variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedSnpsVcf} \
--L ${capturedIntervals} \
 --selectTypeToExclude INDEL \
 -sn ${externalSampleID}
 

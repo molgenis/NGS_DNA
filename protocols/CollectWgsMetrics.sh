@@ -32,5 +32,4 @@ TMP_DIR=${tempDir}
 
 echo -e "\nWgsMetrics finished succesfull. Moving temp files to final.\n\n"
 mv ${tmpWgsMetrics} ${wgsMetrics}
-mv ${tmpWgsMetrics}.pdf ${wgsMetrics}.pdf
 

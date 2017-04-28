@@ -9,7 +9,7 @@
 #string stage
 #string checkStage
 #string fastqcVersion
-#string intermediateDir
+#string outputFolderFastQC
 #string tmpDataDir
 #string project
 #string logsDir 
@@ -20,28 +20,22 @@ sleep 5
 #Load module
 ${stage} ${fastqcVersion}
 ${checkStage}
-makeTmpDir ${intermediateDir}
-tmpIntermediateDir=${MC_tmpFile}
+makeTmpDir ${outputFolderFastQC}
+tmpOutputFolderFastQC=${MC_tmpFile}
 
 #If paired-end do fastqc for both ends, else only for one
 if [ "${seqType}" == "PE" ]
 then
 	fastqc ${fastq1} \
 	${fastq2} \
-	-o ${tmpIntermediateDir}
+	-o ${tmpOutputFolderFastQC}
 	echo -e "\nFastQC finished succesfull. Moving temp files to final.\n\n"
-	cp -r ${tmpIntermediateDir}/* ${intermediateDir}
-	echo "copied ${tmpIntermediateDir}/* to ${intermediateDir}"
-	rm -rf ${tmpIntermediateDir}
-	echo "removed ${tmpIntermediateDir}"
+	mv ${tmpOutputFolderFastQC}/* ${outputFolderFastQC}
 else
 	fastqc ${srBarcodeFqGz} \
-	-o ${tmpIntermediateDir}
+	-o ${tmpOutputFolderFastQC}
 	echo -e "\nFastQC finished succesfull. Moving temp files to final.\n\n"
-	cp -r ${tmpIntermediateDir}/* ${intermediateDir}
-	echo "copied ${tmpIntermediateDir}/* to ${intermediateDir}"
-	rm -rf ${tmpIntermediateDir}
-	echo "removed ${tmpIntermediateDir}"
+	mv ${tmpOutputFolderFastQC}/* ${outputFolderFastQC}
 	
 fi
 

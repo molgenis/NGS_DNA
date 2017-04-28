@@ -30,7 +30,6 @@
 module load ${cutadaptVersion}
 module load ${seqTkVersion}
 module load ${pigzVersion}
-module load pigz
 module list
 
 array_contains () {
