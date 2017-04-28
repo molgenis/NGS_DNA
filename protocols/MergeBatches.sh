@@ -66,7 +66,8 @@ java -Xmx12g -Djava.io.tmpdir=${tempDir} -cp ${EBROOTGATK}/${gatkJar} org.broadi
 ${INPUTS[@]} \
 -out ${tmpProjectVariantsMerged}
 
-mv ${tmpProjectVariantsMergedIdx} ${projectVariantsMergedIdx}
-echo "mv ${tmpProjectVariantsMergedIdx} ${projectVariantsMergedIdx}"
-mv ${tmpProjectVariantsMerged} ${projectVariantsMerged}
-echo "mv ${tmpProjectVariantsMerged} ${projectVariantsMerged}"
+echo "sorting vcf"
+sortVCFbyFai.pl -fastaIndexFile ${indexFile}.fai -inputVCF ${tmpProjectVariantsMerged} -outputVcf ${tmpProjectVariantsMerged}.sorted
+
+mv ${tmpProjectVariantsMerged}.sorted ${projectVariantsMerged}
+echo "mv ${tmpProjectVariantsMerged}.sorted ${projectVariantsMerged}"

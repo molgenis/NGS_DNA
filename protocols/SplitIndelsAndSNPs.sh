@@ -16,10 +16,8 @@
 #string projectVariantsMergedSnpsVcf
 #string projectVariantsMergedIndelsVcf
 #string externalSampleID
-#string ngsUtilsVersion
 
 module load ${gatkVersion}
-module load ${ngsUtilsVersion}
 
 makeTmpDir ${projectVariantsMergedIndelsVcf}
 tmpProjectVariantsMergedIndelsVcf=${MC_tmpFile}
@@ -29,17 +27,11 @@ tmpProjectVariantsMergedSnpsVcf=${MC_tmpFile}
 
 sleep 5
 
-if [ ! -f ${projectVariantsMerged}.sorted.locked ] 
-then
-	touch ${projectVariantsMerged}.sorted.locked
-	sortVCFbyFai.pl -fastaIndexFile $indexFile -inputVCF ${projectVariantsMerged} -outputVcf ${projectVariantsMerged}.sorted
-fi
-
 #select only Indels
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${projectVariantsMerged}.sorted \
+--variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedIndelsVcf} \
 --selectTypeToInclude INDEL \
 -sn ${externalSampleID}
@@ -53,7 +45,7 @@ sleep 5
 java -XX:ParallelGCThreads=2 -Xmx4g -jar ${EBROOTGATK}/${gatkJar} \
 -R ${indexFile} \
 -T SelectVariants \
---variant ${projectVariantsMerged}.sorted \
+--variant ${projectVariantsMerged} \
 -o ${tmpProjectVariantsMergedSnpsVcf} \
 --selectTypeToExclude INDEL \
 -sn ${externalSampleID}
