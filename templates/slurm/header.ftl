@@ -109,4 +109,10 @@ trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 
 touch ${MC_jobScript}.started
 
+#
+# When dealing with timing / synchronization issues of large parallel file systems,
+# you can uncomment the sleep statement below to allow for flushing of IO buffers/caches.
+#
+#sleep 10
+
 </#noparse>

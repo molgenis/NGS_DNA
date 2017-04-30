@@ -18,8 +18,6 @@
 #string sambambaVersion
 #string sambambaTool
 
-sleep 5
-
 #Function to check if array contains value
 array_contains () {
     local array="$1[@]"

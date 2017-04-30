@@ -14,8 +14,6 @@
 #string logsDir 
 #string groupname
 
-sleep 10 
-
 # Spike phiX only once
 samp=`tail -10 ${peEnd1BarcodeFqGz}`
 phiX=`tail -10 ${phiXEnd1Gz}`

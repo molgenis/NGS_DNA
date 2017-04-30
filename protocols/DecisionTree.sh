@@ -35,7 +35,6 @@
 #string intermediateDir
 #string bedToolsVersion
 
-sleep 5
 module load ${ngsversion}
 module load ${bedToolsVersion}
 

@@ -15,7 +15,6 @@
 #string gatkJar
 #string dbSnp
 #string inputMergeBam
-sleep 5
 
 ${stage} ${gatkVersion}
 ${checkStage}

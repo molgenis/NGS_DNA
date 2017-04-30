@@ -21,7 +21,6 @@
 #Load Picard module
 ${stage} ${sambambaVersion}
 ${checkStage}
-sleep 5
 
 makeTmpDir ${dedupBam}
 tmpDedupBam=${MC_tmpFile}

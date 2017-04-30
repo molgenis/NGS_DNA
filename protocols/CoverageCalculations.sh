@@ -19,7 +19,6 @@
 #string coveragePerTargetDir
 #string ngsUtilsVersion
 
-sleep 5
 module load ${gatkVersion}
 module load ${ngsUtilsVersion}
 
