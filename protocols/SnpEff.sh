@@ -15,8 +15,6 @@
 #string snpEffVersion
 #string javaVersion
 
-sleep 5
-
 makeTmpDir ${projectVariantCallsSnpEff_Annotated}
 tmpProjectVariantCallsSnpEff_Annotated=${MC_tmpFile}
 

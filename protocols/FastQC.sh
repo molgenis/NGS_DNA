@@ -15,8 +15,6 @@
 #string logsDir 
 #string groupname
 
-sleep 5
-
 #Load module
 ${stage} ${fastqcVersion}
 ${checkStage}

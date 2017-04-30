@@ -18,7 +18,6 @@
 #string sambambaVersion
 #string sambambaTool
 #string mergedBamRecalibratedTable
-sleep 5
 
 ${stage} ${gatkVersion}
 ${stage} ${sambambaVersion}

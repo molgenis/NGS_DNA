@@ -16,7 +16,6 @@
 #string dellyVcf
 #string dellySnpEffVcf
 #string GCC_Analysis
-sleep 3
 
 makeTmpDir ${projectDellyAnnotatorOutputVcf}
 tmpProjectDellyAnnotatorOutputVcf=${MC_tmpFile}

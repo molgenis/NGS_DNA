@@ -24,8 +24,6 @@
 #string projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated
 #string projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated
 
-sleep 5
-
 makeTmpDir ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated}
 tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated=${MC_tmpFile}
 

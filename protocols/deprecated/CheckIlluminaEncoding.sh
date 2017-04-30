@@ -14,7 +14,6 @@
 #string projectRawTmpDataDir
 #string seqTkVersion
 #string pigzVersion
-sleep 10
 
 module load ${seqTkVersion}
 module load ${pigzVersion}

@@ -18,7 +18,6 @@
 #Load Picard module
 ${stage} ${sambambaVersion}
 ${checkStage}
-sleep 5
 
 makeTmpDir ${flagstatMetrics}
 tmpFlagstatMetrics=${MC_tmpFile}

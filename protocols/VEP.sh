@@ -17,7 +17,6 @@
 #string vepDBVersion
 #string vepDataDir
 #string vepVersion
-sleep 5
 
 makeTmpDir ${projectVariantCallsVEP_Annotated}
 tmpProjectVariantCallsVEP_Annotated=${MC_tmpFile}

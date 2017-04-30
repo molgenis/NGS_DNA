@@ -16,7 +16,6 @@
 #string picardVersion
 
 module load ${picardVersion}
-sleep 5
 
 if [ -f ${dedupBam}.noChrX ]
 then

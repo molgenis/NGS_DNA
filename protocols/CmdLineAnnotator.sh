@@ -21,8 +21,6 @@
 #string gonlAnnotation
 #string exacAnnotation
 
-sleep 3
-
 makeTmpDir ${projectVariantCallsSnpEff_ExAC_Annotated}
 tmpProjectVariantCallsSnpEff_ExAC_Annotated=${MC_tmpFile}
 

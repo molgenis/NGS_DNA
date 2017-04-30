@@ -103,8 +103,6 @@ else
 	awk '{ if ($10!= "0/0") print $0};' ${sampleNameID}.genotypeArray.ExonFiltered.vcf \
 	> ${sampleNameID}.genotypeArray.ExonFiltered.HomozygousRefRemoved.vcf
 	
-	sleep 3
-	
 	#Count how much SNP's are in original VCF and how much proceed for Concordance
 	wc -l ${sampleNameID}.genotypeArray.vcf > ${sampleNameID}.originalSNPs.txt
 	wc -l ${sampleNameID}.genotypeArray.ExonFiltered.HomozygousRefRemoved.vcf > ${sampleNameID}.SNPswichproceedtoConcordance.txt
