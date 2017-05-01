@@ -23,8 +23,7 @@ echo "checkout commit: COMMIT"
 git checkout -f ${COMMIT}
 
 ##Copy raw data
-cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_1.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/
-cp -r test/rawdata/MY_TEST_BAM_PROJECT/small_revertsam_2.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/
+cp -r test/rawdata/MY_TEST_BAM_PROJECT/*.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT/
 
 if [ -d ${workfolder}/generatedscripts/PlatinumSubset ] 
 then
@@ -58,7 +57,6 @@ fgrep "computeVersion," parameters.csv > ${workfolder}/generatedscripts/Platinum
 perl -pi -e 's|module load NGS_DNA/3.4.0|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|PROJECT=projectXX|PROJECT=PlatinumSubset|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|RUNID=runXX|RUNID=run01|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
-perl -pi -e 's|BATCH="_chr"|BATCH="_small"|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|ngsversion=.*|ngsversion="test";\\|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
