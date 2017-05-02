@@ -74,9 +74,9 @@ sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
 
-perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
-perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_0.sh  
-perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_DecisionTree_0.sh  
+perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_*.sh
+perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_*.sh  
+perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_DecisionTree_*.sh  
 perl -pi -e 's|module load test|#|' s*_QCReport_0.sh
 perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s*_CountAllFinishedFiles_0.sh
 perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
