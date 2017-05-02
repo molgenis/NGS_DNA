@@ -10,8 +10,6 @@
 #string projectVariantsMerged
 #string intermediateDir
 
-sleep 10
-
 tail -3 ${simulatedPhiXVariants} > ${intermediateDir}/InSilico.txt
 
 awk '

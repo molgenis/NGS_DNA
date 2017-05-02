@@ -31,8 +31,6 @@
 #string gavinOutputFinalMergedRLV
 #string sampleFinalVcf
 
-sleep 3
-
 makeTmpDir ${gavinOutputFirstPass}
 tmpGavinOutputFirstPass=${MC_tmpFile}
 

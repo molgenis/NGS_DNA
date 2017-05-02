@@ -61,24 +61,23 @@ then
 		echo "startWithBamFinished skipped"
 	fi
 	
-	
 	if [ ! -f ${startWithMatchScoreFinished} ]
 	then
 		if [ "${includePrevRuns}" == "true" ]
 		then
 			rm -f ${workingDir}/oldControls.txt
 			for i in $(ls -d ${pathToFinalControls}/*/)
-                        do
-                                echo "start copying normalized coverage files from previous runs to ${convadingStartWithBamDir}"
+			do
+				echo "start copying normalized coverage files from previous runs to ${convadingStartWithBamDir}"
 				if [ -d ${pathToFinalControls}/$(basename ${i})/Convading/${gender} ]
-	                        then
-				        cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${convadingStartWithBamDir}
-       	                        	cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${controlsDir}
+				then
+					cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${convadingStartWithBamDir}
+					cp ${pathToFinalControls}/$(basename ${i})/Convading/${gender}/*.aligned.only.normalized.coverage.txt ${controlsDir}
 				fi
-                                echo $(basename ${i%%.*}) >> ${workingDir}/oldControls.txt
-                        done
+				echo $(basename ${i%%.*}) >> ${workingDir}/oldControls.txt
+			done
 		fi
-	
+		
 		echo "working on: s2_startWithMatchScore"
 		perl ${EBROOTCONVADING}/CoNVaDING.pl \
 		-mode StartWithMatchScore \
@@ -86,9 +85,9 @@ then
 		-outputDir ${convadingStartWithMatchScoreDir} \
 		-sexChr \
 		-controlsDir ${controlsDir}  2>&1 >> ${workingDir}/step2_StartWithMatchScore.log
-	
+		
 		touch ${startWithMatchScoreFinished}
-        	echo "startWithMatchScore created"
+		echo "startWithMatchScore created"
 	else
 		echo "startWithMatchScore skipped"
 	fi
@@ -131,54 +130,48 @@ then
 				}
 			}' $i > ${sampleID}.chrX.shortlist 
 			size=0
-
-			if [ -f ${sampleID}.chrX.shortlist ]
-			then	
-                		size=$(cat ${sampleID}.chrX.shortlist | wc -l)
-        		fi
-
-	        	if [ ${size} != 0 ]
-                	then
-                        	rm -f ${convadingInputBamsDir}/${sampleID}*
 			
-                        	##
-                        	### Check if the control of the old controlgroup is still a control
-                        	##
-                        	oldControlGoesOut=""
-                        	if [ -f ${workingDir}/oldControls.txt ]
-                        	then
+			if [ -f ${sampleID}.chrX.shortlist ]
+			then
+				size=$(cat ${sampleID}.chrX.shortlist | wc -l)
+			fi
+			
+			if [ ${size} != 0 ]
+			then
+				rm -f ${convadingInputBamsDir}/${sampleID}*
+				
+				#
+				## Check if the control of the old controlgroup is still a control
+				#
+				oldControlGoesOut=""
+				if [ -f ${workingDir}/oldControls.txt ]
+				then
 					if grep $sampleID ${workingDir}/oldControls.txt 
 					then
-                            			oldControlGoesOut=$(grep $sampleID ${workingDir}/oldControls.txt)
-					fi				
-                        	else
-                            		oldControlGoesOut=""
-                        	fi
-	
-                        	if [ ! -z "${oldControlGoesOut}" ]
-                        	then
-                            		echo "${sampleID}" >> ${workingDir}/RemovedFromOldControlsGroup.txt
-					
-                        	else
-                            		#
-                                	## The controlsGroup does not contain bams anymore, only bams of this new group can be removed
-                                	#
-                                	echo "The controlsGroup does not contain bams anymore, only bams of this new group can be removed"
-	
-                        	fi
-                        	#
-                        	## Removing samples from the controlsDir
-                        	#
+						oldControlGoesOut=$(grep $sampleID ${workingDir}/oldControls.txt)
+					fi
+				else
+					oldControlGoesOut=""
+				fi
+				
+				if [ ! -z "${oldControlGoesOut}" ]
+				then
+					echo "${sampleID}" >> ${workingDir}/RemovedFromOldControlsGroup.txt
+				else
+					#
+					## The controlsGroup does not contain bams anymore, only bams of this new group can be removed
+					#
+					echo "The controlsGroup does not contain bams anymore, only bams of this new group can be removed"
+				fi
+				#
+				## Removing samples from the controlsDir
+				#
 				mv ${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt ${kickedOutSamples}/
-                        	printf "number of outliers: ${size}\t${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt moved to ${kickedOutSamples} folder \n" >> ${workingDir}/step4a_removingSamplesFromControls.log
-                        	printf "You can check the outliers in: $i \n\n" | tee ${workingDir}/step4a_removingSamplesFromControls.log
-	
-	
-                	fi
-	
-        	done
+				printf "number of outliers: ${size}\t${controlsDir}/${sampleID}*.aligned.only.normalized.coverage.txt moved to ${kickedOutSamples} folder \n" >> ${workingDir}/step4a_removingSamplesFromControls.log
+				printf "You can check the outliers in: $i \n\n" | tee ${workingDir}/step4a_removingSamplesFromControls.log
+			fi
+		done
 		touch ${workingDir}/step4a_removingSamplesFromControls.finished
-	
 	fi
 	
 	if [ ! -d ${pathToFinalControls}/${version}/Convading/${gender}/ ]
@@ -190,7 +183,7 @@ then
 	then
 		mkdir -p ${pathToFinalControls}/${version}/XHMM//${gender}/
 	fi
-		
+	
 	if [ ! -f ${generateTargetQcListFinished} ]
 	then
 		echo "working on: s4_generateTargetQcList with updated controls list"
@@ -231,8 +224,8 @@ then
 		for i in $(ls ${convadingInputBamsDir}/*.bam)
 		do
 			name=$(basename ${i%%.*})
-	  		echo "$i" > ${xhmmWorkingDir}/${name}.READS.bam.list
-	
+			echo "$i" > ${xhmmWorkingDir}/${name}.READS.bam.list
+		
 		done
 		
 		for i in $(ls ${xhmmWorkingDir}/*.READS.bam.list)
@@ -240,7 +233,7 @@ then
 		mkdir -p ${xhmmWorkingDir}/scripts/
 		bas=$(basename ${i%%.*})
 		output=${xhmmWorkingDir}/scripts/xhmm_${bas}.sh
-	
+		
 		echo "#!/bin/bash" > ${output}
 		echo "#SBATCH --job-name=xhmm_${bas}" >> ${output}
 		echo "#SBATCH --output=${xhmmWorkingDir}/scripts/xhmm_${bas}.out" >> ${output}
@@ -254,9 +247,9 @@ then
 		echo "set -e" >> ${output}
 		echo "set -u" >> ${output}
 		echo "function finish {">> ${output}
-        	echo "echo \"TRAPPED\"">> ${output}
-        	echo "touch ${xhmmWorkingDir}/scripts/XHMM.failed">> ${output}
-        	echo "}">> ${output}
+		echo "echo \"TRAPPED\"">> ${output}
+		echo "touch ${xhmmWorkingDir}/scripts/XHMM.failed">> ${output}
+		echo "}">> ${output}
 		echo "trap finish HUP INT QUIT TERM EXIT ERR" >> ${output}
 		echo "module load GATK" >> ${output}
 		echo "java -Xmx5g -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \\" >> ${output}
@@ -280,7 +273,7 @@ then
 			echo "${output} skipped"
 		fi
 		done
-	
+		
 		touch ${workingDir}/XHMM.submitted
 	fi
 	
@@ -293,7 +286,7 @@ then
 		then
 			countFinished=$(ls ${xhmmWorkingDir}/scripts/*.sh.finished | wc -l)
 		fi
-	
+		
 		if [ $countSh == $countFinished ]
 		then
 			echo "${countFinished} scripts finished out of the ${countSh}"
@@ -302,7 +295,6 @@ then
 		else
 			echo "${countFinished} scripts finished out of the ${countSh}"
 			echo "XHMM is not finished yet, going to sleep for 1 minute"
-	
 			sleep 60
 		fi
 	done
@@ -324,45 +316,42 @@ then
 				B=$(basename $line)
 				if [ -d ${pathToFinalControls}/${B}/XHMM/${gender}/PerSample/ ]
 				then
-       	                        	cp ${pathToFinalControls}/${B}/XHMM/${gender}/PerSample/*.sample_interval_summary ${xhmmWorkingDir}
-
+					cp ${pathToFinalControls}/${B}/XHMM/${gender}/PerSample/*.sample_interval_summary ${xhmmWorkingDir}
 				fi
 			done<${xhmmWorkingDir}/versions.txt 
-
 		fi
-	
+		
 		mkdir -p ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/
 		
 		echo "### COPYING XHMM controls to final destination"
-        	cp -r ${xhmmWorkingDir}/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/
-	
+		cp -r ${xhmmWorkingDir}/*.sample_interval_summary ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/
+		
 		if [ -f ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls ]
 		then
 			rm ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls
 		fi
- 	
-        	for i in $(ls ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/*.sample_interval_summary )
-        	do
-          		echo "$i" >> ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls
-        	done
-	
+		
+		for i in $(ls ${pathToFinalControls}/${version}/XHMM/${gender}/PerSample/*.sample_interval_summary )
+		do
+			echo "$i" >> ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls
+		done
+		
 		cp ${xhmmWorkingDir}/${gender}_sample_interval_summary.Controls ${pathToFinalControls}/${version}/XHMM//${gender}/Controls.sample_interval_summary
-	
-        	echo "xhmm results copied"
-	
+		
+		echo "xhmm results copied"
+		
 	fi
 	echo "cleaning up and moving data per Gender"
-        logsDir=${workingDir}/logs
-        mkdir -p ${logsDir}
-
+	logsDir=${workingDir}/logs
+	mkdir -p ${logsDir}
+	
 	echo "moving data to ${logsDir}"
-        mv ${workingDir}/step* ${logsDir}
-        mv ${workingDir}/XHMM.* ${logsDir}
-        if [ -f ${workingDir}/oldControls.txt ]
+	mv ${workingDir}/step* ${logsDir}
+	mv ${workingDir}/XHMM.* ${logsDir}
+	if [ -f ${workingDir}/oldControls.txt ]
 	then
 		mv ${workingDir}/oldControls.txt ${logsDir}
 		touch ${workingDir}/Convading_MakeControlGroup.finished
-		
 	fi
 	echo "Making controlsgroup is completely finished"
 else

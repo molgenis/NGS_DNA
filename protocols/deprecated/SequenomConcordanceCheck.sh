@@ -20,7 +20,6 @@
 #string groupname
 #string ngsUtilsVersion
 
-sleep 5
 #
 ## Default using build 37
 #

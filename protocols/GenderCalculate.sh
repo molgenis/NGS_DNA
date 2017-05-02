@@ -17,7 +17,6 @@
 #string groupname
 
 module load ${picardVersion}
-sleep 5
 
 makeTmpDir ${hsMetricsNonAutosomalRegionChrX}
 tmpHsMetricsNonAutosomalRegionChrX=${MC_tmpFile}

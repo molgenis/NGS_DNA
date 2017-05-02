@@ -12,7 +12,6 @@
 #string dedupBam
 #string externalSampleID
 #string verifyBamIDVersion
-sleep 5
 
 ${stage} ${verifyBamIDVersion}
 ${checkStage}
