@@ -74,7 +74,15 @@ sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
 
-perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_*.sh
+perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
+
+for i in $(ls s*_Manta_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
+
+## "gender cannot be determined for Male NA12891"
+for i in $(ls s*_GenderCheck_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
+for i in $(ls s*_GenderCalculate_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
+printf "This is a male\n" > //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12891.chosenSex.txt
+printf "Male\n" >> //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12891.chosenSex.txt
 perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_*.sh  
 perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_DecisionTree_*.sh  
 perl -pi -e 's|module load test|#|' s*_QCReport_0.sh
