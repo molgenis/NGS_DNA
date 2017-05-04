@@ -78,6 +78,7 @@ cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
 
 perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
 
+for i in $(ls s*_CoverageCalculations*.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 for i in $(ls s*_Manta_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 
 ## "gender cannot be determined for Male NA12891"
