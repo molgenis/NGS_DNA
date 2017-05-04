@@ -26,7 +26,7 @@ do
 	else
 		echo "${i}: test succeeded"
 		head -2 /home/umcg-molgenis/NGS_DNA/output/${i}/vcfStats.txt	
-		count=$((count + 1)
+		count=$((count + 1))
 	fi
 done
 
