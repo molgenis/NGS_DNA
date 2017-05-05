@@ -123,4 +123,3 @@ echo ""
 echo "Test succeeded!"
 echo ""
 
-head -2 /home/umcg-molgenis/NGS_DNA/output/vcfStats.txt
