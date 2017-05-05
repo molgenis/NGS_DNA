@@ -155,8 +155,8 @@ else
 	#make fastQ out of the fq.gz file
 	echo "converting Illumina encoding"
 	seqtk seq ${barcodeFq} -Q 64 -V > ${barcodeFq}.encoded.fq
-	echo -e "done..\nNow gzipping ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}"
-	pigz -c ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}
+	echo -e "done..\nNow gzipping ${barcodeFq}.encoded.fq > ${barcodeFinalFqGz}"
+	pigz -c ${barcodeFq}.encoded.fq > ${barcodeFinalFqGz}
 
 fi
 

@@ -104,7 +104,7 @@ else
         		${EBROOTGATK}/${gatkJar} \
         		-T HaplotypeCaller \
         		-R ${indexFile} \
-        		$inputs \			
+        		$inputs \
 			--BQSR ${mergedBamRecalibratedTable} \
 			-newQual \
 	        	--dbsnp ${dbSnp} \
