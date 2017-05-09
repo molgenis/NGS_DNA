@@ -18,6 +18,7 @@ java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar ${EBROOTGA
    -T PhaseByTransmission \
    -R ${indexFile} \
    -V "${projectBatchGenotypedVariantCalls}" \
+   --pedigreeValidationType SILENT \
    -mvf "${projectBatchGenotypedVariantCalls}.mvf" \
    -ped ${intermediateDir}/children.ped \
    -o "${projectBatchGenotypedVariantCalls}.PBToutput.abc.vcf"
@@ -41,6 +42,7 @@ java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar ${EBROOTGA
    -R ${indexFile} \
    -V "${projectBatchGenotypedVariantCalls}" \
    -mvf "${projectBatchGenotypedVariantCalls}.abd.mvf" \
+   --pedigreeValidationType SILENT \
    -ped ${intermediateDir}/children_d.ped \
    -o "${projectBatchGenotypedVariantCalls}.PBToutput.abd.vcf"
 fi
