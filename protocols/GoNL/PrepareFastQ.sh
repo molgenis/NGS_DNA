@@ -58,7 +58,7 @@ if [[ "${seqType}" == "PE" ]]
 then
 	cutadapt --format=fastq \
 	-a AGATCGGAAGAG \
-	-A GAGAAGGCTAGA \
+	-A AGATCGGAAGAG \
 	--minimum-length 20 \
 	-o ${TMPDIR}/${peEnd1BarcodeTrimmedFq} \
 	-p ${TMPDIR}/${peEnd2BarcodeTrimmedFq} \
