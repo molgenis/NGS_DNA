@@ -236,7 +236,7 @@ barcodeFastQcFolderPE2,${intermediateDir}/${filePrefix}_${barcode}_2.fq_fastqc
 
 walltimeCheckIllumina,08:59:00
 wgsMetrics,${dedupBam}.wgs_metrics
-bioPetVersion,Biopet/Biopet-0.9.0
+bioPetVersion,Biopet/Biopet-0.9.0-be7838f2
 bioPetJar,Biopet-0.9.0-be7838f2.jar
 pigzVersion,pigz/2.3.1-foss-2015b
 mergedBamRecalibratedTable,${sampleMergedBam}.recalibrated.table

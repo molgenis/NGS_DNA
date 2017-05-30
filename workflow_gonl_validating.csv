@@ -11,6 +11,7 @@ s07_MarkDuplicates,protocols/GoNL/MarkDuplicates.sh,s06a_MergeBam;inputMarkDupBa
 s08a_WgsMetrics,protocols/CollectWgsMetrics.sh,s07_MarkDuplicates
 s08b_GCBiasMetrics,protocols/CollectGCBiasMetrics.sh,s07_MarkDuplicates
 s08c_BamStats,protocols/GoNL/BamStats.sh,s07_MarkDuplicates
+s08d_CollectMultipleMetrics,protocols/CollectMultipleMetrics.sh,s07_MarkDuplicates
 s09a_VariantCalling,protocols/GoNL/VariantCalling.sh,s07_MarkDuplicates;s06b_BaseRecalibrator;dbSnp=dbSNPb38Vcf
 s09d_GenotypeVariants,protocols/VariantGenotyping.sh,s09a_VariantCalling;dbSnp=dbSNPb38Vcf
 s09e_PhaseByTransmission,protocols/GoNL/PhaseByTransmission.sh,s09d_GenotypeVariants

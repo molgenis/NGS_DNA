@@ -27,7 +27,7 @@ tool BamStats \
 ### Clipping information
 ### Mapping quality
 
-"moving ${tmpIntermediateDir} ${intermediateDir}"
+echo "moving ${tmpIntermediateDir}/ ${intermediateDir}"
 
-mv ${tmpIntermediateDir} ${intermediateDir}
+mv ${tmpIntermediateDir}/* ${intermediateDir}
 

@@ -14,6 +14,9 @@ set -u
 
 ENVIRONMENT_DIR='.'
 
+WHOAMI=$(whoami)
+. /home/$WHOAMI/molgenis.cfg
+
 #
 # Variables declared in MOLGENIS Compute headers/footers always start with a MC_ prefix.
 #
@@ -26,8 +29,11 @@ declare MC_jobScriptSTDOUT="${taskId}.out"
 # a central location for log files for all projects.
 #
 declare MC_failedFile="${logsDir}/${project}.pipeline.failed"
+mydate_start=$(date +"%Y-%m-%dT%H:%M:%S+0200")
+export mydate_start
 
 <#noparse>
+
 
 declare MC_singleSeperatorLine=$(head -c 120 /dev/zero | tr '\0' '-')
 declare MC_doubleSeperatorLine=$(head -c 120 /dev/zero | tr '\0' '=')
@@ -54,11 +60,23 @@ function errorExitAndCleanUp() {
 	echo "${errorMessage}"
 	echo "${MC_doubleSeperatorLine}"                > ${MC_failedFile}
 	echo "${errorMessage}"                         >> ${MC_failedFile}
+
+	</#noparse>
+	step=$(echo "${taskId}" | awk -F'_' '{print $1"_"$2}')
+
+	<#noparse>
+
+	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
+	TOKEN=${CURLRESPONSE:10:32}
+
+	curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}"</#noparse> -X PUT -d '{"job":"${taskId}","project_job":"${project}_${taskId}",<#noparse>"step":"'"${step}"'"</#noparse>,"project":"${project}",<#noparse>"started_date":"'"${mydate_start}"'","status":"Error"}' https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}
+<#noparse>
 	if [ -f "${MC_jobScriptSTDERR}" ]; then
 		echo "${MC_singleSeperatorLine}"           >> ${MC_failedFile}
 		printf "${format}" "${MC_jobScriptSTDERR}" >> ${MC_failedFile}
 		echo "${MC_singleSeperatorLine}"           >> ${MC_failedFile}
 		tail -50 "${MC_jobScriptSTDERR}"           >> ${MC_failedFile}
+		
 	fi
 	if [ -f "${MC_jobScriptSTDOUT}" ]; then
 		echo "${MC_singleSeperatorLine}"           >> ${MC_failedFile}
@@ -109,10 +127,20 @@ trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 
 touch ${MC_jobScript}.started
 
+</#noparse>
+step=$(echo "${taskId}" | awk -F'_' '{print $1"_"$2}')
+
+<#noparse>
+
+CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
+TOKEN=${CURLRESPONSE:10:32}
+
+curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}"</#noparse> -X PUT -d '{"job":"${taskId}","project_job":"${project}_${taskId}",<#noparse>"step":"'"${step}"'"</#noparse>,"project":"${project}",<#noparse>"started_date":"'"${mydate_start}"'","status":"Started"}' https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}
+
+
+
 #
 # When dealing with timing / synchronization issues of large parallel file systems,
 # you can uncomment the sleep statement below to allow for flushing of IO buffers/caches.
 #
 #sleep 10
-
-</#noparse>
