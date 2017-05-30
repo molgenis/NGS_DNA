@@ -1,8 +1,9 @@
-#MOLGENIS walltime=01:00:00 mem=4gb
+#MOLGENIS walltime=01:00:00 mem=20gb
 
 #string tmpName
 #string dedupBam
 #string	project
+#string tempDir
 #string logsDir 
 #string groupname
 #string bioPetVersion
@@ -16,7 +17,10 @@ module load $bioPetVersion
 makeTmpDir ${intermediateDir}
 tmpIntermediateDir=${MC_tmpFile}
 
-java -jar ${EBROOTBIOPET}/${bioPetJar} \
+BAS=$(basename ${dedupBam})
+NAME=${BAS%%.*}
+
+java -jar -Xmx19g -Djava.io.tmpdir=${tempDir} ${EBROOTBIOPET}/${bioPetJar} \
 tool BamStats \
 -b ${dedupBam} \
 -R ${indexFile} \
@@ -26,6 +30,11 @@ tool BamStats \
 ### Flagstat results
 ### Clipping information
 ### Mapping quality
+
+cd ${tmpIntermediateDir}/
+rename '' "${NAME}_" *.tsv
+
+cd -
 
 echo "moving ${tmpIntermediateDir}/ ${intermediateDir}"
 
