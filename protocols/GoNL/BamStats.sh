@@ -1,10 +1,10 @@
-#MOLGENIS walltime=01:00:00 mem=20gb
+#MOLGENIS walltime=04:00:00 mem=20gb
 
 #string tmpName
 #string dedupBam
 #string	project
 #string tempDir
-#string logsDir 
+#string logsDir
 #string groupname
 #string bioPetVersion
 #string bioPetJar
@@ -32,7 +32,7 @@ tool BamStats \
 ### Mapping quality
 
 cd ${tmpIntermediateDir}/
-rename '' "${NAME}_" *.tsv
+rename '' "${NAME}_" *
 
 cd -
 
