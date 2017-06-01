@@ -1,5 +1,4 @@
 #MOLGENIS walltime=23:59:00 mem=14gb ppn=2
-
 #Parameter mapping
 #string tmpName
 #string stage
@@ -107,6 +106,8 @@ else
         		$inputs \
 			--BQSR ${mergedBamRecalibratedTable} \
 			-newQual \
+			--variant_index_type LINEAR \
+			--variant_index_parameter 128000 \
 	        	--dbsnp ${dbSnp} \
         		-o "${tmpSampleBatchVariantCalls}" \
         		-L "${capturedBatchBed}" \
@@ -121,6 +122,8 @@ else
 			-R ${indexFile} \
 			--dbsnp ${dbSnp} \
                         -newQual \
+                        --variant_index_type LINEAR \
+                        --variant_index_parameter 128000 \
 			--BQSR ${mergedBamRecalibratedTable} \
 			${inputs} \
 			-o "${tmpSampleBatchVariantCalls}" \
@@ -145,12 +148,14 @@ else
                         -R ${indexFile} \
                         --dbsnp ${dbSnp} \
                         -newQual \
+                        --variant_index_type LINEAR \
+                        --variant_index_parameter 128000 \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
-                        -ploidy 2
+                        -ploidy 1
         	elif [ "${sex}" == "Male" ]
 		then
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
@@ -159,12 +164,14 @@ else
                         -R ${indexFile} \
                         --dbsnp ${dbSnp} \
                         -newQual \
+                        --variant_index_type LINEAR \
+                        --variant_index_parameter 128000 \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
                         --emitRefConfidence GVCF \
-                        -ploidy 2
+                        -ploidy 1
 		fi
 	else
 		echo "Autosomal"
@@ -173,6 +180,8 @@ else
                 -T HaplotypeCaller \
                 -R ${indexFile} \
                 -newQual \
+                --variant_index_type LINEAR \
+                --variant_index_parameter 128000 \
                 $inputs \
 		--BQSR ${mergedBamRecalibratedTable} \
                 --dbsnp ${dbSnp} \
