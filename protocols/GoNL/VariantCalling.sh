@@ -97,21 +97,19 @@ else
 			else
 				echo "X (female)"
 			fi
-		
+
 			#Run GATK HaplotypeCaller in DISCOVERY mode to call SNPs and indels
-        		java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
-        		${EBROOTGATK}/${gatkJar} \
-        		-T HaplotypeCaller \
-        		-R ${indexFile} \
-        		$inputs \
+			java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
+			${EBROOTGATK}/${gatkJar} \
+			-T HaplotypeCaller \
+			-R ${indexFile} \
+			$inputs \
 			--BQSR ${mergedBamRecalibratedTable} \
 			-newQual \
-			--variant_index_type LINEAR \
-			--variant_index_parameter 128000 \
-	        	--dbsnp ${dbSnp} \
-        		-o "${tmpSampleBatchVariantCalls}" \
-        		-L "${capturedBatchBed}" \
-        		--emitRefConfidence GVCF \
+			--dbsnp ${dbSnp} \
+			-o "${tmpSampleBatchVariantCalls}" \
+			-L "${capturedBatchBed}" \
+			--emitRefConfidence GVCF \
 			-ploidy 2 
 		elif [ "${sex}" == "Male" ]
 		then
@@ -122,8 +120,6 @@ else
 			-R ${indexFile} \
 			--dbsnp ${dbSnp} \
                         -newQual \
-                        --variant_index_type LINEAR \
-                        --variant_index_parameter 128000 \
 			--BQSR ${mergedBamRecalibratedTable} \
 			${inputs} \
 			-o "${tmpSampleBatchVariantCalls}" \
@@ -131,7 +127,7 @@ else
 			--emitRefConfidence GVCF \
 			-ploidy 1
 
-		else 
+		else
 			echo "The sex has not a known option (Male, Female, Unknown)"
 			exit 1
 		fi
@@ -139,7 +135,7 @@ else
 	then
 		echo "Y"
 		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
-        	then
+		then
 			### Female Y is not existing, but this is
 			### to prevent an error when combining all the variants together in one vcf 
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
@@ -148,15 +144,13 @@ else
                         -R ${indexFile} \
                         --dbsnp ${dbSnp} \
                         -newQual \
-                        --variant_index_type LINEAR \
-                        --variant_index_parameter 128000 \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
                         -ploidy 1
-        	elif [ "${sex}" == "Male" ]
+		elif [ "${sex}" == "Male" ]
 		then
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
                         ${EBROOTGATK}/${gatkJar} \
@@ -164,8 +158,6 @@ else
                         -R ${indexFile} \
                         --dbsnp ${dbSnp} \
                         -newQual \
-                        --variant_index_type LINEAR \
-                        --variant_index_parameter 128000 \
 			--BQSR ${mergedBamRecalibratedTable} \
                         ${inputs} \
                         -o "${tmpSampleBatchVariantCalls}" \
@@ -180,8 +172,6 @@ else
                 -T HaplotypeCaller \
                 -R ${indexFile} \
                 -newQual \
-                --variant_index_type LINEAR \
-                --variant_index_parameter 128000 \
                 $inputs \
 		--BQSR ${mergedBamRecalibratedTable} \
                 --dbsnp ${dbSnp} \
@@ -194,9 +184,9 @@ else
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
-        	mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
-        	mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
-			
+		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
+		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
+
 		cp "${sampleBatchVariantCalls}" ${intermediateDir}/gVCF/
 		cp "${sampleBatchVariantCallsIndex}" ${intermediateDir}/gVCF/
 	else
