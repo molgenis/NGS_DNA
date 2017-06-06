@@ -8,7 +8,6 @@
 #list lane
 #list flowcell
 #list batchID
-#string contact
 #string seqType
 
 # conststants
@@ -89,11 +88,6 @@ for sample in "${INPUTS[@]}"
 do
 	echo -e "$intermediateDir/${sample}.total.qc.metrics.table" >> ${allMetrics}
 done
-
-if [ "${contact}" == "" ]
-then
-	contact="Cleo C. van Diemen (c.c.van.diemen@umcg.nl)"
-fi
 
 
 cat > ${intermediateDir}/${project}_QCReport.rhtml <<'_EOF'
@@ -226,15 +220,6 @@ cat > ${intermediateDir}/${project}_QCReport.rhtml <<'_EOF'
 	<tr>
 		<br />
 	</tr>
-        <tr>
-            	<td><b>Contact</b></td>
-        </tr>
-	<tr>
-            	<td>Name</td>
-		<td>
-			${contact}
-		</td>
-        </tr>
 </table>
 </div>
 </div>

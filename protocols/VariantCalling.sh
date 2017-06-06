@@ -150,7 +150,7 @@ else
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
-                        -ploidy 2
+                        -ploidy 1
         	elif [ "${sex}" == "Male" ]
 		then
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
@@ -164,7 +164,7 @@ else
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
                         --emitRefConfidence GVCF \
-                        -ploidy 2
+                        -ploidy 1
 		fi
 	else
 		echo "Autosomal"

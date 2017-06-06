@@ -1,5 +1,4 @@
 #MOLGENIS walltime=23:59:00 mem=14gb ppn=2
-
 #Parameter mapping
 #string tmpName
 #string stage
@@ -98,19 +97,19 @@ else
 			else
 				echo "X (female)"
 			fi
-		
+
 			#Run GATK HaplotypeCaller in DISCOVERY mode to call SNPs and indels
-        		java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
-        		${EBROOTGATK}/${gatkJar} \
-        		-T HaplotypeCaller \
-        		-R ${indexFile} \
-        		$inputs \
+			java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
+			${EBROOTGATK}/${gatkJar} \
+			-T HaplotypeCaller \
+			-R ${indexFile} \
+			$inputs \
 			--BQSR ${mergedBamRecalibratedTable} \
 			-newQual \
-	        	--dbsnp ${dbSnp} \
-        		-o "${tmpSampleBatchVariantCalls}" \
-        		-L "${capturedBatchBed}" \
-        		--emitRefConfidence GVCF \
+			--dbsnp ${dbSnp} \
+			-o "${tmpSampleBatchVariantCalls}" \
+			-L "${capturedBatchBed}" \
+			--emitRefConfidence GVCF \
 			-ploidy 2 
 		elif [ "${sex}" == "Male" ]
 		then
@@ -128,7 +127,7 @@ else
 			--emitRefConfidence GVCF \
 			-ploidy 1
 
-		else 
+		else
 			echo "The sex has not a known option (Male, Female, Unknown)"
 			exit 1
 		fi
@@ -136,7 +135,7 @@ else
 	then
 		echo "Y"
 		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
-        	then
+		then
 			### Female Y is not existing, but this is
 			### to prevent an error when combining all the variants together in one vcf 
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
@@ -150,8 +149,8 @@ else
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
-                        -ploidy 2
-        	elif [ "${sex}" == "Male" ]
+                        -ploidy 1
+		elif [ "${sex}" == "Male" ]
 		then
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
                         ${EBROOTGATK}/${gatkJar} \
@@ -164,7 +163,7 @@ else
                         -o "${tmpSampleBatchVariantCalls}" \
                         -L "${capturedBatchBed}" \
                         --emitRefConfidence GVCF \
-                        -ploidy 2
+                        -ploidy 1
 		fi
 	else
 		echo "Autosomal"
@@ -185,9 +184,9 @@ else
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
-        	mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
-        	mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
-			
+		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
+		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
+
 		cp "${sampleBatchVariantCalls}" ${intermediateDir}/gVCF/
 		cp "${sampleBatchVariantCallsIndex}" ${intermediateDir}/gVCF/
 	else
