@@ -41,7 +41,7 @@ I=${dedupBam} \
 O=${tmpGcBiasMetrics} \
 S=${tmpGcBiasMetrics}.summary_metrics.txt \
 CHART=${tmpGcBiasMetrics}.pdf \
-VALIDATION_STRINGENCY=LENIENT \
+VALIDATION_STRINGENCY=STRICT \
 TMP_DIR=${tempDir}
 
     echo -e "\nGcBiasMetrics finished succesfull. Moving temp files to final.\n\n"
