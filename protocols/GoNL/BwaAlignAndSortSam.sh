@@ -42,9 +42,9 @@ ${checkStage}
 READGROUPLINE=""
 if [ "${Library}" == "" ]
 then
-	READGROUPLINE="@RG\tID:${filePrefix}_${lane}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
+	READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
 else
-	READGROUPLINE="@RG\tID:${filePrefix}_${lane}\tPL:illumina\tLB:${Library}\tSM:${externalSampleID}"	
+	READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${Library}\tSM:${externalSampleID}"	
 fi
 rm -f  ${tmpAlignedSam}
 
