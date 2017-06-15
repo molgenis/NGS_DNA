@@ -23,7 +23,7 @@ ${checkStage}
 
 if [ -f ${projectBatchGenotypedVariantCalls} ]
 then
-    	#
+	#
 	##
 	###Annotate with SnpEff
         ##
@@ -33,6 +33,7 @@ then
 	$EBROOTSNPEFF/snpEff.jar \
 	-v hg19 \
 	-noStats \
+	-csvStats \
 	-noLog \
 	-lof \
 	-canon \
