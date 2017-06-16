@@ -32,8 +32,7 @@ then
 	java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx4g -jar \
 	$EBROOTSNPEFF/snpEff.jar \
 	-v hg19 \
-	-noStats \
-	-csvStats \
+	-csvStats ${tmpProjectVariantCallsSnpEff_Annotated}.csvStats.csv \
 	-noLog \
 	-lof \
 	-canon \
@@ -43,6 +42,7 @@ then
 	> ${tmpProjectVariantCallsSnpEff_Annotated}
 
 	mv ${tmpProjectVariantCallsSnpEff_Annotated} ${projectVariantCallsSnpEff_Annotated}
+	mv ${tmpProjectVariantCallsSnpEff_Annotated}.csvStats.csv  ${projectVariantCallsSnpEff_Annotated}.csvStats.csv 
 	echo "mv ${tmpProjectVariantCallsSnpEff_Annotated} ${projectVariantCallsSnpEff_Annotated}"
 
 else
