@@ -7,16 +7,18 @@
 #string gatkVersion
 #string gatkJar
 #string htsLibVersion
+#string ngsUtilsVersion
 #string tempDir
 #string intermediateDir
 #string projectVariantsMerged
-#string projectVariantsMergedIdx
 #string projectVariantsMergedSorted
+#string projectVariantsMergedSortedGz
 #list batchID
 #string projectPrefix
 #string tmpDataDir
 #string project
 #string logsDir 
+#string intermediateDir
 #string groupname
 #string sortVCFpl
 #string indexFile
@@ -26,16 +28,18 @@
 #Load module GATK,tabix
 ${stage} ${gatkVersion}
 ${stage} ${htsLibVersion}
-${stage} ngs-utils
+${stage} ${ngsUtilsVersion}
+
 ${checkStage}
 
 makeTmpDir ${projectVariantsMerged}
 tmpProjectVariantsMerged=${MC_tmpFile}
-makeTmpDir ${projectVariantsMergedIdx}
-tmpProjectVariantsMergedIdx=${MC_tmpFile}
 
 makeTmpDir ${projectVariantsMergedSorted}
 tmpProjectVariantsMergedSorted=${MC_tmpFile}
+
+makeTmpDir ${tmpProjectVariantsMergedSortedGz}
+tmpProjectVariantsMergedSortedGz=${MC_tmpFile}
 
 #Function to check if array contains value
 array_contains () {
@@ -67,7 +71,11 @@ ${INPUTS[@]} \
 -out ${tmpProjectVariantsMerged}
 
 echo "sorting vcf"
-sortVCFbyFai.pl -fastaIndexFile ${indexFile}.fai -inputVCF ${tmpProjectVariantsMerged} -outputVcf ${tmpProjectVariantsMerged}.sorted
+sortVCFbyFai.pl -fastaIndexFile ${indexFile}.fai -inputVCF ${tmpProjectVariantsMerged} -outputVcf ${tmpProjectVariantsMergedSorted}
 
-mv ${tmpProjectVariantsMerged}.sorted ${projectVariantsMerged}
-echo "mv ${tmpProjectVariantsMerged}.sorted ${projectVariantsMerged}"
+bgzip ${tmpProjectVariantsMergedSorted}
+tabix -p vcf ${tmpProjectVariantsMergedSorted}.gz
+
+mv ${tmpProjectVariantsMergedSortedGz}* ${intermediateDir}
+
+echo "mv ${tmpProjectVariantsMergedSortedGz}* ${intermediateDir}"

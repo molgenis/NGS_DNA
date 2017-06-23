@@ -211,6 +211,7 @@ projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsMergedIdx,${projectPrefix}.variant.calls.GATK.vcf.idx
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
+projectVariantsMergedSortedGz,${projectPrefix}.variant.calls.GATK.sorted.vcf.gz
 projectVariantsMergedSortedSorted,${projectPrefix}.variant.calls.GATK.sorted.sorted.vcf
 sortVCFpl,sortVCFbyFai.pl
 gavinDataDir,${dataDir}/GAVIN/
