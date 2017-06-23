@@ -38,7 +38,7 @@ tmpProjectVariantsMerged=${MC_tmpFile}
 makeTmpDir ${projectVariantsMergedSorted}
 tmpProjectVariantsMergedSorted=${MC_tmpFile}
 
-makeTmpDir ${tmpProjectVariantsMergedSortedGz}
+makeTmpDir ${projectVariantsMergedSortedGz}
 tmpProjectVariantsMergedSortedGz=${MC_tmpFile}
 
 #Function to check if array contains value
