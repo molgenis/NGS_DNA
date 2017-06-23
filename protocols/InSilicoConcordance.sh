@@ -8,9 +8,11 @@
 #string groupname
 #string project
 #string projectVariantsMerged
+#string projectVariantsMergedSortedGz
 #string intermediateDir
 
 tail -3 ${simulatedPhiXVariants} > ${intermediateDir}/InSilico.txt
+zcat ${projectVariantsMergedSortedGz} > ${projectVariantsMergedSortedGz}.vcf
 
 awk '
 BEGIN{}
@@ -30,7 +32,7 @@ FNR==NR{
   if ((k in a) && (lc==$4) && (ld==$5)){
         print k,lc,ld
         }
-}' ${intermediateDir}/InSilico.txt ${projectVariantsMerged} > ${intermediateDir}/InSilicoConcordanceCheck.txt
+}' ${intermediateDir}/InSilico.txt ${projectVariantsMergedSortedGz}.vcf > ${intermediateDir}/InSilicoConcordanceCheck.txt
 
 count=`cat ${intermediateDir}/InSilicoConcordanceCheck.txt | wc -l`
 
