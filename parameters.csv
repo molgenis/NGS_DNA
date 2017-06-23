@@ -14,7 +14,7 @@ computeVersion,v16.08.1-Java-1.8.0_74
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,cutadapt/1.13-foss-2015b-Python-2.7.10
-fastqcVersion,FastQC/0.11.5-Java-1.7.0_80
+fastqcVersion,FastQC/0.11.5-Java-1.8.0_74
 gatkVersion,GATK/3.7-Java-1.8.0_74
 gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
@@ -211,6 +211,7 @@ projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsMergedIdx,${projectPrefix}.variant.calls.GATK.vcf.idx
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
+projectVariantsMergedSortedGz,${projectPrefix}.variant.calls.GATK.sorted.vcf.gz
 projectVariantsMergedSortedSorted,${projectPrefix}.variant.calls.GATK.sorted.sorted.vcf
 sortVCFpl,sortVCFbyFai.pl
 gavinDataDir,${dataDir}/GAVIN/

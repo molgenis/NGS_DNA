@@ -40,14 +40,14 @@ array_contains () {
 
 for bamFile in "${sampleMergedBam[@]}"
 do
-  	array_contains INPUTS "$bamFile" || INPUTS+=("-I $bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTS "$bamFile" || INPUTS+=("-I $bamFile")    # If bamFile does not exist in array add it
         array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("-I $bamFile")    # If bamFile does not exist in array add it
 done
 
 makeTmpDir ${mergedBamRecalibratedTable}
 tmpMergedBamRecalibratedTable=${MC_tmpFile}
 
-${EBROOTSAMBAMBA}/${sambambaTool} index ${sampleMergedBam}
+${sambambaTool} index ${sampleMergedBam}
 
 
 java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx9g -jar ${EBROOTGATK}/${gatkJar} \

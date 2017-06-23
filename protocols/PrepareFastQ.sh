@@ -27,7 +27,6 @@
 
 
 #Load module
-module load ${cutadaptVersion}
 module load ${seqTkVersion}
 module load ${pigzVersion}
 module list

@@ -61,16 +61,16 @@ then
 
 	#indexing because there is no index file coming out of the sorting step
 	printf "indexing..."
-	${EBROOTSAMBAMBA}/${sambambaTool} index ${sampleMergedBam} ${inputMergeBamIdx[0]}
+	${sambambaTool} index ${sampleMergedBam} ${inputMergeBamIdx[0]}
 	printf "..finished\n"
-	
+
 	echo "ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}"
 	ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}
 
 	echo "nothing to merge because there is only one sample"
 
 else
-	${EBROOTSAMBAMBA}/${sambambaTool} merge \
+	${sambambaTool} merge \
 	${tmpSampleMergedBam} \
 	${INPUTS[@]}
 

@@ -29,7 +29,7 @@ makeTmpDir ${dedupBamIdx}
 tmpDedupBamIdx=${MC_tmpFile}
 
 ##Run picard, sort BAM file and create index on the fly
-${EBROOTSAMBAMBA}/${sambambaTool} markdup \
+${sambambaTool} markdup \
 --nthreads=4 \
 --overflow-list-size 1000000 \
 --hash-table-size 1000000 \
