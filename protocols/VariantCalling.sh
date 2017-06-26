@@ -98,20 +98,19 @@ else
 			else
 				echo "X (female)"
 			fi
-		
 			#Run GATK HaplotypeCaller in DISCOVERY mode to call SNPs and indels
-        		java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
-        		${EBROOTGATK}/${gatkJar} \
-        		-T HaplotypeCaller \
-        		-R ${indexFile} \
-        		$inputs \
+			java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
+			${EBROOTGATK}/${gatkJar} \
+			-T HaplotypeCaller \
+			-R ${indexFile} \
+			$inputs \
 			-newQual \
 			--BQSR ${mergedBamRecalibratedTable} \
-	        	--dbsnp ${dbSnp} \
-        		-o "${tmpSampleBatchVariantCalls}" \
-        		-L "${capturedBatchBed}" \
-        		--emitRefConfidence GVCF \
-			-ploidy 2 
+			--dbsnp ${dbSnp} \
+			-o "${tmpSampleBatchVariantCalls}" \
+			-L "${capturedBatchBed}" \
+			--emitRefConfidence GVCF \
+			-ploidy 2
 		elif [ "${sex}" == "Male" ]
 		then
 			echo "X (male): non autosomal region, mono ploid call"
@@ -128,7 +127,7 @@ else
 			--emitRefConfidence GVCF \
 			-ploidy 1
 
-		else 
+		else
 			echo "The sex has not a known option (Male, Female, Unknown)"
 			exit 1
 		fi
@@ -136,7 +135,7 @@ else
 	then
 		echo "Y"
 		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
-        	then
+		then
 			### Female Y is not existing, but this is
 			### to prevent an error when combining all the variants together in one vcf 
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
@@ -151,7 +150,7 @@ else
                         -L "${femaleCapturedBatchBed}" \
                         --emitRefConfidence GVCF \
                         -ploidy 1
-        	elif [ "${sex}" == "Male" ]
+		elif [ "${sex}" == "Male" ]
 		then
 			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
                         ${EBROOTGATK}/${gatkJar} \
