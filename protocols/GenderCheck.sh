@@ -131,6 +131,7 @@ then
 			echo "In the samplesheet the gender was not specified (thus Unknown), but it has been calculated"
 		fi
 	else
+		echo "ALARM ALARM"
 		echo "ALARM, ALARM, the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!"
 		exit 1
 	fi
