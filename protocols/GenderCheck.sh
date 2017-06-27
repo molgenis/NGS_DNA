@@ -41,14 +41,18 @@ if ($0 ~ /^#/){
 	}
 	}' ${dedupBam}.hs_metrics >> ${checkSexMeanCoverage}
 
-	avgCov=$('{if (NR==2){print $1}}' ${checkSexMeanCoverage})
+	avgCov=$(awk '{if (NR==2){print $1}}' ${checkSexMeanCoverage})
 
-	if [[ ${avgCov} -lt 1 ]]
+	if [[ "${avgCov}" == .* ]]
         then
-                echo "${avgCov} of autosomes is lower than 1, skipped"
+		printf "There is no autosomal region, a gender cannot be determined\n" > //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
+                printf "Unknown\n" >> //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
 
-                printf "There is no autosomal region, a gender cannot be determined\n" > ${whichSex}
-                printf "Unknown\n" >> ${whichSex}
+        elif [[ "${avgCov}" < 1 ]]
+        then
+		echo "${avgCov} of autosomes is lower than 1, skipped"
+                printf "There is no autosomal region, a gender cannot be determined\n" > //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
+                printf "Unknown\n" >> //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
         else
 
 		#select only the mean target coverage of chromosome X
@@ -130,5 +134,5 @@ then
 		echo "ALARM, ALARM, the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!"
 		exit 1
 	fi
-else
+fi
 
