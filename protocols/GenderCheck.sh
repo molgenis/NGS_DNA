@@ -122,7 +122,7 @@ then
 	then
 		if [ $sex == "Unknown" ]
 		then
-			print "calculated ($sex) was unknown, but in the samplesheet it was specified ($Gender), $whichSex file has been updated"
+			echo "calculated ($sex) was unknown, but in the samplesheet it was specified ($Gender), $whichSex file has been updated"
 			cp ${whichSex} ${whichSex}.tmp
 			rename chosenSex oldGender ${whichSex}
 			echo "the calculation of the sex cannot be determined, file has been moved from chosenSex name to oldGender name" > ${whichSex} 
