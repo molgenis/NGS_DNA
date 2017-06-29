@@ -33,11 +33,11 @@ else
 if ($0 ~ /^#/){
 
 		}
-		else if ($22 == ""){
-		}else if ( $22 == "MEAN_TARGET_COVERAGE" ){
+		else if ($23 == ""){
+		}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
 
 		}else{
-			print $22
+			print $23
 	}
 	}' ${dedupBam}.hs_metrics >> ${checkSexMeanCoverage}
 
@@ -45,14 +45,14 @@ if ($0 ~ /^#/){
 
 	if [[ "${avgCov}" == .* ]]
         then
-		printf "There is no autosomal region, a gender cannot be determined\n" > //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
-                printf "Unknown\n" >> //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
+		printf "There is no autosomal region, a gender cannot be determined\n" > ${whichSex}
+                printf "Unknown\n" >> ${whichSex}
 
         elif [[ "${avgCov}" < 1 ]]
         then
 		echo "${avgCov} of autosomes is lower than 1, skipped"
-                printf "There is no autosomal region, a gender cannot be determined\n" > //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
-                printf "Unknown\n" >> //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12878.chosenSex.txt
+                printf "There is no autosomal region, a gender cannot be determined\n" > ${whichSex}
+                printf "Unknown\n" >> ${whichSex}
         else
 
 		#select only the mean target coverage of chromosome X
@@ -60,11 +60,11 @@ if ($0 ~ /^#/){
 		if ($0 ~ /^#/){
 
 		}
-		else if ($22 == ""){
-			}else if ( $22 == "MEAN_TARGET_COVERAGE" ){
+		else if ($23 == ""){
+			}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
 
 			}else{
-				print $22
+				print $23
 			}
 		}' ${hsMetricsNonAutosomalRegionChrX} >> ${checkSexMeanCoverage}
 
