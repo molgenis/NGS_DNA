@@ -33,11 +33,11 @@ else
 if ($0 ~ /^#/){
 
 		}
-		else if ($22 == ""){
-		}else if ( $22 == "MEAN_BAIT_COVERAGE" ){
+		else if ($23 == ""){
+		}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
 
 		}else{
-			print $22
+			print $23
 	}
 	}' ${dedupBam}.hs_metrics >> ${checkSexMeanCoverage}
 
@@ -60,11 +60,11 @@ if ($0 ~ /^#/){
 		if ($0 ~ /^#/){
 
 		}
-		else if ($22 == ""){
-			}else if ( $22 == "MEAN_TARGET_COVERAGE" ){
+		else if ($23 == ""){
+			}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
 
 			}else{
-				print $22
+				print $23
 			}
 		}' ${hsMetricsNonAutosomalRegionChrX} >> ${checkSexMeanCoverage}
 
