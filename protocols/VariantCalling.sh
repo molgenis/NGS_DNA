@@ -50,20 +50,7 @@ tmpSampleBatchVariantCalls=${MC_tmpFile}
 makeTmpDir "${sampleBatchVariantCallsIndex}"
 tmpSampleBatchVariantCallsIndex=${MC_tmpFile}
 
-makeTmpDir "${sampleBatchVariantCallsMaleNONPAR}"
-tmpSampleBatchVariantCallsMaleNONPAR=${MC_tmpFile}
-
-makeTmpDir "${sampleBatchVariantCallsMaleNONPARIndex}"
-tmpSampleBatchVariantCallsMaleNONPARIndex=${MC_tmpFile} 
-
-makeTmpDir "${sampleBatchVariantCallsFemale}"
-tmpSampleBatchVariantCallsFemale=${MC_tmpFile}
-
-makeTmpDir "${sampleBatchVariantCallsFemaleIndex}"
-tmpSampleBatchVariantCallsFemaleIndex=${MC_tmpFile}
-
-MALE_BAMS=()
-BAMS=()
+bams=()
 INPUTS=()
 for SampleID in "${externalSampleID[@]}"
 do
@@ -109,6 +96,7 @@ then
 			ploidy=2
 		fi
 	elif [[ "${genderCheck}" == "Male" ]]
+	then
 		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed || "${capturedBatchBed}" == *batch-Xnp.bed ]]
 		then
 			ploidy=1
