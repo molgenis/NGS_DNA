@@ -84,6 +84,8 @@ ploidy=""
 myBed=${capturedBatchBed}
 if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
+	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"
+else
 	if [ "${genderCheck}" == "Female" ]
 	then
 		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
