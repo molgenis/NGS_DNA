@@ -34,7 +34,7 @@ if ($0 ~ /^#/){
 
 		}
 		else if ($22 == ""){
-		}else if ( $22 == "MEAN_TARGET_COVERAGE" ){
+		}else if ( $22 == "MEAN_BAIT_COVERAGE" ){
 
 		}else{
 			print $22
