@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=14gb ppn=2
+#MOLGENIS walltime=23:59:00 mem=14gb ppn=1
 
 #Parameter mapping
 #string tmpName
@@ -21,13 +21,13 @@
 #string tmpDataDir
 #string externalSampleID
 #string	project
-#string logsDir 
+#string logsDir
 #string groupname
 #string dedupBam
 #string mergedBamRecalibratedTable
 
 #Function to check if array contains value
-array_contains () { 
+array_contains () {
     local array="$1[@]"
     local seeking=$2
     local in=1
@@ -50,20 +50,7 @@ tmpSampleBatchVariantCalls=${MC_tmpFile}
 makeTmpDir "${sampleBatchVariantCallsIndex}"
 tmpSampleBatchVariantCallsIndex=${MC_tmpFile}
 
-makeTmpDir "${sampleBatchVariantCallsMaleNONPAR}"
-tmpSampleBatchVariantCallsMaleNONPAR=${MC_tmpFile}
-
-makeTmpDir "${sampleBatchVariantCallsMaleNONPARIndex}"
-tmpSampleBatchVariantCallsMaleNONPARIndex=${MC_tmpFile} 
-
-makeTmpDir "${sampleBatchVariantCallsFemale}"
-tmpSampleBatchVariantCallsFemale=${MC_tmpFile}
-
-makeTmpDir "${sampleBatchVariantCallsFemaleIndex}"
-tmpSampleBatchVariantCallsFemaleIndex=${MC_tmpFile}
-
-MALE_BAMS=()
-BAMS=()
+bams=()
 INPUTS=()
 for SampleID in "${externalSampleID[@]}"
 do
@@ -73,7 +60,7 @@ baitBatchLength=""
 sex=$(less ${intermediateDir}/${externalSampleID}.chosenSex.txt | awk 'NR==2')
 if [ -f "${capturedBatchBed}" ] 
 then
-	baitBatchLength=`cat "${capturedBatchBed}" | wc -l`
+	baitBatchLength=$(cat "${capturedBatchBed}" | wc -l)
 fi
 
 if [ ! -d ${intermediateDir}/gVCF ]
@@ -84,109 +71,63 @@ fi
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
 inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
 
+genderCheck=""
+
+if [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
+then
+	genderCheck="Female"
+else
+	genderCheck="Male"
+fi
+
+ploidy=""
+myBed=${capturedBatchBed}
 if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
-	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"  
+	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"
 else
-	if [[ "${capturedBatchBed}" == *batch-[0-9]*X.bed || "${capturedBatchBed}" == *batch-Xnp.bed || "${capturedBatchBed}" == *batch-Xp.bed ]]
+	if [ "${genderCheck}" == "Female" ]
 	then
-		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" || "${capturedBatchBed}" == *batch-Xp.bed ]]
+		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
 		then
-			if [ "${capturedBatchBed}" == *batch-Xp.bed ]
-			then
-				echo "Par region of X, both female and male are diploid for this region"
-			else
-				echo "X (female)"
-			fi
-			#Run GATK HaplotypeCaller in DISCOVERY mode to call SNPs and indels
-			java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
-			${EBROOTGATK}/${gatkJar} \
-			-T HaplotypeCaller \
-			-R ${indexFile} \
-			$inputs \
-			-newQual \
-			--BQSR ${mergedBamRecalibratedTable} \
-			--dbsnp ${dbSnp} \
-			-o "${tmpSampleBatchVariantCalls}" \
-			-L "${capturedBatchBed}" \
-			--emitRefConfidence GVCF \
-			-ploidy 2
-		elif [ "${sex}" == "Male" ]
-		then
-			echo "X (male): non autosomal region, mono ploid call"
-			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
-			${EBROOTGATK}/${gatkJar} \
-			-T HaplotypeCaller \
-			-R ${indexFile} \
-			--BQSR ${mergedBamRecalibratedTable} \
-			--dbsnp ${dbSnp}\
-                        -newQual \
-			${inputs} \
-			-o "${tmpSampleBatchVariantCalls}" \
-			-L "${capturedBatchBed}" \
-			--emitRefConfidence GVCF \
-			-ploidy 1
-
+			echo -e "Female, chrY => ploidy=1\nbedfile=${femaleCapturedBatchBed}"
+			ploidy=1
+			myBed=${femaleCapturedBatchBed}
 		else
-			echo "The sex has not a known option (Male, Female, Unknown)"
-			exit 1
+			echo -e "Female, autosomal or chrX ==> ploidy=2"
+			ploidy=2
 		fi
-	elif [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
+	elif [[ "${genderCheck}" == "Male" ]]
 	then
-		echo "Y"
-		if [[ "${sex}" == "Female" || "${sex}" == "Unknown" ]]
+		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed || "${capturedBatchBed}" == *batch-Xnp.bed ]]
 		then
-			### Female Y is not existing, but this is
-			### to prevent an error when combining all the variants together in one vcf 
-			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
-                        ${EBROOTGATK}/${gatkJar} \
-                        -T HaplotypeCaller \
-                        -R ${indexFile} \
-                        --dbsnp ${dbSnp}\
-                        -newQual \
-			--BQSR ${mergedBamRecalibratedTable} \
-                        ${inputs} \
-                        -o "${tmpSampleBatchVariantCalls}" \
-                        -L "${femaleCapturedBatchBed}" \
-                        --emitRefConfidence GVCF \
-                        -ploidy 1
-		elif [ "${sex}" == "Male" ]
-		then
-			java -Xmx12g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
-                        ${EBROOTGATK}/${gatkJar} \
-                        -T HaplotypeCaller \
-                        -R ${indexFile} \
-                        --dbsnp ${dbSnp} \
-                        -newQual \
-			--BQSR ${mergedBamRecalibratedTable} \
-                        ${inputs} \
-                        -o "${tmpSampleBatchVariantCalls}" \
-                        -L "${capturedBatchBed}" \
-                        --emitRefConfidence GVCF \
-                        -ploidy 1
+			ploidy=1
+			echo -e "Male, chrY or chrXNonPar ==> ploidy=1"
+		else
+			ploidy=2
+			echo -e "Male, autosomal or chrXPar ==> ploidy=2"
 		fi
-	else
-		echo "Autosomal"
-		java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
-                ${EBROOTGATK}/${gatkJar} \
-                -T HaplotypeCaller \
-                -R ${indexFile} \
-                $inputs \
-		-newQual \
-		--BQSR ${mergedBamRecalibratedTable} \
-                --dbsnp ${dbSnp} \
-                -o "${tmpSampleBatchVariantCalls}" \
-                -L "${capturedBatchBed}" \
-		--emitRefConfidence GVCF \
-                -ploidy 2
 	fi
+
+	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
+	${EBROOTGATK}/${gatkJar} \
+	-T HaplotypeCaller \
+	-R ${indexFile} \
+	$inputs \
+	-newQual \
+	--BQSR ${mergedBamRecalibratedTable} \
+	--dbsnp ${dbSnp} \
+	-o "${tmpSampleBatchVariantCalls}" \
+	-L "${myBed}" \
+	--emitRefConfidence GVCF \
+	-ploidy ${ploidy}
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
-        	mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
-        	mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
-			
+		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
+		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
+
 		cp "${sampleBatchVariantCalls}" ${intermediateDir}/gVCF/
 		cp "${sampleBatchVariantCallsIndex}" ${intermediateDir}/gVCF/
 	else

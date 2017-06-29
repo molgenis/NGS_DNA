@@ -27,7 +27,7 @@ tmpDedupMetrics=${MC_tmpFile}
 
 echo "starting to calculate flagstat metrics"
 #make metrics file
-${EBROOTSAMBAMBA}/${sambambaTool} \
+${sambambaTool} \
 flagstat \
 --nthreads=4 \
 ${dedupBam} > ${tmpFlagstatMetrics}
