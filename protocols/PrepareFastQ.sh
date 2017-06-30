@@ -52,8 +52,8 @@ done
 
 echo "starting with phiX part"
 # Spike phiX only once
-samp=$(tail -10 ${peEnd1BarcodeFqGz})
-phiX=$(tail -10 ${phiXEnd1Gz})
+samp=$(zcat ${peEnd1BarcodeFqGz} | tail -n10)
+phiX=$(zcat ${phiXEnd1Gz} | tail -n10)
 
 if [ "$samp" = "$phiX" ]; 
 then

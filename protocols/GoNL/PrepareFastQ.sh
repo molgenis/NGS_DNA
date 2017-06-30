@@ -69,7 +69,7 @@ fi
 echo "starting with phiX part"
 # Spike phiX only once
 samp=$(zcat ${TMPDIR}/${peEnd1BarcodeTrimmedFqGz} | tail -n10)
-phiX=$(zcat ${phiXEnd1Gz} | tail tail -n10)
+phiX=$(zcat ${phiXEnd1Gz} | tail -n10)
 
 if [ "$samp" = "$phiX" ]; 
 then
