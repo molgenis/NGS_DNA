@@ -83,7 +83,7 @@ checkIlluminaEncoding() {
 		#check for illumina encoding 1.5
 		if [[ "$line" =~ [P-Z] ]] || [[ "$line" =~ [a-g] ]]
 			then
-				encoding="1.5
+				encoding="1.5"
 			if [[ ${count} -eq 1 ]]
 			then
 				lastEncoding=${encoding}
@@ -111,7 +111,7 @@ checkIlluminaEncoding() {
 			if ! [ "${encoding}" == "${lastEncoding}" ]
 			then
 				echo "error, encoding not possible"
-				echo "${encoding} is not matching last encoding (${lastEncoding}"
+				echo "${encoding} is not matching last encoding (${lastEncoding})"
 				echo "LINE: " $line
 			exit 1
 			fi
@@ -133,7 +133,7 @@ checkIlluminaEncoding() {
 	then
 		echo "encoding is Illumina 1.8 - Sanger / Illumina 1.9"
 		echo "Only move ${barcodeFqGz} to ${barcodeFinalFqGz}"
-		mv ${barcodeFqGz} > ${barcodeFinalFqGz}
+		mv ${barcodeFqGz} ${barcodeFinalFqGz}
 
 	else
 		#make fastQ out of the fq.gz file
