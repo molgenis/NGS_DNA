@@ -137,12 +137,12 @@ checkIlluminaEncoding() {
 
 	else
 		#make fastQ out of the fq.gz file
-		mkfifo ${barcodeFq}.encoded.fq
+		mkfifo ${barcodeFqGz}.encoded.fq
 		echo "converting Illumina encoding"
-		seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFq}.encoded.fq&
+		seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFqGz}.encoded.fq&
 
-		echo -e "done..\nNow gzipping ${barcodeFq}.encoded.fq > ${barcodeFinalFqGz}"
-		pigz -c ${barcodeFq}.encoded.fq > ${barcodeFinalFqGz}
+		echo -e "done..\nNow gzipping ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}"
+		pigz -c ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}
 
 	fi
 
