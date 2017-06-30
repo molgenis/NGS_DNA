@@ -109,7 +109,7 @@ checkIlluminaEncoding() {
 			if ! [ "${encoding}" == "${lastEncoding}" ]
 			then
 				echo "error, encoding not possible"
-				echo "${encoding} is not matching last encoding (${lastEncoding}"
+				echo "${encoding} is not matching last encoding (${lastEncoding})"
 				echo "LINE: " $line
 				exit 1
 			fi
