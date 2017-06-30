@@ -116,9 +116,6 @@ peEnd1BarcodePhiXRecodedFqGz,${rawFile}_1.phiX.recoded.${rawFileExt}
 peEnd2BarcodePhiXRecodedFqGz,${rawFile}_2.phiX.recoded.${rawFileExt}
 peEnd1BarcodePhiXFqGz,${rawFile}_1.phiX.${rawFileExt}
 peEnd2BarcodePhiXFqGz,${rawFile}_2.phiX.${rawFileExt}
-peEnd1BarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.trimmed.${rawFileExt}
-peEnd2BarcodeTrimmedFqGz,${intermediateDir}${filePrefix}_${barcode}_2.trimmed.${rawFileExt}
-srBarcodeTrimmedFqGz,${intermediateDir}/${filePrefix}_${barcode}.trimmed.${rawFileExt}
 srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
 srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
 bwaAlignCores,8
