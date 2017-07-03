@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=10gb ppn=3
+#MOLGENIS walltime=23:59:00 mem=10gb ppn=8
 
 #Parameter mapping
 #string tmpName
@@ -50,11 +50,11 @@ tmpMergedBamRecalibratedTable=${MC_tmpFile}
 ${sambambaTool} index ${sampleMergedBam}
 
 
-java -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -Xmx9g -jar ${EBROOTGATK}/${gatkJar} \
+java -XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g -jar ${EBROOTGATK}/${gatkJar} \
    -T BaseRecalibrator \
    -R ${indexFile} \
    ${INPUTS[@]} \
-   -nct 3 \
+   -nct 8 \
    -knownSites ${dbSnp} \
    -o ${tmpMergedBamRecalibratedTable}
 
