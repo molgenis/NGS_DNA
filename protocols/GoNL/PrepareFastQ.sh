@@ -1,6 +1,5 @@
 #MOLGENIS ppn=2 mem=8gb walltime=18:00:00 
 
-set -o pipefail
 
 #Parameter mapping
 #string logsDir
@@ -153,9 +152,8 @@ checkIlluminaEncoding() {
 
 	else
 		#make fastQ out of the fq.gz file
-		mkfifo ${barcodeFqGz}.encoded.fq
 		echo "converting Illumina encoding"
-		seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFqGz}.encoded.fq&
+		seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFqGz}.encoded.fq
 
 		echo -e "done..\nNow gzipping ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}"
 		pigz -c ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}

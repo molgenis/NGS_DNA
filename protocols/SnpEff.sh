@@ -35,6 +35,7 @@ then
 	-csvStats ${tmpProjectVariantCallsSnpEff_Annotated}.csvStats.csv \
 	-noLog \
 	-lof \
+	-stats ${intermediateDir}/ \
 	-canon \
 	-ud 0 \
 	-c $EBROOTSNPEFF/snpEff.config \
