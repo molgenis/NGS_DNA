@@ -49,14 +49,14 @@ if [ "${seqType}" == "PE" ]
 then
 	#Run BWA for paired-end
 
-    	bwa mem \
-    	-M \
-    	-R $READGROUPLINE \
-    	-t ${bwaAlignCores} \
-    	${indexFile} \
-    	${fastq1} \
-    	${fastq2} \
-    	> ${tmpAlignedSam} &
+	bwa mem \
+	-M \
+	-R $READGROUPLINE \
+	-t ${bwaAlignCores} \
+	${indexFile} \
+	${fastq1} \
+	${fastq2} \
+	> ${tmpAlignedSam} &
 
 	java -Djava.io.tmpdir=${tempDir} -Xmx29G -XX:ParallelGCThreads=4 -jar ${EBROOTPICARD}/${picardJar} SortSam \
         INPUT=${tmpAlignedSam} \
@@ -67,15 +67,15 @@ then
 	mv ${tmpAlignedSortedBam} ${alignedSortedBam}
 
 else
-    	#Run BWA for single-read
-   	bwa mem \
+	#Run BWA for single-read
+	bwa mem \
 	-M \
-    	-R $READGROUPLINE \
-    	-t ${bwaAlignCores} \
-    	${indexFile} \
-    	${srBarcodePhiXFqGz} \
-    	> ${tmpAlignedSam} &
-	
+	-R $READGROUPLINE \
+	-t ${bwaAlignCores} \
+	${indexFile} \
+	${srBarcodePhiXFqGz} \
+	> ${tmpAlignedSam} &
+
 	java -Djava.io.tmpdir=${tempDir} -Xmx29G -XX:ParallelGCThreads=4 -jar ${EBROOTPICARD}/${picardJar} SortSam \
         INPUT=${tmpAlignedSam} \
         OUTPUT=${tmpAlignedSortedBam}  \
