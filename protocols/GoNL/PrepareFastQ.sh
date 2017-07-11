@@ -1,6 +1,5 @@
 #MOLGENIS ppn=2 mem=8gb walltime=18:00:00 
 
-set -o pipefail
 
 #Parameter mapping
 #string logsDir
@@ -60,15 +59,15 @@ then
 	-a AGATCGGAAGAG \
 	-A AGATCGGAAGAG \
 	--minimum-length 20 \
-	-o ${TMPDIR}/${peEnd1BarcodeTrimmedFqGz} \
-	-p ${TMPDIR}/${peEnd2BarcodeTrimmedFqGz} \
+	-o ${peEnd1BarcodeTrimmedFqGz} \
+	-p ${peEnd2BarcodeTrimmedFqGz} \
 	${peEnd1BarcodeFqGz} ${peEnd2BarcodeFqGz}
 	echo "barcode trimmed"	
 fi
 
 echo "starting with phiX part"
 # Spike phiX only once
-samp=$(zcat ${TMPDIR}/${peEnd1BarcodeTrimmedFqGz} | tail -n10)
+samp=$(zcat ${peEnd1BarcodeTrimmedFqGz} | tail -n10)
 phiX=$(zcat ${phiXEnd1Gz} | tail -n10)
 
 if [ "$samp" = "$phiX" ]; 
@@ -79,8 +78,8 @@ else
 	if [ "${seqType}" == "PE" ]
 	then
 		echo "Append phiX reads"
-		cat ${phiXEnd1Gz} >> ${TMPDIR}/${peEnd1BarcodeTrimmedFqGz}
-		cat ${phiXEnd2Gz} >> ${TMPDIR}/${peEnd2BarcodeTrimmedFqGz}
+		cat ${phiXEnd1Gz} >> ${peEnd1BarcodeTrimmedFqGz}
+		cat ${phiXEnd2Gz} >> ${peEnd2BarcodeTrimmedFqGz}
 	fi
 fi
 echo -e "finished with phiX part...\nstarting with IlluminaEncoding"
@@ -153,9 +152,8 @@ checkIlluminaEncoding() {
 
 	else
 		#make fastQ out of the fq.gz file
-		mkfifo ${barcodeFqGz}.encoded.fq
 		echo "converting Illumina encoding"
-		seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFqGz}.encoded.fq&
+		seqtk seq ${barcodeFqGz} -Q 64 -V > ${barcodeFqGz}.encoded.fq
 
 		echo -e "done..\nNow gzipping ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}"
 		pigz -c ${barcodeFqGz}.encoded.fq > ${barcodeFinalFqGz}
@@ -169,8 +167,8 @@ checkIlluminaEncoding() {
 #If paired-end do fastqc for both ends, else only for one
 if [ "${seqType}" == "PE" ]
 then
-        checkIlluminaEncoding ${TMPDIR}/${peEnd1BarcodeTrimmedFqGz} ${peEnd1BarcodeTrimmedPhiXRecodedFqGz}
-        checkIlluminaEncoding ${TMPDIR}/${peEnd2BarcodeTrimmedFqGz} ${peEnd2BarcodeTrimmedPhiXRecodedFqGz}
+        checkIlluminaEncoding ${peEnd1BarcodeTrimmedFqGz} ${peEnd1BarcodeTrimmedPhiXRecodedFqGz}
+        checkIlluminaEncoding ${peEnd2BarcodeTrimmedFqGz} ${peEnd2BarcodeTrimmedPhiXRecodedFqGz}
 else
 	echo "SeqType unknown"
 	exit 1
