@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 mem=14gb ppn=1
+#MOLGENIS walltime=23:59:00 mem=13gb ppn=1
 
 #Parameter mapping
 #string tmpName
