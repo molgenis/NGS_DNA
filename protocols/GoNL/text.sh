@@ -1,0 +1,14 @@
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160211_NB501043_0010_AHKH5FBGXX/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160303_NB501093_0016_AHVW75BGXX/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160331_NB501043_0018_AHY5W5BGXX/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160404_NB501043_0019_AHY72FBGXX/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160413_NB501043_0022_AHVNTCBGXX/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160415_NB501043_0023_AHW5NHBGXX/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160425_NB501043_0024_AH27K5BGXY/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160512_NB501043_0029_AH3JG3BGXY/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160726_M01997_0289_000000000-AU7G1_NGS_1665/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160804_M01997_0292_000000000-AU7GP_NGS_1668-2/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/160805_NB501093_0051_AHF2GFBGXY/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/161019_M01997_0314_000000000-AW69J_NGSR_12/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/161024_M01997_0315_000000000-AWGAG_NGSR_13/*
+ls -d /groups/umcg-gd/prm02/rawdata/ngs/161123_M01785_0381_000000000-AV1BM_NGSR_39/*
