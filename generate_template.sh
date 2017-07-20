@@ -2,21 +2,26 @@
 
 module load NGS_DNA/3.4.1
 module list 
-HOST=$(hostname)
+HOST=$(hostname -s)
 thisDir=$(pwd)
 
-ENVIRONMENT_PARAMETERS="parameters_${HOST%%.*}.csv"
+ENVIRONMENT_PARAMETERS="parameters_${HOST}.csv"
 TMPDIRECTORY=$(basename $(cd ../../ && pwd ))
 GROUP=$(basename $(cd ../../../ && pwd ))
 
 PROJECT=projectXX
 WORKDIR="/groups/${GROUP}/${TMPDIRECTORY}"
 RUNID=runXX
+SPECIES="homo_sapiens"
+BUILD="b37"
 
 ## Normal user, please leave BATCH at _chr
 ## For expert modus: small batchsize (6) fill in '_small'  or per chromosome fill in _chr
 BATCH="_chr"
-samplesheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv
+
+GENSCRIPTS="${WORKDIR}/generatedscripts/${PROJECT}"
+
+samplesheet=${GENSCRIPTS}/${PROJECT}.csv
 mac2unix $samplesheet
 
 python ${EBROOTNGS_DNA}/scripts/samplesize.py ${samplesheet} $thisDir
@@ -24,6 +29,7 @@ SAMPLESIZE=$(cat externalSampleIDs.txt | uniq | wc -l)
 
 python ${EBROOTNGS_DNA}/scripts/gender.py $samplesheet
 var=$(cat ${samplesheet}.tmp | wc -l)
+
 
 if [ $var != 0 ]
 then
@@ -44,44 +50,45 @@ then
      rm .compute.properties
 fi
 
-if [ -f ${WORKDIR}/generatedscripts/${PROJECT}/out.csv  ];
+if [ -f ${GENSCRIPTS}/out.csv  ];
 then
-    	rm -rf ${WORKDIR}/generatedscripts/${PROJECT}/out.csv
+    	rm -rf ${GENSCRIPTS}/out.csv
 fi
 
-echo "tmpName,${TMPDIRECTORY}" > ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv 
+echo "tmpName,${TMPDIRECTORY}" > ${GENSCRIPTS}/tmpdir_parameters.csv 
 
-perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters.csv > \
-${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv
+perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${GENSCRIPTS}/tmpdir_parameters.csv > \
+${GENSCRIPTS}/tmpdir_parameters_converted.csv
 
 perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters.csv > \
-${WORKDIR}/generatedscripts/${PROJECT}/out.csv
+${GENSCRIPTS}/out.csv
 
 perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/parameters_${GROUP}.csv > \
-${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv
+${GENSCRIPTS}/group_parameters.csv
 
 perl ${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl ${EBROOTNGS_DNA}/${ENVIRONMENT_PARAMETERS} > \
-${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv
+${GENSCRIPTS}/environment_parameters.csv
+
 
 sh $EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh \
--p ${WORKDIR}/generatedscripts/${PROJECT}/out.csv \
--p ${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv \
--p ${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv \
--p ${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv \
+-p ${GENSCRIPTS}/out.csv \
+-p ${GENSCRIPTS}/group_parameters.csv \
+-p ${GENSCRIPTS}/environment_parameters.csv \
+-p ${GENSCRIPTS}/tmpdir_parameters_converted.csv \
 -p ${EBROOTNGS_DNA}/batchIDList${BATCH}.csv \
--p ${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv \
+-p ${GENSCRIPTS}/${PROJECT}.csv \
 -w ${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv \
--rundir ${WORKDIR}/generatedscripts/${PROJECT}/scripts \
+-rundir ${GENSCRIPTS}/scripts \
 --runid ${RUNID} \
 -o "workflowpath=${WORKFLOW};\
-outputdir=scripts/jobs;mainParameters=${WORKDIR}/generatedscripts/${PROJECT}/out.csv;\
-group_parameters=${WORKDIR}/generatedscripts/${PROJECT}/group_parameters.csv;\
+outputdir=scripts/jobs;mainParameters=${GENSCRIPTS}/out.csv;\
+group_parameters=${GENSCRIPTS}/group_parameters.csv;\
 groupname=${GROUP};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
-environment_parameters=${WORKDIR}/generatedscripts/${PROJECT}/environment_parameters.csv;\
-tmpdir_parameters=${WORKDIR}/generatedscripts/${PROJECT}/tmpdir_parameters_converted.csv;\
+environment_parameters=${GENSCRIPTS}/environment_parameters.csv;\
+tmpdir_parameters=${GENSCRIPTS}/tmpdir_parameters_converted.csv;\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${BATCH}.csv;\
-worksheet=${WORKDIR}/generatedscripts/${PROJECT}/${PROJECT}.csv" \
+worksheet=${GENSCRIPTS}/${PROJECT}.csv" \
 -weave \
 --generate
 

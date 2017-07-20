@@ -8,7 +8,7 @@ sh Convading_MakeControlGroup.sh -i /path/to/bams -w /path/to/workdir/ -p ONCO_v
 
 Arguments
         Required:
-	-i|--bamsfolder		path to where all bams are
+	-i|--bamsfolder		path to where all bams are (WARNING: do not use inputBams as the directory name)
 	-w|--workdir		path to working directory
         -p|--panel	    	name of panel (e.g. CARDIO_v2, ONCO_v3)
 	Optional:
