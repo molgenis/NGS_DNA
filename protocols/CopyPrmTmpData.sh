@@ -1,4 +1,8 @@
 #MOLGENIS walltime=02:00:00 mem=4gb
+
+set -e 
+set -u 
+
 #string tmpName
 #string allRawNgsTmpDataDir
 #string allRawNgsPrmDataDir
@@ -20,6 +24,7 @@
 #string intermediateDir
 #list barcode
 #list lane
+
 
 n_elements=${internalSampleID[@]}
 max_index=${#internalSampleID[@]}-1

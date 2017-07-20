@@ -199,6 +199,7 @@ projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.call
 
 ### Protocols 19, 20, 21, 21, 22, 23 and 24 (SnpEff,CmdLineAnnotator, VariantAnnotator, MergeBatches,Gavin VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
 projectVariantCallsSnpEff_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.vcf
+projectVariantCallsSnpEff_SummaryHtml,${projectPrefix}.batch-${batchID}.variant.calls.snpeff_Summary.html
 projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.vcf

@@ -56,7 +56,9 @@ cp generate_template.sh ${workfolder}/generatedscripts/PlatinumSubset/generate_t
 ## Grep used version of molgenis compute out of the parameters file
 fgrep "computeVersion," parameters.csv > ${workfolder}/generatedscripts/PlatinumSubset/mcVersion.txt
 
-perl -pi -e 's|module load NGS_DNA/3.4.1|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+NGS_DNA_VERSION=NGS_DNA/3.4.1
+module load $NGS_DNA_VERSION
+perl -pi -e "s|module load $NGS_DNA_VERSION|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|PROJECT=projectXX|PROJECT=PlatinumSubset|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|RUNID=runXX|RUNID=run01|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|ngsversion=.*|ngsversion="test";\\|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
@@ -71,7 +73,7 @@ cd ${workfolder}/generatedscripts/PlatinumSubset/
 sh generate_template.sh 
 
 cd scripts
-perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\nmodule load Molgenis-Compute/\${computeVersion}|' *.sh
+perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\n|' *.sh
 sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/

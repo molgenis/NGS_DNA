@@ -1,8 +1,6 @@
 <h1>NGS_DNA pipeline</h1>
-
 <h2>Manual</h2>
 Find manual on installation and use at https://molgenis.gitbooks.io/molgenis-pipelines/
-
 
 <h2>Summary</h2>
 The sequencer is producing reads (in FastQ format) and are aligned to the hg19 reference genome with BWA (Li & Durbin <sup>1</sup>).
