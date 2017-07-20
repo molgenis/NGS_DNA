@@ -34,6 +34,9 @@
 #list lane
 #string ngsUtilsVersion
 
+set -e 
+set -u
+
 umask 0007
 module load ${ngsUtilsVersion}
 module load $ngsversion
