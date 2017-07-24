@@ -58,7 +58,7 @@ fgrep "computeVersion," parameters.csv > ${workfolder}/generatedscripts/Platinum
 
 NGS_DNA_VERSION=NGS_DNA/3.4.1
 module load "${NGS_DNA_VERSION}"
-
+EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/
 perl -pi -e "s|module load ${NGS_DNA_VERSION}|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|ngsversion=.*|ngsversion="test";\\|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e 's|create_in-house_ngs_projects_workflow.csv|create_external_samples_ngs_projects_workflow.csv|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
@@ -73,7 +73,7 @@ cd ${workfolder}/generatedscripts/PlatinumSubset/
 sh generate_template.sh
 
 cd scripts
-perl -pi -e 's|module load \$ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\n|' *.sh
+perl -pi -e 's|module load $ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\n|' *.sh
 sh submit.sh
 
 cd ${workfolder}/projects/PlatinumSubset/run01/jobs/
@@ -88,8 +88,8 @@ for i in $(ls s*_GenderCheck_1.sh); do touch $i.finished ; touch ${i%.*}.env; ch
 for i in $(ls s*_GenderCalculate_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 printf "This is a male\n" > //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12891.chosenSex.txt
 printf "Male\n" >> //groups/umcg-gaf//tmp04//tmp//PlatinumSubset/run01//PlatinumSample_NA12891.chosenSex.txt
-perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_*.sh  
-perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_DecisionTree_*.sh  
+perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_QCStats_*.sh
+perl -pi -e 's|module load test|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|' s*_DecisionTree_*.sh
 perl -pi -e 's|module load test|#|' s*_QCReport_0.sh
 perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s*_CountAllFinishedFiles_0.sh
 perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
