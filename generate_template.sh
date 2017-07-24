@@ -71,9 +71,9 @@ fi
 
 if [ $sampleSize -gt 199 ]
 then
-	workflow="${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv"
+	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv
 else
-        workflow="${EBROOTNGS_DNA}/workflow.csv"
+        workflow=${EBROOTNGS_DNA}/workflow.csv
 fi
 
 if [ -f "${genScripts}/out.csv"  ];then rm -rf "${genScripts}/out.csv" ; fi
