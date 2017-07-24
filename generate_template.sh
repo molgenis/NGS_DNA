@@ -96,14 +96,14 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
 --runid "${runID}" \
--o workflowpath="${workflow}";\
-outputdir=scripts/jobs;mainParameters="${genScripts}/out.csv";\
-group_parameters="${genScripts}/group_parameters.csv";\
-groupname="${group}";\
+-o workflowpath="${workflow};\
+outputdir=scripts/jobs;mainParameters=${genScripts}/out.csv;\
+group_parameters=${genScripts}/group_parameters.csv;\
+groupname=${group};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
-environment_parameters="${genScripts}/environment_parameters.csv";\
-tmpdir_parameters="${genScripts}/tmpdir_parameters_converted.csv";\
-batchIDList="${EBROOTNGS_DNA}/batchIDList${batch}.csv";\
-worksheet="${genScripts}/${project}.csv" \
+environment_parameters=${genScripts}/environment_parameters.csv;\
+tmpdir_parameters=${genScripts}/tmpdir_parameters_converted.csv;\
+batchIDList=${EBROOTNGS_DNA}/batchIDList${batch}.csv;\
+worksheet=${genScripts}/${project}.csv" \
 -weave \
 --generate
