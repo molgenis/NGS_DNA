@@ -21,9 +21,9 @@ Options:
 	-c   batch (_chr or _small) (default=_chr)
 	-g   group (default=basename of ../../../ )
 	-p   project (default=basename of this directory)
-	-r   runid (default=run01)
+	-r   runID (default=run01)
 	-s   species (default=homo_sapiens)
-	-t   tmpdirectory (default=basename of ../../ )
+	-t   tmpDirectory (default=basename of ../../ )
 	-w   workdir (default=/groups/\${group}/\${tmpDirectory})
 
 ===============================================================================================================
@@ -43,7 +43,7 @@ if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd
 if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
 if [[ -z "${project:-}" ]]; then project=$(basename $(pwd )) ; fi ; echo "project=${project}"
-if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runid=$runid"
+if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=$runID"
 if [[ -z "${species:-}" ]]; then species="homo_sapiens" ; fi ; echo "species=${species}"
 if [[ -z "${build:-}" ]]; then build="b37" ; fi ;echo "build=${build}"
 if [[ -z "${batch:-}" ]]; then batch=_chr; fi ; echo "batch=${batch}"
@@ -52,7 +52,7 @@ if [[ -z "${batch:-}" ]]; then batch=_chr; fi ; echo "batch=${batch}"
 ## Normal user, please leave BATCH at _chr
 ## For expert modus: small batchsize (6) fill in '_small'  or per chromosome fill in _chr
 
-genScripts="${workDir}/generatedscripts/${project}"
+genScripts="${workDir}/generatedscripts/${project}/"
 samplesheet="${genScripts}/${project}.csv" ; mac2unix "${samplesheet}"
 
 python "${EBROOTNGS_DNA}/scripts/samplesize.py" "${samplesheet}" $(pwd)
