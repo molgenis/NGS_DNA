@@ -3,7 +3,7 @@
 module load NGS_DNA/3.4.1
 module list
 host=$(hostname -s)
-environmentParameters="parameters_${host}.csv"
+environmentParameters="parameters_${host}"
 
 function showHelp() {
 	#
@@ -82,7 +82,7 @@ echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/tmpdir_parameters_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/out.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/group_parameters.csv"
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/${environmentParameters}" > "${genScripts}/environment_parameters.csv"
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/${environmentParameters}.csv" > "${genScripts}/environment_parameters.csv"
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${genScripts}/out.csv" \
