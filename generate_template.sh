@@ -94,7 +94,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
 --runid "${runID}" \
--o "workflowpath=${workflow}";\
+-o workflowpath="${workflow}";\
 outputdir=scripts/jobs;mainParameters="${genScripts}/out.csv";\
 group_parameters="${genScripts}/group_parameters.csv";\
 groupname="${group}";\
