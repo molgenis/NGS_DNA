@@ -81,7 +81,7 @@ if [ -f "${genScripts}/out.csv"  ];then rm -rf "${genScripts}/out.csv" ; fi
 echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/tmpdir_parameters_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/out.csv"
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${GROUP}.csv" > "${genScripts}/group_parameters.csv"
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/group_parameters.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/${environmentParameters}" > "${genScripts}/environment_parameters.csv"
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
