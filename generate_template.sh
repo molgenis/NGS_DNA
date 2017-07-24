@@ -43,10 +43,10 @@ if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd
 if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
 if [[ -z "${project:-}" ]]; then project=$(basename $(pwd )) ; fi ; echo "project=${project}"
-if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=$runID"
+if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 if [[ -z "${species:-}" ]]; then species="homo_sapiens" ; fi ; echo "species=${species}"
-if [[ -z "${build:-}" ]]; then build="b37" ; fi ;echo "build=${build}"
-if [[ -z "${batch:-}" ]]; then batch=_chr; fi ; echo "batch=${batch}"
+if [[ -z "${build:-}" ]]; then build="b37" ; fi ; echo "build=${build}"
+if [[ -z "${batch:-}" ]]; then batch="_chr"; fi ; echo "batch=${batch}"
 
 
 ## Normal user, please leave BATCH at _chr
@@ -94,7 +94,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
 --runid "${runID}" \
--o "workflowpath="${workflow}";\
+-o "workflowpath=${workflow}";\
 outputdir=scripts/jobs;mainParameters="${genScripts}/out.csv";\
 group_parameters="${genScripts}/group_parameters.csv";\
 groupname="${group}";\
@@ -105,4 +105,3 @@ batchIDList="${EBROOTNGS_DNA}/batchIDList${batch}.csv";\
 worksheet="${genScripts}/${project}.csv" \
 -weave \
 --generate
-
