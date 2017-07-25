@@ -67,7 +67,7 @@ perl -pi -e 's|create_in-house_ngs_projects_workflow.csv|create_external_samples
 perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 
-perl -pi -e 's|workflow=\"\${EBROOTNGS_DNA}/workflow.csv\"|workflow=${EBROOTNGS_DNA}/test_workflow.csv|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
+perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=${EBROOTNGS_DNA}/test_workflow.csv|" ${workfolder}/generatedscripts/PlatinumSubset/generate_template.sh
 cp test/PlatinumSubset.csv ${workfolder}/generatedscripts/PlatinumSubset/
 
 cd ${workfolder}/generatedscripts/PlatinumSubset/
