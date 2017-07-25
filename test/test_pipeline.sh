@@ -75,7 +75,9 @@ cd ${workfolder}/generatedscripts/PlatinumSubset/
 sh generate_template.sh
 
 cd scripts
-perl -pi -e 's|module load $ngsversion|EBROOTNGS_DNA=/groups/umcg-gaf/tmp04/tmp/NGS_DNA/\n|' *.sh
+###### Load a version of molgenis compute
+perl -pi -e "s|module load test|module load ${NGS_DNA_VERSION}|
+######
 perl -pi -e "s|/apps/software/${NGS_DNA_VERSION}/|/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|g" *.sh
 sh submit.sh
 
