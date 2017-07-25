@@ -38,8 +38,8 @@ set -e
 set -u
 
 umask 0007
-module load $ngsUtilsVersion
-module load $ngsversion
+module load ${ngsUtilsVersion}
+module load ${ngsversion}
 
 module list
 #
