@@ -76,7 +76,7 @@ sh generate_template.sh
 
 cd scripts
 ###### Load a version of molgenis compute
-perl -pi -e "s|module load \${ngsversion}|module load ${NGS_DNA_VERSION}|
+perl -pi -e "s|module load test|module load ${NGS_DNA_VERSION}|
 ######
 perl -pi -e "s|/apps/software/${NGS_DNA_VERSION}/|/groups/umcg-gaf/tmp04/tmp/NGS_DNA/|g" *.sh
 sh submit.sh
