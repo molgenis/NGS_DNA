@@ -16,7 +16,7 @@ set -u
 #string worksheet 
 #string outputdir
 #string workflowpath
-#list internalSampleID
+#list externalSampleID
 #string project
 #string logsDir 
 #string groupname
@@ -26,8 +26,8 @@ set -u
 #list lane
 
 
-n_elements=${internalSampleID[@]}
-max_index=${#internalSampleID[@]}-1
+n_elements=${externalSampleID[@]}
+max_index=${#externalSampleID[@]}-1
 
 WHOAMI=$(whoami)
 HOST=$(hostname)
