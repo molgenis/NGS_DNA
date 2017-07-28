@@ -186,9 +186,10 @@ do
 	then
 		echo "copying output decision tree to results/variants/cnv/"
 		rsync -a ${intermediateDir}/${sa}.longlistplusplusFinal.txt ${projectResultsDir}/variants/cnv/
+		cp ${cxControlsDir}/${capturingKit}/${convadingVersion}/Convading/targetQcList.txt ${projectResultsDir}/variants/cnv/
+
 	fi
 
-	cp ${cxControlsDir}/${capturingKit}/${convadingVersion}/Convading/targetQcList.txt ${projectResultsDir}/variants/cnv/
 
 done
 printf " finished (7/11)\n"
