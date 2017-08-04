@@ -11,8 +11,10 @@ function checkUnique (){
 	then
 		return ''
 	elif [[ countlines -eq 1 ]]
+	then
 		return $(cat "${1}")
 	elif [[ countlines -gt 1 ]]
+	then
 		echo "there are different values where there should only be one option:"
 		cat "${1}"
 		exit 1
