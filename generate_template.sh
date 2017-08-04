@@ -58,8 +58,8 @@ if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi
 if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
-genScripts="${workDir}/generatedscripts/${project}/"
-samplesheet="${genScripts}/${project}.csv" ; mac2unix "${samplesheet}"
+genScripts="${workDir}/generatedscripts/${filePrefix}/"
+samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
 
 #
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
