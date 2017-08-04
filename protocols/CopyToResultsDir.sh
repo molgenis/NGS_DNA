@@ -13,6 +13,9 @@
 #string projectRawTmpDataDir
 #string projectQcDir
 #string projectJobsDir
+#string convadingVersion
+#string capturingKit
+#string cxControlsDir
 #list externalSampleID
 #list batchID
 #list seqType
@@ -183,7 +186,11 @@ do
 	then
 		echo "copying output decision tree to results/variants/cnv/"
 		rsync -a ${intermediateDir}/${sa}.longlistplusplusFinal.txt ${projectResultsDir}/variants/cnv/
+		cp ${cxControlsDir}/${capturingKit}/${convadingVersion}/Convading/targetQcList.txt ${projectResultsDir}/variants/cnv/
+
 	fi
+
+
 done
 printf " finished (7/11)\n"
 
@@ -264,7 +271,9 @@ echo "Made md5 file for ${projectResultsDir}/${project}.zip (11/11)"
 cd ${CURRENT_DIR}
 
 echo "pipeline is finished"
-touch ${logsDir}/${project}.pipeline.finished
+#touch ${logsDir}/${project}/${project}.pipeline.finished
+runNumber=$(basename $( dirname ${projectResultsDir}))
+touch ${logsDir}/${project}/${runNumber}.pipeline.finished
 echo "${logsDir}/${project}.pipeline.finished is created"
 
 if [ ! -d ${logsDir}/${project}/ ]
