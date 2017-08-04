@@ -5,22 +5,6 @@ module list
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
 
-function checkUnique (){
-	countLines=$(cat $1 | wc -l)
-	if [[ "${countLines}" -eq 0 ]]
-	then
-		return ''
-	elif [[ countlines -eq 1 ]]
-	then
-		return $(cat "${1}")
-	elif [[ countlines -gt 1 ]]
-	then
-		echo "there are different values where there should only be one option:"
-		cat "${1}"
-		exit 1
-	fi
-}
-
 function showHelp() {
 	#
 	# Display commandline help on STDOUT.
@@ -70,12 +54,13 @@ python "${EBROOTNGS_DNA}/scripts/gender.py" "${samplesheet}"
 
 ## get only uniq lines and removing txt.tmp file
 for i in $(ls *.txt.tmp); do cat $i | sort -u > ${i%.*} ; rm $i ;done
-b=$(checkUniq build.txt) 
-build=${b:-b37}
-sa=$(checkUnique sampleType.txt) 
-sampleType=${sa:-DNA}
-sp=$(checkUnique species.txt) 
-species=${sp:-homo_sapiens}
+
+build="b37"
+species="homo_sapiens"
+
+if [ -s build.txt ]; then build=$(cat build.txt);fi
+if [ -s species.txt ];then species=$(cat species.txt); fi
+
 sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleSize}"
 genderColumn=$(cat "${samplesheet}.tmp" | wc -l)
 

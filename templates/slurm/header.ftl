@@ -14,9 +14,6 @@ set -u
 
 ENVIRONMENT_DIR='.'
 
-WHOAMI=$(whoami)
-. /home/$WHOAMI/molgenis.cfg
-
 #
 # Variables declared in MOLGENIS Compute headers/footers always start with a MC_ prefix.
 #
@@ -30,8 +27,6 @@ declare MC_jobScriptSTDOUT="${taskId}.out"
 #
 
 logsDirectory="${logsDir}/${project}/"
-mydate_start=$(date +"%Y-%m-%dT%H:%M:%S+0200")
-export mydate_start
 
 <#noparse>
 runName=$(basename $(cd ../ && pwd ))

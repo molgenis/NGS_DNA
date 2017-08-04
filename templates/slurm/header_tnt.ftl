@@ -15,7 +15,13 @@ set -u
 ENVIRONMENT_DIR='.'
 
 WHOAMI=$(whoami)
-. /home/$WHOAMI/molgenis.cfg
+if [[ -f "/home/$WHOAMI/molgenis.cfg" && -r "/home/$WHOAMI/molgenis.cfg" ]]
+then
+	source /home/$WHOAMI/molgenis.cfg
+else
+	printf '%s\n' "FATAL: cannot find or cannot access /home/$WHOAMI/molgenis.cfg"
+	exit 1
+fi
 
 #
 # Variables declared in MOLGENIS Compute headers/footers always start with a MC_ prefix.
