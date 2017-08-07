@@ -1,5 +1,6 @@
 queue,ll
 prmName,prm03
+prmHost,localhost
 root,/
 appsDir,${root}/apps/
 toolChain,foss-2015b

@@ -1,8 +1,5 @@
 #MOLGENIS walltime=02:00:00 mem=4gb
 
-set -e 
-set -u 
-
 #string tmpName
 #string allRawNgsTmpDataDir
 #string allRawNgsPrmDataDir
@@ -25,97 +22,58 @@ set -u
 #list barcode
 #list lane
 
-
-n_elements=${internalSampleID[@]}
 max_index=${#internalSampleID[@]}-1
 
 WHOAMI=$(whoami)
-HOST=$(hostname)
+HOST=$(hostname -s)
 
-if [[ "$HOST" == "zinc-finger.gcc.rug.nl" ||  "$HOST" == "leucine-zipper.gcc.rug.nl" ]] && [ ! -d /groups/${groupname}/prm02 ]
+if ls ${permanentDataDir}logs/*.mailinglist 1>/dev/null 2>&1
 then
-	printf "On zinc-finger or leucine-zipper...\n"
-	if [ ! -f /groups/umcg-gd/${tmpName}/logs/mailinglistDiagnostiek.txt ]
-	then
-		rsync ${WHOAMI}@calculon.hpc.rug.nl:${permanentDataDir}/logs/mailinglistDiagnostiek.txt /groups/umcg-gd/${tmpName}/logs/
-		printf "mailinglistDiagnostiek.txt copied from prm02 to /groups/umcg-gd/${tmpName}/logs/ \n"
-	fi
+	rsync --verbose --links --no-perms --times --group --no-owner --devices --specials --checksum \
+		"${permanentDataDir}/logs/*.mailinglist" \
+		"${tmpDataDir}/logs/"
 fi
 
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
-
-	RUNNAME=${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}	
-	if [[ "$HOST" == "zinc-finger.gcc.rug.nl" ||  "$HOST" == "leucine-zipper.gcc.rug.nl" ]] && [ ! -d /groups/${groupname}/prm02 ]
+	RUNNAME="${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}"
+	PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
+	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
+	
+	mkdir -vp ${TMPDATADIR}
+	
+	if [[ "${seqType[samplenumber]}" == 'SR' ]]
 	then
-		echo "${WHOAMI}@calculon.hpc.rug.nl:${allRawNgsPrmDataDir}/${RUNNAME}"
-		PRMDATADIR="${WHOAMI}@calculon.hpc.rug.nl:${allRawNgsPrmDataDir}/${RUNNAME}"
-	else	
-		PRMDATADIR=${allRawNgsPrmDataDir}/${RUNNAME}
-	fi
-
-	TMPDATADIR=${allRawNgsTmpDataDir}/${RUNNAME}
-
-	if [[ ${seqType[samplenumber]} == "SR" ]]
-	then
-  		mkdir -p ${TMPDATADIR}
-		if [[ ${barcode[samplenumber]} == "None" ]]
+		if [[ "${barcode[samplenumber]}" == 'None' ]]
 		then
-			echo "copying ${RUNNAME}_L${lane[samplenumber]}.fq.gz..." 
-			rsync -a -r --no-perms --no-owner \
-			${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz \
-			${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz
-			rsync -a -r --no-perms --no-owner \
-			${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz.md5 \
-			${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz.md5
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz*" \
+				"${TMPDATADIR}/"
 		else
-			echo "copying ${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz..." 
-			rsync -a -r --no-perms --no-owner \
-			${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz \
-			${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz
-			rsync -a -r --no-perms --no-owner \
-			${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz.md5 \
-			${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz.md5	
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz*" \
+				"${TMPDATADIR}/"
 		fi
-	elif [[ ${seqType[samplenumber]} == "PE" ]]
+	elif [[ "${seqType[samplenumber]}" == 'PE' ]]
 	then
-		mkdir -p ${TMPDATADIR}
-		if [[ ${barcode[samplenumber]} == "None" ]]
-    		then
-		echo "copying ${RUNNAME}_L${lane[samplenumber]}_1.fq.gz..." 
-    		rsync -a -r --no-perms --no-owner \
-    			${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz \
-    			${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz
-		echo "copying ${RUNNAME}_L${lane[samplenumber]}_2.fq.gz..." 
-		rsync -a -r --no-perms --no-owner \
-			${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz \
-			${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz
-		rsync -a -r --no-perms --no-owner \
-			${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz.md5 \
-			${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz.md5
-        	rsync -a -r --no-perms --no-owner \
-        		${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz.md5 \
-        		${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz.md5
-		else          
-		echo "copying ${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz..." 
-        	rsync -a -r --no-perms --no-owner \
-        		${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz \
-        		${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz
-		echo "copying ${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz..." 
-        	rsync -a -r --no-perms --no-owner \
-        		${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz \
-        		${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz
-        	rsync -a -r --no-perms --no-owner \
-        		${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz.md5 \
-        		${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz.md5
-        	rsync -a -r --no-perms --no-owner \
-        		${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5 \
-        		${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5
-    		fi
- 	fi	
-
+		if [[ "${barcode[samplenumber]}" == 'None' ]]
+		then
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz*" \
+				"${TMPDATADIR}/"
+			
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz*" \
+				"${TMPDATADIR}/"
+		else
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz*" \
+				"${TMPDATADIR}/"
+			
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz*" \
+				"${TMPDATADIR}/"
+		fi
+	fi
 done
-
-
-
 
