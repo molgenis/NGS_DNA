@@ -14,9 +14,6 @@ set -u
 
 ENVIRONMENT_DIR='.'
 
-WHOAMI=$(whoami)
-. /home/$WHOAMI/molgenis.cfg
-
 #
 # Variables declared in MOLGENIS Compute headers/footers always start with a MC_ prefix.
 #
@@ -28,12 +25,12 @@ declare MC_jobScriptSTDOUT="${taskId}.out"
 # File to indicate failure of a complete workflow in
 # a central location for log files for all projects.
 #
-declare MC_failedFile="${logsDir}/${project}.pipeline.failed"
-mydate_start=$(date +"%Y-%m-%dT%H:%M:%S+0200")
-export mydate_start
+
+logsDirectory="${logsDir}/${project}/"
 
 <#noparse>
-
+runName=$(basename $(cd ../ && pwd ))
+MC_failedFile="${logsDirectory}/${runName}.pipeline.failed"
 
 declare MC_singleSeperatorLine=$(head -c 120 /dev/zero | tr '\0' '-')
 declare MC_doubleSeperatorLine=$(head -c 120 /dev/zero | tr '\0' '=')

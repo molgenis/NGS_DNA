@@ -13,7 +13,7 @@
 #string worksheet 
 #string outputdir
 #string workflowpath
-#list internalSampleID
+#list externalSampleID
 #string project
 #string logsDir 
 #string groupname
@@ -22,7 +22,7 @@
 #list barcode
 #list lane
 
-max_index=${#internalSampleID[@]}-1
+max_index=${#externalSampleID[@]}-1
 
 WHOAMI=$(whoami)
 HOST=$(hostname -s)

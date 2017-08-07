@@ -21,7 +21,7 @@
 #list flowcell
 #list barcode
 #list lane
-#list internalSampleID
+#list externalSampleID
 
 #string mainParameters
 #string worksheet 
@@ -56,7 +56,8 @@ mkdir -p "${projectQcDir}"
 # (There may be multiple sequence files per sample)
 #
 cd "${projectRawTmpDataDir}"
-max_index=${#internalSampleID[@]}-1
+max_index=${#externalSampleID[@]}-1
+
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]
