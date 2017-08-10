@@ -4,6 +4,7 @@ set -u
 function preparePipeline(){
 	local _workflowType="${1}"
 	local _projectName="Platinum${_workflowType}"
+	${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
 	cp -r test/rawdata/MY_TEST_BAM_PROJECT${_workflowType}/*.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
 
 	if [ -d ${workfolder}/generatedscripts/${_projectName} ] 
