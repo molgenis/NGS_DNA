@@ -1,41 +1,6 @@
 set -e 
 set -u
 
-groupName="umcg-atd"
-workfolder="/groups/${groupName}/tmp03/"
-
-cd ${workfolder}/tmp/
-if [ -d ${workfolder}/tmp/NGS_DNA ]
-then
-	rm -rf ${workfolder}/tmp/NGS_DNA/
-	echo "removed ${workfolder}/tmp/NGS_DNA/"
-fi
-
-echo "pr number: $1"
-
-PULLREQUEST=$1
-NGS_DNA_VERSION=NGS_DNA/3.4.2
-
-git clone https://github.com/molgenis/NGS_DNA.git
-cd ${workfolder}/tmp/NGS_DNA
-
-git fetch --tags --progress https://github.com/molgenis/NGS_DNA/ +refs/pull/*:refs/remotes/origin/pr/*
-COMMIT=$(git rev-parse refs/remotes/origin/pr/$PULLREQUEST/merge^{commit})
-echo "checkout commit: COMMIT"
-git checkout -f ${COMMIT}
-
-### create testworkflow
-cd ${workfolder}/tmp/NGS_DNA/
-cp workflow.csv test_workflow.csv 
-tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
-
-rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
-cp test/results/PlatinumSubset_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz
-cp test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
-cp test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
-
-
-
 function preparePipeline(){
 	local _workflowType="${1}"
 	local _projectName="Platinum${_workflowType}"
@@ -143,6 +108,39 @@ local checkIfFinished(){
 	echo "${_projectName} test succeeded!"
 	echo ""
 }
+
+groupName="umcg-atd"
+workfolder="/groups/${groupName}/tmp03/"
+
+cd ${workfolder}/tmp/
+if [ -d ${workfolder}/tmp/NGS_DNA ]
+then
+	rm -rf ${workfolder}/tmp/NGS_DNA/
+	echo "removed ${workfolder}/tmp/NGS_DNA/"
+fi
+
+echo "pr number: $1"
+
+PULLREQUEST=$1
+NGS_DNA_VERSION=NGS_DNA/3.4.2
+
+git clone https://github.com/molgenis/NGS_DNA.git
+cd ${workfolder}/tmp/NGS_DNA
+
+git fetch --tags --progress https://github.com/molgenis/NGS_DNA/ +refs/pull/*:refs/remotes/origin/pr/*
+COMMIT=$(git rev-parse refs/remotes/origin/pr/$PULLREQUEST/merge^{commit})
+echo "checkout commit: COMMIT"
+git checkout -f ${COMMIT}
+
+### create testworkflow
+cd ${workfolder}/tmp/NGS_DNA/
+cp workflow.csv test_workflow.csv 
+tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
+
+rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
+cp test/results/PlatinumSubset_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz
+cp test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
+cp test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
 
 preparePipeline "ExternalSamples"
 preparePipeline "InhouseSamples"
