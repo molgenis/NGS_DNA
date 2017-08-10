@@ -7,8 +7,7 @@ function preparePipeline(){
 	local _projectName="PlatinumSubset${_workflowType}"
 	rm -f ${workfolder}/logs/${_projectName}.pipeline.finished
 
-	${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
-	cp -r test/rawdata/MY_TEST_BAM_PROJECT${_workflowType}/*.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
+	cp -r ${workfolder}/tmp/NGS_DNA/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType}/*.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
 
 	if [ -d ${workfolder}/generatedscripts/${_projectName} ] 
 	then
@@ -26,8 +25,8 @@ function preparePipeline(){
 	fi
 	mkdir ${workfolder}/generatedscripts/${_projectName}/
 
-	cp generate_template.sh ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
-	fgrep "computeVersion," parameters.csv > ${workfolder}/generatedscripts/${_projectName}/mcVersion.txt
+	cp ${workfolder}/tmp/NGS_DNA/generate_template.sh ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
+	fgrep "computeVersion," ${workfolder}/tmp/NGS_DNA/parameters.csv > ${workfolder}/generatedscripts/${_projectName}/mcVersion.txt
 
 	module load ${NGS_DNA_VERSION}
 	EBROOTNGS_DNA="${workfolder}/tmp/NGS_DNA/"
@@ -39,15 +38,12 @@ function preparePipeline(){
 
 	## Grep used version of molgenis compute out of the parameters file
 	perl -pi -e "s|module load ${NGS_DNA_VERSION}|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
-	echo "perl -pi -e |module load ${NGS_DNA_VERSION}|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/| ${workfolder}/generatedscripts/${_projectName}/generate_template.sh"
 	perl -pi -e 's|ngsversion=.*|ngsversion="test";\\|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 
 	perl -pi -e "s|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=${EBROOTNGS_DNA}/test_workflow.csv|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
-	echo "where am i"
-	pwd
-	cp test/${_projectName}.csv ${workfolder}/generatedscripts/${_projectName}/
+	cp ${workfolder}/tmp/NGS_DNA/test/${_projectName}.csv ${workfolder}/generatedscripts/${_projectName}/
 
 	cd ${workfolder}/generatedscripts/${_projectName}/
 
@@ -143,9 +139,9 @@ cd ${workfolder}/tmp/NGS_DNA/
 cp workflow.csv test_workflow.csv 
 tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
 
-cp test/results/PlatinumSubset_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz
-cp test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
-cp test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
+cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubset_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz
+cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
+cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
 
 preparePipeline "ExternalSamples"
 preparePipeline "InhouseSamples"
