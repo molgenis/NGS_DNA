@@ -6,7 +6,7 @@ project=open("project.txt.tmp","w")
 build=open("build.txt.tmp","w")
 species=open("species.txt.tmp","w")
 sampleType=open("sampleType.txt.tmp","w")
-externalSampleID=open("externalSampleID.txt.tmp","w")
+externalSampleID=open("externalSampleIDs.txt.tmp","w")
 capturingKit=open("capturingKit.txt.tmp","w")
 for row in reader:
 	for (k,v) in row.items():		
