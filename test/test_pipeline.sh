@@ -2,7 +2,7 @@ set -e
 set -u
 
 groupName="umcg-atd"
-workfolder="/groups/${groupName}/tmp04/"
+workfolder="/groups/${groupName}/tmp03/"
 
 cd ${workfolder}/tmp/
 if [ -d ${workfolder}/tmp/NGS_DNA ]
