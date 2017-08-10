@@ -78,7 +78,7 @@ function preparePipeline(){
 
 
 }
-local checkIfFinished(){
+function checkIfFinished(){
 	local _projectName="Platinum${1}"
 	count=0
 	minutes=0
