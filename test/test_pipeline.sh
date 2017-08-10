@@ -114,7 +114,7 @@ function preparePipeline(){
 
 }
 local checkIfFinished(){
-	local _projectName="Platinum${$1}"
+	local _projectName="Platinum${1}"
 	count=0
 	minutes=0
 	while [ ! -f ${workfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished ]
