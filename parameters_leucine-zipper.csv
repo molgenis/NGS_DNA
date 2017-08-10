@@ -1,5 +1,6 @@
 queue,lz-compute
-prmName,prm02
+prmName,prm06
+prmHost,localhost
 root,/
 appsDir,${root}/apps/
 toolChain,foss-2015b
