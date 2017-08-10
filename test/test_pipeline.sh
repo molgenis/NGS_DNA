@@ -42,6 +42,8 @@ function preparePipeline(){
 	perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 
 	perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=${EBROOTNGS_DNA}/test_workflow.csv|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
+	echo "where am i"
+	pwd
 	cp test/${_projectName}.csv ${workfolder}/generatedscripts/${_projectName}/
 
 	cd ${workfolder}/generatedscripts/${_projectName}/
