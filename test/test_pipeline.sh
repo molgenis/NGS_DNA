@@ -2,8 +2,11 @@ set -e
 set -u
 
 function preparePipeline(){
+
 	local _workflowType="${1}"
-	local _projectName="Platinum${_workflowType}"
+	local _projectName="PlatinumSubset${_workflowType}"
+	rm -f ${workfolder}/logs/${_projectName}.pipeline.finished
+
 	${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
 	cp -r test/rawdata/MY_TEST_BAM_PROJECT${_workflowType}/*.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
 
@@ -82,7 +85,7 @@ function preparePipeline(){
 
 }
 function checkIfFinished(){
-	local _projectName="Platinum${1}"
+	local _projectName="PlatinumSubset${1}"
 	count=0
 	minutes=0
 	while [ ! -f ${workfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished ]
@@ -140,7 +143,6 @@ cd ${workfolder}/tmp/NGS_DNA/
 cp workflow.csv test_workflow.csv 
 tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
 
-rm -f ${workfolder}/logs/PlatinumSubset.pipeline.finished
 cp test/results/PlatinumSubset_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz
 cp test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
 cp test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
