@@ -5,7 +5,7 @@ function preparePipeline(){
 
 	local _workflowType="${1}"
 	local _projectName="PlatinumSubset${_workflowType}"
-	rm -f ${workfolder}/logs/${_projectName}.pipeline.finished
+	rm -f ${workfolder}/logs/${_projectName}/run01.pipeline.finished
 
 	cp -r ${workfolder}/tmp/NGS_DNA/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType}/*.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
 
