@@ -7,7 +7,7 @@ function preparePipeline(){
 	local _projectName="PlatinumSubset${_workflowType}"
 	rm -f ${workfolder}/logs/${_projectName}/run01.pipeline.finished
 
-	cp -r ${workfolder}/tmp/NGS_DNA/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType}/*.fq.gz ${workfolder}/rawdata/ngs/MY_TEST_BAM_PROJECT${_workflowType}/
+	cp -r ${workfolder}/tmp/NGS_DNA/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType} ${workfolder}/rawdata/ngs/
 
 	if [ -d ${workfolder}/generatedscripts/${_projectName} ] 
 	then
