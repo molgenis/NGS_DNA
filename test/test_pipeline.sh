@@ -143,8 +143,8 @@ cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubset_True.final.vcf.gz /home
 cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
 cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
 
-preparePipeline "ExternalSamples"
 preparePipeline "InhouseSamples"
+preparePipeline "ExternalSamples"
 
-checkIfFinished "ExternalSamples"
 checkIfFinished "InhouseSamples"
+checkIfFinished "ExternalSamples"
