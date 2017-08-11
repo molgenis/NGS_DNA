@@ -42,7 +42,7 @@ function preparePipeline(){
 	perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 
-	perl -pi -e "s|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=${EBROOTNGS_DNA}/test_workflow.csv|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
+	perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=\${EBROOTNGS_DNA}/test_workflow.csv|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	cp ${workfolder}/tmp/NGS_DNA/test/${_projectName}.csv ${workfolder}/generatedscripts/${_projectName}/
 
 	cd ${workfolder}/generatedscripts/${_projectName}/
