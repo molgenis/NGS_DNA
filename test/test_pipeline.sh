@@ -86,11 +86,11 @@ function checkIfFinished(){
 	while [ ! -f ${workfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished ]
 	do
 
-		echo "${_projectName} is not finished in $minutes minutes, sleeping for 1 minute"
+		echo "${_projectName} is not finished in $minutes minutes, sleeping for 2 minutes"
 		sleep 60
-		minutes=$((minutes+1))
+		minutes=$((minutes+2))
 
-		count=$((count+1))
+		count=$((count+2))
 		if [ $count -eq 60 ]
 		then
 			echo "the test was not finished within 1 hour, let's kill it"
