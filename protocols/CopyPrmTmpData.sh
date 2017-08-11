@@ -21,6 +21,7 @@
 #string intermediateDir
 #list barcode
 #list lane
+#string prmHost
 
 max_index=${#externalSampleID[@]}-1
 
@@ -39,9 +40,9 @@ do
 	RUNNAME="${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}"
 	PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
 	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
-	
+
 	mkdir -vp ${TMPDATADIR}
-	
+
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]
 	then
 		if [[ "${barcode[samplenumber]}" == 'None' ]]
@@ -61,7 +62,6 @@ do
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz*" \
 				"${TMPDATADIR}/"
-			
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz*" \
 				"${TMPDATADIR}/"
@@ -69,7 +69,7 @@ do
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz*" \
 				"${TMPDATADIR}/"
-			
+
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz*" \
 				"${TMPDATADIR}/"
