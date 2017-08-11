@@ -55,6 +55,7 @@ mkdir -p "${projectQcDir}"
 # Do this for each sequence file and it's accompanying MD5 checksum.
 # (There may be multiple sequence files per sample)
 #
+rocketPoint=$(pwd)
 cd "${projectRawTmpDataDir}"
 max_index=${#externalSampleID[@]}-1
 
@@ -108,8 +109,7 @@ perl -pi -e 's/\r(?!\n)//g' "${projectJobsDir}/${project}.csv"
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
 #
-MY_DIR="$(cd -P "$(dirname "${0}")" && pwd)"
-cd ${MY_DIR}
+cd ${rocketPoint}
 
 if [[ -f .compute.properties ]]
 then
