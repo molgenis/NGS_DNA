@@ -52,6 +52,7 @@ mkdir -p ${projectLogsDir}
 mkdir -p ${intermediateDir}
 mkdir -p ${projectResultsDir}
 mkdir -p ${projectQcDir}
+mkdir -p "${logsDir}/${project}/"
 
 rocketPoint=$(pwd)
 
