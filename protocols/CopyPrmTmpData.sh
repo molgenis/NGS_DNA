@@ -38,7 +38,12 @@ fi
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
 	RUNNAME="${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}"
-	PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
+	if [ ${prmHost} == "localhost" ]
+	then 
+		PRMDATADIR="${allRawNgsPrmDataDir}/${RUNNAME}"
+	else
+		PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
+	fi
 	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
 
 	mkdir -vp ${TMPDATADIR}
