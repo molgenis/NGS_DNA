@@ -71,7 +71,6 @@ function preparePipeline(){
 	perl -pi -e "s|module load test|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_QCStats_*.sh
 	perl -pi -e "s|module load test|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_DecisionTree_*.sh
 	perl -pi -e 's|module load test|#|' s*_QCReport_0.sh
-	perl -pi -e 's|countShScripts-3\)\)|countShScripts-4))|' s*_CountAllFinishedFiles_0.sh
 	perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
 	perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
 
@@ -136,8 +135,8 @@ git checkout -f ${COMMIT}
 
 ### create testworkflow
 cd ${workfolder}/tmp/NGS_DNA/
-cp workflow.csv test_workflow.csv 
-tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
+cp ${workfolder}/tmp/NGS_DNA/workflow.csv ${workfolder}/tmp/NGS_DNA/test_workflow.csv 
+tail -1 ${workfolder}/tmp/NGS_DNA/workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> ${workfolder}/tmp/NGS_DNA/test_workflow.csv
 
 cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubset_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz
 cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
