@@ -49,7 +49,7 @@ mkdir -p "${projectLogsDir}"
 mkdir -p "${intermediateDir}"
 mkdir -p "${projectResultsDir}"
 mkdir -p "${projectQcDir}"
-
+mkdir -p "${logsDir}/${project}/"
 #
 # Create symlinks to the raw data required to analyse this project.
 # Do this for each sequence file and it's accompanying MD5 checksum.
