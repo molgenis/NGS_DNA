@@ -14,7 +14,7 @@ count=0
 for i in ${project} PlatinumSample_NA12878 PlatinumSample_NA12891
 do
 	mkdir -p /home/umcg-molgenis/NGS_DNA/output_${project}/${i}
-	${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz -2 ${projectResultsDir}/variants/${i}.final.vcf.gz -o /home/umcg-molgenis/NGS_DNA/output_${project}/${i}/
+	${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 /home/umcg-molgenis/NGS_DNA/${i}_True.final.vcf.gz -2 ${projectResultsDir}/variants/${i}.final.vcf.gz -o /home/umcg-molgenis/NGS_DNA/output_${project}/${i}/
 
 	if [[ -f /home/umcg-molgenis/NGS_DNA/output_${project}/${i}/notInVcf1.txt || -f /home/umcg-molgenis/NGS_DNA/output_${project}/${i}/notInVcf2.txt || -f /home/umcg-molgenis/NGS_DNA/output_${project}/${i}/inconsistent.txt ]]
 	then
