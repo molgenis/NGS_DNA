@@ -21,6 +21,7 @@
 #string intermediateDir
 #list barcode
 #list lane
+#string prmHost
 
 max_index=${#externalSampleID[@]}-1
 
@@ -37,21 +38,26 @@ fi
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
 	RUNNAME="${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}"
-	PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
+	if [ ${prmHost} == "localhost" ]
+	then
+		PRMDATADIR="${allRawNgsPrmDataDir}/${RUNNAME}"
+	else
+		PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
+	fi
 	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
-	
+
 	mkdir -vp ${TMPDATADIR}
-	
+
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]
 	then
 		if [[ "${barcode[samplenumber]}" == 'None' ]]
 		then
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz*" \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz"* \
 				"${TMPDATADIR}/"
 		else
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz*" \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz"* \
 				"${TMPDATADIR}/"
 		fi
 	elif [[ "${seqType[samplenumber]}" == 'PE' ]]
@@ -59,19 +65,18 @@ do
 		if [[ "${barcode[samplenumber]}" == 'None' ]]
 		then
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz*" \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz"* \
 				"${TMPDATADIR}/"
-			
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz*" \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz"* \
 				"${TMPDATADIR}/"
 		else
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz*" \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz"* \
 				"${TMPDATADIR}/"
-			
+
 			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz*" \
+				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz"* \
 				"${TMPDATADIR}/"
 		fi
 	fi

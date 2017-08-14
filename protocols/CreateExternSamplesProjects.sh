@@ -52,10 +52,11 @@ mkdir -p ${projectLogsDir}
 mkdir -p ${intermediateDir}
 mkdir -p ${projectResultsDir}
 mkdir -p ${projectQcDir}
+mkdir -p "${logsDir}/${project}/"
 
-ROCKETPOINT=$(pwd)
+rocketPoint=$(pwd)
 
-cd ${projectRawTmpDataDir}
+cd "${projectRawTmpDataDir}"
 
 #
 # Create symlinks to the raw data required to analyse this project
@@ -95,7 +96,7 @@ do
 	fi
 done
 
-cd $ROCKETPOINT
+cd "${rocketPoint}"
 
 echo "before splitting"
 echo $(pwd)

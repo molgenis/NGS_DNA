@@ -9,10 +9,13 @@
 cd $projectJobsDir
 
 
-countShScripts=$(find *.sh ! -name '*Manta*.sh' ! -name 'sXX*.sh'  | wc -l)
+countShScripts=$(find *.sh ! -name '*Manta*.sh' ! -name 'sXX*.sh'  ! -name 'Autotest_0.sh' | wc -l)
 countFinishedFiles=$(find *.sh.finished ! -name '*Manta*.sh.finished' ! -name 'sXX*.sh.finished' | wc -l)
 
-#remove 3, because this step (CountAllFinishedFiles) and the CopyToResultsDir are not finished yet and there is submit.sh
+#remove 3, because there are 3 sh scripts that cannot have (already) a finished file, those are the following:
+#
+## CountAllFinishedFiles.sh, CopyToResultsDir.sh and submit.sh
+
 countShScripts=$(($countShScripts-3))
 
 rm -f ${projectJobsDir}/${taskId}_INCORRECT
@@ -29,7 +32,8 @@ else
 			echo ${getSh} >> ${projectJobsDir}/${taskId}_INCORRECT
 		fi
 	done
+	trap - EXIT
 	exit 0
+
 fi
-	
 
