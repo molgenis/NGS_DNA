@@ -273,8 +273,9 @@ cd ${CURRENT_DIR}
 echo "pipeline is finished"
 #touch ${logsDir}/${project}/${project}.pipeline.finished
 runNumber=$(basename $( dirname ${projectResultsDir}))
-touch ${logsDir}/${project}/${runNumber}.pipeline.finished
-echo "${logsDir}/${project}.pipeline.finished is created"
+mv ${logsDir}/${project}/${runNumber}.pipeline.{started,finished}
+rm -f ${logsDir}/${project}/${runNumber}.pipeline.failed
+echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
 
 if [ ! -d ${logsDir}/${project}/ ]
 then
