@@ -72,8 +72,8 @@ then
 		if [ -f ${mantaDir}/results/variants/real/candidateSV.vcf ]
 		then
 			bgzip -c ${mantaDir}/results/variants/real/candidateSV.vcf > ${mantaDir}/results/variants/real/candidateSV.vcf.gz
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
-		tabix -p vcf ${mantaDir}/results/variants/real/candidateSV.vcf.gz
+			printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
+			tabix -p vcf ${mantaDir}/results/variants/real/candidateSV.vcf.gz
 			printf "${mantaDir}/results/variants/real/candidateSV.vcf ..done\n"
 		else
 			echo "no candidateSV's left after filtering with the bedfile"
@@ -84,8 +84,8 @@ then
 		if [ -f ${mantaDir}/results/variants/real/diploidSV.vcf ]
                 then
 			bgzip -c ${mantaDir}/results/variants/real/diploidSV.vcf > ${mantaDir}/results/variants/real/diploidSV.vcf.gz
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
-		tabix -p vcf ${mantaDir}/results/variants/real/diploidSV.vcf.gz
+			printf "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
+			tabix -p vcf ${mantaDir}/results/variants/real/diploidSV.vcf.gz
 			printf "${mantaDir}/results/variants/real/diploidSV.vcf ..done\n"
 		else
 			echo "no diploidSV's left after filtering with the bedfile"
