@@ -20,13 +20,17 @@ tmpMantaDir=${MC_tmpFile}
 
 
 bedfile=$(basename $capturingKit)
-
-if [[ "${bedfile}" == *"CARDIO_v"* || "${bedfile}" == *"DER_v"* || "${bedfile}" == *"DYS_v"* || "${bedfile}" == *"EPI_v"* \
-|| "${bedfile}" == *"FH_v"*|| "${bedfile}" == *"LEVER_v"* || "${bedfile}" == *"MYO_v"* || "${bedfile}" == *"NEURO_v"* \
-|| "${bedfile}" == *"ONCO_v"* || "${bedfile}" == *"PCS_v"* || "${bedfile}" == *"TID_v"* ]]
+if [[ "${bedfile}" == *"Exoom"* || "${bedfile}" == *"wgs"* || "${bedfile}" == *"WGS"* || "${bedfile}" == *"All_Exon_v1"* ]] 
 then
-    	echo "Manta is skipped"
-else
+	## Exclude Manta_1 script when executing test project (PlatinumnSubset)
+	SCRIPTNAME=$(basename $0)
+	if [[ "${project}" == *"PlatinumSubset"* && ${SCRIPTNAME} == *Manta_1.sh* ]] 
+	then
+		echo "PlatinumSubset is executed, therefore this script will not run (need a fix in making PhiX reads, forward/reversed)"
+		touch ${SCRIPTNAME}.finished
+		trap - EXIT
+		exit 0
+	fi
 	module load ${mantaVersion}
 	module load ${pythonVersion}
 	module load ${bedToolsVersion}
@@ -47,12 +51,12 @@ else
 
 	if [[ $capturingKit != *"wgs"* ]]
 	then
-		mkdir ${mantaDir}/results/variants/real/	
-		
+		mkdir ${mantaDir}/results/variants/real/
+
 		#
 		## 3 files has been created by Manta, they all should be limited only on the bedfile
 		#
-	
+
 		bedtools intersect -a ${mantaDir}/results/variants/candidateSmallIndels.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/candidateSmallIndels.vcf
 		if [ -f ${mantaDir}/results/variants/real/candidateSmallIndels.vcf ]
                 then
@@ -68,27 +72,27 @@ else
 		if [ -f ${mantaDir}/results/variants/real/candidateSV.vcf ]
 		then
 			bgzip -c ${mantaDir}/results/variants/real/candidateSV.vcf > ${mantaDir}/results/variants/real/candidateSV.vcf.gz
-        		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
-       			tabix -p vcf ${mantaDir}/results/variants/real/candidateSV.vcf.gz
+			printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
+			tabix -p vcf ${mantaDir}/results/variants/real/candidateSV.vcf.gz
 			printf "${mantaDir}/results/variants/real/candidateSV.vcf ..done\n"
 		else
 			echo "no candidateSV's left after filtering with the bedfile"
 			touch ${mantaDir}/results/variants/real/NO_candidateSV
 		fi
-		
+
 		bedtools intersect -a ${mantaDir}/results/variants/diploidSV.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/diploidSV.vcf
 		if [ -f ${mantaDir}/results/variants/real/diploidSV.vcf ]
                 then
 			bgzip -c ${mantaDir}/results/variants/real/diploidSV.vcf > ${mantaDir}/results/variants/real/diploidSV.vcf.gz
-		        printf "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
-		        tabix -p vcf ${mantaDir}/results/variants/real/diploidSV.vcf.gz
+			printf "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
+			tabix -p vcf ${mantaDir}/results/variants/real/diploidSV.vcf.gz
 			printf "${mantaDir}/results/variants/real/diploidSV.vcf ..done\n"
 		else
 			echo "no diploidSV's left after filtering with the bedfile"
                         touch ${mantaDir}/results/variants/real/NO_diploidSV
 		fi
 	fi
-	
+else
+	echo "Manta is skipped"
+
 fi
-
-

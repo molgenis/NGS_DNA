@@ -87,13 +87,13 @@ function checkIfFinished(){
 	do
 
 		echo "${_projectName} is not finished in $minutes minutes, sleeping for 2 minutes"
-		sleep 60
+		sleep 120
 		minutes=$((minutes+2))
 
 		count=$((count+2))
-		if [ $count -eq 60 ]
+		if [ $count -eq 30 ]
 		then
-			echo "the test was not finished within 1 hour, let's kill it"
+			echo "the test was not finished within 30 minutes, let's kill it"
 			echo -e "\n"
 			for i in $(ls ${workfolder}/projects/${_projectName}/run01/jobs/*.sh)
 			do
