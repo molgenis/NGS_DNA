@@ -90,8 +90,6 @@ echo "moi"
 sampleSize=$(cat ${genScripts}/${filePrefix}.csv |  wc -l) ; echo "Samplesize is ${sampleSize}"
 batching="_chr"
 
-if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
-
 echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/parameters_converted.csv"
