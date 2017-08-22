@@ -61,8 +61,8 @@ then
 		inputVcf=${vcfFile}
 	fi
 
-	header=$(head -1 ${inputVcf})
-	if [[ ${header} == *fileformat=VCF* ]]
+	header=$(head -1 "${inputVcf}")
+	if [[ "${header}" == *fileformat=VCF* ]]
 	then
 		echo "valid vcf Format"
 	else
@@ -77,7 +77,7 @@ fi
 
 ## make samplesheet
 echo "no"
-sh ${EBROOTNGS_DNA}/scripts/convertVcfToSamplesheet.sh -i ${inputVcf} -p ${filePrefix} -c ${capturingKit} 
+sh ${EBROOTNGS_DNA}/scripts/convertVcfToSamplesheet.sh -i "${inputVcf}" -p "${filePrefix}" -c "${capturingKit}" 
 genScripts="${workDir}/generatedscripts/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv"
 
@@ -87,7 +87,7 @@ species="homo_sapiens"
 if [ -s build.txt ]; then build=$(cat build.txt);fi
 if [ -s species.txt ];then species=$(cat species.txt); fi
 echo "moi"
-sampleSize=$(cat ${genScripts}/${filePrefix}.csv |  wc -l) ; echo "Samplesize is ${sampleSize}"
+sampleSize=$(cat "${genScripts}/${filePrefix}.csv" |  wc -l) ; echo "Samplesize is ${sampleSize}"
 batching="_chr"
 
 echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
