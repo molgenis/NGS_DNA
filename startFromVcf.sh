@@ -116,15 +116,15 @@ cp "${samplesheet}" ${projectJobsDir}/${filePrefix}.csv
 cp "${vcfFile}" "${intermediateDir}"
 
 ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh \
-        -p "parameters_converted.csv" \
-        -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" -p "${projectJobsDir}/${filePrefix}.csv" -p "parameters_environment_converted.csv" -p "parameters_group_converted.csv" -p "parameters_tmpdir_converted.csv" \
-        -rundir "${projectJobsDir}" \
-        --header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
-        --footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
-        --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
-        -w "${EBROOTNGS_DNA}/workflow_startWithVcf.csv" \
-        -b slurm \
-        -g \
-        -weave \
-        -runid "${runID}" \
-	-o "ngsversion=${ngsversion};groupname=${group};inputVCF=${intermediateDir}/${vcfFile}"
+-p "parameters_converted.csv" \
+-p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" -p "${projectJobsDir}/${filePrefix}.csv" -p "parameters_environment_converted.csv" -p "parameters_group_converted.csv" -p "parameters_tmpdir_converted.csv" \
+-rundir "${projectJobsDir}" \
+--header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
+--submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
+-w "${EBROOTNGS_DNA}/workflow_startWithVcf.csv" \
+-b slurm \
+-g \
+-weave \
+-runid "${runID}" \
+-o "ngsversion=${ngsversion};groupname=${group};inputVCF=${intermediateDir}/${vcfFile}"
