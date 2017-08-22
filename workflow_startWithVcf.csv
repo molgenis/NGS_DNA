@@ -1,6 +1,6 @@
 step,protocol,dependencies
 s01_PrepareVcf,protocols/PrepareVcf.sh,
-s17_SnpEff,protocols/SnpEff.sh,s01_PrepareVcStep
+s17_SnpEff,protocols/SnpEff.sh,s01_PrepareVcf
 s18_CmdLineAnnotator,protocols/CmdLineAnnotator.sh,s17_SnpEff
 s19_MergeBatches,protocols/MergeBatches.sh,s18_CmdLineAnnotator;extension=annotatedExtension
 s20_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s19_MergeBatches
