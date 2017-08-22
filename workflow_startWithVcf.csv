@@ -8,4 +8,3 @@ s06a_SnpFiltration,protocols/SnpFiltration.sh,s05_SplitIndelsAndSNPs
 s06b_IndelFiltration,protocols/IndelFiltration.sh,s05_SplitIndelsAndSNPs
 s07_MergeIndelsAndSnps,protocols/MergeIndelsAndSnps.sh,s06b_IndelFiltration;s06a_SnpFiltration
 s08_Gavin,protocols/Gavin.sh,s07_MergeIndelsAndSnps
-s09_CopyToResultsDir,protocols/CopyToResultsDir.sh,s08_CountAllFinishedFiles
