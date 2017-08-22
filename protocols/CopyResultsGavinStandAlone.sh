@@ -16,5 +16,5 @@ cp ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinSA/output/
 echo "copied ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinSA/output/"
 
 name=$(basename "${inputVcf}" ".vcf")
-
+mv ${tmpDataDir}/GavinSA/input/${name}.{started,finished}
 
