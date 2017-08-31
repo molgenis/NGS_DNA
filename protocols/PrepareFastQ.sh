@@ -73,7 +73,7 @@ checkIlluminaEncoding() {
 	barcodeFqGz=$1
 	barcodeFinalFqGz=$2
 
-	lines=($(zcat ${barcodeFqGz} | head -8000 | tail -192 | awk 'NR % 4 == 0'))
+	lines=($(zcat ${barcodeFqGz} | head -20000 | tail -192 | awk 'NR % 4 == 0'))
 	count=1
 	nodecision=0
 	numberoflines=0

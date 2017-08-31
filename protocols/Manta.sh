@@ -27,7 +27,9 @@ then
 	if [[ "${project}" == *"PlatinumSubset"* && ${SCRIPTNAME} == *Manta_1.sh* ]] 
 	then
 		echo "PlatinumSubset is executed, therefore this script will not run (need a fix in making PhiX reads, forward/reversed)"
-		touch ${SCRIPTNAME}.finished
+		mv ${SCRIPTNAME}.{started,finished}
+		touch ${SCRIPTNAME}.env
+		chmod ugo+x ${SCRIPTNAME}.env 
 		trap - EXIT
 		exit 0
 	fi
