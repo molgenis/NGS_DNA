@@ -3,7 +3,7 @@
 
 set -e
 set -u
-module load NGS_DNA/3.4.3-beta
+module load NGS_DNA/3.4.2
 module list
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
@@ -118,9 +118,9 @@ ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh \
 --header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
 --footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
--w "${EBROOTNGS_DNA}/workflow_startWithVcf.csv" \
+-w "${EBROOTNGS_DNA}/workflow_startFromVcf.csv" \
 -b slurm \
 -g \
 -weave \
 -runid "${runID}" \
--o "ngsversion=${ngsversion};groupname=${group};inputVCF=${intermediateDir}/${vcfFile}"
+-o "ngsversion=${ngsversion};groupname=${group};inputVcf=${intermediateDir}/${vcfFile}"

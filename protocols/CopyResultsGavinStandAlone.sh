@@ -11,9 +11,9 @@
 #string tmpDataDir
 #string inputVcf
 
-cp ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinSA/output/
-echo "copied ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinSA/output/"
+cp ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinStandAlone/output/
+echo "copied ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinStandAlone/output/"
 
-name=$(basename "${inputVcf}" ".vcf")
-mv ${tmpDataDir}/GavinSA/input/${name}.{started,finished}
-
+name=$(basename ${inputVcf})
+mv ${tmpDataDir}/GavinStandAlone/input/${name}.{started,finished}
+mv ${tmpDataDir}/GavinStandAlone/input/processing/${name} ${tmpDataDir}/GavinStandAlone/input/done/

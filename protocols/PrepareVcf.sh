@@ -12,11 +12,11 @@
 #list externalSampleID
 #string projectPrefix
 #list batchID
-#string inputVCF
+#string inputVcf
 
-awk '{if ($1 ~ /#/){print $0}}' "${inputVCF}" > "${intermediateDir}/header.vcf"
+awk '{if ($1 ~ /#/){print $0}}' "${inputVcf}" > "${intermediateDir}/header.vcf"
 
-awk -v var="${intermediateDir}" '{if ($1 !~ /#/){print $0 >> var"/captured.batch-"$1".vcf"}}' "${inputVCF}"
+awk -v var="${intermediateDir}" '{if ($1 !~ /#/){print $0 >> var"/captured.batch-"$1".vcf"}}' "${inputVcf}"
 
 for i in ${batchID[@]}
 do
