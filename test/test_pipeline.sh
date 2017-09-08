@@ -24,7 +24,7 @@ function preparePipeline(){
 	fi
 	mkdir ${workfolder}/generatedscripts/${_projectName}/
 
-	cp ${workfolder}/tmp/NGS_DNA/generate_template.sh ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
+	cp ${workfolder}/tmp/NGS_DNA/templates/generate_template.sh ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	fgrep "computeVersion," ${workfolder}/tmp/NGS_DNA/parameters.csv > ${workfolder}/generatedscripts/${_projectName}/mcVersion.txt
 
 	module load ${NGS_DNA_VERSION}
