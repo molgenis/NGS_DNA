@@ -3,7 +3,7 @@
 
 set -e
 set -u
-module load NGS_DNA/3.4.3-beta
+module load NGS_DNA/3.4.2
 module list
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
@@ -46,7 +46,7 @@ if [[ -z "${vcfFile:-}" ]]; then echo -e '\nERROR: Must specify an inputFile (vc
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
 if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
-if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "filePrefix=${filePrefix}"
+if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ;elif [ "${filePrefix}" == "Gavin" ];then  filePrefix="Gavin_"$(basename $(pwd ));fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
 vcfExtension=${vcfFile##*.}
@@ -118,9 +118,9 @@ ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh \
 --header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
 --footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
--w "${EBROOTNGS_DNA}/workflow_startWithVcf.csv" \
+-w "${EBROOTNGS_DNA}/workflow_startFromVcf.csv" \
 -b slurm \
 -g \
 -weave \
 -runid "${runID}" \
--o "ngsversion=${ngsversion};groupname=${group};inputVCF=${intermediateDir}/${vcfFile}"
+-o "ngsversion=${ngsversion};groupname=${group};inputVcf=${intermediateDir}/${vcfFile}"
