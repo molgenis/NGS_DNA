@@ -46,7 +46,7 @@ if [[ -z "${vcfFile:-}" ]]; then echo -e '\nERROR: Must specify an inputFile (vc
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
 if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
-if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "filePrefix=${filePrefix}"
+if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ;elif [ "${filePrefix}" == "Gavin" ];then  filePrefix="Gavin_"$(basename $(pwd ));fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
 vcfExtension=${vcfFile##*.}
