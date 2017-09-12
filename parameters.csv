@@ -360,3 +360,11 @@ arrayFileLocation,${inputData}/${arrayFile}
 
 mergedBamRecalibratedTable,${sampleMergedBam}.recalibrated.table
 pigzVersion,pigz/2.3.1-foss-2015b
+
+geneNetworkFolder,${dataDir}/GeneNetwork/
+geneNetworkSource,${GeneNetworkFolder}/GeneNetwork.txt
+geneNetworkLiftOveredBed,${GeneNetworkFolder}/mart_export.b38.sorted.cleaned.liftovered.b37.resort.bed
+
+geneNetworkPrefixSample,${intermediateDir}/GeneNetwork/${externalSampleID}.geneNetwork
+geneNetworkPrefixSampleResult,${intermediateDir}/${externalSampleID}.geneNetwork
+geneNetworkVcf,${intermediateDir}/${externalSampleID}.GAVIN.geneNetwork.final.vcf
