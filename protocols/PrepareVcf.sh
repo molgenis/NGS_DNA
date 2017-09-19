@@ -16,7 +16,7 @@
 
 awk '{if ($1 ~ /#/){print $0}}' "${inputVcf}" > "${intermediateDir}/header.vcf"
 
-awk -v var="${intermediateDir}" '{if ($1 !~ /#/){print $0 >> var"/captured.batch-"$1".vcf"}}' "${inputVcf}"
+awk -v var="${intermediateDir}" '{if ($1 !~ /#/){if ($1 == "X"){print $0 >> var"/captured.batch-Xnp.vcf"}else{print $0 >> var"/captured.batch-"$1".vcf"}}' "${inputVcf}"
 
 for i in ${batchID[@]}
 do
