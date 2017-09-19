@@ -22,6 +22,7 @@ javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.0.1-${toolChain}
 molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
 ngsUtilsVersion,ngs-utils/16.12.1
+perlPlusVersion,PerlPlus/5.22.0-foss-2015b-v17.08.1
 plink1Version,PLINK/1.07-x86_64
 plink2Version,plink/1.9-foss-2015b
 plinkSeqVersion,plinkseq/x86_64-0.10
@@ -362,8 +363,8 @@ mergedBamRecalibratedTable,${sampleMergedBam}.recalibrated.table
 pigzVersion,pigz/2.3.1-foss-2015b
 
 geneNetworkFolder,${dataDir}/GeneNetwork/
-geneNetworkSource,${GeneNetworkFolder}/GeneNetwork.txt
-geneNetworkLiftOveredBed,${GeneNetworkFolder}/mart_export.b38.sorted.cleaned.liftovered.b37.resort.bed
+geneNetworkSource,${geneNetworkFolder}/TermGeneZScores-2016-10-13HPO-propergenes-cov-genescompsscaled-307comps.txt
+geneNetworkLiftOveredBed,${geneNetworkFolder}/mart_export.b38.sorted.cleaned.liftovered.b37.resort.bed
 
 geneNetworkPrefixSample,${intermediateDir}/GeneNetwork/${externalSampleID}.geneNetwork
 geneNetworkPrefixSampleResult,${intermediateDir}/${externalSampleID}.geneNetwork
