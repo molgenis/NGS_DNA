@@ -78,11 +78,13 @@ score.sh ${gavinToCADDgz} ${tmpGavinFromCADDgz}
 mv ${tmpGavinFromCADDgz} ${gavinFromCADDgz}
 echo "moved ${tmpGavinFromCADDgz} ${gavinFromCADDgz}"
 
+zcat ${gavinFromCADDgz} > ${gavinFromCADD}
+
 java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
 -i ${sampleFinalVcf} \
 -o ${tmpGavinOutputFinal} \
 -m ANALYSIS \
--a ${gavinFromCADDgz} \
+-a ${gavinFromCADD} \
 -c ${gavinClinVar} \
 -d ${gavinCGD} \
 -f ${gavinFDR} \
