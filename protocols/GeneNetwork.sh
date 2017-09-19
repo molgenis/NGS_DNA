@@ -20,7 +20,6 @@ module load "${htsLibVersion}"
 IFS=';' read -r -a allTerms <<< "$hpoTerms"
 
 count=1
-arraytje=()
 
 ## get the column numbers of the hpoterms
 for i in $(head -1 resources/GeneNetwork.txt)
