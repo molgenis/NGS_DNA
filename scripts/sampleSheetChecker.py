@@ -8,7 +8,6 @@ species=open("species.txt.tmp","w")
 sampleType=open("sampleType.txt.tmp","w")
 externalSampleID=open("externalSampleIDs.txt.tmp","w")
 capturingKit=open("capturingKit.txt.tmp","w")
-out=open(sys.argv[1]+'.tmp',"w")
 
 teller=0
 for row in reader:
@@ -31,10 +30,15 @@ for row in reader:
 		if "capturingKit" in row:
 			if k == "capturingKit":
 				capturingKit.write(v+'\n')
-		if not "hpoTerms" in row:
-			if teller == 0:
-				out.write(','.join(row.keys())+",hpoTerms"+'\n')
-                                out.write(','.join(row.values())+","+'\n')
-                                teller+=1
-                        else:
-                              	out.write(','.join(row.values())+","+'\n')			
+	if teller == 0:		
+		if not "hpoIDs" in row:
+			out=open(sys.argv[1]+'.tmpie',"w")
+			print "no hpo id's"
+			out.write(','.join(row.keys())+",hpoIDs"+'\n')
+			out.write(','.join(row.values())+","+'\n')
+                        teller+=1
+			hpoID="no"
+	elif hpoID == "no":
+		print "noHPOID, elif"
+		out.write(','.join(row.values())+","+'\n')
+			

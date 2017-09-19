@@ -50,6 +50,10 @@ samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
 ## Checking for genderColumn
 #
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
+if [ -f "${samplesheet}.tmpie" ]
+then
+    	mv "${samplesheet}.tmpie" "${samplesheet}"
+fi
 python "${EBROOTNGS_DNA}/scripts/gender.py" "${samplesheet}"
 
 ## get only uniq lines and removing txt.tmp file
