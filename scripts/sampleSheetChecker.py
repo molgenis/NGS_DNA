@@ -9,7 +9,7 @@ sampleType=open("sampleType.txt.tmp","w")
 externalSampleID=open("externalSampleIDs.txt.tmp","w")
 capturingKit=open("capturingKit.txt.tmp","w")
 
-teller=0
+count=0
 for row in reader:
 	for (k,v) in row.items():		
 		if "project" in row:
@@ -30,13 +30,13 @@ for row in reader:
 		if "capturingKit" in row:
 			if k == "capturingKit":
 				capturingKit.write(v+'\n')
-	if teller == 0:		
+	if count == 0:		
 		if not "hpoIDs" in row:
 			out=open(sys.argv[1]+'.tmpie',"w")
 			print "no hpo id's"
 			out.write(','.join(row.keys())+",hpoIDs"+'\n')
 			out.write(','.join(row.values())+","+'\n')
-                        teller+=1
+                        count+=1
 			hpoID="no"
 	elif hpoID == "no":
 		print "noHPOID, elif"
