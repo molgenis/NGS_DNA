@@ -4,6 +4,7 @@ set -u
 function preparePipeline(){
 
 	local _workflowType="${1}"
+
 	local _projectName="PlatinumSubset${_workflowType}"
 	rm -f ${workfolder}/logs/${_projectName}/run01.pipeline.finished
 	rsync -r --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials ${workfolder}/tmp/NGS_DNA/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType} ${workfolder}/rawdata/ngs/
@@ -44,6 +45,7 @@ function preparePipeline(){
 	perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=\${EBROOTNGS_DNA}/test_workflow.csv|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	cp ${workfolder}/tmp/NGS_DNA/test/${_projectName}.csv ${workfolder}/generatedscripts/${_projectName}/
 
+	perl -pi -e "s|/groups/umcg-atd/tmp03/|${workfolder}/|g" ${workfolder}/generatedscripts/${_projectName}/${_projectName}.csv
 	cd ${workfolder}/generatedscripts/${_projectName}/
 
 	sh generate_template.sh
@@ -108,9 +110,16 @@ function checkIfFinished(){
 	echo "${_projectName} test succeeded!"
 	echo ""
 }
-
+tmpdirectory="tmp03"
 groupName="umcg-atd"
-workfolder="/groups/${groupName}/tmp03/"
+
+if [ $(hostname) == "calculon" ]
+then
+	tmpdirectory="tmp04"
+	groupName="umcg-gaf"
+fi	
+
+workfolder="/groups/${groupName}/${tmpdirectory}"
 
 cd ${workfolder}/tmp/
 if [ -d ${workfolder}/tmp/NGS_DNA ]
@@ -145,5 +154,5 @@ cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12891_True.final.vcf.
 preparePipeline "InhouseSamples"
 preparePipeline "ExternalSamples"
 
-checkIfFinished "InhouseSamples"
-checkIfFinished "ExternalSamples"
+checkIfFinished "InhouseSamples" ""
+checkIfFinished "ExternalSamples" ""
