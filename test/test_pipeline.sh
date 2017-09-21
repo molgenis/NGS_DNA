@@ -137,7 +137,8 @@ cd ${workfolder}/tmp/NGS_DNA/
 cp ${workfolder}/tmp/NGS_DNA/workflow.csv ${workfolder}/tmp/NGS_DNA/test_workflow.csv 
 tail -1 ${workfolder}/tmp/NGS_DNA/workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> ${workfolder}/tmp/NGS_DNA/test_workflow.csv
 
-cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubset_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubset_True.final.vcf.gz
+cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubsetExternalSamples_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubsetExternalSamples_True.final.vcf.gz
+cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubsetInhouseSamples_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubsetInhouseSamples_True.final.vcf.gz
 cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
 cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
 
