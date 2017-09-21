@@ -56,7 +56,7 @@ fi
 
 SAMPLES=($(awk '{if ($1 ~ /#CHROM/){print $0} }' "${inputFile}" | awk '{for(i=10;i<=NF;++i)print $i}'))
 
-count=0
+count=1
 totalCount=${#SAMPLES[@]}
 
 printf "externalSampleID,barcode,project,capturingKit,seqType,Gender,arrayFile,lane,sequencingStartDate,sequencer,run,flowcell\n" > "${workDir}/${projectName}.csv"

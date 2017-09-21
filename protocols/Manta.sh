@@ -29,7 +29,8 @@ then
 		echo "PlatinumSubset is executed, therefore this script will not run (need a fix in making PhiX reads, forward/reversed)"
 		mv ${SCRIPTNAME}.{started,finished}
 		touch ${SCRIPTNAME}.env
-		chmod ugo+x ${SCRIPTNAME}.env 
+		script=${SCRIPTNAME%.*}
+		chmod ugo+x ${script}.env 
 		trap - EXIT
 		exit 0
 	fi
