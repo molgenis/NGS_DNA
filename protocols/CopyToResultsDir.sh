@@ -16,6 +16,7 @@
 #string convadingVersion
 #string capturingKit
 #string cxControlsDir
+#string controlsVersioning
 #list externalSampleID
 #list batchID
 #list seqType
@@ -186,7 +187,8 @@ do
 	then
 		echo "copying output decision tree to results/variants/cnv/"
 		rsync -a ${intermediateDir}/${sa}.longlistplusplusFinal.txt ${projectResultsDir}/variants/cnv/
-		cp ${cxControlsDir}/${capturingKit}/${convadingVersion}/Convading/targetQcList.txt ${projectResultsDir}/variants/cnv/
+		capturedBedFile=$(grep "${capturingKit}" "${controlsVersioning}" | awk '{FS=" "}{print $2}')
+                cp ${cxControlsDir}/${capturedBedFile}/Convading/targetQcList.txt ${projectResultsDir}/variants/cnv/
 
 	fi
 
