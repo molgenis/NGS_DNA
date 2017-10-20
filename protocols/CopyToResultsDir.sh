@@ -50,7 +50,7 @@ mkdir -p ${projectResultsDir}/general
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
 do
-  	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
+	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
 done
 
 EXTERN=${#UNIQUESAMPLES[@]}
