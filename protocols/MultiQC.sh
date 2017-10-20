@@ -43,6 +43,13 @@
 #string xhmmVersion
 #string hpoVersion
 
+#string ngsversion
+#string project
+#string capturingKit
+#string stage
+#string checkStage
+#string multiQCVersion
+
 set -e
 set -u
 
@@ -87,6 +94,7 @@ echo -e "report_header_info:
     - '': '${wkHtmlToPdfVersion}'
     - '': '${xhmmVersion}'
     - '': '${hpoVersion}'
+    - '': '${multiQCVersion}'
     - '' : ''
     - pipeline description : ''
     - Manual : ''
@@ -125,9 +133,8 @@ picard_config:
         - 50
         - 100" >> ${intermediateDir}/${project}.multiqc_config.yaml
 
-
-module load multiqc/1.0-foss-2015b-Python-2.7.11
-module list
+${stage} ${multiQCVersion}
+${checkStage}
 
 multiqc -c ${intermediateDir}/${project}.multiqc_config.yaml -f ${intermediateDir} -o ${intermediateDir}
 
