@@ -44,7 +44,6 @@
 #string hpoVersion
 
 #string ngsversion
-#string project
 #string capturingKit
 #string stage
 #string checkStage
