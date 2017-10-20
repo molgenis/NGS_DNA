@@ -70,7 +70,7 @@ echo -e "report_header_info:
     - '': '${fastqcVersion}'
     - '': '${gatkVersion}'
     - '': '${gavinToolPackVersion}'
-    - '': '${olibVersion}'
+    - '': '${iolibVersion}'
     - '': '${javaVersion}'
     - '': '${mantaVersion}'
     - '': '${molgenisAnnotatorVersion}'
