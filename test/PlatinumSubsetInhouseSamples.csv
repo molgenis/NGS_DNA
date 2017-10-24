@@ -1,5 +1,0 @@
-externalSampleID,project,sequencer,sequencingStartDate,run,flowcell,lane,seqType,capturingKit,arrayFile,arrayID,barcode,Gender
-PlatinumSample_NA12878,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,1,PE,UMCG\/All_Exon_v1,,,None,Female
-PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,2,PE,UMCG\/All_Exon_v1,,,None,Male
-PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,3,PE,UMCG\/All_Exon_v1,,,None,Male
-PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,4,PE,UMCG\/All_Exon_v1,,,None,Male
