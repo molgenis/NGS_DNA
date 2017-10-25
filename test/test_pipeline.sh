@@ -44,7 +44,6 @@ function preparePipeline(){
 
 	perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=\${EBROOTNGS_DNA}/test_workflow.csv|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	cp ${workfolder}/tmp/NGS_DNA/test/${_projectName}.csv ${workfolder}/generatedscripts/${_projectName}/
-
 	perl -pi -e "s|/groups/umcg-atd/tmp03/|${workfolder}/|g" ${workfolder}/generatedscripts/${_projectName}/${_projectName}.csv
 	cd ${workfolder}/generatedscripts/${_projectName}/
 
@@ -154,5 +153,5 @@ cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12891_True.final.vcf.
 preparePipeline "InhouseSamples"
 preparePipeline "ExternalSamples"
 
-checkIfFinished "InhouseSamples" ""
-checkIfFinished "ExternalSamples" ""
+checkIfFinished "InhouseSamples"
+checkIfFinished "ExternalSamples"

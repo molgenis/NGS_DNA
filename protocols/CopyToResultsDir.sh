@@ -16,6 +16,7 @@
 #string convadingVersion
 #string capturingKit
 #string cxControlsDir
+#string ControlsVersioning
 #list externalSampleID
 #list batchID
 #list seqType
@@ -49,7 +50,7 @@ mkdir -p ${projectResultsDir}/general
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
 do
-  	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
+	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
 done
 
 EXTERN=${#UNIQUESAMPLES[@]}
@@ -186,7 +187,8 @@ do
 	then
 		echo "copying output decision tree to results/variants/cnv/"
 		rsync -a ${intermediateDir}/${sa}.longlistplusplusFinal.txt ${projectResultsDir}/variants/cnv/
-		cp ${cxControlsDir}/${capturingKit}/${convadingVersion}/Convading/targetQcList.txt ${projectResultsDir}/variants/cnv/
+		capturedBedFile=$(grep "${capturingKit}" "${ControlsVersioning}" | awk '{FS=" "}{print $2}')
+                cp ${cxControlsDir}/${capturedBedFile}/Convading/targetQcList.txt ${projectResultsDir}/variants/cnv/
 
 	fi
 

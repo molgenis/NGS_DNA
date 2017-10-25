@@ -34,9 +34,10 @@ FNR==NR{
         }
 }' ${intermediateDir}/InSilico.txt ${projectVariantsMergedSortedGz}.vcf > ${intermediateDir}/InSilicoConcordanceCheck.txt
 
-count=`cat ${intermediateDir}/InSilicoConcordanceCheck.txt | wc -l`
+count=$(cat ${intermediateDir}/InSilicoConcordanceCheck.txt | wc -l)
 
-if [ $count -ne 3 ]; then
+if [[ $count -ne 3 ]]
+then
     echo "Spiked phiX reads NOT found in sample ${project}" > ${inSilicoConcordanceFile}
 else
     echo "Spiked phiX reads found in sample ${project}" > ${inSilicoConcordanceFile}
