@@ -145,26 +145,45 @@ echo "copy cnv results of Convading and XHMM and Manta"
 
 for sa in "${UNIQUESAMPLES[@]}"
 do
-	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/candidateSV.vcf.gz ]
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ]
 	then
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz ${projectResultsDir}/variants/cnv/${sa}_candidateSV.vcf.gz
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/${sa}_candidateSV.vcf.gz.tbi
 		printf "."
 	fi
 
-	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/candidateSmallIndels.vcf.gz ]
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz ]
         then
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz ${projectResultsDir}/variants/cnv/${sa}_candidateSmallIndels.vcf.gz
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz.tbi ${projectResultsDir}/variants/cnv/${sa}_candidateSmallIndels.vcf.gz.tbi
 		printf "."
 	fi
 
-	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/real/diploidSV.vcf.gz ]
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz ]
         then
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz ${projectResultsDir}/variants/cnv/${sa}_diploidSV.vcf.gz
 		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi ${projectResultsDir}/variants/cnv/${sa}_diploidSV.vcf.gz.tbi
 		printf "."
 	fi
+
+
+	if [ -f ${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz ]
+	then
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz ${projectResultsDir}/variants/cnv//${sa}_candidateSV_VEP.vcf.gz
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz.tbi ${projectResultsDir}/variants/cnv/${sa}_candidateSV_VEP.vcf.gz.tbi
+		rsync -a ${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP_summary.html ${projectResultsDir}/variants/cnv/${sa}_candidateSV_VEP_summary.html
+		printf "."
+	fi
+
+
+        if [ -f ${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz ]
+        then
+                rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz ${projectResultsDir}/variants/cnv//${sa}_diploidSV_VEP.vcf.gz
+                rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz.tbi ${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP.vcf.gz.tbi
+                rsync -a ${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP_summary.html ${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP_summary.html
+                printf "."
+        fi
+
 
 	if ls ${intermediateDir}/Convading//StartWithBestScore/${sa}/*.only.best.score.log 1> /dev/null 2>&1
         then
