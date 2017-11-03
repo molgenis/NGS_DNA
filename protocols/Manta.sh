@@ -25,7 +25,7 @@ ${stage} ${htsLibVersion}
 ${checkStage}
 
 rm -rf ${mantaDir}
-mkdir  ${mantaDir}
+mkdir -p ${mantaDir}
 
 makeTmpDir ${mantaDir}
 tmpMantaDir=${MC_tmpFile}
