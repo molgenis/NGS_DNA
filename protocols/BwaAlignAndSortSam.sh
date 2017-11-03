@@ -51,7 +51,7 @@ then
 
 	bwa mem \
 	-M \
-	-R $READGROUPLINE \
+	-R "${READGROUPLINE}" \
 	-t ${bwaAlignCores} \
 	${indexFile} \
 	${fastq1} \
@@ -70,7 +70,7 @@ else
 	#Run BWA for single-read
 	bwa mem \
 	-M \
-	-R $READGROUPLINE \
+	-R "${READGROUPLINE}" \
 	-t ${bwaAlignCores} \
 	${indexFile} \
 	${srBarcodePhiXFqGz} \
