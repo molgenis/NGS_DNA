@@ -11,7 +11,7 @@
 #string projectVariantsMergedSortedGz
 #string intermediateDir
 
-tail -3 ${simulatedPhiXVariants} > ${intermediateDir}/InSilico.txt
+tail -4 ${simulatedPhiXVariants} > ${intermediateDir}/InSilico.txt
 zcat ${projectVariantsMergedSortedGz} > ${projectVariantsMergedSortedGz}.vcf
 
 awk '
@@ -36,9 +36,16 @@ FNR==NR{
 
 count=$(cat ${intermediateDir}/InSilicoConcordanceCheck.txt | wc -l)
 
-if [[ $count -ne 3 ]]
+if [[ "${count}" -ne 4 ]]
 then
-    echo "Spiked phiX reads NOT found in sample ${project}" > ${inSilicoConcordanceFile}
+	echo "Spiked phiX SNPs are NOT found back, exiting"
+	echo "EXPECTED:"
+	cat ${intermediateDir}/InSilico.txt
+
+	echo -e "\n\n"
+	echo "FOUND BACK:"
+	awk  '$1 == "NC_001422.1"' ${projectVariantsMergedSortedGz}.vcf
+	exit 1
 else
-    echo "Spiked phiX reads found in sample ${project}" > ${inSilicoConcordanceFile}
+	echo "Spiked phiX SNPs are found back"
 fi
