@@ -1,5 +1,5 @@
 queue,ll
-prmName,prm02
+prmName,prm03
 prmHost,calculon.hpc.rug.nl
 root,/
 appsDir,${root}/apps/
