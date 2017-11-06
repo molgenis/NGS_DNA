@@ -21,33 +21,33 @@
 #string gonlAnnotation
 #string exacAnnotation
 
-makeTmpDir ${projectVariantCallsSnpEff_ExAC_Annotated}
-tmpProjectVariantCallsSnpEff_ExAC_Annotated=${MC_tmpFile}
+makeTmpDir "${projectVariantCallsSnpEff_ExAC_Annotated}"
+tmpProjectVariantCallsSnpEff_ExAC_Annotated="${MC_tmpFile}"
 
-makeTmpDir ${projectVariantCallsSnpEff_ExAC_GoNL_Annotated}
-tmpProjectVariantCallsSnpEff_ExAC_GoNL_Annotated=${MC_tmpFile}
+makeTmpDir "${projectVariantCallsSnpEff_ExAC_GoNL_Annotated}"
+tmpProjectVariantCallsSnpEff_ExAC_GoNL_Annotated="${MC_tmpFile}"
 
-makeTmpDir ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}
-tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated=${MC_tmpFile}
+makeTmpDir "${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}"
+tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated="${MC_tmpFile}
 
-${stage} ${javaVersion}
-${stage} ${molgenisAnnotatorVersion}
+"${stage}" "${javaVersion}"
+"${stage}" "${molgenisAnnotatorVersion}"
 
 ${checkStage}
-if [ -f ${projectVariantCallsSnpEff_Annotated} ]
+if [ -f "${projectVariantCallsSnpEff_Annotated}" ]
 then
 	#
 	##
 	###Annotate with ExAC
 	##
 	#
-	java -Xmx10g -jar -Djava.io.tmpdir=${tempDir} ${EBROOTCMDLINEANNOTATOR}/${molgenisAnnotatorJar} \
+	java -Xmx10g -jar -Djava.io.tmpdir="${tempDir}" "${EBROOTCMDLINEANNOTATOR}/${molgenisAnnotatorJar}" \
 	-a exac \
-	-s ${exacAnnotation} \
-	-i ${projectVariantCallsSnpEff_Annotated} \
-	-o ${tmpProjectVariantCallsSnpEff_ExAC_Annotated}
+	-s "${exacAnnotation}" \
+	-i "${projectVariantCallsSnpEff_Annotated}" \
+	-o "${tmpProjectVariantCallsSnpEff_ExAC_Annotated}"
 
-	mv ${tmpProjectVariantCallsSnpEff_ExAC_Annotated} ${projectVariantCallsSnpEff_ExAC_Annotated} 
+	mv "${tmpProjectVariantCallsSnpEff_ExAC_Annotated}" "${projectVariantCallsSnpEff_ExAC_Annotated}"
 	echo "Finished Exac annotation"
 
 	#
@@ -55,13 +55,13 @@ then
 	###Annotate with GoNL
 	##
 	#
-	java -Xmx10g -jar -Djava.io.tmpdir=${tempDir} ${EBROOTCMDLINEANNOTATOR}/${molgenisAnnotatorJar} \
+	java -Xmx10g -jar -Djava.io.tmpdir="${tempDir}" "${EBROOTCMDLINEANNOTATOR}/${molgenisAnnotatorJar}" \
 	-a gonl \
-	-s ${gonlAnnotation} \
-	-i ${projectVariantCallsSnpEff_ExAC_Annotated} \
-	-o ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_Annotated}
+	-s "${gonlAnnotation}" \
+	-i "${projectVariantCallsSnpEff_ExAC_Annotated}" \
+	-o "${tmpProjectVariantCallsSnpEff_ExAC_GoNL_Annotated}"
 
-	mv ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_Annotated} ${projectVariantCallsSnpEff_ExAC_GoNL_Annotated} 
+	mv "${tmpProjectVariantCallsSnpEff_ExAC_GoNL_Annotated}" "${projectVariantCallsSnpEff_ExAC_GoNL_Annotated}"
 	echo "Finished GoNL annotation"
 
 	#
@@ -69,15 +69,15 @@ then
 	###Annotate with CADD-SNVs
 	##
 	#
-	java -Xmx10g -jar -Djava.io.tmpdir=${tempDir} ${EBROOTCMDLINEANNOTATOR}/${molgenisAnnotatorJar} \
+	java -Xmx10g -jar -Djava.io.tmpdir="${tempDir}" "${EBROOTCMDLINEANNOTATOR}/${molgenisAnnotatorJar}" \
 	-a cadd \
-	-s ${caddAnnotation} \
-	-i ${projectVariantCallsSnpEff_ExAC_GoNL_Annotated} \
-	-o ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}
-	
-	mv ${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated} 
+	-s "${caddAnnotation}" \
+	-i "${projectVariantCallsSnpEff_ExAC_GoNL_Annotated}" \
+	-o "${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}"
+
+	mv "${tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}" "${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}"
 	echo "Finished CADD-SNVs annotation"
-	perl -i -wpe 'my @t = split("\t",$_);$t[7] =~ s/ /_/g if ($t[7]);$t[7] =~ s/;$//g if ($t[7]);$_ = join("\t",@t)' ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}
+	perl -i -wpe 'my @t = split("\t",$_);$t[7] =~ s/ /_/g if ($t[7]);$t[7] =~ s/;$//g if ($t[7]);$_ = join("\t",@t)' "${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}"
 	echo "annotation step done, the fully annotated vcf file is: ${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}"
 else
 	echo "skipped, ${projectBatchGenotypedVariantCalls} is not existing"

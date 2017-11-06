@@ -20,78 +20,69 @@
 #string Gender
 
 convadingControlsDir=""
-if [[ $project == *"smMIP"* ]]
+if [[ "${project}" == *"smMIP"* ]]
 then
-        touch ${intermediateDir}/convading.skipped
+        touch "${intermediateDir}/convading.skipped"
         echo "this is a smMIP run, convading cannot be executed"
 else
 
-	if grep ${capturingKit} ${ControlsVersioning}
+	if grep "${capturingKit}" "${ControlsVersioning}"
 	then
-		
 		awk '{
-      			if ($1 == "X"){
-                		print $0
-        		}
-		}' ${capturedBed} > ${intermediateDir}/chrXRegions.txt
-	
+			if ($1 == "X"){
+				print $0
+			}
+		}' "${capturedBed}" > "${intermediateDir}/chrXRegions.txt"
+
 		size=0
-		if [ -f ${intermediateDir}/chrXRegions.txt ]
-		then	
-			size=$(cat ${intermediateDir}/chrXRegions.txt | wc -l)
+		if [ -f "${intermediateDir}/chrXRegions.txt" ]
+		then
+			size=$(cat "${intermediateDir}/chrXRegions.txt" | wc -l)
 		fi
-	
+
 		#
 		## Execute chrX steps
 		#
-		
+
 		ChrXRun="false"
 		run=()
 		run+=("autosomal")
-		if [ $size != 0 ]
+		if [ "${size}" != 0 ]
 		then
-        		echo "the bedfile contains chrX regions, convading now be executed with a male or female controlsgroup"
+			echo "the bedfile contains chrX regions, convading now be executed with a male or female controlsgroup"
 			chrXRun="true"
 			run+=("$Gender")
 		fi
-			
-		makeTmpDir ${convadingStartWithBam}
-		tmpConvadingStartWithBam=${MC_tmpFile}
-		
-		makeTmpDir ${convadingStartWithMatchScore}
-		tmpConvadingStartWithMatchScore=${MC_tmpFile}
-		
-		makeTmpDir ${convadingStartWithMatchScoreGender}
-		tmpConvadingStartWithMatchScoreGender=${MC_tmpFile}
-		
-		makeTmpDir ${convadingStartWithBestScore}
-		tmpConvadingStartWithBestScore=${MC_tmpFile}
-		
-		makeTmpDir ${convadingStartWithBestScoreGender}
-		tmpConvadingStartWithBestScoreGender=${MC_tmpFile}
-		
-		makeTmpDir ${convadingCreateFinalList}
-		tmpConvadingCreateFinalList=${MC_tmpFile}
-		
-		
-		mkdir -p ${intermediateDir}/Convading
-		
+		makeTmpDir "${convadingStartWithBam}"
+		tmpConvadingStartWithBam="${MC_tmpFile}"
+		makeTmpDir "${convadingStartWithMatchScore}"
+		tmpConvadingStartWithMatchScore="${MC_tmpFile}"
+		makeTmpDir "${convadingStartWithMatchScoreGender}"
+		tmpConvadingStartWithMatchScoreGender="${MC_tmpFile}"
+		makeTmpDir "${convadingStartWithBestScore}"
+		tmpConvadingStartWithBestScore="${MC_tmpFile}"
+		makeTmpDir "${convadingStartWithBestScoreGender}"
+		tmpConvadingStartWithBestScoreGender="${MC_tmpFile}"
+		makeTmpDir "${convadingCreateFinalList}"
+		tmpConvadingCreateFinalList="${MC_tmpFile}"
+
+		mkdir -p "${intermediateDir}/Convading"
 		for i in ${run[@]}
 		do
-			echo $i
+			echo "${i}"
 			cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' $ControlsVersioning)
-		
+
 			convadingControlsDir=""
 			workingDir=""
 			if [ "${i}" == "autosomal" ]
 			then
-				convadingControlsDir=${cxControlsDir}/${cDir}/Convading/
+				convadingControlsDir="${cxControlsDir}/${cDir}/Convading/"
 			elif [[ "${i}" == "Male" || "${i}" == "Man" ]]
 			then
-				convadingControlsDir=${cxControlsDir}/${cDir}/Convading/Male/
+				convadingControlsDir="${cxControlsDir}/${cDir}/Convading/Male/"
 			elif [[ "${i}" == "Female" || "${i}" == "Vrouw" ]]
 			then
-				convadingControlsDir=${cxControlsDir}/${cDir}/Convading/Female/
+				convadingControlsDir="${cxControlsDir}/${cDir}/Convading/Female/"
 			elif [ "${i}" == "Unknown" ]
 			then
 				echo "Gender is Unknown, skipped"
@@ -100,73 +91,70 @@ else
 				echo "THIS CANNOT BE TRUE, no Male, Female or autosomal!!"
 				exit 1
 			fi
-		
-			if [[ ! -f ${intermediateDir}/capt.txt || ! -f ${intermediateDir}/capt.txt.locked ]]
+
+			if [[ ! -f "${intermediateDir}/capt.txt" || ! -f "${intermediateDir}/capt.txt.locked" ]]
 			then
-				touch ${intermediateDir}/capt.txt.locked	
+				touch "${intermediateDir}/capt.txt.locked"
 				## write capturingkit to file to make it easier to split
-				echo $capturingKit > ${intermediateDir}/capt.txt 
+				echo "${capturingKit}" > "${intermediateDir}/capt.txt"
 			fi
-				
-			if [ -d ${convadingControlsDir} ]
+
+			if [ -d "${convadingControlsDir}" ]
 			then
-			
-				CAPT=$(awk 'BEGIN {FS="/"}{print $2}' ${intermediateDir}/capt.txt)
-				BASE=$(basename ${dedupBam})
+				CAPT=$(awk 'BEGIN {FS="/"}{print $2}' "${intermediateDir}/capt.txt")
+				BASE=$(basename "${dedupBam}")
 				nameOfSample=${BASE%%.*}
-				
-				module load ${convadingVersion}
-					
+
+				module load "${convadingVersion}"
 				#Function to check if array contains value
 				array_contains () {
 					local array="$1[@]"
-   					local seeking=$2
-    					local in=1
-    					for element in "${!array-}"; do
-        					if [[ "$element" == "$seeking" ]]; then
-        	   					in=0
-        	  					break
-        					fi
-    					done
-    					return $in
+					local seeking="${2}"
+					local in=1
+					for element in "${!array-}"; do
+						if [[ "${element}" == "${seeking}" ]]; then
+							in=0
+							break
+						fi
+					done
+					return "${in}"
 				}
-				
+
 				##STEP 1
-				if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step1.finished ]
+				if [ ! -f "${intermediateDir}/convading.${nameOfSample}.${i}.step1.finished" ]
 				then
-				
 					for bamFile in "${dedupBam[@]}"
 					do
-	        				array_contains INPUTS "$bamFile" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
-	        				array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
+						array_contains INPUTS "$bamFile" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
+						array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
 					done
-				
+
 					## Creating bams directory
-					mkdir -p ${convadingStartWithBam}
-					mkdir -p ${convadingInputBamsDir} 
-					ln -sf ${dedupBam} ${convadingInputBamsDir}/
-					ln -sf ${dedupBam}.bai ${convadingInputBamsDir}/
-				
-					echo $project
-					rm -f ${convadingInputBamsDir}/${CAPT}.READS.bam.list
-						
+					mkdir -p "${convadingStartWithBam}"
+					mkdir -p "${convadingInputBamsDir}"
+					ln -sf "${dedupBam}" "${convadingInputBamsDir}/"
+					ln -sf "${dedupBam}.bai" "${convadingInputBamsDir}/"
+
+					echo "${project}"
+					rm -f "${convadingInputBamsDir}/${CAPT}.READS.bam.list"
+
 					for k in ${INPUTS[@]}
 					do
-						echo "$k" >> ${convadingInputBamsDir}/${CAPT}.READS.bam.list
+						echo "${k}" >> "${convadingInputBamsDir}/${CAPT}.READS.bam.list"
 					done
-					
-					perl ${EBROOTCONVADING}/CoNVaDING.pl \
+
+					perl "${EBROOTCONVADING}/CoNVaDING.pl" \
 					-mode StartWithBam \
-					-inputDir ${convadingInputBamsDir} \
-					-outputDir ${tmpConvadingStartWithBam} \
-					-controlsDir ${convadingControlsDir} \
-					-bed ${capturedBed} \
+					-inputDir "${convadingInputBamsDir}" \
+					-outputDir "${tmpConvadingStartWithBam}" \
+					-controlsDir "${convadingControlsDir}" \
+					-bed "${capturedBed}" \
 					-rmdup
-				
+
 					printf "moving ${tmpConvadingStartWithBam} to ${convadingStartWithBam} ... "
-					mv ${tmpConvadingStartWithBam}/* ${convadingStartWithBam}
+					mv "${tmpConvadingStartWithBam}"/* "${convadingStartWithBam}"
 					printf " .. done \n"
-					touch ${intermediateDir}/convading.${nameOfSample}.${i}.step1.finished
+					touch "${intermediateDir}/convading.${nameOfSample}.${i}.step1.finished"
 				fi
 				
 				##STEP 2

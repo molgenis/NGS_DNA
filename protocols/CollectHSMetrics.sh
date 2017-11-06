@@ -21,31 +21,31 @@
 #string groupname
 
 #Load Picard module
-${stage} ${picardVersion}
+"${stage}" "${picardVersion}"
 
-makeTmpDir ${hsMetrics}
-tmpHsMetrics=${MC_tmpFile}
+makeTmpDir "${hsMetrics}"
+tmpHsMetrics="${MC_tmpFile}"
 
 #Run Picard HsMetrics if capturingKit was used
 if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
 then
-	java -jar -Xmx4g ${EBROOTPICARD}/${picardJar} ${hsMetricsJar} \
-	INPUT=${dedupBam} \
-	OUTPUT=${tmpHsMetrics} \
-	BAIT_INTERVALS=${capturedExomeIntervals} \
-	TARGET_INTERVALS=${capturedExomeIntervals} \
+	java -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" "${hsMetricsJar}" \
+	INPUT="${dedupBam}" \
+	OUTPUT="${tmpHsMetrics}" \
+	BAIT_INTERVALS="${capturedExomeIntervals}" \
+	TARGET_INTERVALS="${capturedExomeIntervals}" \
 	VALIDATION_STRINGENCY=LENIENT \
-	TMP_DIR=${tempDir}
+	TMP_DIR="${tempDir}"
 else
-	java -jar -Xmx4g ${EBROOTPICARD}/${picardJar} ${hsMetricsJar} \
-	INPUT=${dedupBam} \
-	OUTPUT=${tmpHsMetrics} \
-	BAIT_INTERVALS=${capturedIntervals} \
-	TARGET_INTERVALS=${capturedIntervals} \
+	java -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" "${hsMetricsJar}" \
+	INPUT="${dedupBam}" \
+	OUTPUT="${tmpHsMetrics}" \
+	BAIT_INTERVALS="${capturedIntervals}" \
+	TARGET_INTERVALS="${capturedIntervals}" \
 	VALIDATION_STRINGENCY=LENIENT \
-	TMP_DIR=${tempDir}
+	TMP_DIR="${tempDir}"
 fi
 
-mv ${tmpHsMetrics} ${hsMetrics}
+mv "${tmpHsMetrics}" "${hsMetrics}"
 echo "moved ${tmpHsMetrics} to ${hsMetrics}"
 

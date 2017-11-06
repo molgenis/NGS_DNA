@@ -18,19 +18,19 @@
 #string groupname
 
 #Load Picard module
-${stage} ${picardVersion}
+"${stage}" "${picardVersion}"
 
-makeTmpDir ${bamIndexStats}
-tmpBamIndexStats=${MC_tmpFile}
+makeTmpDir "${bamIndexStats}"
+tmpBamIndexStats="${MC_tmpFile}"
 
 
 #Run Picard BamIndexStats
-java -jar -Xmx4g ${EBROOTPICARD}/${picardJar} ${bamIndexStatsJar} \
-INPUT=${dedupBam} \
+java -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" "${bamIndexStatsJar}" \
+INPUT="${dedupBam}" \
 VALIDATION_STRINGENCY=LENIENT \
-TMP_DIR=${tempDir} \
-> ${tmpBamIndexStats}
+TMP_DIR=${tempDir}" \
+> "${tmpBamIndexStats}"
 
-mv ${tmpBamIndexStats} ${bamIndexStats}
+mv "${tmpBamIndexStats}" "${bamIndexStats}"
 echo "moved ${tmpBamIndexStats} to ${bamIndexStats}"
 

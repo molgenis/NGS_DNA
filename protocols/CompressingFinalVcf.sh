@@ -13,10 +13,10 @@
 #Function to check if array contains value
 array_contains () {
     local array="$1[@]"
-    local seeking=$2
+    local seeking="${2}"
     local in=1
     for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
+        if [[ "${element}" == "${seeking}" ]]; then
             in=0
             break
         fi
@@ -25,8 +25,8 @@ array_contains () {
 }
 
 #Load Tabix module
-${stage} ${htsLibVersion}
-${checkStage}
+"${stage}" "${htsLibVersion}"
+"${checkStage}"
 
 INPUTS=()
 for SampleID in "${finalVcf}"
@@ -36,13 +36,13 @@ done
 
 for i in ${INPUTS[@]}
 do
-	if [ -f $i ]
+	if [ -f "${i}" ]
         then
-        	printf "bgzipping $i"
-        	bgzip -c $i > $i.gz
-        	printf "..done\ntabix-ing $i.gz .."
-        	tabix -p vcf $i.gz
-        	printf "..done\n"
-        	echo "done"
+		printf "bgzipping ${i}"
+		bgzip -c "${i}" > "${i}.gz"
+		printf "..done\ntabix-ing ${i}.gz .."
+		tabix -p vcf "${i}.gz"
+		printf "..done\n"
+		echo "done"
         fi
 done

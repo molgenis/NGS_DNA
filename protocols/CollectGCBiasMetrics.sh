@@ -14,6 +14,7 @@
 #string tempDir
 #string recreateInsertSizePdfR
 #string rVersion
+#string ngsUtilsVersion
 #string capturingKit
 #string seqType
 #string picardJar
@@ -24,38 +25,36 @@
 #string groupname
 
 #Load Picard module
-${stage} ${picardVersion}
+"${stage}" "${picardVersion}"
+"${stage}" "${rVersion}"
+"${stage}" "${ngsUtilsVersion}
+"${checkStage}"
 
-#Load R module
-${stage} ${rVersion}
-${stage} ngs-utils
-${checkStage}
-
-makeTmpDir ${gcBiasMetrics}
-tmpGcBiasMetrics=${MC_tmpFile}
+makeTmpDir "${gcBiasMetrics}"
+tmpGcBiasMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics
-java -XX:ParallelGCThreads=4 -jar -Xmx4g ${EBROOTPICARD}/${picardJar} ${gcBiasMetricsJar} \
-R=${indexFile} \
-I=${dedupBam} \
-O=${tmpGcBiasMetrics} \
-S=${tmpGcBiasMetrics}.summary_metrics.txt \
-CHART=${tmpGcBiasMetrics}.pdf \
+java -XX:ParallelGCThreads=4 -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" "${gcBiasMetricsJar}" \
+R="${indexFile}" \
+I="${dedupBam}" \
+O="${tmpGcBiasMetrics}" \
+S="${tmpGcBiasMetrics}.summary_metrics.txt" \
+CHART="${tmpGcBiasMetrics}.pdf" \
 VALIDATION_STRINGENCY=STRICT \
-TMP_DIR=${tempDir}
+TMP_DIR="${tempDir}"
 
-    echo -e "\nGcBiasMetrics finished succesfull. Moving temp files to final.\n\n"
-    mv ${tmpGcBiasMetrics} ${gcBiasMetrics}
-    mv ${tmpGcBiasMetrics}.pdf ${gcBiasMetrics}.pdf
+echo -e "\nGcBiasMetrics finished succesfull. Moving temp files to final.\n\n"
+mv "${tmpGcBiasMetrics}" "${gcBiasMetrics}"
+mv "${tmpGcBiasMetrics}.pdf" "${gcBiasMetrics}.pdf"
 
 ######IS THIS STILL NEEDED, IMPROVEMENTS/UPDATES TO BE DONE?#####
 #Create nicer insertsize plots if seqType is PE
 #if [ "${seqType}" == "PE" ]
 #then
 	# Overwrite the PDFs that were just created by nicer onces:
-${recreateInsertSizePdfR} \
---insertSizeMetrics ${insertSizeMetrics} \
---pdf ${insertSizeMetrics}.pdf
+"${recreateInsertSizePdfR}" \
+--insertSizeMetrics "${insertSizeMetrics}" \
+--pdf "${insertSizeMetrics}.pdf"
 
 #else
 	# Don't do insert size analysis because seqType != "PE"
