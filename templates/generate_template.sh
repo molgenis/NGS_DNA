@@ -57,7 +57,7 @@ fi
 python "${EBROOTNGS_DNA}/scripts/gender.py" "${samplesheet}"
 
 ## get only uniq lines and removing txt.tmp file
-for i in $(ls *.txt.tmp); do cat $i | sort -u > ${i%.*} ; rm $i ;done
+for i in $(ls *.txt.tmp); do cat "${i}" | sort -u > ${i%.*} ; rm "${i}" ;done
 
 build="b37"
 species="homo_sapiens"

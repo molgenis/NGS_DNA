@@ -16,25 +16,25 @@
 #string flagstatMetrics
 
 #Load Picard module
-${stage} ${sambambaVersion}
-${checkStage}
+"${stage}" "${sambambaVersion}"
+"${checkStage}"
 
-makeTmpDir ${flagstatMetrics}
-tmpFlagstatMetrics=${MC_tmpFile}
+makeTmpDir "${flagstatMetrics}"
+tmpFlagstatMetrics="${MC_tmpFile}"
 
-makeTmpDir ${dedupMetrics}
-tmpDedupMetrics=${MC_tmpFile}
+makeTmpDir "${dedupMetrics}"
+tmpDedupMetrics="${MC_tmpFile}"
 
 echo "starting to calculate flagstat metrics"
 #make metrics file
-${sambambaTool} \
+"${sambambaTool}" \
 flagstat \
 --nthreads=4 \
-${dedupBam} > ${tmpFlagstatMetrics}
+"${dedupBam}" > "${tmpFlagstatMetrics}"
 
 echo -e "\nFlagstatMetrics calculated. Moving temp files to final.\n\n"
 
-mv ${tmpFlagstatMetrics} ${flagstatMetrics}
+mv "${tmpFlagstatMetrics}" "${flagstatMetrics}"
 
 echo "moved ${tmpFlagstatMetrics} ${flagstatMetrics}"
 

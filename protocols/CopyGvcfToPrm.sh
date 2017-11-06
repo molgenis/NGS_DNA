@@ -23,16 +23,15 @@ array_contains () {
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
 do
-  	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
+	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
 done
 
 
 echo "blaat"
 
 for samp in ${UNIQUESAMPLES[@]}
-do 
-	rsync -rlD ${intermediateDir}/gVCF/new/${samp}*.g.vcf.gz /groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/
-	rsync -rlD ${intermediateDir}/gVCF/new/${samp}*.g.vcf.gz.tbi /groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/
-	
+do
+	rsync -rlD "${intermediateDir}/gVCF/new/${samp}"*.g.vcf.gz "/groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/"
+	rsync -rlD "${intermediateDir}/gVCF/new/${samp}"*.g.vcf.gz.tbi "/groups/umcg-gd/prm02/projects/5GPM_WGS/run01/results/alignment/gVCF/"
 done
 

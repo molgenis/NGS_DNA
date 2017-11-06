@@ -28,7 +28,7 @@ max_index=${#externalSampleID[@]}-1
 WHOAMI=$(whoami)
 HOST=$(hostname -s)
 
-if ls ${permanentDataDir}logs/*.mailinglist 1>/dev/null 2>&1
+if ls "${permanentDataDir}logs/"*.mailinglist 1>/dev/null 2>&1
 then
 	rsync --verbose --links --no-perms --times --group --no-owner --devices --specials --checksum \
 		"${permanentDataDir}/logs/*.mailinglist" \
@@ -46,7 +46,7 @@ do
 	fi
 	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
 
-	mkdir -vp ${TMPDATADIR}
+	mkdir -vp "${TMPDATADIR}"
 
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]
 	then

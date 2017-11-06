@@ -156,157 +156,137 @@ else
 					printf " .. done \n"
 					touch "${intermediateDir}/convading.${nameOfSample}.${i}.step1.finished"
 				fi
-				
 				##STEP 2
-				if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step2.finished ]
+				if [ ! -f "${intermediateDir}/convading.${nameOfSample}.${i}.step2.finished" ]
 				then
-								
 					if [ "${i}" == "autosomal" ]
-        				then
-						mkdir -p ${convadingStartWithMatchScore}/
-		
-	            				perl ${EBROOTCONVADING}/CoNVaDING.pl \
-        	        			-mode StartWithMatchScore \
-        	        			-inputDir ${convadingStartWithBam} \
-        	        			-outputDir ${tmpConvadingStartWithMatchScore} \
-        	        			-controlsDir ${convadingControlsDir}
+					then
+						mkdir -p "${convadingStartWithMatchScore}"
+						perl "${EBROOTCONVADING}/CoNVaDING.pl" \
+						-mode StartWithMatchScore \
+						-inputDir "${convadingStartWithBam}" \
+						-outputDir "${tmpConvadingStartWithMatchScore}" \
+						-controlsDir "${convadingControlsDir}"
 						printf "moving ${tmpConvadingStartWithMatchScore} to ${convadingStartWithMatchScore} .. "
-						mv ${tmpConvadingStartWithMatchScore}/* ${convadingStartWithMatchScore}
+						mv "${tmpConvadingStartWithMatchScore}"/* "${convadingStartWithMatchScore}"
 						printf " .. done\n"
-			
-        				else
-						mkdir -p ${convadingStartWithMatchScoreGender}	
-	
-						perl ${EBROOTCONVADING}/CoNVaDING.pl \
-                        			-mode StartWithMatchScore \
-                        			-inputDir ${convadingStartWithBam} \
-                        			-outputDir ${tmpConvadingStartWithMatchScoreGender} \
-						-sexChr \
-                        			-controlsDir ${convadingControlsDir}
-						
-						printf "moving ${tmpConvadingStartWithMatchScoreGender} to ${convadingStartWithMatchScoreGender} .. "
-                				mv ${tmpConvadingStartWithMatchScoreGender}/* ${convadingStartWithMatchScoreGender}
-                				printf " .. done\n"
-        				fi
-				
-					
-					touch ${intermediateDir}/convading.${nameOfSample}.${i}.step2.finished
-				fi
-				
-				##STEP 3
-				if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished ]
-				then
-				
-					if [ "${i}" == "autosomal" ]
-                			then	
-						mkdir -p ${convadingStartWithBestScore}
-					
-						perl ${EBROOTCONVADING}/CoNVaDING.pl \
-						-mode StartWithBestScore \
-						-inputDir ${convadingStartWithMatchScore} \
-						-outputDir ${tmpConvadingStartWithBestScore} \
-						-controlsDir ${convadingControlsDir}
-						printf "moving ${tmpConvadingStartWithBestScore} to ${convadingStartWithBestScore} .. "
-						mv ${tmpConvadingStartWithBestScore}/* ${convadingStartWithBestScore}
-						printf " .. done\n"
-						
-						
 					else
-						mkdir -p ${convadingStartWithBestScoreGender}
-					
-						perl ${EBROOTCONVADING}/CoNVaDING.pl \
-                        			-mode StartWithBestScore \
-                        			-inputDir ${convadingStartWithMatchScoreGender} \
-                        			-outputDir ${tmpConvadingStartWithBestScoreGender} \
+						mkdir -p "${convadingStartWithMatchScoreGender}"
+						perl "${EBROOTCONVADING}/CoNVaDING.pl" \
+						-mode StartWithMatchScore \
+						-inputDir "${convadingStartWithBam}" \
+						-outputDir "${tmpConvadingStartWithMatchScoreGender}" \
 						-sexChr \
-                        			-controlsDir ${convadingControlsDir}
-					
-						printf "moving ${tmpConvadingStartWithBestScoreGender} to ${convadingStartWithBestScoreGender} .. "
-	                			mv ${tmpConvadingStartWithBestScoreGender}/* ${convadingStartWithBestScoreGender}
-	                			printf " .. done\n"
-				
+						-controlsDir "${convadingControlsDir}"
+						printf "moving ${tmpConvadingStartWithMatchScoreGender} to ${convadingStartWithMatchScoreGender} .. "
+						mv "${tmpConvadingStartWithMatchScoreGender}"/* "${convadingStartWithMatchScoreGender}"
+						printf " .. done\n"
 					fi
-	
-					if [ -d ${convadingStartWithBestScore} ]
-                               		then
-		
-                                        	for z in $(ls ${convadingStartWithBestScore}/*.txt)
-                                        	do
-                                                	BEFORE=$(cat $z | wc -l)
-                                                	BAS=$(basename $z)
-                                                	awk '{
-                                                        	if ($1 != "X"){
-                                                                	print $0
-                                                        	}
-                                                	}' $z > ${convadingStartWithBestScore}/${BAS}.tmp
-				
-                                                	AFTER=$(cat ${convadingStartWithBestScore}/${BAS}.tmp | wc -l)
-                                                	if [ $BEFORE -eq $AFTER ]
-                                                	then
-                                                    		echo "no calls on X for ${z}"
-                                                	else
-                                                        	echo "removing all X calls from ${z} to ${convadingStartWithBestScore}/${BAS}"
-                                                	fi
-							echo "moving ${convadingStartWithBestScore}/${BAS}.tmp to ${convadingStartWithBestScore}/${BAS}"
-                                        		mv ${convadingStartWithBestScore}/${BAS}.tmp ${convadingStartWithBestScore}/${BAS}
-							
-						done
-						grep "SAMPLE_RATIO:" ${convadingLogfile} | awk '{print $2}' > ${convadingLogfile}.sampleRatio
-                                	fi
-	
-					if [ -d ${convadingStartWithBestScoreGender} ]
-					then 
-				
-						for z in $(ls ${convadingStartWithBestScoreGender}/*.txt)
+
+					touch "${intermediateDir}/convading.${nameOfSample}.${i}.step2.finished"
+				fi
+
+				##STEP 3
+				if [ ! -f "${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished" ]
+				then
+
+					if [ "${i}" == "autosomal" ]
+					then
+						mkdir -p "${convadingStartWithBestScore}"
+
+						perl "${EBROOTCONVADING}/CoNVaDING.pl" \
+						-mode StartWithBestScore \
+						-inputDir "${convadingStartWithMatchScore}" \
+						-outputDir "${tmpConvadingStartWithBestScore}" \
+						-controlsDir "${convadingControlsDir}"
+						printf "moving ${tmpConvadingStartWithBestScore} to ${convadingStartWithBestScore} .. "
+						mv "${tmpConvadingStartWithBestScore}"/* "${convadingStartWithBestScore}"
+						printf " .. done\n"
+					else
+						mkdir -p "${convadingStartWithBestScoreGender}"
+						perl "${EBROOTCONVADING}/CoNVaDING.pl" \
+						-mode StartWithBestScore \
+						-inputDir "${convadingStartWithMatchScoreGender}" \
+						-outputDir "${tmpConvadingStartWithBestScoreGender}" \
+						-sexChr \
+						-controlsDir "${convadingControlsDir}"
+
+						printf "moving ${tmpConvadingStartWithBestScoreGender} to ${convadingStartWithBestScoreGender} .. "
+						mv "${tmpConvadingStartWithBestScoreGender}"/* "${convadingStartWithBestScoreGender}"
+						printf " .. done\n"
+					fi
+
+					if [ -d "${convadingStartWithBestScore}" ]
+					then
+						for z in $(ls "${convadingStartWithBestScore}"/*.txt)
 						do
-							BEFORE=$(cat $z | wc -l)
-							BAS=$(basename $z)
+							BEFORE=$(cat "${z}" | wc -l)
+							BAS=$(basename "${z}")
+							awk '{
+								if ($1 != "X"){
+									print $0
+								}
+							}' "${z}" > "${convadingStartWithBestScore}/${BAS}.tmp"
+							AFTER=$(cat "${convadingStartWithBestScore}/${BAS}.tmp" | wc -l)
+							if [ "${BEFORE}" -eq "${AFTER}" ]
+							then
+								echo "no calls on X for ${z}"
+							else
+								echo "removing all X calls from ${z} to ${convadingStartWithBestScore}/${BAS}"
+							fi
+							echo "moving ${convadingStartWithBestScore}/${BAS}.tmp to ${convadingStartWithBestScore}/${BAS}"
+							mv "${convadingStartWithBestScore}/${BAS}.tmp" "${convadingStartWithBestScore}/${BAS}"
+						done
+						grep "SAMPLE_RATIO:" "${convadingLogfile}" | awk '{print $2}' > "${convadingLogfile}.sampleRatio"
+
+					if [ -d "${convadingStartWithBestScoreGender}" ]
+					then
+						for z in $(ls "${convadingStartWithBestScoreGender}"/*.txt)
+						do
+							BEFORE=$(cat "${z}" | wc -l)
+							BAS=$(basename "${z}")
 							awk '{
 								if ($1 == "X"){
 									print $0
 								}
-							}' $z > ${convadingStartWithBestScore}/${BAS} 
-							AFTER=$(cat ${convadingStartWithBestScore}/${BAS} | wc -l)
-							if [ $BEFORE -eq $AFTER ]
+							}' "${z}" > "${convadingStartWithBestScore}/${BAS}"
+
+							AFTER=$(cat "${convadingStartWithBestScore}/${BAS}" | wc -l)
+							if [ "${BEFORE}" -eq "${AFTER}" ]
 							then
 								echo "no calls on X for ${z}"
 							else
 								echo "writing all X calls from ${z} to ${convadingStartWithBestScore}/${BAS}"
 							fi
 						done
-					fi	
-					touch ${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished
+					fi
+					touch "${intermediateDir}/convading.${nameOfSample}.${i}.step3.finished"
 				fi
-				
 				##STEP 5
-				if [ ! -f ${intermediateDir}/convading.${nameOfSample}.${i}.step5.finished ]
+				if [ ! -f "${intermediateDir}/convading.${nameOfSample}.${i}.step5.finished" ]
 				then
-				
 					## Creating directory
-					mkdir -p ${convadingCreateFinalList}
-				
-					perl ${EBROOTCONVADING}/CoNVaDING.pl \
+					mkdir -p "${convadingCreateFinalList}"
+
+					perl "${EBROOTCONVADING}/CoNVaDING.pl" \
 					-mode CreateFinalList \
-					-inputDir ${convadingStartWithBestScore} \
-					-outputDir ${tmpConvadingCreateFinalList} \
-					-targetQcList ${convadingControlsDir}/targetQcList.txt
-				
+					-inputDir "${convadingStartWithBestScore}" \
+					-outputDir "${tmpConvadingCreateFinalList}" \
+					-targetQcList "${convadingControlsDir}/targetQcList.txt"
+
 					printf "moving ${tmpConvadingCreateFinalList} to ${convadingCreateFinalList} .. "
-					mv ${tmpConvadingCreateFinalList}/* ${convadingCreateFinalList}
+					mv "${tmpConvadingCreateFinalList}"/* "${convadingCreateFinalList}"
 					printf " .. done\n"
-					
-					touch ${intermediateDir}/convading.${nameOfSample}.${i}.step5.finished
+
+					touch "${intermediateDir}/convading.${nameOfSample}.${i}.step5.finished"
 				fi
-			
-			
 			else
 				echo "Convading step has been skipped since there are no controls for this group: ${cDir}/Convading/"
-			
 			fi
-		
+
 		done
 	else
-		touch ${intermediateDir}/convading.skipped
-    		echo "for this bedfile there is no Controlsgroup"
+		touch "${intermediateDir}/convading.skipped"
+		echo "for this bedfile there is no Controlsgroup"
 	fi
 fi
