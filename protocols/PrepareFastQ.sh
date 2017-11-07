@@ -62,8 +62,8 @@ else
 	if [ "${seqType}" == "PE" ]
 	then
 		echo "Append phiX reads"
-		cat "${peEnd1BarcodeFqGz}" "${phiXEnd1Gz} >> "${peEnd1BarcodePhiXFqGz}"
-		cat "${peEnd2BarcodeFqGz}" "${phiXEnd2Gz} >> "${peEnd2BarcodePhiXFqGz}"
+		cat "${peEnd1BarcodeFqGz}" "${phiXEnd1Gz}" >> "${peEnd1BarcodePhiXFqGz}"
+		cat "${peEnd2BarcodeFqGz}" "${phiXEnd2Gz}" >> "${peEnd2BarcodePhiXFqGz}"
 	fi
 fi
 echo -e "finished with phiX part...\nstarting with IlluminaEncoding"

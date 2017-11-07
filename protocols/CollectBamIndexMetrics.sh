@@ -28,7 +28,7 @@ tmpBamIndexStats="${MC_tmpFile}"
 java -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" "${bamIndexStatsJar}" \
 INPUT="${dedupBam}" \
 VALIDATION_STRINGENCY=LENIENT \
-TMP_DIR=${tempDir}" \
+TMP_DIR="${tempDir}" \
 > "${tmpBamIndexStats}"
 
 mv "${tmpBamIndexStats}" "${bamIndexStats}"

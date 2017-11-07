@@ -27,7 +27,7 @@
 #Load Picard module
 ${stage} "${picardVersion}"
 ${stage} "${rVersion}"
-${stage} "${ngsUtilsVersion}
+${stage} "${ngsUtilsVersion}"
 ${checkStage}
 
 makeTmpDir "${gcBiasMetrics}"

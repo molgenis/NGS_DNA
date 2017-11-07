@@ -28,7 +28,7 @@ makeTmpDir "${projectVariantCallsSnpEff_ExAC_GoNL_Annotated}"
 tmpProjectVariantCallsSnpEff_ExAC_GoNL_Annotated="${MC_tmpFile}"
 
 makeTmpDir "${projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated}"
-tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated="${MC_tmpFile}
+tmpProjectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated="${MC_tmpFile}"
 
 ${stage} "${javaVersion}"
 ${stage} "${molgenisAnnotatorVersion}"

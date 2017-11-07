@@ -38,7 +38,7 @@ tmpProjectBatchCombinedVariantCalls="${MC_tmpFile}"
 
 
 #Load GATK module
-${stage} "${gatkVersion}
+${stage} "${gatkVersion}"
 ${checkStage}
 
 INPUTS=()

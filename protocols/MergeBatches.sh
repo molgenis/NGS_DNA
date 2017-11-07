@@ -76,6 +76,6 @@ sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpProjectVarian
 bgzip "${tmpProjectVariantsMergedSorted}"
 tabix -p vcf "${tmpProjectVariantsMergedSorted}.gz"
 
-mv "${tmpProjectVariantsMergedSortedGz}"* ${intermediateDir}"
+mv "${tmpProjectVariantsMergedSortedGz}"* "${intermediateDir}"
 
 echo "moved ${tmpProjectVariantsMergedSortedGz}* ${intermediateDir}"

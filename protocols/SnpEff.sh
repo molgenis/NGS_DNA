@@ -44,7 +44,7 @@ then
 	> "${tmpProjectVariantCallsSnpEff_Annotated}"
 
 	mv "${tmpProjectVariantCallsSnpEff_Annotated}" "${projectVariantCallsSnpEff_Annotated}"
-	mv "${tmpProjectVariantCallsSnpEff_Annotated}.csvStats.csv" "${projectVariantCallsSnpEff_Annotated}.csvStats.csv 
+	mv "${tmpProjectVariantCallsSnpEff_Annotated}.csvStats.csv" "${projectVariantCallsSnpEff_Annotated}.csvStats.csv"
 	echo "mv ${tmpProjectVariantCallsSnpEff_Annotated} ${projectVariantCallsSnpEff_Annotated}"
 
 else

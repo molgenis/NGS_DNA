@@ -312,7 +312,7 @@ then
 		if [[ "${exons}" == *"Call_has_multiple_exons"* ]]
 		then
 			echo "Call has multiple exons, program continues > "
-			genes=$(Number_of_genes "${combinedFiltered}" ${boom}")
+			genes=$(Number_of_genes "${combinedFiltered}" "${boom}")
 		else
 			echo -e "${boom}\tCall is single exon, program stops. "
 			echo "${exons}" >> "${longlistPlusPlus}"
@@ -474,7 +474,7 @@ then
 		if [[ "${values}" == *"CoNVaDING_has_good_values"* ]]
 		then
 			echo "CoNVaDING has good values, program continues > "
-			shapiro=$(Shapiro_wilk "${convadingLonglistCombinedFiltered}" ${boom}")
+			shapiro=$(Shapiro_wilk "${convadingLonglistCombinedFiltered}" "${boom}")
 		else
 			echo -e "${boom}\tCoNVaDING values are not good, program stops."
 			echo "${values}" >> "${longlistPlusPlus}"

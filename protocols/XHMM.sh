@@ -385,7 +385,7 @@ else
 					#
 					if [ "${i}" == "autosomal" ]
 					then
-						"${EBROOTXHMM}"/bin/xhmm" --discover \
+						"${EBROOTXHMM}/bin/xhmm" --discover \
 						--discoverSomeQualThresh 0 \
 						-p "${xhmmHighSenseParams}" \
 						-r "${xhmmPCANormalizedfileFilteredZscores}" \
