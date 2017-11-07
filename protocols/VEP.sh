@@ -18,28 +18,27 @@
 #string vepDataDir
 #string vepVersion
 
-makeTmpDir ${projectVariantCallsVEP_Annotated}
-tmpProjectVariantCallsVEP_Annotated=${MC_tmpFile}
+makeTmpDir "${projectVariantCallsVEP_Annotated}"
+tmpProjectVariantCallsVEP_Annotated="${MC_tmpFile}"
 
-${stage} ${vepVersion}
-${checkStage}
-if [ -f ${projectBatchGenotypedVariantCalls} ]
-then 
-	${EBROOTVEP}/variant_effect_predictor.pl \
-	-i ${projectBatchGenotypedVariantCalls} \
+"${stage}" "${vepVersion}"
+"${checkStage}"
+if [ -f "${projectBatchGenotypedVariantCalls}" ]
+then
+	"${EBROOTVEP}/variant_effect_predictor.pl" \
+	-i "${projectBatchGenotypedVariantCalls}" \
 	--offline \
 	--cache \
-	--dir ${vepDataDir} \
-	--db_version=${vepDBVersion} \
+	--dir "${vepDataDir}" \
+	--db_version="${vepDBVersion}" \
 	--buffer 1000 \
 	--most_severe \
 	--species homo_sapiens \
 	--vcf \
-	-o ${tmpProjectVariantCallsVEP_Annotated}  
-	
-	mv ${tmpProjectVariantCallsVEP_Annotated} ${projectVariantCallsVEP_Annotated}
-       	echo "mv ${tmpProjectVariantCallsVEP_Annotated} ${projectVariantCallsVEP_Annotated}"
-	
+	-o "${tmpProjectVariantCallsVEP_Annotated}"
+
+	mv "${tmpProjectVariantCallsVEP_Annotated}" "${projectVariantCallsVEP_Annotated}"
+	echo "mv ${tmpProjectVariantCallsVEP_Annotated} ${projectVariantCallsVEP_Annotated}"
 else
 	echo "skipped"
 fi

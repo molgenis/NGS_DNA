@@ -11,8 +11,8 @@
 #string projectVariantsMergedSortedGz
 #string intermediateDir
 
-tail -4 ${simulatedPhiXVariants} > ${intermediateDir}/InSilico.txt
-zcat ${projectVariantsMergedSortedGz} > ${projectVariantsMergedSortedGz}.vcf
+tail -4 "${simulatedPhiXVariants}" > "${intermediateDir}/InSilico.txt"
+zcat "${projectVariantsMergedSortedGz}" > "${projectVariantsMergedSortedGz}.vcf"
 
 awk '
 BEGIN{}
@@ -32,19 +32,19 @@ FNR==NR{
   if ((k in a) && (lc==$4) && (ld==$5)){
         print k,lc,ld
         }
-}' ${intermediateDir}/InSilico.txt ${projectVariantsMergedSortedGz}.vcf > ${intermediateDir}/InSilicoConcordanceCheck.txt
+}' "${intermediateDir}/InSilico.txt" "${projectVariantsMergedSortedGz}.vcf" > "${intermediateDir}/InSilicoConcordanceCheck.txt"
 
-count=$(cat ${intermediateDir}/InSilicoConcordanceCheck.txt | wc -l)
+count=$(cat "${intermediateDir}/InSilicoConcordanceCheck.txt" | wc -l)
 
 if [[ "${count}" -ne 4 ]]
 then
 	echo "Spiked phiX SNPs are NOT found back, exiting"
 	echo "EXPECTED:"
-	cat ${intermediateDir}/InSilico.txt
+	cat "${intermediateDir}/InSilico.txt"
 
 	echo -e "\n\n"
 	echo "FOUND BACK:"
-	awk  '$1 == "NC_001422.1"' ${projectVariantsMergedSortedGz}.vcf
+	awk  '$1 == "NC_001422.1"' "${projectVariantsMergedSortedGz}.vcf"
 	exit 1
 else
 	echo "Spiked phiX SNPs are found back"

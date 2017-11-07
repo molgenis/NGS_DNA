@@ -26,56 +26,56 @@
 #string extension
 
 #Load module GATK,tabix
-${stage} ${gatkVersion}
-${stage} ${htsLibVersion}
-${stage} ${ngsUtilsVersion}
+"${stage}" "${gatkVersion}"
+"${stage}" "${htsLibVersion}"
+"${stage}" "${ngsUtilsVersion}"
 
-${checkStage}
+"${checkStage}"
 
-makeTmpDir ${projectVariantsMerged}
-tmpProjectVariantsMerged=${MC_tmpFile}
+makeTmpDir "${projectVariantsMerged}"
+tmpProjectVariantsMerged="${MC_tmpFile}"
 
-makeTmpDir ${projectVariantsMergedSorted}
-tmpProjectVariantsMergedSorted=${MC_tmpFile}
+makeTmpDir "${projectVariantsMergedSorted}"
+tmpProjectVariantsMergedSorted="${MC_tmpFile}"
 
-makeTmpDir ${projectVariantsMergedSortedGz}
-tmpProjectVariantsMergedSortedGz=${MC_tmpFile}
+makeTmpDir "${projectVariantsMergedSortedGz}"
+tmpProjectVariantsMergedSortedGz="${MC_tmpFile}"
 
 #Function to check if array contains value
 array_contains () {
     local array="$1[@]"
-    local seeking=$2
+    local seeking=${2}
     local in=1
     for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
+        if [[ "${element}" == "${seeking}" ]]; then
             in=0
             break
         fi
     done
-    return $in
+    return "${in}"
 }
 
 INPUTS=()
 
 for b in "${batchID[@]}"
 do
-	if [ -f ${projectPrefix}.batch-${b}.${extension} ]
+	if [ -f "${projectPrefix}.batch-${b}.${extension}" ]
 	then
 		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.${extension}")
 	fi
 done
 
-java -Xmx12g -Djava.io.tmpdir=${tempDir} -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
--R ${indexFile} \
+java -Xmx12g -Djava.io.tmpdir="${tempDir}" -cp "${EBROOTGATK}/${gatkJar}" org.broadinstitute.gatk.tools.CatVariants \
+-R "${indexFile}" \
 ${INPUTS[@]} \
--out ${tmpProjectVariantsMerged}
+-out "${tmpProjectVariantsMerged}"
 
 echo "sorting vcf"
-sortVCFbyFai.pl -fastaIndexFile ${indexFile}.fai -inputVCF ${tmpProjectVariantsMerged} -outputVcf ${tmpProjectVariantsMergedSorted}
+sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpProjectVariantsMerged}" -outputVcf "${tmpProjectVariantsMergedSorted}"
 
-bgzip ${tmpProjectVariantsMergedSorted}
-tabix -p vcf ${tmpProjectVariantsMergedSorted}.gz
+bgzip "${tmpProjectVariantsMergedSorted}"
+tabix -p vcf "${tmpProjectVariantsMergedSorted}.gz"
 
-mv ${tmpProjectVariantsMergedSortedGz}* ${intermediateDir}
+mv "${tmpProjectVariantsMergedSortedGz}"* ${intermediateDir}"
 
-echo "mv ${tmpProjectVariantsMergedSortedGz}* ${intermediateDir}"
+echo "moved ${tmpProjectVariantsMergedSortedGz}* ${intermediateDir}"

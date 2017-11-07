@@ -48,11 +48,12 @@
 #string wkHtmlToPdfVersion
 #string capturingKit
 #string ngsversion
+#string stage
 
-module load ${wkHtmlToPdfVersion}
-module load ${rVersion}
-module load ${ngsUtilsVersion}
-module load ${ngsversion}
+"${stage}" "${wkHtmlToPdfVersion}"
+"${stage}" "${rVersion}"
+"${stage}" "${ngsUtilsVersion}"
+"${stage}" "${ngsversion}"
 
 #
 ## Define bash helper function for arrays
@@ -60,7 +61,7 @@ module load ${ngsversion}
 
 array_contains () { 
     local array="$1[@]"
-    local seeking=$2
+    local seeking="${2}"
     local in=1
     for element in "${!array-}"; do
         if [[ "$element" == "$seeking" ]]; then
@@ -68,25 +69,25 @@ array_contains () {
             break
         fi
     done
-    return $in
+    return "${in}"
 }
-if [ -f ${allMetrics} ] 
+if [ -f "${allMetrics}" ]
 then
-	rm ${allMetrics}
+	rm "${allMetrics}"
 fi
 
 
 #This check needs to be performed because Compute generates duplicate values in array
 INPUTS=()
-for SampleID in "${externalSampleID[@]}"
+for sampleID in "${externalSampleID[@]}"
 do
-        array_contains INPUTS "$SampleID" || INPUTS+=("$SampleID")    # If bamFile does not exist in array add it
+        array_contains INPUTS "${sampleID}" || INPUTS+=("${sampleID}")    # If bamFile does not exist in array add it
 done
 
 #folded only on uniq externalSampleIDs
 for sample in "${INPUTS[@]}"
 do
-	echo -e "$intermediateDir/${sample}.total.qc.metrics.table" >> ${allMetrics}
+	echo -e "$intermediateDir/${sample}.total.qc.metrics.table" >> "${allMetrics}"
 done
 
 
@@ -176,10 +177,10 @@ Preprocessing:
 <br>
 <table align=center STYLE="font-size: 30pt; border-spacing: 8px 2px;">
         <tr>
-            	<td><b>Report</b></td>
+		<td><b>Report</b></td>
         </tr>
 	<tr>
-            	<td>Created on</td>
+		<td>Created on</td>
                 <td>
 <script language="javascript">
         var month=new Array(12);
@@ -217,10 +218,10 @@ Preprocessing:
 		<br />
 	</tr>
 	<tr>
-            	<td>Number of samples</td>
+		<td>Number of samples</td>
 		<td>
 		<!--begin.rcode, engine='bash', echo=FALSE, comment=NA, warning=FALSE, message=FALSE, results='asis'
-		cat ${allMetrics} | wc -l	
+		cat ${allMetrics} | wc -l
 		end.rcode-->
 		</td>
 	</tr>
@@ -411,13 +412,12 @@ sed -i 's/border:solid 1px #F7F7F7/border:solid 0px #F7F7F7/g' ${projectQcDir}/$
 #only available with PE
 if [ "${seqType}" == "PE" ]
 then
-	mkdir -p ${projectQcDir}/images
+	mkdir -p "${projectQcDir}/images"
 
-	cp ${intermediateDir}/*.merged.dedup.bam.insert_size_histogram.pdf ${projectQcDir}/images
-    	cp ${intermediateDir}/*.merged.dedup.bam.insert_size_metrics ${projectQcDir}/images
+	cp "${intermediateDir}"/*.merged.dedup.bam.insert_size_histogram.pdf "${projectQcDir}/images"
+	cp "${intermediateDir}"/*.merged.dedup.bam.insert_size_metrics "${projectQcDir}/images"
 fi
 
 #convert to pdf
 
-wkhtmltopdf --page-size A0 ${projectQcDir}/${project}_QCReport.html ${projectQcDir}/${project}_QCReport.pdf
-
+wkhtmltopdf --page-size A0 "${projectQcDir}/${project}_QCReport.html" "${projectQcDir}/${project}_QCReport.pdf"

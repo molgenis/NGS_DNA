@@ -6,6 +6,6 @@
 #string logsDir 
 #string groupname
 
-md5sum ${dedupBam} > ${dedupBam}.md5
+md5sum "${dedupBam}" > "${dedupBam}.md5"
 
 

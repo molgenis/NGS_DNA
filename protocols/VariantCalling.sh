@@ -32,40 +32,40 @@ array_contains () {
     local seeking=$2
     local in=1
     for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
+        if [[ "${element}" == "${seeking}" ]]; then
             in=0
             break
         fi
     done
-    return $in
+    return "${in}"
 }
 
 #Load GATK module
-${stage} ${gatkVersion}
-${checkStage}
+"${stage}" "${gatkVersion}"
+"${checkStage}"
 
 makeTmpDir "${sampleBatchVariantCalls}"
-tmpSampleBatchVariantCalls=${MC_tmpFile}
+tmpSampleBatchVariantCalls="${MC_tmpFile}"
 
 makeTmpDir "${sampleBatchVariantCallsIndex}"
-tmpSampleBatchVariantCallsIndex=${MC_tmpFile}
+tmpSampleBatchVariantCallsIndex="${MC_tmpFile}"
 
 bams=()
 INPUTS=()
-for SampleID in "${externalSampleID[@]}"
+for sampleID in "${externalSampleID[@]}"
 do
-        array_contains INPUTS "$SampleID" || INPUTS+=("$SampleID")    # If bamFile does not exist in array add it
+        array_contains INPUTS "${sampleID}" || INPUTS+=("$sampleID")    # If bamFile does not exist in array add it
 done
 baitBatchLength=""
-sex=$(less ${intermediateDir}/${externalSampleID}.chosenSex.txt | awk 'NR==2')
+sex=$(less "${intermediateDir}/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
 if [ -f "${capturedBatchBed}" ] 
 then
 	baitBatchLength=$(cat "${capturedBatchBed}" | wc -l)
 fi
 
-if [ ! -d ${intermediateDir}/gVCF ]
+if [ ! -d "${intermediateDir}/gVCF" ]
 then
-	mkdir -p ${intermediateDir}/gVCF
+	mkdir -p "${intermediateDir}/gVCF"
 fi
 
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
@@ -81,7 +81,7 @@ else
 fi
 
 ploidy=""
-myBed=${capturedBatchBed}
+myBed="${capturedBatchBed}"
 if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"
@@ -92,7 +92,7 @@ else
 		then
 			echo -e "Female, chrY => ploidy=1\nbedfile=${femaleCapturedBatchBed}"
 			ploidy=1
-			myBed=${femaleCapturedBatchBed}
+			myBed="${femaleCapturedBatchBed}"
 		else
 			echo -e "Female, autosomal or chrX ==> ploidy=2"
 			ploidy=2
@@ -109,18 +109,18 @@ else
 		fi
 	fi
 
-	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx12g -jar \
-	${EBROOTGATK}/${gatkJar} \
+	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx12g -jar \
+	"${EBROOTGATK}/${gatkJar}" \
 	-T HaplotypeCaller \
-	-R ${indexFile} \
-	$inputs \
+	-R "${indexFile}" \
+	${inputs} \
 	-newQual \
-	--BQSR ${mergedBamRecalibratedTable} \
-	--dbsnp ${dbSnp} \
+	--BQSR "${mergedBamRecalibratedTable}" \
+	--dbsnp "${dbSnp}" \
 	-o "${tmpSampleBatchVariantCalls}" \
 	-L "${myBed}" \
 	--emitRefConfidence GVCF \
-	-ploidy ${ploidy}
+	-ploidy "${ploidy}"
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
@@ -128,8 +128,8 @@ else
 		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
 		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
 
-		cp "${sampleBatchVariantCalls}" ${intermediateDir}/gVCF/
-		cp "${sampleBatchVariantCallsIndex}" ${intermediateDir}/gVCF/
+		cp "${sampleBatchVariantCalls}" "${intermediateDir}/gVCF/"
+		cp "${sampleBatchVariantCallsIndex}" "${intermediateDir}/gVCF/"
 	else
 		echo "ERROR: output file is missing"
 		exit 1

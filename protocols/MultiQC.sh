@@ -132,9 +132,10 @@ picard_config:
         - 50
         - 100" >> ${intermediateDir}/${project}.multiqc_config.yaml
 
-${stage} ${multiQCVersion}
-${checkStage}
+"${stage}" "${multiQCVersion}"
+"${checkStage}"
 
-multiqc -c ${intermediateDir}/${project}.multiqc_config.yaml -f ${intermediateDir} -o ${intermediateDir}
+multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${intermediateDir}" -o "${intermediateDir}"
 
-mv ${intermediateDir}/multiqc_report.html ${intermediateDir}/${project}_multiqc_report.html
+mv "${intermediateDir}/multiqc_report.html "${intermediateDir}/${project}_multiqc_report.html"
+echo "moved ${intermediateDir}/multiqc_report.html ${intermediateDir}/${project}_multiqc_report.html"

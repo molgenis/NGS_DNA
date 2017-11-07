@@ -16,16 +16,16 @@
 #string groupname
 #string picardVersion
 
-module load ${picardVersion}
+module load "${picardVersion}"
 
-if [ -f ${dedupBam}.noChrX ]
+if [ -f "${dedupBam}.noChrX" ]
 then
-	printf "There is no chrX, a gender cannot be determined\n" > ${whichSex}
-	printf "Unknown\n" >> ${whichSex}
+	printf "There is no chrX, a gender cannot be determined\n" > "${whichSex}"
+	printf "Unknown\n" >> "${whichSex}"
 else
-	if [ -f $checkSexMeanCoverage ]
+	if [ -f "${checkSexMeanCoverage}" ]
 	then
-		rm  $checkSexMeanCoverage
+		rm "${checkSexMeanCoverage}"
 	fi
 
 	#select only the mean target coverage of the whole genome file
@@ -39,9 +39,9 @@ if ($0 ~ /^#/){
 		}else{
 			print $23
 	}
-	}' ${dedupBam}.hs_metrics >> ${checkSexMeanCoverage}
+	}' "${dedupBam}.hs_metrics" >> "${checkSexMeanCoverage}"
 
-	avgCov=$(awk '{print $1}' ${checkSexMeanCoverage})
+	avgCov=$(awk '{print $1}' "${checkSexMeanCoverage}")
 
 	if [[ "${avgCov}" == .* ]]
         then
@@ -51,8 +51,8 @@ if ($0 ~ /^#/){
         elif [[ "${avgCov}" < 1 ]]
         then
 		echo "${avgCov} of autosomes is lower than 1, skipped"
-                printf "There is no autosomal region, a gender cannot be determined\n" > ${whichSex}
-                printf "Unknown\n" >> ${whichSex}
+                printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
+                printf "Unknown\n" >> "${whichSex}"
         else
 
 		#select only the mean target coverage of chromosome X
@@ -66,11 +66,11 @@ if ($0 ~ /^#/){
 			}else{
 				print $23
 			}
-		}' ${hsMetricsNonAutosomalRegionChrX} >> ${checkSexMeanCoverage}
+		}' "${hsMetricsNonAutosomalRegionChrX}" >> "${checkSexMeanCoverage}"
 
 
 
-		perl -pi -e 's/\n/\t/' ${checkSexMeanCoverage}
+		perl -pi -e 's/\n/\t/' "${checkSexMeanCoverage}"
 
 		RESULT=$(awk '{
 			if ( "NA" == $1 || "?" == $2 ){
@@ -79,7 +79,7 @@ if ($0 ~ /^#/){
 			} else {
 				printf "%.2f \n", $2/$1 
 			}
-		}' ${checkSexMeanCoverage})
+		}' "${checkSexMeanCoverage}")
 
 		echo "RESULT: $RESULT"
 		echo "\$1 is the mean coverage of the autosomes"
@@ -109,22 +109,22 @@ if ($0 ~ /^#/){
 				print $2," divided by ",$1," is "$2"/"$1", this is in between the 0.65 and 0.85, we are not sure what the sex is based on the coverage on chromosome X"
 				print "Unknown" 
 			}
-		}' ${checkSexMeanCoverage} >> ${whichSex}
+		}' "${checkSexMeanCoverage}" >> "${whichSex}"
 	fi
 fi
 
-sex=$(less ${whichSex} | awk 'NR==2')
+sex=$(less "${whichSex}" | awk 'NR==2')
 
-if [ $sex != $Gender ]
+if [ "${sex}" != "${Gender}" ]
 then
 	echo "gender is different between samplesheet and calculated"
-	if [[ $sex == "Unknown" || $Gender == "Unknown" ]]
+	if [[ "${sex}" == "Unknown" || "${Gender}" == "Unknown" ]]
 	then
-		if [ $sex == "Unknown" ]
+		if [ "${sex}" == "Unknown" ]
 		then
 			echo "calculated ($sex) was unknown, but in the samplesheet it was specified ($Gender), $whichSex file has been updated"
-			cp ${whichSex} ${whichSex}.tmp
-			rename chosenSex oldGender ${whichSex}
+			cp "${whichSex}" "${whichSex}.tmp"
+			rename chosenSex oldGender "${whichSex}"
 			echo "the calculation of the sex cannot be determined, file has been moved from chosenSex name to oldGender name" > ${whichSex} 
 			echo "$Gender" >> ${whichSex} 
 		else
