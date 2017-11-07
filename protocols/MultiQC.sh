@@ -8,7 +8,6 @@
 #string logsDir
 #string groupname
 #string intermediateDir
-#string externalSampleID
 
 #string bedToolsVersion
 #string bwaVersion

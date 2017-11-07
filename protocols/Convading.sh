@@ -238,7 +238,7 @@ else
 							mv "${convadingStartWithBestScore}/${BAS}.tmp" "${convadingStartWithBestScore}/${BAS}"
 						done
 						grep "SAMPLE_RATIO:" "${convadingLogfile}" | awk '{print $2}' > "${convadingLogfile}.sampleRatio"
-
+					fi
 					if [ -d "${convadingStartWithBestScoreGender}" ]
 					then
 						for z in $(ls "${convadingStartWithBestScoreGender}"/*.txt)
