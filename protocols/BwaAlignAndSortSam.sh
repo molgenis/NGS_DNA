@@ -35,9 +35,9 @@ makeTmpDir "${alignedSortedBam}"
 tmpAlignedSortedBam="${MC_tmpFile}"
 
 #Load module BWA
-"${stage}" "${bwaVersion}"
-"${stage}" "${picardVersion}"
-"${checkStage}"
+${stage} "${bwaVersion}"
+${stage} "${picardVersion}"
+${checkStage}
 
 READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
 rm -f "${tmpAlignedSam}"

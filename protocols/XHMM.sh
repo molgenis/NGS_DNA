@@ -97,7 +97,7 @@ else
 		for i in ${run[@]}
 		do
 			echo "analyzing ${i}"
-			"${stage}" "${xhmmVersion}"
+			${stage} "${xhmmVersion}"
 
 			cDir=$(awk '{if ($1 == "'${capturingKit}'"){print $2}}' "${ControlsVersioning}")
 
@@ -118,7 +118,7 @@ else
 					## write capturingkit to file to make it easier to split
 					echo "${capturingKit}" > "${intermediateDir}/capt.txt"
 				fi
-				"${stage}" "${gatkVersion}"
+				${stage} "${gatkVersion}"
 				CAPT=$(awk 'BEGIN {FS="/"}{print $2}' "${intermediateDir}/capt.txt")
 
 

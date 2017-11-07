@@ -23,8 +23,8 @@
 #string stage
 
 #Load module
-"${stage}" "${pythonVersion}"
-"${stage}" "${ngsversion}"
+${stage} "${pythonVersion}"
+${stage} "${ngsversion}"
 
 
 makeTmpDir "${intermediateDir}"

@@ -38,8 +38,8 @@ tmpSampleMergedBam="${MC_tmpFile}"
 makeTmpDir "${sampleMergedBamIdx}"
 tmpSampleMergedBamIdx="${MC_tmpFile}"
 
-"${stage}" "${sambambaVersion}"
-"${checkStage}"
+${stage} "${sambambaVersion}"
+${checkStage}
 
 #Create string with input BAM files for Picard
 #This check needs to be performed because Compute generates duplicate values in array

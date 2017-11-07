@@ -18,11 +18,11 @@
 #string checkStage
 #string externalSampleID
 
-"${stage}" "${mantaVersion}"
-"${stage}" "${pythonVersion}"
-"${stage}" "${htsLibVersion}"
+${stage} "${mantaVersion}"
+${stage} "${pythonVersion}"
+${stage} "${htsLibVersion}"
 
-"${checkStage}"
+${checkStage}
 
 rm -rf "${mantaDir}"
 mkdir -p "${mantaDir}"

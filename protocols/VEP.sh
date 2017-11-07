@@ -21,8 +21,8 @@
 makeTmpDir "${projectVariantCallsVEP_Annotated}"
 tmpProjectVariantCallsVEP_Annotated="${MC_tmpFile}"
 
-"${stage}" "${vepVersion}"
-"${checkStage}"
+${stage} "${vepVersion}"
+${checkStage}
 if [ -f "${projectBatchGenotypedVariantCalls}" ]
 then
 	"${EBROOTVEP}/variant_effect_predictor.pl" \

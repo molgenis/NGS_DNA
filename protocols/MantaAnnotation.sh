@@ -19,10 +19,10 @@ set -e
 set -u
 
 
-"${stage}" "${ngsUtilsVersion}"
-"${stage}" "${vepVersion}"
-"${stage}" "${htsLibVersion}"
-"${checkStage}"
+${stage} "${ngsUtilsVersion}"
+${stage} "${vepVersion}"
+${stage} "${htsLibVersion}"
+${checkStage}
 
 makeTmpDir "${intermediateDir}"
 tmpIntermediateDir="${MC_tmpFile}"

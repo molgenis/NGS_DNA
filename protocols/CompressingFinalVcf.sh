@@ -25,8 +25,8 @@ array_contains () {
 }
 
 #Load Tabix module
-"${stage}" "${htsLibVersion}"
-"${checkStage}"
+${stage} "${htsLibVersion}"
+${checkStage}
 
 INPUTS=()
 for SampleID in "${finalVcf}"

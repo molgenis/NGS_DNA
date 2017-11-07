@@ -46,10 +46,10 @@ tmpGavinOutputFinal="${MC_tmpFile}"
 makeTmpDir "${gavinFromCADDgz}"
 tmpGavinFromCADDgz="${MC_tmpFile}"
 
-"${stage}" "${htsLibVersion}"
-"${stage}" "${gavinToolPackVersion}"
+${stage} "${htsLibVersion}"
+${stage} "${gavinToolPackVersion}"
 
-"${checkStage}"
+${checkStage}
 
 java -Xmx4g -jar "${EBROOTGAVINMINTOOLPACK}/${gavinJar}" \
 -i "${sampleFinalVcf}" \

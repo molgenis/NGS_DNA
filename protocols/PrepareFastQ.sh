@@ -27,8 +27,8 @@
 #string stage
 
 #Load module
-"${stage}" "${seqTkVersion}"
-"${stage}" ${pigzVersion}
+${stage} "${seqTkVersion}"
+${stage} ${pigzVersion}
 
 array_contains () {
     local array="$1[@]"

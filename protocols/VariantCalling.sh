@@ -41,8 +41,8 @@ array_contains () {
 }
 
 #Load GATK module
-"${stage}" "${gatkVersion}"
-"${checkStage}"
+${stage} "${gatkVersion}"
+${checkStage}
 
 makeTmpDir "${sampleBatchVariantCalls}"
 tmpSampleBatchVariantCalls="${MC_tmpFile}"

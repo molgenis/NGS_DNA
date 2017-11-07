@@ -18,7 +18,7 @@
 #string externalSampleID
 
 
-"${stage}" "${gatkVersion}"
+${stage} "${gatkVersion}"
 
 makeTmpDir "${projectVariantsMergedIndelsVcf}"
 tmpProjectVariantsMergedIndelsVcf="${MC_tmpFile}"

@@ -18,7 +18,7 @@
 #string stage
 
 #Load GATK module
-"${stage}" "${gatkVersion}"
+${stage} "${gatkVersion}"
 
 makeTmpDir "${projectVariantsMergedSnpsFilteredVcf}"
 tmpProjectVariantsMergedSnpsFilteredVcf="${MC_tmpFile}"

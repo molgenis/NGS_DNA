@@ -17,7 +17,7 @@
 
 makeTmpDir "${variantsFinalProjectVcfTable}"
 tmpVariantsFinalProjectVcfTable="${MC_tmpFile}"
-"${stage}" "${ngsUtilsVersion}"
+${stage} "${ngsUtilsVersion}"
 module list
 
 #Function to check if array contains value

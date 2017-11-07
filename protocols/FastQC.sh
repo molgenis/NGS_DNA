@@ -16,8 +16,8 @@
 #string groupname
 
 #Load module
-"${stage}" "${fastqcVersion}"
-"${checkStage}"
+${stage} "${fastqcVersion}"
+${checkStage}
 
 makeTmpDir "${outputFolderFastQC}"
 tmpOutputFolderFastQC="${MC_tmpFile}"

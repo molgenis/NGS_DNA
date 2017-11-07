@@ -50,10 +50,10 @@
 #string ngsversion
 #string stage
 
-"${stage}" "${wkHtmlToPdfVersion}"
-"${stage}" "${rVersion}"
-"${stage}" "${ngsUtilsVersion}"
-"${stage}" "${ngsversion}"
+${stage} "${wkHtmlToPdfVersion}"
+${stage} "${rVersion}"
+${stage} "${ngsUtilsVersion}"
+${stage} "${ngsversion}"
 
 #
 ## Define bash helper function for arrays

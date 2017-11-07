@@ -19,8 +19,8 @@
 #string flagstatMetrics
 
 #Load Picard module
-"${stage}" "${sambambaVersion}"
-"${checkStage}"
+${stage} "${sambambaVersion}"
+${checkStage}
 
 makeTmpDir "${dedupBam}"
 tmpDedupBam="${MC_tmpFile}"

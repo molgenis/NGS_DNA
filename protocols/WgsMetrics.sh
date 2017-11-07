@@ -17,8 +17,8 @@
 #string groupname
 
 #Load Picard module
-"${stage}" "${picardVersion}"
-"${checkStage}"
+${stage} "${picardVersion}"
+${checkStage}
 
 makeTmpDir "${alignedBam}"
 tmpAlignedBam="${MC_tmpFile}"

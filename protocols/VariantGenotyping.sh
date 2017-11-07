@@ -38,8 +38,8 @@ makeTmpDir "${projectBatchGenotypedVariantCalls}"
 tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 #Load GATK module
-"${stage}" "${gatkVersion}"
-"${checkStage}"
+${stage} "${gatkVersion}"
+${checkStage}
 
 SAMPLESIZE=$(cat "${projectJobsDir}/${project}.csv" | wc -l)
 numberofbatches=$(("${SAMPLESIZE}" / 200))

@@ -19,8 +19,8 @@
 makeTmpDir "${projectVariantCallsSnpEff_Annotated}"
 tmpProjectVariantCallsSnpEff_Annotated="${MC_tmpFile}"
 
-"${stage}" "${snpEffVersion}"
-"${checkStage}"
+${stage} "${snpEffVersion}"
+${checkStage}
 
 if [ -f "${projectBatchGenotypedVariantCalls}" ]
 then

@@ -21,7 +21,7 @@
 #string groupname
 
 #Load Picard module
-"${stage}" "${picardVersion}"
+${stage} "${picardVersion}"
 
 makeTmpDir "${hsMetrics}"
 tmpHsMetrics="${MC_tmpFile}"

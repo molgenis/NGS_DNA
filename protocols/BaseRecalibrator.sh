@@ -19,10 +19,10 @@
 #string sambambaTool
 #string mergedBamRecalibratedTable
 
-"${stage}" "${gatkVersion}"
-"${stage}" "${sambambaVersion}"
+${stage} "${gatkVersion}"
+${stage} "${sambambaVersion}"
 
-"${checkStage}"
+${checkStage}
 
 #Function to check if array contains value
 array_contains () {

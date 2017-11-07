@@ -28,8 +28,8 @@ array_contains () {
 }
 
 #Load GATK module
-"${stage}" "${gatkVersion}"
-"${checkStage}"
+${stage} "${gatkVersion}"
+${checkStage}
 
 INPUTS=()
 for sampleID in "${externalSampleID[@]}"

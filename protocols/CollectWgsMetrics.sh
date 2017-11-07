@@ -17,8 +17,8 @@
 #string wgsMetrics
 
 #Load Picard module
-"${stage}" "${picardVersion}"
-"${checkStage}"
+${stage} "${picardVersion}"
+${checkStage}
 
 makeTmpDir "${wgsMetrics}"
 tmpWgsMetrics="${MC_tmpFile}"

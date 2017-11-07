@@ -25,10 +25,10 @@
 #string groupname
 
 #Load Picard module
-"${stage}" "${picardVersion}"
-"${stage}" "${rVersion}"
-"${stage}" "${ngsUtilsVersion}
-"${checkStage}"
+${stage} "${picardVersion}"
+${stage} "${rVersion}"
+${stage} "${ngsUtilsVersion}
+${checkStage}
 
 makeTmpDir "${gcBiasMetrics}"
 tmpGcBiasMetrics="${MC_tmpFile}"

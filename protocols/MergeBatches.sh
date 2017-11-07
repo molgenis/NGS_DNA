@@ -26,11 +26,11 @@
 #string extension
 
 #Load module GATK,tabix
-"${stage}" "${gatkVersion}"
-"${stage}" "${htsLibVersion}"
-"${stage}" "${ngsUtilsVersion}"
+${stage} "${gatkVersion}"
+${stage} "${htsLibVersion}"
+${stage} "${ngsUtilsVersion}"
 
-"${checkStage}"
+${checkStage}
 
 makeTmpDir "${projectVariantsMerged}"
 tmpProjectVariantsMerged="${MC_tmpFile}"

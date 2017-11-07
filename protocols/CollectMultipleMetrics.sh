@@ -19,7 +19,7 @@
 #string groupname
 
 #Load Picard module
-"${stage}" "${picardVersion}"
+${stage} "${picardVersion}"
 
 makeTmpDir "${collectBamMetricsPrefix}"
 tmpCollectBamMetricsPrefix="${MC_tmpFile}"
