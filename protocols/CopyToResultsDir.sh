@@ -62,7 +62,7 @@ printf ".. finished (2/11)\n"
 
 # Copy fastQC output to results directory
 printf "Copying fastQC output to results directory.."
-rsync -a "${intermediateDir}/*_fastqc.zip" "${projectResultsDir}/qc/"
+rsync -a "${intermediateDir}/"*_fastqc.zip "${projectResultsDir}/qc/"
 printf ".. finished (3/11)\n"
 
 ##Copy GAVIN results
