@@ -64,7 +64,7 @@ then
         SORT_ORDER=coordinate \
         CREATE_INDEX=true 
 
-	moving "${tmpAlignedSortedBam} ${alignedSortedBam}"
+	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
 	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
 
 else
