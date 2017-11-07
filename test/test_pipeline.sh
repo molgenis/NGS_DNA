@@ -50,7 +50,7 @@ function preparePipeline(){
 	sh generate_template.sh
 	cd scripts
 	###### Load a version of molgenis compute
-	perl -pi -e "s|module load test| module load ${NGS_DNA_VERSION}|" *.sh
+	perl -pi -e "s|module load \"test\"| module load ${NGS_DNA_VERSION}|" *.sh
 	######
 	perl -pi -e "s|/apps/software/${NGS_DNA_VERSION}/|${workfolder}/tmp/NGS_DNA/|g" *.sh
 
@@ -68,9 +68,9 @@ function preparePipeline(){
 	for i in $(ls s*_GenderCalculate_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 	printf "This is a male\n" > ${workfolder}//tmp//${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt
 	printf "Male\n" >> ${workfolder}/tmp//${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt
-	perl -pi -e "s|module load test|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_QCStats_*.sh
-	perl -pi -e "s|module load test|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_DecisionTree_*.sh
-	perl -pi -e 's|module load test|#|' s*_QCReport_0.sh
+	perl -pi -e "s|module load \"test\"|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_QCStats_*.sh
+	perl -pi -e "s|module load \"test\"|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_DecisionTree_*.sh
+	perl -pi -e 's|module load \"test\"|#|' s*_QCReport_0.sh
 	perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
 	perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
 
