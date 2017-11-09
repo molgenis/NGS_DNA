@@ -96,8 +96,8 @@ printf " finished (4/11)\n"
 printf "Copying gVCF files + index file"
 for sample in "${UNIQUESAMPLES[@]}"
 do
-        rsync -a "${intermediateDir}/gVCF/${sample}.*.g.vcf.gz" "${projectResultsDir}/alignment/gVCF/"
-        rsync -a "${intermediateDir}/gVCF/${sample}.*.g.vcf.gz.tbi" "${projectResultsDir}/alignment/gVCF/"
+        rsync -a "${intermediateDir}/gVCF/${sample}."*.g.vcf.gz "${projectResultsDir}/alignment/gVCF/"
+        rsync -a "${intermediateDir}/gVCF/${sample}."*.g.vcf.gz.tbi "${projectResultsDir}/alignment/gVCF/"
 
         printf "."
 done
@@ -227,9 +227,9 @@ do
 	rsync -a "${intermediateDir}/${sa}.chosenSex.txt" "${projectResultsDir}/general/"
 	printf "."
 
-	if ls "${intermediateDir}/${sa}".*.coveragePerBase.txt 1> /dev/null 2>&1
+	if ls "${intermediateDir}/${sa}."*.coveragePerBase.txt 1> /dev/null 2>&1
 	then
-		for i in $(ls "${intermediateDir}/${sa}".*.coveragePerBase.txt )
+		for i in $(ls "${intermediateDir}/${sa}."*.coveragePerBase.txt )
 		do
 			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerBase/"
 			printf "."
@@ -239,9 +239,9 @@ do
 		echo "coveragePerBase skipped for sample: ${sa}"
 	fi
 
-	if ls "${intermediateDir}/${sa}".*.coveragePerTarget.txt 1> /dev/null 2>&1
+	if ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt 1> /dev/null 2>&1
         then
-		for i in $(ls "${intermediateDir}/${sa}".*.coveragePerTarget.txt )
+		for i in $(ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt )
 		do
 			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerTarget/"
 			printf "."
