@@ -69,15 +69,9 @@ function errorExitAndCleanUp() {
 	echo "${MC_doubleSeperatorLine}"                > ${MC_failedFile}
 	echo "${errorMessage}"                         >> ${MC_failedFile}
 
-	</#noparse>
-	step=$(echo "${taskId}" | awk -F'_' '{print $1"_"$2}')
-
-	<#noparse>
-
 	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
 	TOKEN=${CURLRESPONSE:10:32}
-nano "curl -H \"Content-Type:application/json\" -H \"x-molgenis-token:${TOKEN}\"</#noparse> -X PUT -d '{\"job\":\"${taskId}\",\"project_job\":\"${project}_${taskId}\",<#noparse>\"step\":\"'\"${step}\"'\"</#noparse>,\"project\":\"${project}\",<#noparse>\"started_date\":\"'\"${mydate_start}\"'\",\"status\":\"Error\"}' https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}"
-	curl -H "Content-Type:application/json" -H "<#noparse>x-molgenis-token:${TOKEN}"</#noparse> -X PUT -d '{"job":"${taskId}","project_job":"${project}_${taskId}",<#noparse>"step":"'"${step}"'"</#noparse>,"project":"${project}",<#noparse>"started_date":"'"${mydate_start}"'","status":"Error"}' https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}
+	curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
 <#noparse>
 	if [ -f "${MC_jobScriptSTDERR}" ]; then
 		echo "${MC_singleSeperatorLine}"           >> ${MC_failedFile}
@@ -135,15 +129,11 @@ trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 
 touch ${MC_jobScript}.started
 
-</#noparse>
-step=$(echo "${taskId}" | awk -F'_' '{print $1"_"$2}')
-
-<#noparse>
 
 CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
 TOKEN=${CURLRESPONSE:10:32}
 
-curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}"</#noparse> -X PUT -d '{"job":"${taskId}","project_job":"${project}_${taskId}",<#noparse>"step":"'"${step}"'"</#noparse>,"project":"${project}",<#noparse>"started_date":"'"${mydate_start}"'","status":"Started"}' https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}
+curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
 
 
 
