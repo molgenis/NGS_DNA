@@ -28,17 +28,17 @@ max_index=${#externalSampleID[@]}-1
 WHOAMI=$(whoami)
 HOST=$(hostname -s)
 
-if ls ${permanentDataDir}logs/*.mailinglist 1>/dev/null 2>&1
+if ls "${permanentDataDir}/logs/"*.mailinglist 1>/dev/null 2>&1
 then
 	rsync --verbose --links --no-perms --times --group --no-owner --devices --specials --checksum \
-		"${permanentDataDir}/logs/*.mailinglist" \
+		"${permanentDataDir}/logs/"*.mailinglist \
 		"${tmpDataDir}/logs/"
 fi
 
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
 	RUNNAME="${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}"
-	if [ ${prmHost} == "localhost" ]
+	if [ "${prmHost}" == "localhost" ]
 	then
 		PRMDATADIR="${allRawNgsPrmDataDir}/${RUNNAME}"
 	else
@@ -46,7 +46,7 @@ do
 	fi
 	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
 
-	mkdir -vp ${TMPDATADIR}
+	mkdir -vp "${TMPDATADIR}"
 
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]
 	then

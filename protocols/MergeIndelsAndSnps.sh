@@ -16,25 +16,25 @@
 #Function to check if array contains value
 array_contains () {
     local array="$1[@]"
-    local seeking=$2
+    local seeking="${2}"
     local in=1
     for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
+        if [[ "${element}" == "${seeking}" ]]; then
             in=0
             break
         fi
     done
-    return $in
+    return "${in}"
 }
 
 #Load GATK module
-${stage} ${gatkVersion}
+${stage} "${gatkVersion}"
 ${checkStage}
 
 INPUTS=()
-for SampleID in "${externalSampleID[@]}"
+for sampleID in "${externalSampleID[@]}"
 do
-        array_contains INPUTS "$SampleID" || INPUTS+=("$SampleID")    # If bamFile does not exist in array add it
+        array_contains INPUTS "$sampleID" || INPUTS+=("$sampleID")    # If bamFile does not exist in array add it
 done
 
 for externalID in "${INPUTS[@]}"
@@ -42,18 +42,18 @@ do
 	#create variant array
 	VARIANTS+=("--variant ${intermediateDir}/${externalID}.final.vcf")
 
-	java -Xmx2g -jar ${EBROOTGATK}/${gatkJar} \
-	-R ${indexFile} \
+	java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
+	-R "${indexFile}" \
 	-T CombineVariants \
-	--variant ${intermediateDir}/${externalID}.annotated.filtered.indels.vcf \
-	--variant ${intermediateDir}/${externalID}.annotated.filtered.snps.vcf \
+	--variant "${intermediateDir}/${externalID}.annotated.filtered.indels.vcf" \
+	--variant "${intermediateDir}/${externalID}.annotated.filtered.snps.vcf" \
 	--genotypemergeoption UNSORTED \
-	-o ${intermediateDir}/${externalID}.final.vcf
+	-o "${intermediateDir}/${externalID}.final.vcf"
 done
 
 #merge all samples into one big vcf
-java -Xmx2g -jar ${EBROOTGATK}/${gatkJar} \
--R ${indexFile} \
+java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
+-R "${indexFile}" \
 -T CombineVariants \
 ${VARIANTS[@]} \
--o ${projectPrefix}.final.vcf
+-o "${projectPrefix}.final.vcf"

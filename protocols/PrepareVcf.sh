@@ -2,9 +2,7 @@
 
 #Parameter mapping
 #string logsDir
-
 #string seqType
-
 #string intermediateDir
 #string project
 #string groupname

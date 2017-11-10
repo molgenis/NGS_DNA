@@ -6,37 +6,37 @@
 #string dedupBamCramBam
 #string indexFile
 #string	project
-#string logsDir 
+#string logsDir
 #string groupname
 #string intermediateDir
 #string iolibVersion
 
-module load ${iolibVersion}
+module load "${iolibVersion}"
 module list
 
-makeTmpDir ${dedupBamCram}
-tmpDedupBamCram=${MC_tmpFile}
+makeTmpDir "${dedupBamCram}"
+tmpDedupBamCram="${MC_tmpFile}"
 
-makeTmpDir ${dedupBamCramBam}
-tmpDedupBamCramBam=${MC_tmpFile}
+makeTmpDir "${dedupBamCramBam}"
+tmpDedupBamCramBam="${MC_tmpFile}"
 
 echo "Starting scramble BAM to CRAM conversion"
 
 scramble \
 -I bam \
 -O cram \
--r ${indexFile} \
+-r "${indexFile}" \
 -m \
 -t 8 \
-${dedupBam} \
-${tmpDedupBamCram}
+"${dedupBam}" \
+"${tmpDedupBamCram}"
 
 
 echo "dirname"
-mv ${tmpDedupBamCram} ${dedupBamCram}
-cd ${intermediateDir}
+mv "${tmpDedupBamCram}" "${dedupBamCram}"
+cd "${intermediateDir}"
 
-md5sum $(basename ${dedupBamCram}) > $(basename ${dedupBamCram}).md5
+md5sum $(basename "${dedupBamCram}") > $(basename "${dedupBamCram}").md5
 
 cd -
 

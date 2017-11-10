@@ -28,21 +28,21 @@ set -o pipefail
 #string picardJar
 #string cutadaptVersion
 
-makeTmpDir ${alignedSam} 
-tmpAlignedSam=${MC_tmpFile}
+makeTmpDir "${alignedSam}"
+tmpAlignedSam="${MC_tmpFile}"
 
-makeTmpDir ${alignedSortedBam}
-tmpAlignedSortedBam=${MC_tmpFile}
+makeTmpDir "${alignedSortedBam}"
+tmpAlignedSortedBam="${MC_tmpFile}"
 
 #Load module BWA
-${stage} ${bwaVersion}
-${stage} ${picardVersion}
+${stage} "${bwaVersion}"
+${stage} "${picardVersion}"
 ${checkStage}
 
 READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
-rm -f  ${tmpAlignedSam}
+rm -f "${tmpAlignedSam}"
 
-mkfifo -m 0644 ${tmpAlignedSam}
+mkfifo -m 0644 "${tmpAlignedSam}"
 
 #If paired-end use two fq files as input, else only one
 if [ "${seqType}" == "PE" ]
@@ -52,38 +52,39 @@ then
 	bwa mem \
 	-M \
 	-R "${READGROUPLINE}" \
-	-t ${bwaAlignCores} \
-	${indexFile} \
-	${fastq1} \
-	${fastq2} \
-	> ${tmpAlignedSam} &
+	-t "${bwaAlignCores}" \
+	"${indexFile}" \
+	"${fastq1}" \
+	"${fastq2}" \
+	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir=${tempDir} -Xmx29G -XX:ParallelGCThreads=4 -jar ${EBROOTPICARD}/${picardJar} SortSam \
-        INPUT=${tmpAlignedSam} \
-        OUTPUT=${tmpAlignedSortedBam}  \
+	java -Djava.io.tmpdir="${tempDir}" -Xmx29G -XX:ParallelGCThreads=4 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
+        INPUT="${tmpAlignedSam}" \
+        OUTPUT="${tmpAlignedSortedBam}"  \
         SORT_ORDER=coordinate \
         CREATE_INDEX=true 
 
-	mv ${tmpAlignedSortedBam} ${alignedSortedBam}
+	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
+	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
 
 else
 	#Run BWA for single-read
 	bwa mem \
 	-M \
 	-R "${READGROUPLINE}" \
-	-t ${bwaAlignCores} \
-	${indexFile} \
-	${srBarcodePhiXFqGz} \
-	> ${tmpAlignedSam} &
+	-t "${bwaAlignCores}" \
+	"${indexFile}" \
+	"${srBarcodePhiXFqGz}" \
+	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir=${tempDir} -Xmx29G -XX:ParallelGCThreads=4 -jar ${EBROOTPICARD}/${picardJar} SortSam \
-        INPUT=${tmpAlignedSam} \
-        OUTPUT=${tmpAlignedSortedBam}  \
+	java -Djava.io.tmpdir="${tempDir}" -Xmx29G -XX:ParallelGCThreads=4 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
+        INPUT="${tmpAlignedSam}" \
+        OUTPUT="${tmpAlignedSortedBam}"  \
         SORT_ORDER=coordinate \
         CREATE_INDEX=true
 
-	mv ${tmpAlignedSortedBam} ${alignedSortedBam}
-
+	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
+	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
 
 fi
 

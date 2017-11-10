@@ -36,8 +36,8 @@
 #string logsDir 
 
 umask 0007
-module load ${ngsUtilsVersion}
-module load ${ngsversion}
+module load "${ngsUtilsVersion}"
+module load "${ngsversion}"
 
 #
 # Create project dirs.
@@ -110,14 +110,14 @@ perl -pi -e 's/\r(?!\n)//g' "${projectJobsDir}/${project}.csv"
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
 #
-cd ${rocketPoint}
+cd "${rocketPoint}"
 
 if [[ -f .compute.properties ]]
 then
 	rm .compute.properties
 fi
 
-${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh \
+sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "${mainParameters}" \
 	-p "${batchIDList}" -p "${projectJobsDir}/${project}.csv" -p "${environment_parameters}" -p "${group_parameters}" -p "${tmpdir_parameters}" \
 	-rundir "${projectJobsDir}" \

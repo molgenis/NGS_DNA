@@ -1,4 +1,4 @@
-#MOLGENIS walltime=05:59:00 mem=6gb 
+#MOLGENIS walltime=05:59:00 mem=6gb
 #string tmpName
 #Parameter mapping
 #string stage
@@ -6,7 +6,7 @@
 #string tempDir
 #string intermediateDir
 #string project
-#string logsDir 
+#string logsDir
 #string groupname
 #string snpEffVersion
 #string javaVersion
@@ -31,88 +31,89 @@
 #string gavinOutputFinalMergedRLV
 #string sampleFinalVcf
 
-makeTmpDir ${gavinOutputFirstPass}
-tmpGavinOutputFirstPass=${MC_tmpFile}
+makeTmpDir "${gavinOutputFirstPass}"
+tmpGavinOutputFirstPass="${MC_tmpFile}"
 
-makeTmpDir ${gavinToCADDgz}
-tmpGavinToCADDgz=${MC_tmpFile}
+makeTmpDir "${gavinToCADDgz}"
+tmpGavinToCADDgz="${MC_tmpFile}"
 
-makeTmpDir ${gavinToCADD}
-tmpGavinToCADD=${MC_tmpFile}
+makeTmpDir "${gavinToCADD}"
+tmpGavinToCADD="${MC_tmpFile}"
 
-makeTmpDir ${gavinOutputFinal}
-tmpGavinOutputFinal=${MC_tmpFile}
+makeTmpDir "${gavinOutputFinal}"
+tmpGavinOutputFinal="${MC_tmpFile}"
 
-makeTmpDir ${gavinFromCADDgz}
-tmpGavinFromCADDgz=${MC_tmpFile}
+makeTmpDir "${gavinFromCADDgz}"
+tmpGavinFromCADDgz="${MC_tmpFile}"
 
-${stage} ${htsLibVersion}
-${stage} ${gavinToolPackVersion}
+${stage} "${htsLibVersion}"
+${stage} "${gavinToolPackVersion}"
 
 ${checkStage}
-java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
--i ${sampleFinalVcf} \
--o ${tmpGavinOutputFirstPass} \
--m CREATEFILEFORCADD \
--a ${tmpGavinToCADD} \
--c ${gavinClinVar} \
--d ${gavinCGD} \
--f ${gavinFDR} \
--g ${gavinCalibrations}
 
-mv ${tmpGavinOutputFirstPass} ${gavinOutputFirstPass}
+java -Xmx4g -jar "${EBROOTGAVINMINTOOLPACK}/${gavinJar}" \
+-i "${sampleFinalVcf}" \
+-o "${tmpGavinOutputFirstPass}" \
+-m CREATEFILEFORCADD \
+-a "${tmpGavinToCADD}" \
+-c "${gavinClinVar}" \
+-d "${gavinCGD}" \
+-f "${gavinFDR}" \
+-g "${gavinCalibrations}"
+
+mv "${tmpGavinOutputFirstPass}" "${gavinOutputFirstPass}"
 echo "moved ${tmpGavinOutputFirstPass} to ${gavinOutputFirstPass}"
 
-awk '{if ($1 != "NC_001422.1"){print $0}}' ${tmpGavinToCADD} > ${gavinToCADD}
+awk '{if ($1 != "NC_001422.1"){print $0}}' "${tmpGavinToCADD}" > "${gavinToCADD}"
 echo "updated ${tmpGavinToCADD} => ${gavinToCADD}"
 
 echo "GAVIN round 1 is finished, uploading to CADD..."
 
 echo "starting to get CADD annotations locally for ${gavinToCADD}"
 
-bgzip -c ${gavinToCADD} > ${gavinToCADDgz}
-tabix -p vcf ${gavinToCADDgz} 
+bgzip -c "${gavinToCADD}" > "${gavinToCADDgz}"
+tabix -p vcf "${gavinToCADDgz}"
 
-score.sh ${gavinToCADDgz} ${tmpGavinFromCADDgz}
+score.sh "${gavinToCADDgz}" "${tmpGavinFromCADDgz}"
 
-mv ${tmpGavinFromCADDgz} ${gavinFromCADDgz}
+mv "${tmpGavinFromCADDgz}" "${gavinFromCADDgz}"
 echo "moved ${tmpGavinFromCADDgz} ${gavinFromCADDgz}"
 
-zcat ${gavinFromCADDgz} > ${gavinFromCADD}
+zcat "${gavinFromCADDgz}" > "${gavinFromCADD}"
 
-java -Xmx4g -jar ${EBROOTGAVINMINTOOLPACK}/${gavinJar} \
--i ${sampleFinalVcf} \
--o ${tmpGavinOutputFinal} \
+java -Xmx4g -jar "${EBROOTGAVINMINTOOLPACK}/${gavinJar}" \
+-i "${sampleFinalVcf}" \
+-o "${tmpGavinOutputFinal}" \
 -m ANALYSIS \
--a ${gavinFromCADD} \
--c ${gavinClinVar} \
--d ${gavinCGD} \
--f ${gavinFDR} \
--g ${gavinCalibrations}
+-a "${gavinFromCADD}" \
+-c "${gavinClinVar}" \
+-d "${gavinCGD}" \
+-f "${gavinFDR}" \
+-g "${gavinCalibrations}"
 
-mv ${tmpGavinOutputFinal} ${gavinOutputFinal}
+mv "${tmpGavinOutputFinal}" "${gavinOutputFinal}"
 echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
 
 #echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" ${gavinOutputFinal} | wc -l'
 
 echo "Merging ${sampleFinalVcf} and ${gavinOutputFinal}"
 
-java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar} \
--i ${sampleFinalVcf} \
+java -jar -Xmx4g "${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar}" \
+-i "${sampleFinalVcf}" \
 -r \
--v ${gavinOutputFinal} \
--o ${gavinOutputFinalMerged}
+-v "${gavinOutputFinal}" \
+-o "${gavinOutputFinalMerged}"
 
 
 #gavinSplitRlvToolJar
-java -jar -Xmx4g ${EBROOTGAVINMINTOOLPACK}/${gavinSplitRlvToolJar} \
--i ${gavinOutputFinalMerged} \
+java -jar -Xmx4g "${EBROOTGAVINMINTOOLPACK}/${gavinSplitRlvToolJar}" \
+-i "${gavinOutputFinalMerged}" \
 -r \
--o ${gavinOutputFinalMergedRLV}
+-o "${gavinOutputFinalMergedRLV}"
 
-perl -pi -e 's|INFO=<ID=EXAC_AF,Number=.,Type=String|INFO=<ID=EXAC_AF,Number=.,Type=Float|' ${gavinOutputFinalMergedRLV}
-perl -pi -e 's|INFO=<ID=EXAC_AC_HOM,Number=.,Type=String|INFO=<ID=EXAC_AC_HOM,Number=.,Type=Integer|' ${gavinOutputFinalMergedRLV}
-perl -pi -e 's|INFO=<ID=EXAC_AC_HET,Number=.,Type=String|INFO=<ID=EXAC_AC_HET,Number=.,Type=Integer|' ${gavinOutputFinalMergedRLV}
+perl -pi -e 's|INFO=<ID=EXAC_AF,Number=.,Type=String|INFO=<ID=EXAC_AF,Number=.,Type=Float|' "${gavinOutputFinalMergedRLV}"
+perl -pi -e 's|INFO=<ID=EXAC_AC_HOM,Number=.,Type=String|INFO=<ID=EXAC_AC_HOM,Number=.,Type=Integer|' "${gavinOutputFinalMergedRLV}"
+perl -pi -e 's|INFO=<ID=EXAC_AC_HET,Number=.,Type=String|INFO=<ID=EXAC_AC_HET,Number=.,Type=Integer|' "${gavinOutputFinalMergedRLV}"
 
 
 echo "output: ${gavinOutputFinalMergedRLV}"

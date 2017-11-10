@@ -19,8 +19,8 @@
 #string sambambaTool
 #string mergedBamRecalibratedTable
 
-${stage} ${gatkVersion}
-${stage} ${sambambaVersion}
+${stage} "${gatkVersion}"
+${stage} "${sambambaVersion}"
 
 ${checkStage}
 
@@ -44,19 +44,19 @@ do
         array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("-I $bamFile")    # If bamFile does not exist in array add it
 done
 
-makeTmpDir ${mergedBamRecalibratedTable}
-tmpMergedBamRecalibratedTable=${MC_tmpFile}
+makeTmpDir "${mergedBamRecalibratedTable}"
+tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
-${sambambaTool} index ${sampleMergedBam}
+"${sambambaTool}" index "${sampleMergedBam}"
 
 
-java -XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g -jar ${EBROOTGATK}/${gatkJar} \
+java -XX:ParallelGCThreads=7 -Djava.io.tmpdir="${tempDir}" -Xmx9g -jar "${EBROOTGATK}/${gatkJar}" \
    -T BaseRecalibrator \
-   -R ${indexFile} \
+   -R "${indexFile}" \
    ${INPUTS[@]} \
    -nct 8 \
-   -knownSites ${dbSnp} \
-   -o ${tmpMergedBamRecalibratedTable}
+   -knownSites "${dbSnp}" \
+   -o "${tmpMergedBamRecalibratedTable}"
 
-mv ${tmpMergedBamRecalibratedTable}  ${mergedBamRecalibratedTable}
+mv "${tmpMergedBamRecalibratedTable}" "${mergedBamRecalibratedTable}"
 echo "moved ${tmpMergedBamRecalibratedTable}  ${mergedBamRecalibratedTable}"

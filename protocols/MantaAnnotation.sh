@@ -19,13 +19,13 @@ set -e
 set -u
 
 
-${stage} ${ngsUtilsVersion}
-${stage} ${vepVersion}
-${stage} ${htsLibVersion}
+${stage} "${ngsUtilsVersion}"
+${stage} "${vepVersion}"
+${stage} "${htsLibVersion}"
 ${checkStage}
 
-makeTmpDir ${intermediateDir}
-tmpIntermediateDir=${MC_tmpFile}
+makeTmpDir "${intermediateDir}"
+tmpIntermediateDir="${MC_tmpFile}"
 
 for i in  "candidateSV" "diploidSV"
 do

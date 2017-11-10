@@ -32,13 +32,13 @@ array_contains () {
     return $in
 }
 
-makeTmpDir ${sampleMergedBam}
-tmpSampleMergedBam=${MC_tmpFile}
+makeTmpDir "${sampleMergedBam}"
+tmpSampleMergedBam="${MC_tmpFile}"
 
-makeTmpDir ${sampleMergedBamIdx}
-tmpSampleMergedBamIdx=${MC_tmpFile}
+makeTmpDir "${sampleMergedBamIdx}"
+tmpSampleMergedBamIdx="${MC_tmpFile}"
 
-${stage} ${sambambaVersion}
+${stage} "${sambambaVersion}"
 ${checkStage}
 
 #Create string with input BAM files for Picard
@@ -50,18 +50,21 @@ INPUTBAIS=()
 
 for bamFile in "${inputMergeBam[@]}"
 do
-	array_contains INPUTS "$bamFile" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
-	array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${bamFile}" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
 done
 
 if [ ${#INPUTS[@]} == 1 ]
 then
 
-	ln -sf $(basename ${inputMergeBam[0]}) ${sampleMergedBam}
+	ln -sf $(basename ${inputMergeBam[0]}) "${sampleMergedBam}"
 
 	#indexing because there is no index file coming out of the sorting step
 	printf "indexing..."
-	${sambambaTool} index ${sampleMergedBam} ${inputMergeBamIdx[0]}
+	"${sambambaTool}" index \
+	"${sampleMergedBam}" \
+	${inputMergeBamIdx[0]}
+
 	printf "..finished\n"
 
 	echo "ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}"
@@ -70,14 +73,15 @@ then
 	echo "nothing to merge because there is only one sample"
 
 else
-	${sambambaTool} merge \
-	${tmpSampleMergedBam} \
+	"${sambambaTool}" merge \
+	"${tmpSampleMergedBam}" \
 	${INPUTS[@]}
 
-	mv ${tmpSampleMergedBam} ${sampleMergedBam}
-	mv ${tmpSampleMergedBamIdx} ${sampleMergedBamIdx}
-	echo "mv ${tmpSampleMergedBam} ${sampleMergedBam}"
-	echo "mv ${tmpSampleMergedBamIdx} ${sampleMergedBamIdx}"
+	mv "${tmpSampleMergedBam}" "${sampleMergedBam}"
+	echo "moved ${tmpSampleMergedBam} ${sampleMergedBam}"
+
+	mv "${tmpSampleMergedBamIdx}" "${sampleMergedBamIdx}"
+	echo "moved ${tmpSampleMergedBamIdx} ${sampleMergedBamIdx}"
 
 fi
 

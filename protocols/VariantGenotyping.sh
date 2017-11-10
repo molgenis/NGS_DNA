@@ -17,62 +17,62 @@
 #list sampleBatchVariantCalls
 #string tmpDataDir
 #string projectJobsDir
-#string logsDir 
+#string logsDir
 #string groupname
 
 #Function to check if array contains value
 array_contains () { 
     local array="$1[@]"
-    local seeking=$2
+    local seeking="${2}"
     local in=1
     for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
+        if [[ "${element}" == "${seeking}" ]]; then
             in=0
             break
         fi
     done
-    return $in
+    return "${in}"
 }
 
 makeTmpDir "${projectBatchGenotypedVariantCalls}"
-tmpProjectBatchGenotypedVariantCalls=${MC_tmpFile}
+tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 #Load GATK module
-${stage} ${gatkVersion}
+${stage} "${gatkVersion}"
 ${checkStage}
 
-SAMPLESIZE=$(cat ${projectJobsDir}/${project}.csv | wc -l)
-numberofbatches=$(($SAMPLESIZE / 200))
+SAMPLESIZE=$(cat "${projectJobsDir}/${project}.csv" | wc -l)
+numberofbatches=$(("${SAMPLESIZE}" / 200))
 ALLGVCFs=()
 
-if [ $SAMPLESIZE -gt 200 ]
+if [ "${SAMPLESIZE}" -gt 200 ]
 then
-	for b in $(seq 0 $numberofbatches)
+	for b in $(seq 0 "${numberofbatches}")
 	do
 		if [ -f "${projectBatchCombinedVariantCalls}".$b ]
 		then
- 			ALLGVCFs+=(--variant "${projectBatchCombinedVariantCalls}".$b)
+			ALLGVCFs+=(--variant "${projectBatchCombinedVariantCalls}"."${b}")
 		fi
 	done
 else
 	for sbatch in "${sampleBatchVariantCalls[@]}"
         do
-		if [ -f $sbatch ]
+		if [ -f "${sbatch}" ]
 		then
-          		array_contains ALLGVCFs "--variant $sbatch" || ALLGVCFs+=("--variant $sbatch")
+			array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant $sbatch")
 		fi
         done
 fi 
-GvcfSize=${#ALLGVCFs[@]}
-if [ ${GvcfSize} -ne 0 ]
+gvcfSize=${#ALLGVCFs[@]}
+if [ ${gvcfSize} -ne 0 ]
 then
-java -Xmx16g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir} -jar \
-	${EBROOTGATK}/${gatkJar} \
+java -Xmx16g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
+	"${EBROOTGATK}/${gatkJar}" \
 	-T GenotypeGVCFs \
-	-R ${indexFile} \
+	-R "${indexFile}" \
 	-L "${capturedBatchBed}" \
-	--dbsnp ${dbSnp} \
-	-o ${tmpProjectBatchGenotypedVariantCalls} \
+	--dbsnp "${dbSnp}" \
+	-o "${tmpProjectBatchGenotypedVariantCalls}" \
 	${ALLGVCFs[@]} 
 
 	mv "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"

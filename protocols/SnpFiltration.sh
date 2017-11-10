@@ -15,20 +15,21 @@
 #string project
 #string logsDir
 #string groupname
+#string stage
 
 #Load GATK module
-module load ${gatkVersion}
+${stage} "${gatkVersion}"
 
-makeTmpDir ${projectVariantsMergedSnpsFilteredVcf}
-tmpProjectVariantsMergedSnpsFilteredVcf=${MC_tmpFile}
+makeTmpDir "${projectVariantsMergedSnpsFilteredVcf}"
+tmpProjectVariantsMergedSnpsFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called SNPs on
 
-java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx8g -Xms6g -jar ${EBROOTGATK}/${gatkJar} \
+java -XX:ParallelGCThreads=4 -Djava.io.tmpdir="${tempDir}" -Xmx8g -Xms6g -jar "${EBROOTGATK}/${gatkJar}" \
 -T VariantFiltration \
--R ${indexFile} \
--o ${tmpProjectVariantsMergedSnpsFilteredVcf} \
---variant ${projectVariantsMergedSnpsVcf} \
+-R "${indexFile}" \
+-o "${tmpProjectVariantsMergedSnpsFilteredVcf}" \
+--variant "${projectVariantsMergedSnpsVcf}" \
 --filterExpression "QD < 2.0" \
 --filterName "filterQD" \
 --filterExpression "MQ < 25.0" \
@@ -40,5 +41,5 @@ java -XX:ParallelGCThreads=4 -Djava.io.tmpdir=${tempDir} -Xmx8g -Xms6g -jar ${EB
 --filterExpression "ReadPosRankSum < -8.0" \
 --filterName "filterReadPosRankSum"
 
-echo -e "\nVariantFiltering finished succesfull. Moving temp files to final.\n\n"
-mv ${tmpProjectVariantsMergedSnpsFilteredVcf} ${projectVariantsMergedSnpsFilteredVcf}
+mv "${tmpProjectVariantsMergedSnpsFilteredVcf}" "${projectVariantsMergedSnpsFilteredVcf}"
+echo "moved ${tmpProjectVariantsMergedSnpsFilteredVcf} ${projectVariantsMergedSnpsFilteredVcf}"

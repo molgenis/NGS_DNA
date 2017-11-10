@@ -6,7 +6,7 @@
 #string logsDir 
 #string groupname
 
-cd $projectJobsDir
+cd "${projectJobsDir}"
 
 
 countShScripts=$(find *.sh ! -name '*Manta*.sh' ! -name 'sXX*.sh'  ! -name 'Autotest_0.sh' | wc -l)
@@ -18,18 +18,18 @@ countFinishedFiles=$(find *.sh.finished ! -name '*Manta*.sh.finished' ! -name 's
 
 countShScripts=$(($countShScripts-3))
 
-rm -f ${projectJobsDir}/${taskId}_INCORRECT
+rm -f "${projectJobsDir}/${taskId}_INCORRECT"
 
-if [ ${countShScripts} -eq $countFinishedFiles ]
+if [ "${countShScripts}" -eq "${countFinishedFiles}" ]
 then	
-	echo "all files are finished" > ${projectJobsDir}/${taskId}_CORRECT
+	echo "all files are finished" > "${projectJobsDir}/${taskId}_CORRECT"
 else
-	echo "These files are not finished: " > ${projectJobsDir}/${taskId}_INCORRECT
+	echo "These files are not finished: " > "${projectJobsDir}/${taskId}_INCORRECT"
 	for getSh in $(ls *.sh)
 	do
-		if [ ! -f ${getSh}.finished ]
+		if [ ! -f "${getSh}.finished" ]
 		then
-			echo ${getSh} >> ${projectJobsDir}/${taskId}_INCORRECT
+			echo "${getSh}" >> "${projectJobsDir}/${taskId}_INCORRECT"
 		fi
 	done
 	trap - EXIT

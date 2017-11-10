@@ -17,21 +17,21 @@
 #string groupname
 
 #Load Picard module
-${stage} ${picardVersion}
+${stage} "${picardVersion}"
 ${checkStage}
 
-makeTmpDir ${alignedBam}
-tmpAlignedBam=${MC_tmpFile}
+makeTmpDir "${alignedBam}"
+tmpAlignedBam="${MC_tmpFile}"
 
 #Run picard, convert SAM to BAM
-java -XX:ParallelGCThreads=4 -jar -Xmx9g ${EBROOTPICARD}/${picardJar} WgsMetrics \
-INPUT=${dedupBam} \
-OUTPUT=${dedupBam}.wgsmetrics \
+java -XX:ParallelGCThreads=4 -jar -Xmx9g "${EBROOTPICARD}/${picardJar}" WgsMetrics \
+INPUT="${dedupBam}" \
+OUTPUT="${dedupBam}.wgsmetrics" \
 VALIDATION_STRINGENCY=LENIENT \
 MAX_RECORDS_IN_RAM=2000000 \
-TMP_DIR=${tempDir}
+TMP_DIR="${tempDir}"
 
 echo -e "\nSamToBam finished succesfull. Moving temp files to final.\n\n"
-mv ${tmpAlignedBam} ${alignedBam}
+mv "${tmpAlignedBam}" "${alignedBam}"
 
 

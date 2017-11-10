@@ -19,26 +19,26 @@
 #string flagstatMetrics
 
 #Load Picard module
-${stage} ${sambambaVersion}
+${stage} "${sambambaVersion}"
 ${checkStage}
 
-makeTmpDir ${dedupBam}
-tmpDedupBam=${MC_tmpFile}
+makeTmpDir "${dedupBam}"
+tmpDedupBam="${MC_tmpFile}"
 
-makeTmpDir ${dedupBamIdx}
-tmpDedupBamIdx=${MC_tmpFile}
+makeTmpDir "${dedupBamIdx}"
+tmpDedupBamIdx="${MC_tmpFile}"
 
 ##Run picard, sort BAM file and create index on the fly
-${sambambaTool} markdup \
+"${sambambaTool}" markdup \
 --nthreads=4 \
 --overflow-list-size 1000000 \
 --hash-table-size 1000000 \
 -p \
---tmpdir=${tempDir} \
-${sampleMergedBam} ${tmpDedupBam}
+--tmpdir="${tempDir}" \
+"${sampleMergedBam}" "${tmpDedupBam}"
 
 echo -e "\nMarkDuplicates finished succesfull. Moving temp files to final.\n\n"
-mv ${tmpDedupBam} ${dedupBam}
+mv "${tmpDedupBam}" "${dedupBam}"
 echo "moved ${tmpDedupBam} ${dedupBam}"
-mv ${tmpDedupBamIdx} ${dedupBamIdx}
+mv "${tmpDedupBamIdx}" "${dedupBamIdx}"
 echo "mv ${tmpDedupBamIdx} ${dedupBamIdx}"

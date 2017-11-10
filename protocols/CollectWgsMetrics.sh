@@ -17,19 +17,19 @@
 #string wgsMetrics
 
 #Load Picard module
-${stage} ${picardVersion}
+${stage} "${picardVersion}"
 ${checkStage}
 
-makeTmpDir ${wgsMetrics}
-tmpWgsMetrics=${MC_tmpFile}
+makeTmpDir "${wgsMetrics}"
+tmpWgsMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics
-java -XX:ParallelGCThreads=4 -jar -Xmx4g ${EBROOTPICARD}/${picardJar} CollectWgsMetrics \
-R=${indexFile} \
-I=${dedupBam} \
-O=${tmpWgsMetrics} \
-TMP_DIR=${tempDir}
+java -XX:ParallelGCThreads=4 -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" CollectWgsMetrics \
+R="${indexFile}" \
+I="${dedupBam}" \
+O="${tmpWgsMetrics}" \
+TMP_DIR="${tempDir}"
 
 echo -e "\nWgsMetrics finished succesfull. Moving temp files to final.\n\n"
-mv ${tmpWgsMetrics} ${wgsMetrics}
+mv "${tmpWgsMetrics}" "${wgsMetrics}"
 
