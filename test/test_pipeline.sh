@@ -130,7 +130,7 @@ fi
 echo "pr number: $1"
 
 PULLREQUEST=$1
-NGS_DNA_VERSION=NGS_DNA/3.4.2
+NGS_DNA_VERSION=NGS_DNA/3.4.3
 
 git clone https://github.com/molgenis/NGS_DNA.git
 cd ${workfolder}/tmp/NGS_DNA
