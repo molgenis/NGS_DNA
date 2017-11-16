@@ -59,6 +59,8 @@ then
 	echo "Skip this step! PhiX was already spiked in!"
 	exit 0
 else
+	rm "${peEnd1BarcodePhiXFqGz}"
+	rm "${peEnd2BarcodePhiXFqGz}"
 	if [ "${seqType}" == "PE" ]
 	then
 		echo "Append phiX reads"
