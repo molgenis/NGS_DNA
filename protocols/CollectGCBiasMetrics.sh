@@ -47,16 +47,6 @@ echo -e "\nGcBiasMetrics finished succesfull. Moving temp files to final.\n\n"
 mv "${tmpGcBiasMetrics}" "${gcBiasMetrics}"
 mv "${tmpGcBiasMetrics}.pdf" "${gcBiasMetrics}.pdf"
 
-######IS THIS STILL NEEDED, IMPROVEMENTS/UPDATES TO BE DONE?#####
-#Create nicer insertsize plots if seqType is PE
-#if [ "${seqType}" == "PE" ]
-#then
-	# Overwrite the PDFs that were just created by nicer onces:
 "${recreateInsertSizePdfR}" \
 --insertSizeMetrics "${insertSizeMetrics}" \
 --pdf "${insertSizeMetrics}.pdf"
-
-#else
-	# Don't do insert size analysis because seqType != "PE"
-
-#fi

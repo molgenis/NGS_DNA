@@ -15,6 +15,7 @@
 #string htsLibVersion
 #string geneNetworkVcf
 #string perlPlusVersion
+#string vepVersion
 
 if [ "${hpoIDs}" == "" ]
 then
@@ -23,8 +24,8 @@ else
 	makeTmpDir ${geneNetworkVcf}
 	tmpGeneNetworkVcf=${MC_tmpFile}
 
-	module load "${htsLibVersion}"
-	module load "${perlPlusVersion}"
+	${stage} "${htsLibVersion}"
+	${stage} "${perlPlusVersion}"
 
 	IFS=';' read -r -a allTerms <<< "$hpoIDs"
 
@@ -78,7 +79,7 @@ else
 	cp "${geneNetworkPrefixSample}_positionsAfterSorting.bed.gz"* "${intermediateDir}"
 	cp "${geneNetworkPrefixSample}_scores.bed.gz"* "${intermediateDir}"
 
-	module VEP/90
+	${stage} ${vepVersion}
 	echo "starting with custom VEP annotation"
 	$EBROOTVEP/vep \
 	-i "${gavinOutputFinalMergedRLV}" \

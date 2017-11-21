@@ -28,7 +28,7 @@ plink2Version,plink/1.9-${toolChain}
 plinkSeqVersion,plinkseq/x86_64-0.10
 picardVersion,picard/2.9.0-Java-1.8.0_74
 pythonVersion,Python/2.7.10-${toolChain}
-rVersion,R/3.2.1-${toolChain}
+rVersion,R/3.3.3-${toolChain}-bare
 sambambaVersion,sambamba/${sambambaVer}-${toolChain}
 sambambaVer,v0.6.6
 samtoolsVersion,SAMtools/1.2-${toolChain}
