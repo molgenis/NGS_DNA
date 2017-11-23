@@ -29,15 +29,16 @@ tmpIntermediateDir="${MC_tmpFile}"
 
 for i in  "candidateSV" "diploidSV"
 do
-	if [ -f "${mantaDir}/results/variants/${i}.vcf.gz" ]
+	if [ -f "${mantaDir}/results/variants/real/${i}.vcf.gz" ]
 	then
 		"${EBROOTVEP}"/vep \
-		-i "${mantaDir}/results/variants/${i}.vcf.gz" \
+		-i "${mantaDir}/results/variants/real/${i}.vcf.gz" \
 		--offline \
 		--cache \
 		--dir_cache "${vepDataDir}" \
 		--species "homo_sapiens" \
 		--assembly "${vepAssemblyVersion}" \
+		--format vcf \
 		--force_overwrite \
 		--stats_file "${tmpIntermediateDir}/${i}_VEP_summary" \
 		-o "${tmpIntermediateDir}/${i}_VEP.vcf"
