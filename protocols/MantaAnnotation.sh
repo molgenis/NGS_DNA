@@ -38,6 +38,7 @@ do
 		--dir_cache "${vepDataDir}" \
 		--species "homo_sapiens" \
 		--assembly "${vepAssemblyVersion}" \
+		--format vcf \
 		--force_overwrite \
 		--stats_file "${tmpIntermediateDir}/${i}_VEP_summary" \
 		-o "${tmpIntermediateDir}/${i}_VEP.vcf"

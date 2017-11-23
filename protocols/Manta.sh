@@ -74,7 +74,7 @@ mkdir -p ${mantaDir}/results/variants/real/
 ### If a capturingkit is used then only limit the output to those regions 
 if [[ "${capturingKit}" != *"wgs"* ]]
 then
-	bedtools intersect -a ${mantaDir}/results/variants/candidateSmallIndels.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/candidateSmallIndels.vcf
+	bedtools intersect -header -a ${mantaDir}/results/variants/candidateSmallIndels.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/candidateSmallIndels.vcf
 	if [ -f ${mantaDir}/results/variants/real/candidateSmallIndels.vcf ]
         then
 		bgzip -c ${mantaDir}/results/variants/real/candidateSmallIndels.vcf > ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz
@@ -85,7 +85,7 @@ then
 		echo "no candidateSmallIndels's left after filtering with the bedfile"
                 touch ${mantaDir}/results/variants/real/NO_candidateSmallIndels 
 	fi
-	bedtools intersect -a ${mantaDir}/results/variants/candidateSV.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/candidateSV.vcf
+	bedtools intersect -header -a${mantaDir}/results/variants/candidateSV.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/candidateSV.vcf
 	if [ -f ${mantaDir}/results/variants/real/candidateSV.vcf ]
 	then
 		bgzip -c ${mantaDir}/results/variants/real/candidateSV.vcf > ${mantaDir}/results/variants/real/candidateSV.vcf.gz
@@ -97,7 +97,7 @@ then
 		touch ${mantaDir}/results/variants/real/NO_candidateSV
 	fi
 
-	bedtools intersect -a ${mantaDir}/results/variants/diploidSV.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/diploidSV.vcf
+	bedtools intersect -header -a ${mantaDir}/results/variants/diploidSV.vcf.gz -b ${capturedBed} >> ${mantaDir}/results/variants/real/diploidSV.vcf
 	if [ -f ${mantaDir}/results/variants/real/diploidSV.vcf ]
         then
 		bgzip -c ${mantaDir}/results/variants/real/diploidSV.vcf > ${mantaDir}/results/variants/real/diploidSV.vcf.gz
