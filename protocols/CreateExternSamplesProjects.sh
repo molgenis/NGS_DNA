@@ -7,7 +7,6 @@
 #string projectLogsDir
 #string intermediateDir
 #string projectResultsDir
-#string batchIDList
 #string projectQcDir
 #string tmpdir_parameters
 
@@ -22,13 +21,13 @@
 #string groupname
 
 #string mainParameters
-#string worksheet 
+#string worksheet
 #string outputdir
 #string workflowpath
 
 #list externalSampleID
 #string project
-#string logsDir 
+#string logsDir
 #string ngsversion
 #list barcode
 #list lane
@@ -112,6 +111,13 @@ extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${pro
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
 #
 
+batching="_small"
+
+capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv")
+if [[ "${capturingKitProject}" == *"Exoom"* || "${capturingKitProject}" == *"All_Exon_v1"* || "${capturingKitProject}" == *"wgs"* || "${capturingKitProject}" == *"WGS"* ]]
+then
+        batching="_chr"
+fi
 
 if [ -f .compute.properties ];
 then
@@ -133,4 +139,5 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -g -weave \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
+batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
 groupname=${groupname}"

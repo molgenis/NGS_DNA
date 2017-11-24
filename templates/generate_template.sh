@@ -30,10 +30,10 @@ EOH
 }
 
 
-while getopts "t:g:w:f:r:h" opt; 
+while getopts "t:g:w:f:r:h" opt;
 do
-	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)workDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";; 
-	esac 
+	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)workDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
+	esac
 done
 
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
@@ -50,9 +50,9 @@ samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
 ## Checking for genderColumn
 #
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
-if [ -f "${samplesheet}.tmpie" ]
+if [ -f "${samplesheet}.temp" ]
 then
-    	mv "${samplesheet}.tmpie" "${samplesheet}"
+	mv "${samplesheet}.temp" "${samplesheet}"
 fi
 python "${EBROOTNGS_DNA}/scripts/gender.py" "${samplesheet}"
 
@@ -69,17 +69,6 @@ sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleS
 genderColumn=$(cat "${samplesheet}.tmp" | wc -l)
 
 if [ "${genderColumn}" != 0 ];then mv "${samplesheet}.tmp" "${samplesheet}"; echo "samplesheet updated with Gender column" ;fi
-## Check which batching to use
-while read line ;do 
-	if [[ "${line}" == *"Exoom"* || "${line}" == *"All_Exon"* || "${line}" == *"WGS"* || "${line}" == *"wgs"* ]]
-	then
-		if [ "${batching}" == "_small" ]; then echo "There are 2 different types of capturingKits in the samplesheet, _small and _chr, EXIT"; exit 1; fi
-		batching="_chr"
-	else
-		if [ "${batching}" == "_chr" ]; then  echo "There are 2 different types of capturingKits in the samplesheet, _small and _chr, EXIT" ; exit 1; fi
-		batching="_small"
-	fi
-done<capturingKit.txt
 
 if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
 
@@ -89,14 +78,15 @@ perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_D
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/parameters_group_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/${environmentParameters}.csv" > "${genScripts}/parameters_environment_converted.csv"
 
-echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
+## has to be set, otherwise it will crash due to parameters which are not set, this variable will be updated in the next step
+batching="_small"
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${genScripts}/parameters_converted.csv" \
 -p "${genScripts}/parameters_tmpdir_converted.csv" \
+-p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${genScripts}/parameters_group_converted.csv" \
 -p "${genScripts}/parameters_environment_converted.csv" \
--p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${genScripts}/${filePrefix}.csv" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
@@ -108,7 +98,6 @@ groupname=${group};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
 environment_parameters=${genScripts}/parameters_environment_converted.csv;\
 tmpdir_parameters=${genScripts}/parameters_tmpdir_converted.csv;\
-batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
 worksheet=${genScripts}/${filePrefix}.csv" \
 -weave \
 --generate

@@ -9,7 +9,6 @@
 #string projectLogsDir
 #string intermediateDir
 #string projectResultsDir
-#string batchIDList
 #string projectQcDir
 #string computeVersion
 #string group_parameters
@@ -24,7 +23,7 @@
 #list externalSampleID
 
 #string mainParameters
-#string worksheet 
+#string worksheet
 #string outputdir
 #string workflowpath
 #string tmpdir_parameters
@@ -117,16 +116,32 @@ then
 	rm .compute.properties
 fi
 
+batching="_small"
+
+capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv")
+if [[ "${capturingKitProject}" == *"Exoom"* || "${capturingKitProject}" == *"All_Exon_v1"* || "${capturingKitProject}" == *"wgs"* || "${capturingKitProject}" == *"WGS"* ]]
+then
+	batching="_chr"
+fi
+
+echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
+
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
-	-p "${mainParameters}" \
-	-p "${batchIDList}" -p "${projectJobsDir}/${project}.csv" -p "${environment_parameters}" -p "${group_parameters}" -p "${tmpdir_parameters}" \
-	-rundir "${projectJobsDir}" \
-	--header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
-	--footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
-	--submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
-	-w "${workflowpath}" \
-	-b slurm \
-	-g \
-	-weave \
-	-runid "${runid}" \
-	-o "ngsversion=${ngsversion};groupname=${groupname}"
+-p "${mainParameters}" \
+-p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
+-p "${projectJobsDir}/${project}.csv" \
+-p "${environment_parameters}" \
+-p "${group_parameters}" \
+-p "${tmpdir_parameters}" \
+-rundir "${projectJobsDir}" \
+--header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
+--submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
+-w "${workflowpath}" \
+-b slurm \
+-g \
+-weave \
+-runid "${runid}" \
+-o "ngsversion=${ngsversion};\
+batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
+groupname=${groupname}"
