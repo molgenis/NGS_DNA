@@ -125,7 +125,7 @@ then
 fi
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
--p "${batchIDList}" \
+-p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${projectJobsDir}/${project}.csv" \
 -p "${environment_parameters}" \
 -p "${group_parameters}" \
