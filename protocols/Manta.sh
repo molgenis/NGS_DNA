@@ -23,6 +23,7 @@ ${stage} "${ngsversion}"
 ${stage} "${mantaVersion}"
 ${stage} "${pythonVersion}"
 ${stage} "${htsLibVersion}"
+${stage} "${bedToolsVersion}"
 
 ${checkStage}
 
