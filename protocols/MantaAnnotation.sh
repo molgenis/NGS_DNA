@@ -29,6 +29,7 @@ tmpIntermediateDir="${MC_tmpFile}"
 
 for i in  "candidateSV" "diploidSV"
 do
+	echo "running $i"
 	if [ -f "${mantaDir}/results/variants/real/${i}.vcf.gz" ]
 	then
 		"${EBROOTVEP}"/vep \
