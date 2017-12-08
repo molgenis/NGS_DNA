@@ -7,7 +7,6 @@ build=open("build.txt.tmp","w")
 species=open("species.txt.tmp","w")
 sampleType=open("sampleType.txt.tmp","w")
 externalSampleID=open("externalSampleIDs.txt.tmp","w")
-capturingKit=open("capturingKit.txt.tmp","w")
 
 count=0
 for row in reader:
@@ -27,18 +26,15 @@ for row in reader:
 		if "externalSampleID" in row:
 			if k == "externalSampleID":
 				externalSampleID.write(v+'\n')
-		if "capturingKit" in row:
-			if k == "capturingKit":
-				capturingKit.write(v+'\n')
 	if count == 0:		
 		if not "hpoIDs" in row:
-			out=open(sys.argv[1]+'.tmpie',"w")
+			out=open(sys.argv[1]+'.temp',"w")
 			print "no hpo id's"
 			out.write(','.join(row.keys())+",hpoIDs"+'\n')
 			out.write(','.join(row.values())+","+'\n')
                         count+=1
 			hpoID="no"
 	elif hpoID == "no":
-		print "noHPOID, elif"
+		print "no hpoID found in this line"
 		out.write(','.join(row.values())+","+'\n')
 			

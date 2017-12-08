@@ -9,7 +9,6 @@
 #list run
 #list flowcell
 #string mainParameters
-#string batchIDList 
 #string worksheet 
 #string outputdir
 #string workflowpath

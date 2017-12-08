@@ -53,12 +53,14 @@ function preparePipeline(){
 	perl -pi -e "s|module load \"test\"| module load ${NGS_DNA_VERSION}|" *.sh
 	######
 	perl -pi -e "s|/apps/software/${NGS_DNA_VERSION}/|${workfolder}/tmp/NGS_DNA/|g" *.sh
-
+	perl -pi -e 's|\$\{EBROOTNGS_DNA\}/scripts/getCapturingKit.py|'${workfolder}'/tmp/NGS_DNA/scripts/getCapturingKit.py|' *.sh
 	sh submit.sh
 
 	cd ${workfolder}/projects/${_projectName}/run01/jobs/
 
 	perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
+	perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
+        perl -pi -e 's|\$\{EBROOTNGS_DNA\}/conf/configManta.py.ini|'${workfolder}'/tmp/NGS_DNA/conf/configManta.py.ini|' s*_Manta_0.sh
 
 	for i in $(ls s*_CoverageCalculations*.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 	for i in $(ls s*_Manta_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
