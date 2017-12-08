@@ -96,7 +96,7 @@ then
 	if [ -f ${mantaDir}/results/variants/real/candidateSV.vcf.tmp ]
 	then
 		grep "^#" ${mantaDir}/results/variants/real/candidateSV.vcf.tmp > ${mantaDir}/results/variants/real/candidateSV.vcf
-		grep -v "^#" ${mantaDir}/results/variants/real/candidateSV.vcf.tmp| uniq >> ${mantaDir}/results/variants/real/candidateSV.vcf
+		grep -v "^#" ${mantaDir}/results/variants/real/candidateSV.vcf.tmp | uniq >> ${mantaDir}/results/variants/real/candidateSV.vcf
 
 		bgzip -c ${mantaDir}/results/variants/real/candidateSV.vcf > ${mantaDir}/results/variants/real/candidateSV.vcf.gz
 		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
