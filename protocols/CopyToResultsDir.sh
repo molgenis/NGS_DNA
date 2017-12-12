@@ -258,13 +258,8 @@ printf " finished (8/11)\n"
 printf "Copying QC report to results directory "
 
 # Copy QC report to results directory
-rsync -a "${projectQcDir}/${project}_QCReport.pdf" "${projectResultsDir}"
-printf "."
-rsync -a "${projectQcDir}/${project}_QCReport.html" "${projectResultsDir}"
-printf "."
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
 printf "."
-rsync -ra "${projectQcDir}/images" "${projectResultsDir}"
 printf " finished (9/11)\n"
 
 echo "Creating zip file"
@@ -274,9 +269,7 @@ cd "${projectResultsDir}"
 
 zip -gr "${projectResultsDir}/${project}.zip" variants
 zip -gr "${projectResultsDir}/${project}.zip" qc
-zip -gr "${projectResultsDir}/${project}.zip" images
 zip -g "${projectResultsDir}/${project}.zip" "${project}.csv"
-zip -g "${projectResultsDir}/${project}.zip" "${project}_QCReport.pdf"
 zip -g "${projectResultsDir}/${project}.zip" "${project}_multiqc_report.html"
 zip -gr "${projectResultsDir}/${project}.zip" coverage
 
