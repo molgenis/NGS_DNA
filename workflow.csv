@@ -10,7 +10,7 @@ s09a_Manta,protocols/Manta.sh,s07_MarkDuplicates
 s09b_Convading,protocols/Convading.sh,s07_MarkDuplicates
 s09c_XHMM,protocols/XHMM.sh,s07_MarkDuplicates
 s09d_DecisionTree,protocols/DecisionTree.sh,s09b_Convading;s09c_XHMM
-s09e_MantaAnnotation,protocols/MantaAnnotation.sh,s09a_Manta
+#s09e_MantaAnnotation,protocols/MantaAnnotation.sh,s09a_Manta
 s10_GenderCalculate,protocols/GenderCalculate.sh,s07_MarkDuplicates
 s11_CramConversion,protocols/CramConversion.sh,s07_MarkDuplicates
 s12_MakeDedupBamMd5,protocols/MakeDedupBamMd5.sh,s07_MarkDuplicates
