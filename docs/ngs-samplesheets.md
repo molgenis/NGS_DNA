@@ -2,11 +2,11 @@
 Creating a samplesheet is necessary to start the pipeline and that the pipeline knows which samples to run. The samplesheet should be a comma seperated file.
 An example of a samplesheet template is below, all the headers are required but rows are not necessarily to be filled
 
-project,run,sequencingStartDate,sequencer,flowcell,externalSampleID,seqType,capturingKit,internalSampleID,barcode,lane,barcodeType,contact,Gender
-testproject,run1,010101,sequencer2,flowcell3,S1,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},S1,ATCGAA,1,,,Male
-testproject,run1,010101,sequencer2,flowcell3,S2,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},S2,TTAACC,1,,,Female
-testproject,run1,010101,sequencer2,flowcell3,S3,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},S3,GACAAA,1,,,Male
-testproject,run1,010101,sequencer2,flowcell3,S4,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},S4,ACGTTA,1,,,Unknown
+project,run,sequencingStartDate,sequencer,flowcell,externalSampleID,seqType,capturingKit,barcode,lane,barcodeType,Gender
+testproject,run1,010101,sequencer2,flowcell3,S1,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},ATCGAA,1,,Male
+testproject,run1,010101,sequencer2,flowcell3,S2,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},TTAACC,1,,Female
+testproject,run1,010101,sequencer2,flowcell3,S3,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},GACAAA,1,,Male
+testproject,run1,010101,sequencer2,flowcell3,S4,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},ACGTTA,1,,Unknown
 
 columns that **cannot be blank** are the following:
 
@@ -29,11 +29,9 @@ e.g. UMCG\/All\_Exon_v1
 
 can be blank:
 
-- internalSampleID 
 - barcode (when there is a barcode used fill in barcode, **NOTE: should be filled in case of external samples, see below** )
 - lane (in case of different lanes fill in lane number)
 - barcodeType (can fill the barcode type e.g. AGI,rPI etc)
-- contact (who is the person to contact)
 - Gender (Male,Female or Unknown)
 
 ## External samples
