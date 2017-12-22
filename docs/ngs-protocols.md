@@ -1,5 +1,6 @@
 # Preprocessing (aligning --> bam )
-### Step 1: Spike in the PhiX reads
+### Step 1: PrepareFastQ
+#####Spike in the PhiX reads
 
 To see whether the pipeline ran correctly. The reads will be inserted in each sample. Later on (step 23) of the pipeline there will be a concordance check to see if the SNPs that are put in, will be found.
 
@@ -9,7 +10,7 @@ To see whether the pipeline ran correctly. The reads will be inserted in each sa
 
 **Output:** FastQ files (${filePrefix}_${lane}_${barcode}.fq.gz)*
 
-### Step 2: Check the Illumina encoding
+#####Check the Illumina encoding
 
 In this step the encoding of the FastQ files will be checked. Older (2012 and older) sequence data contains the old Phred+64 encoding (this is called Illumina 1.5 encoding), new sequence data is encoded in Illumina 1.8 or 1.9 (Phred+33). If the data is 1.5, it will be converted to 1.9 encoding
 
@@ -43,7 +44,7 @@ In this step, the Burrows-Wheeler Aligner (BWA) is used to align the (mostly pai
 
 **Scriptname:** BwaAlignAndSortBam
 
-####Aligning
+#####Aligning
 
 **Toolname:** BWA
 **Input:** raw sequence file in the form of a gzipped fastq file (${filePrefix}.fq.gz)
@@ -60,7 +61,7 @@ bwa mem \
 	-fastq2.gz \
 	> aligned.sam &
 
-#### Sorting Sam/bam file
+##### Sorting Sam/bam file
 
 **Toolname:** Picard SortSam
 **Input**: fifo piped sam file
@@ -229,6 +230,27 @@ This protocol contains all the steps described here http://atgu.mgh.harvard.edu/
 **Input:** dedup BAM file (${sample}.dedup.bam)
 
 **Output:** file containing regions that contain a CNV ${sample}.xcnv
+
+### Step 9d: Decision tree
+To determine if a CNV is true the output from steps Convading and XHMM will be checked. There is a decision tree developed by L. Johannson and a student him (M. Frans). The end results of the decision tree will result in a file with a very high confidence CNVs.
+
+**Scriptname:** DecisionTree
+
+**Input:** multiple output files from XHMM (${SAMPLE}_step10.xcnv.final) and Convading (.shortlist.finallist.txt, .shortlist.txt, .totallist.txt and .longlist.txt)
+
+**Output:** ${SAMPLE}.longlistplusplusFinal.txt
+
+
+### Step 9e: Annotating manta output
+The Manta output will be annotated with VEP. To prevent long runtimes and messy output only the diploid output of Manta will be annotated since this is QC'ed.
+
+**Toolname:** VEP
+
+**Scriptname:** MantaAnnotation
+
+**Input:** Manta output (${sample}.diploidSV.vcf.gz)
+
+**Output:** (${sample}.diploidSV_VEP.vcf.gz)
 
 # Determine gender
 ### Step 10: GenderCalculate
@@ -480,93 +502,7 @@ ${arrayWithVcfs[@]} \
 -out merged.variant.calls.vcf
 ```
 
-### Step s20a: Gavin split samples
-To run Gavin per sample the data needs to be splitted first.
-
-**Toolname:** GATK
-**Scriptname:** GavinSplitSamples
-**Input:** merged vcf per project (${project}.variant.calls.vcf)
-**Output:** merged vcf per sample ${sample}.variant.calls.vcf
-
-```
-java -Xmx4g -jar /path/to/GATK/GenomeAnalysisTK.jar \
--R human_g1k_v37.fa \
--T SelectVariants \
---variant input.vcf \
--o output.vcf \
--L .interval_list \
--sn sampleID
-```
-
-### Step s20b: Gavin
-Tool that predict the impact of the SNP with the help of different databases (CADD etc). 
-
-
-#### Gavin first round
-
-**Scriptname:** Gavin
-**Toolname:** Gavin_toolpack
-**Input:** merged vcf per sample ${sample}.variant.calls.GATK.vcf
-**Output:** 
-- First draft (.GAVIN.RVCF.firstpass.vcf)
-- Tab seperated file to be send to CADD (.toCadd.tsv)
-
-```
-java -Xmx4g -jar /path/to/Gavin_toolpack/GAVIN-APP.jar \
--i input.vcf \
--o output.vcf \
--m CREATEFILEFORCADD \
--a gavinToCADD \
--c gavinClinVar.vcf.gz \
--d gavinCGD.txt.gz \
--f gavinFDR.tsv \
--g gavinCalibrations.tsv
-```
-
-#### Get CADD annotations locally
-
-**Toolname:** CADD
-**Input:** tab seperated file to be send to CADD (.toCadd.tsv)
-**Output:** tab seperated file to be send from CADD (.fromCadd.tsv.gz)
-
-```
-score.sh gavinToCADDgz gavinFromCADDgz
-```
-
-#### Gavin second round
-**Toolname:** Gavin_toolpack
-**Input:** 	
-- merged vcf per sample ${sample}.variant.calls.GATK.vcf
-- tab seperated file to be send from CADD (.fromCadd.tsv.gz)	
-**Output:** Gavin final output (.GAVIN.RVCF.final.vcf)
-
-```
-java -Xmx4g -jar /path/to/Gavin_toolpack/GAVIN-APP.jar \
--i input.vcf \
--o output.vcf \
--m ANALYSIS \
--a gavinFromCADDgz \
--c gavinClinVar.vcf.gz \
--d gavinCGD.txt.gz \
--f gavinFDR.tsv \
--g gavinCalibrations.tsv
-```
-
-#### Merging Gavin output with original
-**Toolname:** Gavin_toolpack
-**Input:** 	
-- merged vcf per sample ${sample}.variant.calls.GATK.vcf
-- Gavin final output (.GAVIN.RVCF.final.vcf)
-**Output:** Gavin final output merged with original (.GAVIN.rlv.vcf)
-
-```
-java -jar -Xmx4g /path/to/Gavin_toolpack/MergeBackTool.jar \
--i input.vcf \
--v output.GAVIN.RVCF.final.vcf \
--o output.GAVIN.rlv.vcf
-```
-
-### Step 21: Split indels and SNPs
+### Step 20: Split indels and SNPs
 
 This step is necessary because the filtering of the vcf needs to be done seperately.
 
@@ -588,7 +524,7 @@ java -XX:ParallelGCThreads=2 -Xmx4g -jar /path/to/GATK/GenomeAnalysisTK.jar \
 -sn ${externalSampleID}
 ```
 
-### Step 22: (a) SNP and (b) Indel filtration
+### Step 21: (a) SNP and (b) Indel filtration
 
 Based on certain quality thresholds (based on GATK best practices) the SNPs and indels are filtered or marked as Pass.
 
@@ -635,7 +571,7 @@ java-Xmx8g -Xms6g -jar /path/to/GATK/GenomeAnalysisTK.jar \
 --filterName "filterReadPosRankSum"
 ```
 
-### Step 23: Merge indels and SNPs
+### Step 22: Merge indels and SNPs
 
 Merge all the SNPs and indels into one file (per project) and merge SNPs and indels per sample.
 
@@ -666,6 +602,88 @@ java -Xmx2g -jar ${EBROOTGATK}/${gatkJar} \
 ${arrayWithAllSampleFinalVcf[@]} \
 -o ${projectPrefix}.final.vcf
 ```
+
+### Step s23a: Gavin
+Tool that predict the impact of the SNP with the help of different databases (CADD etc). 
+
+
+##### Gavin first round
+
+**Scriptname:** Gavin
+**Toolname:** Gavin_toolpack
+**Input:** merged vcf per sample ${sample}.variant.calls.GATK.vcf
+**Output:** 
+- First draft (.GAVIN.RVCF.firstpass.vcf)
+- Tab seperated file to be send to CADD (.toCadd.tsv)
+
+```
+java -Xmx4g -jar /path/to/Gavin_toolpack/GAVIN-APP.jar \
+-i input.vcf \
+-o output.vcf \
+-m CREATEFILEFORCADD \
+-a gavinToCADD \
+-c gavinClinVar.vcf.gz \
+-d gavinCGD.txt.gz \
+-f gavinFDR.tsv \
+-g gavinCalibrations.tsv
+```
+
+##### Get CADD annotations locally
+
+**Toolname:** CADD
+**Input:** tab seperated file to be send to CADD (.toCadd.tsv)
+**Output:** tab seperated file to be send from CADD (.fromCadd.tsv.gz)
+
+```
+score.sh gavinToCADDgz gavinFromCADDgz
+```
+
+##### Gavin second round
+**Toolname:** Gavin_toolpack
+**Input:** 	
+- merged vcf per sample ${sample}.variant.calls.GATK.vcf
+- tab seperated file to be send from CADD (.fromCadd.tsv.gz)	
+**Output:** Gavin final output (.GAVIN.RVCF.final.vcf)
+
+```
+java -Xmx4g -jar /path/to/Gavin_toolpack/GAVIN-APP.jar \
+-i input.vcf \
+-o output.vcf \
+-m ANALYSIS \
+-a gavinFromCADDgz \
+-c gavinClinVar.vcf.gz \
+-d gavinCGD.txt.gz \
+-f gavinFDR.tsv \
+-g gavinCalibrations.tsv
+```
+
+##### Merging Gavin output with original
+**Toolname:** Gavin_toolpack
+**Input:** 	
+- merged vcf per sample ${sample}.variant.calls.GATK.vcf
+- Gavin final output (.GAVIN.RVCF.final.vcf)
+**Output:** Gavin final output merged with original (.GAVIN.rlv.vcf)
+
+```
+java -jar -Xmx4g /path/to/Gavin_toolpack/MergeBackTool.jar \
+-i input.vcf \
+-v output.GAVIN.RVCF.final.vcf \
+-o output.GAVIN.rlv.vcf
+```
+
+### Step s23b: GeneNetwork
+Tool that ranks genes based on HPO ID's, there will be 2 extra INFO fields in the output vcf with a score and position.
+
+**Toolname:** VEP
+
+**Scriptname:** GeneNetwork
+
+**Input:** 	
+- HPO ID's
+- output.GAVIN.rlv.vcf
+**Output:** ${sample}.GAVIN.geneNetwork.final.vcf
+
+
 ### Step 24: Convert structural variants VCF to table
 
 In this step the indels in VCF format are converted into a tabular format using Perlscript vcf2tab by F. Van Dijk.
@@ -694,12 +712,12 @@ Combining all the statistics which are used in the QC report.
 
 ### Step 27b: Generate quality control report
 
-The step in the inhouse sequence analysis pipeline is to output the statistics and metrics from each step that produced such data that was collected in the QCStats step before. From these, tables and graphs are produced. Reports are then created and written to a separate quality control (QC) directory, located IN RunNr/Results/qc/statistics. This report will be outputted in html and pdf. Converting html to pdf the tool wkhtmltopdf is used.
+The step in the inhouse sequence analysis pipeline is to output the statistics and metrics from each step that produced such data that was collected in the QCStats step before. We use the multiQC tool to create an interactive html with all the statistics 
 
-**Toolname:** wkhtmltopdf
-**Scriptname:** QCReport
+**Toolname:** multiqc
+**Scriptname:** MultiQC
 **Input:** ${sample}.total.qc.metrics.table
-**Output:** A quality control report html(*_QCReport.html) and pdf (*_QCReport.html)
+**Output:** A quality control report html(*_multiqc.html) 
 
 ### Step 28: Check if all files are finished
 
