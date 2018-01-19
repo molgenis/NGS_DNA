@@ -239,6 +239,15 @@ do
 		echo "coveragePerBase skipped for sample: ${sa}"
 	fi
 
+	## copy the rejected samples (with less 90% of the targets with > 20x coverage)
+	if ls "${intermediateDir}/${sa}."*.rejected 1> /dev/null 2>&1
+	then
+		for i in $(ls "${intermediateDir}/${sa}."*.rejected) 
+		do 
+			basename $i >> "${projectResultsDir}/coverage/rejectedSamples.txt"
+		done
+		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt
+	fi
 	if ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt 1> /dev/null 2>&1
         then
 		for i in $(ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt )

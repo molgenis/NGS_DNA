@@ -98,6 +98,27 @@ then
 		mv "${sampleNameID}.${perTarget}.coveragePerTarget.txt.tmp" "${sampleNameID}.${perTarget}.coveragePerTarget.txt"
 		echo "phiX is removed for ${sampleNameID}.${perTarget} perTarget" 
 
+		if [ "${perTarget}" ==  "${bedfile}" ]
+		then
+			totalcount=$(($(cat "${sampleNameID}.${perTarget}.coveragePerTarget.txt" | wc -l)-1))
+			count=0
+			count=$(awk 'BEGIN{sum=0}{if($5 < 20){sum++}} END {print sum}' "${sampleNameID}.${perTarget}.coveragePerTarget.txt")
+
+			if [ $count == 0 ]
+			then
+				percentage=0
+
+			else
+				percentage=$(echo $((count*100/totalcount)))
+				if [ ${percentage%%.*} -gt 10 ]
+				then
+					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
+					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" > "${sampleNameID}.rejected"
+				fi
+			fi
+		fi
+
+
 	done
 else
 	echo "There are no CoveragePerTarget calculations for this bedfile: ${bedfile}"
