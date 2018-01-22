@@ -243,10 +243,10 @@ do
 	if ls "${intermediateDir}/${sa}."*.rejected 1> /dev/null 2>&1
 	then
 		for i in $(ls "${intermediateDir}/${sa}."*.rejected) 
-		do 
+		do
 			basename $i >> "${projectResultsDir}/coverage/rejectedSamples.txt"
 		done
-		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt
+		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
 	if ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt 1> /dev/null 2>&1
         then
