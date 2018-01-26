@@ -1,8 +1,8 @@
-<h1> NGS_DNA pipeline </h1>
-<h2>Manual</h2>
+# NGS_DNA pipeline 
+## Manual
 Find manual on installation and use at https://molgenis.gitbooks.io/ngs_dna
 
-<h3>Preprocessing</h3>
+## Preprocessing
 During the first preprocessing steps of the pipeline, PhiX reads are inserted in each sample to create control SNPs in the dataset. Subsequently, Illumina encoding is checked and QC metrics are calculated using a FastQC tool Andrews S. (2010) <sup>1</sup>) 
 
 <h3>Alignment to a reference genome</h3>
@@ -20,4 +20,3 @@ the SNPs and indels are filtered and marked as Lowqual or Pass resulting in a fi
 3. Sambamba: Fast processing of NGS alignment formats 
 4. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data
 5. From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline
-
