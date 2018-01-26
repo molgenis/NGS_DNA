@@ -18,12 +18,12 @@ Based on quality thresholds from the GATK "best practices" (Van der Auwera et al
 the SNPs and indels are filtered and marked as Lowqual or Pass resulting in a final VCF file.
 
 ### References
-<a href="#r1"> 1. Andrews S. (2010). FastQC: a quality control tool for high throughput sequence data. Available online at:http://www.bioinformatics.babraham.ac.uk/projects/fastqc </a>
+<a name="r1"> 1. Andrews S. (2010). FastQC: a quality control tool for high throughput sequence data. Available online at:http://www.bioinformatics.babraham.ac.uk/projects/fastqc </a>
 
-<a href="#r2"> 2. Li Durbin, Fast and accurate short read alignment with Burrows-Wheeler transform.</a>
+<a name="r2"> 2. Li Durbin, Fast and accurate short read alignment with Burrows-Wheeler transform.</a>
 
-<a href="#r3"> 3. Sambamba: Fast processing of NGS alignment formats. </a>
+<a name="r3"> 3. Sambamba: Fast processing of NGS alignment formats. </a>
 
-<a href="#r4"> 4. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data. </a>
+<a name="r4"> 4. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data. </a>
 
-<a href="#r5"> 5. From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline.</a>
+<a name="r5"> 5. From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline.</a>
