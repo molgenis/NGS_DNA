@@ -20,4 +20,3 @@ the SNPs and indels are filtered and marked as Lowqual or Pass resulting in a fi
 3. Sambamba: Fast processing of NGS alignment formats 
 4. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data
 5. From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline
-
