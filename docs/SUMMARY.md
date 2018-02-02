@@ -18,6 +18,9 @@
 - Releases
   - [latest](ngs-latestrelease.md)
   - 3.4
+    - [3.4.3 (Okapi)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.3)
+    - [3.4.2 (Nightingale)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.2)
+    - [3.4.1 (Mandrill)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.1)
     - [3.4.0 (Lion)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.0)
   - 3.3
     - [3.3.3 (Koala)](https://github.com/molgenis/NGS_DNA/releases/tag/3.3.3)
