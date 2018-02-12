@@ -1,5 +1,5 @@
 queue,lz-compute
-prmName,prm03
+prmName,prm02
 prmHost,calculon.hpc.rug.nl
 root,/
 appsDir,${root}/apps/
