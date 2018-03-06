@@ -117,8 +117,7 @@ groupName="umcg-atd"
 if [ $(hostname) == "calculon" ]
 then
 	tmpdirectory="tmp04"
-	groupName="umcg-gaf"
-fi	
+fi
 
 workfolder="/groups/${groupName}/${tmpdirectory}"
 
