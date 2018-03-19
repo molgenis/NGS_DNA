@@ -78,13 +78,14 @@ then
 
 		awk -v OFS='\t' '{print $1,$3}' "${sampleNameID}.${perTarget}.coveragePerTarget.sample_interval_summary" | sed '1d' > "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp"
 		sort -V "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp" > "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp"
-		paste "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp" "${perTargetDir}/${perTarget}.genesOnly" > "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt"
+		perl -pi -e 's|-|\^|' "${perTargetDir}/${perTarget}.genesOnly" > "${sampleNameID}.${perTarget}.coveragePerTarget.genesOnly.tmp"
+		paste "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp" "${sampleNameID}.${perTarget}.coveragePerTarget.genesOnly.tmp" > "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt"
 		##Paste command produces ^M character
 
 		perl -p -i -e "s/\r//g" "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt"
 
 		awk 'BEGIN { OFS = "\t" } ; {split($1,a,":"); print a[1],a[2],$2,$3}' "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt" | awk 'BEGIN { OFS = "\t" } ; {split($0,a,"-"); print a[1],a[2]}' > "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
-
+		perl -pi -e 's|\^|-|'"${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
 		if [ -d "${sampleNameID}.${perTarget}.coveragePerTarget.txt" ]
 		then
 			rm "${sampleNameID}.${perTarget}.coveragePerTarget.txt"
