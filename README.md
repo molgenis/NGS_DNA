@@ -25,4 +25,3 @@ A joint analysis has been performed of all the samples in the project. This lead
 <a name="r4"> 4. McKenna et al. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data. </a>
 
 <a name="r5"> 5. Van der Auwera et al. From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline.</a>
-
