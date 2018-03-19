@@ -15,6 +15,6 @@ cp "${intermediateDir}/"*.GAVIN.rlv.vcf "${tmpDataDir}/GavinStandAlone/output/"
 echo "copied ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinStandAlone/output/"
 
 name=$(basename "${inputVcf}")
-choppedOfName=${name%.splitted.vcf}.vcf
+choppedOfName=${name%.stripped.vcf}.vcf
 mv "${tmpDataDir}/GavinStandAlone/input/${choppedOfName}".{started,finished}
 mv "${tmpDataDir}/GavinStandAlone/input/processing/${choppedOfName}" "${tmpDataDir}/GavinStandAlone/input/done/"
