@@ -5,7 +5,7 @@ This is the Quick tutorial, when there are problems first go to the detailed [in
 We first have to load EasyBuild, this can be done with this command
 ```bash
 module load EasyBuild
-eb NGS_DNA-3.4.3.eb --robot -–robot-paths=${pathToMYeasybuild}/easybuild-easyconfigs/easybuild/easyconfigs/:
+eb NGS_DNA-3.4.4.eb --robot -–robot-paths=${pathToMYeasybuild}/easybuild-easyconfigs/easybuild/easyconfigs/:
 ```
 **_Note:_** some software cannot be downloaded automagically due to for example licensing or technical issues and the build will fail initially.
 In these cases you will have to download manually and copy the sources to
