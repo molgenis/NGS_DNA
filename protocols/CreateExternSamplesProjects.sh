@@ -129,13 +129,13 @@ fi
 if [[ "${capturingKitProject}" == *"Exoom"* || "${capturingKitProject}" == *"All_Exon_v1"* || "${capturingKitProject}" == *"wgs"* || "${capturingKitProject}" == *"WGS"* ]]
 then
 	batching="_chr"
-        if [ ! -r "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+        if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
         then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
                 exit 1
         fi
 else
-	if [ ! -r "${coveragePerBaseDir}/${captKit}/${captKit}" ]
+	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
                 exit 1
