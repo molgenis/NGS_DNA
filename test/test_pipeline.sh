@@ -50,7 +50,7 @@ function preparePipeline(){
 	sh generate_template.sh
 	cd scripts
 	###### Load a version of molgenis compute
-	perl -pi -e "s|module load \"test\"| module load ${NGS_DNA_VERSION}|" *.sh
+	perl -pi -e "s|module load \"test\"| module load NGS_DNA|" *.sh
 	######
 	perl -pi -e "s|/apps/software/${NGS_DNA_VERSION}/|${workfolder}/tmp/NGS_DNA/|g" *.sh
 	perl -pi -e 's|\$\{EBROOTNGS_DNA\}/scripts/getCapturingKit.py|'${workfolder}'/tmp/NGS_DNA/scripts/getCapturingKit.py|' *.sh
