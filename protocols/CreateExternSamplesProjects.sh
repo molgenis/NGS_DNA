@@ -33,6 +33,10 @@
 #list lane
 #string ngsUtilsVersion
 
+#string dataDir
+#string coveragePerBaseDir
+#string coveragePerTargetDir
+
 set -e 
 set -u
 
@@ -113,10 +117,29 @@ extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${pro
 
 batching="_small"
 
-capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv")
+capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
+captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
+
+if [ ! -d "${dataDir}/${capturingKitProject}" ]
+then
+	echo "Bedfile does not exist! Exiting"
+        exit 1
+fi
+
 if [[ "${capturingKitProject}" == *"Exoom"* || "${capturingKitProject}" == *"All_Exon_v1"* || "${capturingKitProject}" == *"wgs"* || "${capturingKitProject}" == *"WGS"* ]]
 then
-        batching="_chr"
+	batching="_chr"
+        if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+        then
+		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
+                exit 1
+        fi
+else
+	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
+        then
+		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+                exit 1
+        fi
 fi
 
 if [ -f .compute.properties ];

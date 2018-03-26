@@ -31,6 +31,11 @@
 #string ngsversion
 #string ngsUtilsVersion
 
+#string dataDir
+
+#string coveragePerBaseDir
+#string coveragePerTargetDir
+
 #string project
 #string logsDir 
 
@@ -118,11 +123,31 @@ fi
 
 batching="_small"
 
-capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv")
+capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv" | sed 's|\\||')
+captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
+
+if [ ! -d "${dataDir}/${capturingKitProject}" ]
+then
+	echo "Bedfile does not exist! Exiting"
+	exit 1
+fi
+
 if [[ "${capturingKitProject}" == *"Exoom"* || "${capturingKitProject}" == *"All_Exon_v1"* || "${capturingKitProject}" == *"wgs"* || "${capturingKitProject}" == *"WGS"* ]]
 then
 	batching="_chr"
+	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+	then
+		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
+		exit 1
+	fi
+else
+	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
+        then
+                echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+                exit 1
+        fi
 fi
+
 
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
 
