@@ -78,7 +78,7 @@ then
 
 		awk -v OFS='\t' '{print $1,$3}' "${sampleNameID}.${perTarget}.coveragePerTarget.sample_interval_summary" | sed '1d' > "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp"
 		sort -V "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp" > "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp"
-		perl -pi -e 's|-|\^|' "${perTargetDir}/${perTarget}.genesOnly" > "${sampleNameID}.${perTarget}.coveragePerTarget.genesOnly.tmp"
+		perl -p -e 's|-|\^|' "${perTargetDir}/${perTarget}.genesOnly" > "${sampleNameID}.${perTarget}.coveragePerTarget.genesOnly.tmp"
 		paste "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp" "${sampleNameID}.${perTarget}.coveragePerTarget.genesOnly.tmp" > "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt"
 		##Paste command produces ^M character
 
