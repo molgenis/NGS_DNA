@@ -121,7 +121,7 @@ fi
 
 batching="_small"
 
-capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv")
+capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv" | sed 's|\\||')
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]

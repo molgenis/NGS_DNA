@@ -116,7 +116,7 @@ extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${pro
 
 batching="_small"
 
-capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv")
+capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
