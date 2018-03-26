@@ -34,7 +34,8 @@
 #string ngsUtilsVersion
 
 #string dataDir
-#string inhouseIntervalsDir
+#string coveragePerBaseDir
+#string coveragePerTargetDir
 
 set -e 
 set -u

@@ -32,7 +32,9 @@
 #string ngsUtilsVersion
 
 #string dataDir
-#string inhouseIntervalsDir
+
+#string coveragePerBaseDir
+#string coveragePerTargetDir
 
 #string project
 #string logsDir 
