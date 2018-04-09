@@ -41,7 +41,7 @@ then
 	--bam "${dedupBam}" \
 	--referenceFasta "${indexFile}" \
 	--runDir "${tmpMantaDir}" 
-else
+elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  ]]
 	## Exclude Manta_1 script when executing test project (PlatinumnSubset)
 	SCRIPTNAME=$(basename "${0}")
 	if [[ "${project}" == *"PlatinumSubset"* && ${SCRIPTNAME} == *Manta_1.sh* ]] 
@@ -54,13 +54,17 @@ else
 		trap - EXIT
 		exit 0
 	fi
-
 	python "${EBROOTMANTA}/bin/configManta.py" \
         --bam "${dedupBam}" \
         --referenceFasta "${indexFile}" \
         --exome \
 	--config ${EBROOTNGS_DNA}/conf/configManta.py.ini \
         --runDir "${tmpMantaDir}" 
+
+else
+	echo "not WGS or Exome, skipping"
+	trap - EXIT
+        exit 0
 
 fi
 

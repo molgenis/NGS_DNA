@@ -36,6 +36,7 @@ then
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perBase}.coveragePerBase" \
 		--omitLocusTable \
+		--includeRefNSites \
 		-I "${dedupBam}" \
 		-L "${perBaseDir}/${perBase}.interval_list"
 
