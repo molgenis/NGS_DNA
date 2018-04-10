@@ -63,6 +63,10 @@ elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  ]]
 
 else
 	echo "not WGS or Exome, skipping"
+	mv "${SCRIPTNAME}".{started,finished}
+        touch "${SCRIPTNAME}.env"
+        script=${SCRIPTNAME%.*}
+        chmod ugo+x "${script}.env"
 	trap - EXIT
         exit 0
 
