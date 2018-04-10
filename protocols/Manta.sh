@@ -34,6 +34,8 @@ makeTmpDir "${mantaDir}"
 tmpMantaDir="${MC_tmpFile}"
 
 bedfile=$(basename $capturingKit)
+SCRIPTNAME=${MC_jobScript}
+
 if [[ "${bedfile}" == *"wgs"* || "${bedfile}" == *"WGS"* ]]
 then
 
@@ -43,7 +45,6 @@ then
 	--runDir "${tmpMantaDir}" 
 elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  ]]
 then
-	SCRIPTNAME=$(basename "${0}")
 
 	## Exclude Manta_1 script when executing test project (PlatinumnSubset)
 	if [[ "${project}" == *"PlatinumSubset"* && ${SCRIPTNAME} == *Manta_1.sh* ]] 
@@ -64,7 +65,6 @@ then
         --runDir "${tmpMantaDir}" 
 
 else
-	SCRIPTNAME=$(basename "${0}")
 
 	echo "not WGS or Exome, skipping"
 	mv "${SCRIPTNAME}".{started,finished}
