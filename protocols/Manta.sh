@@ -34,6 +34,7 @@ makeTmpDir "${mantaDir}"
 tmpMantaDir="${MC_tmpFile}"
 
 bedfile=$(basename $capturingKit)
+SCRIPTNAME=$(basename "${0}")
 if [[ "${bedfile}" == *"wgs"* || "${bedfile}" == *"WGS"* ]]
 then
 
@@ -44,7 +45,6 @@ then
 elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  ]]
 then
 	## Exclude Manta_1 script when executing test project (PlatinumnSubset)
-	SCRIPTNAME=$(basename "${0}")
 	if [[ "${project}" == *"PlatinumSubset"* && ${SCRIPTNAME} == *Manta_1.sh* ]] 
 	then
 		echo "PlatinumSubset is executed, therefore this script will not run (need a fix in making PhiX reads, forward/reversed)"
