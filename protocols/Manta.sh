@@ -42,6 +42,7 @@ then
 	--referenceFasta "${indexFile}" \
 	--runDir "${tmpMantaDir}" 
 elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  ]]
+then
 	## Exclude Manta_1 script when executing test project (PlatinumnSubset)
 	SCRIPTNAME=$(basename "${0}")
 	if [[ "${project}" == *"PlatinumSubset"* && ${SCRIPTNAME} == *Manta_1.sh* ]] 

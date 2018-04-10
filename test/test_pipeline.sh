@@ -72,7 +72,6 @@ function preparePipeline(){
 	printf "Male\n" >> ${workfolder}/tmp//${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt
 	perl -pi -e "s|module load \"test\"|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_QCStats_*.sh
 	perl -pi -e "s|module load \"test\"|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_DecisionTree_*.sh
-	perl -pi -e 's|module load \"test\"|#|' s*_QCReport_0.sh
 	perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
 	perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
 
