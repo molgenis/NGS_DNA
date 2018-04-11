@@ -35,8 +35,8 @@ done
 
 for i in PlatinumSample_NA12878
 then
-	head -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
-	tail -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" >> "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
+	head -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
+	tail -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" >> "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
 	differencePerBase="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt)"
 
 
