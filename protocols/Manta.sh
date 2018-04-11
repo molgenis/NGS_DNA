@@ -43,7 +43,7 @@ then
 	--bam "${dedupBam}" \
 	--referenceFasta "${indexFile}" \
 	--runDir "${tmpMantaDir}" 
-elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  ]]
+elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  || "${bedfile}" == *"NGS_DNA_Test"* ]]
 then
 
 	## Exclude Manta_1 script when executing test project (PlatinumnSubset)
