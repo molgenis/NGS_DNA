@@ -17,7 +17,7 @@ count=0
 for i in PlatinumSample_NA12891
 do
 
-	differencePerTarget="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt)"
+	differencePerTarget="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt)"
 
 	if [ "${differencePerTarget}" != "" ]
         then
