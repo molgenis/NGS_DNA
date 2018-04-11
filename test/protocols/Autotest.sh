@@ -16,6 +16,25 @@ count=0
 ### 1. Check if CoverageCalculations perBase output is still valid
 for i in PlatinumSample_NA12891
 do
+
+	differencePerTarget="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt)"
+
+	if [ "${differencePerTarget}" != "" ]
+        then
+		echo "there are differences in the CoveragePerTarget step between the test and the original output of ${i}"
+		echo "please fix the bug or update this test"
+                echo "${differencePerTarget}"
+                exit 1
+        else
+		echo "CoveragePerTarget is correct"
+	fi
+done
+
+### 2. Check if CoverageCalculations perTarget output is still valid
+### 3. Test Manta output
+
+for i in PlatinumSample_NA12878
+then
 	head -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
 	tail -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" >> "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
 	differencePerBase="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt)"
@@ -30,25 +49,8 @@ do
 	else
 		echo "CoveragePerBase is correct"
 	fi
-done
-### 2. Check if CoverageCalculations perTarget output is still valid
-### 3. Test Manta output
 
-for i in PlatinumSample_NA12878
-then
-	differencePerTarget="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt)"
-
-	if [ "${differencePerTarget}" != "" ]
-        then
-		echo "there are differences in the CoveragePerTarget step between the test and the original output of ${i}"
-		echo "please fix the bug or update this test"
-                echo "${differencePerTarget}"
-                exit 1
-        else
-		echo "CoveragePerTarget is correct"
-	fi
-
-	mantaDiff="$(zcat ${intermediateDir}/Manta/PlatinumSample_NA12878//results/variants/real/diploidSV.vcf.gz | awk '{if ($1 !~ /#/){print $0}}')"
+	mantaDiff="$(zcat ${intermediateDir}/Manta/${i}//results/variants/real/diploidSV.vcf.gz | awk '{if ($1 !~ /#/){print $0}}')"
 	mantaDiffTrue="$(zcat /home/umcg-molgenis/NGS_DNA/${i}.Manta.diploidSV_True.vcf.gz | awk '{if ($1 !~ /#/){print $0}}')"
 
 	if [ "${mantaDiff}" != "${mantaDiffTrue}" ]
