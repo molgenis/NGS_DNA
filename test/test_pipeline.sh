@@ -7,7 +7,7 @@ function preparePipeline(){
 
 	local _projectName="PlatinumSubset${_workflowType}"
 	rm -f ${workfolder}/logs/${_projectName}/run01.pipeline.finished
-	rsync -r --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials ${workfolder}/tmp/NGS_DNA/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType} ${workfolder}/rawdata/ngs/
+	rsync -r --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials ${ngs_dir}/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType} ${workfolder}/rawdata/ngs/
 
 	if [ -d ${workfolder}/generatedscripts/${_projectName} ] 
 	then
@@ -25,8 +25,8 @@ function preparePipeline(){
 	fi
 	mkdir ${workfolder}/generatedscripts/${_projectName}/
 
-	cp ${workfolder}/tmp/NGS_DNA/templates/generate_template.sh ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
-	fgrep "computeVersion," ${workfolder}/tmp/NGS_DNA/parameters.csv > ${workfolder}/generatedscripts/${_projectName}/mcVersion.txt
+	cp ${ngs_dir}/templates/generate_template.sh ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
+	fgrep "computeVersion," ${ngs_dir}/parameters.csv > ${workfolder}/generatedscripts/${_projectName}/mcVersion.txt
 
 	module load ${NGS_DNA_VERSION}
 	EBROOTNGS_DNA="${workfolder}/tmp/NGS_DNA/"
@@ -120,11 +120,13 @@ fi
 
 workfolder="/groups/${groupName}/${tmpdirectory}"
 
-cd ${workfolder}/tmp/
-if [ -d ${workfolder}/tmp/NGS_DNA ]
+cd "${workfolder}/tmp/"
+ngs_dir="${workfolder}/tmp/NGS_DNA/"
+
+if [ -d "${ngs_dir}" ]
 then
-	rm -rf ${workfolder}/tmp/NGS_DNA/
-	echo "removed ${workfolder}/tmp/NGS_DNA/"
+	rm -rf ${ngs_dir}
+	echo "removed ${ngs_dir}"
 fi
 
 echo "pr number: $1"
@@ -133,7 +135,7 @@ PULLREQUEST=$1
 NGS_DNA_VERSION=NGS_DNA/3.4.4
 
 git clone https://github.com/molgenis/NGS_DNA.git
-cd ${workfolder}/tmp/NGS_DNA
+cd ${ngs_dir}
 
 git fetch --tags --progress https://github.com/molgenis/NGS_DNA/ +refs/pull/*:refs/remotes/origin/pr/*
 COMMIT=$(git rev-parse refs/remotes/origin/pr/$PULLREQUEST/merge^{commit})
@@ -141,14 +143,12 @@ echo "checkout commit: COMMIT"
 git checkout -f ${COMMIT}
 
 ### create testworkflow
-cd ${workfolder}/tmp/NGS_DNA/
-cp ${workfolder}/tmp/NGS_DNA/workflow.csv ${workfolder}/tmp/NGS_DNA/test_workflow.csv 
-tail -1 ${workfolder}/tmp/NGS_DNA/workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> ${workfolder}/tmp/NGS_DNA/test_workflow.csv
+cp ${ngs_dir}/workflow.csv ${workfolder}/tmp/NGS_DNA/test_workflow.csv 
+tail -1 ${ngs_dir}/workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> ${ngs_dir}/test_workflow.csv
 
-cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubsetExternalSamples_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubsetExternalSamples_True.final.vcf.gz
-cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSubsetInhouseSamples_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSubsetInhouseSamples_True.final.vcf.gz
-cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12878_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12878_True.final.vcf.gz
-cp ${workfolder}/tmp/NGS_DNA/test/results/PlatinumSample_NA12891_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/PlatinumSample_NA12891_True.final.vcf.gz
+cp ${ngs_dir}/test/results/*_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/
+cp ${ngs_dir}/test/results/*_True.txt /home/umcg-molgenis/NGS_DNA/
+cp ${ngs_dir}/test/results/PlatinumSample_NA12878.Manta.diploid_True.vcf.gz /home/umcg-molgenis/NGS_DNA/
 
 preparePipeline "InhouseSamples"
 preparePipeline "ExternalSamples"

@@ -134,7 +134,15 @@ picard_config:
 ${stage} "${multiQCVersion}"
 ${checkStage}
 
-multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${intermediateDir}" -o "${intermediateDir}"
+##copying data of interest to a new folder
+multiQCdir="${intermediateDir}/MultiQC/"
+mkdir -p "${multiQCdir}"
+cp "${intermediateDir}/"*.snpeff.vcf.csvStats.csv "${multiQCdir}"
+cp "${intermediateDir}/"*.dedup.bam.flagstat "${multiQCdir}"
+cp "${intermediateDir}/"*metrics* "${multiQCdir}"
+
+
+multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${multiQCdir}" ${intermediateDir}/*_fastqc.zip -o "${intermediateDir}"
 
 mv "${intermediateDir}/multiqc_report.html" "${intermediateDir}/${project}_multiqc_report.html"
 echo "moved ${intermediateDir}/multiqc_report.html ${intermediateDir}/${project}_multiqc_report.html"

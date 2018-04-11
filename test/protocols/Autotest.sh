@@ -6,11 +6,65 @@
 #string groupname
 #string projectResultsDir
 #string ngsUtilsVersion
+#string intermediateDir
 
 module load ngs-utils
 
-rm -rf /home/umcg-molgenis/NGS_DNA/output_${project}
+rm -rf "/home/umcg-molgenis/NGS_DNA/output_${project}"
 count=0
+
+### 1. Check if CoverageCalculations perBase output is still valid
+for i in PlatinumSample_NA12891
+do
+	head -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
+	tail -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" >> "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
+	differencePerBase="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt)"
+
+
+	if [ "${differencePerBase}" != "" ]
+	then
+		echo "there are differences in the CoveragePerBase step between the test and the original output of ${i}"
+		echo "please fix the bug or update this test"
+		echo "${differencePerBase}"
+		exit 1
+	else
+		echo "CoveragePerBase is correct"
+	fi
+done
+### 2. Check if CoverageCalculations perTarget output is still valid
+### 3. Test Manta output
+
+for i in PlatinumSample_NA12878
+then
+	differencePerTarget="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt)"
+
+	if [ "${differencePerTarget}" != "" ]
+        then
+		echo "there are differences in the CoveragePerTarget step between the test and the original output of ${i}"
+		echo "please fix the bug or update this test"
+                echo "${differencePerTarget}"
+                exit 1
+        else
+		echo "CoveragePerTarget is correct"
+	fi
+
+	mantaDiff="$(zcat ${intermediateDir}/Manta/PlatinumSample_NA12878//results/variants/real/diploidSV.vcf.gz | awk '{if ($1 !~ /#/){print $0}}')"
+	mantaDiffTrue="$(zcat /home/umcg-molgenis/NGS_DNA/${i}.Manta.diploidSV_True.vcf.gz | awk '{if ($1 !~ /#/){print $0}}')"
+
+	if [ "${mantaDiff}" != "${mantaDiffTrue}" ]
+	then
+		echo "there are differences in the Manta step between the test and the original output of ${i}"
+                echo "please fix the bug or update this test"
+                echo "mantaOutput new run: ${mantaDiff}"
+		echo "mantaOutput True: ${mantaDiffTrue}"
+                exit 1
+	else
+		echo "Manta output is correct"
+	fi
+done
+
+
+## 4. Check if the regular vcf's are still the same
 for i in ${project} PlatinumSample_NA12878 PlatinumSample_NA12891
 do
 	mkdir -p /home/umcg-molgenis/NGS_DNA/output_${project}/${i}
