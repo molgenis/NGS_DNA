@@ -32,7 +32,7 @@ done
 
 ### 2. Check if CoverageCalculations perTarget output is still valid
 ### 3. Test Manta output
-
+### 4. Test GAVIN output
 for i in PlatinumSample_NA12878
 do
 	head -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
@@ -63,10 +63,23 @@ do
 	else
 		echo "Manta output is correct"
 	fi
+
+	gavinDiff="$(fgrep TRUE ${intermediateDir}/${i}.GAVIN.rlv.vcf)"
+	gavinDiffTrue="$(fgrep TRUE /home/umcg-molgenis/NGS_DNA/${i}.GAVIN.rlv.vcf)"
+
+	if [ "${gavinDiff}" != "${gavinDiffTrue}" ]
+	then
+		echo "there are differences in the Gavin output between the test and the original output of ${i}"
+                echo "please fix the bug or update this test"
+                echo "GAVIN output new run: ${gavinDiff}"
+                echo "GAVIN output True: ${gavinDiffTrue}"
+                exit 1
+	fi
+
 done
 
 
-## 4. Check if the regular vcf's are still the same
+## 5. Check if the regular vcf's are still the same
 for i in ${project} PlatinumSample_NA12878 PlatinumSample_NA12891
 do
 	mkdir -p /home/umcg-molgenis/NGS_DNA/output_${project}/${i}

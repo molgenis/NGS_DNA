@@ -149,6 +149,7 @@ tail -1 ${ngs_dir}/workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,
 cp ${ngs_dir}/test/results/*_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/
 cp ${ngs_dir}/test/results/*_True.txt /home/umcg-molgenis/NGS_DNA/
 cp ${ngs_dir}/test/results/PlatinumSample_NA12878.Manta.diploidSV_True.vcf.gz /home/umcg-molgenis/NGS_DNA/
+cp ${ngs_dir}/test/results/PlatinumSample_NA12878.GAVIN.rlv.vcf /home/umcg-molgenis/NGS_DNA/
 
 preparePipeline "InhouseSamples"
 preparePipeline "ExternalSamples"
