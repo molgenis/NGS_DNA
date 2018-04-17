@@ -39,7 +39,7 @@ ${stage} "${bwaVersion}"
 ${stage} "${picardVersion}"
 ${checkStage}
 
-READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${filePrefix}\tSM:${externalSampleID}"
+READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${externalSampleID}\tSM:${externalSampleID}"
 rm -f "${tmpAlignedSam}"
 
 mkfifo -m 0644 "${tmpAlignedSam}"
