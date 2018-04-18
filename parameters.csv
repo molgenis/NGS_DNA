@@ -187,6 +187,7 @@ caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.
 gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
 gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/
 gnomADExomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/exomes/
+clinvarAnnotation,${dataDir}/ClinVar/clinvar_20180401.vcf.gz
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 wgsMetrics,${dedupBam}.wgs_metrics
 
@@ -206,6 +207,7 @@ sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.ba
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
+vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
 vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf

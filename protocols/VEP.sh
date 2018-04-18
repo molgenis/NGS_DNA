@@ -7,7 +7,7 @@
 #string tempDir
 #string intermediateDir
 #string projectVariantCallsVEP_Annotated
-#string projectBatchGenotypedVariantCalls
+#string projectBatchGenotypedAnnotatedVariantCalls
 #string project
 #string logsDir 
 #string groupname
@@ -23,16 +23,17 @@ tmpProjectVariantCallsVEP_Annotated="${MC_tmpFile}"
 
 ${stage} "${vepVersion}"
 ${checkStage}
-if [ -f "${projectBatchGenotypedVariantCalls}" ]
+if [ -f "${projectBatchGenotypedAnnotatedVariantCalls}" ]
 then
-	"${EBROOTVEP}/variant_effect_predictor.pl" \
-	-i "${projectBatchGenotypedVariantCalls}" \
+	"${EBROOTVEP}/vep" \
+	-i "${projectBatchGenotypedAnnotatedVariantCalls}" \
 	--offline \
 	--cache \
 	--dir "${vepDataDir}" \
 	--db_version="${vepDBVersion}" \
+	--dont_skip \
 	--buffer 1000 \
-	--most_severe \
+	--assembly GRCh37 \
 	--species homo_sapiens \
 	--vcf \
 	-o "${tmpProjectVariantCallsVEP_Annotated}"

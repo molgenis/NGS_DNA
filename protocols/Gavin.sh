@@ -51,41 +51,16 @@ ${stage} "${gavinToolPackVersion}"
 
 ${checkStage}
 
-java -Xmx4g -jar "${EBROOTGAVINMINTOOLPACK}/${gavinJar}" \
--i "${sampleFinalVcf}" \
--o "${tmpGavinOutputFirstPass}" \
--m CREATEFILEFORCADD \
--a "${tmpGavinToCADD}" \
--c "${gavinClinVar}" \
--d "${gavinCGD}" \
--f "${gavinFDR}" \
--g "${gavinCalibrations}"
+touch "${intermediateDir}/emptyFile.tsv"
 
-mv "${tmpGavinOutputFirstPass}" "${gavinOutputFirstPass}"
-echo "moved ${tmpGavinOutputFirstPass} to ${gavinOutputFirstPass}"
-
-awk '{if ($1 != "NC_001422.1"){print $0}}' "${tmpGavinToCADD}" > "${gavinToCADD}"
-echo "updated ${tmpGavinToCADD} => ${gavinToCADD}"
-
-echo "GAVIN round 1 is finished, uploading to CADD..."
-
-echo "starting to get CADD annotations locally for ${gavinToCADD}"
-
-bgzip -c "${gavinToCADD}" > "${gavinToCADDgz}"
-tabix -p vcf "${gavinToCADDgz}"
-
-score.sh "${gavinToCADDgz}" "${tmpGavinFromCADDgz}"
-
-mv "${tmpGavinFromCADDgz}" "${gavinFromCADDgz}"
-echo "moved ${tmpGavinFromCADDgz} ${gavinFromCADDgz}"
-
-zcat "${gavinFromCADDgz}" > "${gavinFromCADD}"
+perl -pi -e 's|CADD_SCALED,Number=1|CADD_SCALED,Number=A|' "${sampleFinalVcf}"
+perl -pi -e 's|CADD,Number=1|CADD,Number=A|' "${sampleFinalVcf}"
 
 java -Xmx4g -jar "${EBROOTGAVINMINTOOLPACK}/${gavinJar}" \
 -i "${sampleFinalVcf}" \
 -o "${tmpGavinOutputFinal}" \
 -m ANALYSIS \
--a "${gavinFromCADD}" \
+-a "${intermediateDir}/emptyFile.tsv" \
 -c "${gavinClinVar}" \
 -d "${gavinCGD}" \
 -f "${gavinFDR}" \

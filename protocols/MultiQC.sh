@@ -137,7 +137,8 @@ ${checkStage}
 ##copying data of interest to a new folder
 multiQCdir="${intermediateDir}/MultiQC/"
 mkdir -p "${multiQCdir}"
-cp "${intermediateDir}/"*.snpeff.vcf.csvStats.csv "${multiQCdir}"
+
+#cp "${intermediateDir}/"*.snpeff.vcf.csvStats.csv "${multiQCdir}"
 cp "${intermediateDir}/"*.dedup.bam.flagstat "${multiQCdir}"
 cp "${intermediateDir}/"*metrics* "${multiQCdir}"
 
