@@ -36,6 +36,7 @@ then
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perBase}.coveragePerBase" \
 		--omitLocusTable \
+		--includeRefNSites \
 		-I "${dedupBam}" \
 		-L "${perBaseDir}/${perBase}.interval_list"
 
@@ -85,7 +86,7 @@ then
 		perl -p -i -e "s/\r//g" "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt"
 
 		awk 'BEGIN { OFS = "\t" } ; {split($1,a,":"); print a[1],a[2],$2,$3}' "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt" | awk 'BEGIN { OFS = "\t" } ; {split($0,a,"-"); print a[1],a[2]}' > "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
-		perl -pi -e 's|\^|-|'"${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
+		perl -pi -e 's|\^|-|' "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
 		if [ -d "${sampleNameID}.${perTarget}.coveragePerTarget.txt" ]
 		then
 			rm "${sampleNameID}.${perTarget}.coveragePerTarget.txt"

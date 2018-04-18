@@ -1,0 +1,20 @@
+[[annotation]]
+file="cadd.tsv.gz"
+names=["CADD_SCALED,CADD"]
+columns=[4]
+fields=["phred", "raw"]
+ops=["self","self"]
+
+[[annotation]]
+file="cadd_indels.tsv.gz"
+names=["CADD_SCALED,CADD"]
+columns=[4]
+fields=["phred", "raw"]
+ops=["self","self"]
+
+[[annotation]]
+file="cadd.calculated.tsv.gz"
+names=["CADD_SCALED,CADD"]
+columns=[4]
+fields=["phred", "raw"]
+ops=["self","self"]
