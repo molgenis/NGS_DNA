@@ -70,13 +70,21 @@ then
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.1.sites.${i}.vcf.gz\"\nfields=[\"AF\"]\nnames=[\"gnomAD_AF\"]\nops=[\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		done
 	fi
-	## write first part of conf file
-	cat > "${vcfAnnoConf}" << HERE
+length=$(zcat "${vcfAnnoConf}" | wc -l)
+
+if [ $length -gt 8 ]
+then
+
+cat > "${vcfAnnoConf}" << HERE
 [[annotation]]
 file="${fromCADDMerged}.gz"
 fields=["phred", "raw"]
 names=["CADD_SCALED","CADD"]
 ops=["self","self"]
+HERE
+fi
+	## write first part of conf file
+	cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
 file="${caddAnnotationVcf}"
@@ -104,8 +112,8 @@ ops=["self","self","self"]
 
 [[annotation]]
 file="${gnomADExomesAnnotation}/gnomad.exomes.r2.0.1.sites.vcf.gz"
-fields=["Hom","Het", "AN","AF_POPMAX"]
-names=["gnomAD_Hom","gnomAD_Het","gnomAD_AN","gnomAD_AF_MAX"]
+fields=["Hom","Hemi", "AN","AF_POPMAX"]
+names=["gnomAD_Hom","gnomAD_Hemi","gnomAD_AN","gnomAD_AF_MAX"]
 ops=["self","self","self","self"]
 
 [[annotation]]
@@ -223,9 +231,9 @@ op="lua:calculate_gnomAD_AC(gnomAD_Hom)"
 type="Integer"
 
 [[postannotation]]
-fields=["gnomAD_Het"]
-name="gnomAD_AN_Het"
-op="lua:calculate_gnomAD_AC(gnomAD_Het)"
+fields=["gnomAD_Hemi"]
+name="gnomAD_AN_Hemi"
+op="lua:calculate_gnomAD_AC(gnomAD_Hemi)"
 type="Integer"
 
 [[postannotation]]
@@ -235,8 +243,8 @@ op="div2"
 type="Float"
 
 [[postannotation]]
-fields=["gnomAD_AN_Het", "gnomAD_AN"]
-name="gnomAD_AF_Het"
+fields=["gnomAD_AN_Hemi", "gnomAD_AN"]
+name="gnomAD_AF_Hemi"
 op="div2"
 type="Float"
 
