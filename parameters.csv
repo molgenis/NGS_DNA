@@ -370,6 +370,7 @@ longlistPlusPlusFinal,${intermediateDir}/${externalSampleID}.longlistplusplusFin
 
 noExtension,variant.calls.genotyped.vcf
 annotatedExtension,variant.calls.snpeff.exac.gonl.cadd.vcf
+annotatedSnpEffExtension,variant.calls.snpeff.vcf
 annotatedVEPExtension,variant.calls.VEP.vcf
 
 sampleConcordanceFile,${intermediateDir}/${externalSampleID}.ConcordanceFile.txt

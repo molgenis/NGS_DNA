@@ -8,7 +8,7 @@
 #string intermediateDir
 #string projectVariantCallsSnpEff_Annotated
 #string projectVariantCallsSnpEff_SummaryHtml
-#string projectBatchGenotypedVariantCalls
+#string projectBatchGenotypedAnnotatedVariantCalls
 #string project
 #string logsDir
 #string groupname
@@ -22,7 +22,7 @@ tmpProjectVariantCallsSnpEff_Annotated="${MC_tmpFile}"
 ${stage} "${snpEffVersion}"
 ${checkStage}
 
-if [ -f "${projectBatchGenotypedVariantCalls}" ]
+if [ -f "${projectBatchGenotypedAnnotatedVariantCalls}" ]
 then
 	#
 	##
@@ -40,7 +40,7 @@ then
 	-canon \
 	-ud 0 \
 	-c "${EBROOTSNPEFF}/snpEff.config" \
-	"${projectBatchGenotypedVariantCalls}" \
+	"${projectBatchGenotypedAnnotatedVariantCalls}" \
 	> "${tmpProjectVariantCallsSnpEff_Annotated}"
 
 	mv "${tmpProjectVariantCallsSnpEff_Annotated}" "${projectVariantCallsSnpEff_Annotated}"
