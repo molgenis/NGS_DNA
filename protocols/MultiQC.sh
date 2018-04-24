@@ -47,6 +47,10 @@
 #string stage
 #string checkStage
 #string multiQCVersion
+#string runDateInfoFile
+#list externalSampleID
+#list capturingKit
+#list sequencingStartDate
 
 set -e
 set -u
@@ -146,3 +150,12 @@ multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${multiQCdir}
 
 mv "${intermediateDir}/multiqc_report.html" "${intermediateDir}/${project}_multiqc_report.html"
 echo "moved ${intermediateDir}/multiqc_report.html ${intermediateDir}/${project}_multiqc_report.html"
+
+#create ChronQC samplesheet
+echo -e "Sample,Run,Date" > ${runDateInfoFile}
+max_index=${#externalSampleID[@]}-1
+
+for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
+do
+	echo -e "${externalSampleID[samplenumber]},${project},${sequencingStartDate[samplenumber]}" >> ${runDateInfoFile}
+done

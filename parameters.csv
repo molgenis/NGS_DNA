@@ -52,7 +52,7 @@ picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
 vepDBVersion,90
 vepAssemblyVersion,GRCh37
-multiQCVersion,multiqc/1.0-${toolChain}-Python-2.7.11
+multiQCVersion,multiqc/1.5-${toolChain}-Python-2.7.11
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -269,6 +269,9 @@ qcReportHtml,${projectQcDir}/${project}_QCReport.html
 qcReportPdf,${projectQcDir}/${project}_QCReport.pdf
 qcMetrics,${intermediateDir}/${externalSampleID}.total.qc.metrics.table
 allMetrics,${intermediateDir}/${project}_qc.metricsList
+multiqcDataDir,${intermediateDir}/multiqc_data
+runDateInfoFile,${multiqcDataDir}/${project}.run_date_info.csv
+
 ### 5GPM Protocols (FilterOnIntervalList) ###
 fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 
