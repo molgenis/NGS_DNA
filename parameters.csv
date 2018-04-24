@@ -52,7 +52,7 @@ picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
 vepDBVersion,90
 vepAssemblyVersion,GRCh37
-multiQCVersion,multiqc/1.0-${toolChain}-Python-2.7.11
+multiQCVersion,multiqc/1.5-${toolChain}-Python-2.7.11
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -185,6 +185,8 @@ caddAnnotation,${dataDir}/CADD/whole_genome_SNVs.tsv.gz
 caddAnnotationVcf,${dataDir}/CADD/whole_genome_SNVs.vcf.gz
 caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.gz
 gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
+gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/
+gnomADExomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/exomes/
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 wgsMetrics,${dedupBam}.wgs_metrics
 
@@ -204,6 +206,8 @@ sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.ba
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
+vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
+vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
 toCADD,${projectPrefix}.batch-${batchID}.toCadd.tsv
 fromCADD,${projectPrefix}.batch-${batchID}.fromCadd.tsv.gz
@@ -265,6 +269,9 @@ qcReportHtml,${projectQcDir}/${project}_QCReport.html
 qcReportPdf,${projectQcDir}/${project}_QCReport.pdf
 qcMetrics,${intermediateDir}/${externalSampleID}.total.qc.metrics.table
 allMetrics,${intermediateDir}/${project}_qc.metricsList
+multiqcDataDir,${intermediateDir}/multiqc_data
+runDateInfoFile,${multiqcDataDir}/${project}.run_date_info.csv
+
 ### 5GPM Protocols (FilterOnIntervalList) ###
 fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 
@@ -364,6 +371,7 @@ longlistPlusPlusFinal,${intermediateDir}/${externalSampleID}.longlistplusplusFin
 
 noExtension,variant.calls.genotyped.vcf
 annotatedExtension,variant.calls.snpeff.exac.gonl.cadd.vcf
+annotatedVEPExtension,variant.calls.VEP.vcf
 
 sampleConcordanceFile,${intermediateDir}/${externalSampleID}.ConcordanceFile.txt
 arrayTmpMap,${intermediateDir}/${externalSampleID}.concordance.tmp.map
