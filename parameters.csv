@@ -52,7 +52,7 @@ picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
 vepDBVersion,90
 vepAssemblyVersion,GRCh37
-multiQCVersion,multiqc/1.0-${toolChain}-Python-2.7.11
+multiQCVersion,multiqc/1.5-${toolChain}-Python-2.7.11
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -187,7 +187,6 @@ caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.
 gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
 gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/
 gnomADExomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/exomes/
-clinvarAnnotation,${dataDir}/ClinVar/clinvar_20180401.vcf.gz
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 wgsMetrics,${dedupBam}.wgs_metrics
 
@@ -207,7 +206,6 @@ sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.ba
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
-vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
 vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
@@ -271,6 +269,9 @@ qcReportHtml,${projectQcDir}/${project}_QCReport.html
 qcReportPdf,${projectQcDir}/${project}_QCReport.pdf
 qcMetrics,${intermediateDir}/${externalSampleID}.total.qc.metrics.table
 allMetrics,${intermediateDir}/${project}_qc.metricsList
+multiqcDataDir,${intermediateDir}/multiqc_data
+runDateInfoFile,${multiqcDataDir}/${project}.run_date_info.csv
+
 ### 5GPM Protocols (FilterOnIntervalList) ###
 fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 
@@ -370,7 +371,6 @@ longlistPlusPlusFinal,${intermediateDir}/${externalSampleID}.longlistplusplusFin
 
 noExtension,variant.calls.genotyped.vcf
 annotatedExtension,variant.calls.snpeff.exac.gonl.cadd.vcf
-annotatedSnpEffExtension,variant.calls.snpeff.vcf
 annotatedVEPExtension,variant.calls.VEP.vcf
 
 sampleConcordanceFile,${intermediateDir}/${externalSampleID}.ConcordanceFile.txt
