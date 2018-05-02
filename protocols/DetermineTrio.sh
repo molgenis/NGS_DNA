@@ -20,7 +20,7 @@ trioInformationPrefix="${intermediateDir}/trioInformation"
 
 teller=0
 inputTrioFile="${projectPrefix}.trio"
-
+sed -i -e '$a\' ${inputTrioFile}
 count=$(cat ${inputTrioFile} | wc -l)
 
 if [ $count -gt 1 ]
