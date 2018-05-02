@@ -25,21 +25,26 @@
 array_contains () {
     local array="$1[@]"
     local seeking=$2
+    local barcodeLane=$3
     local in=1
+    rejected="false"
     for element in "${!array-}"; do
         if [[ "$element" == "$seeking" ]]; then
             in=0
-		echo "barcode+Lane already exists!!"
-		exit 1
+		if [ "${barcodeLane}" == "true" ]
+		then
+			echo "barcode+Lane already exists!!"
+			exit 1
+		else
+			rejected="true"
+			continue
+		fi
         fi
     done
     return $in
 }
 
 max_index=${#externalSampleID[@]}-1
-
-
-
 
 WHOAMI=$(whoami)
 HOST=$(hostname -s)
@@ -61,6 +66,18 @@ do
 		PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
 	fi
 	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
+
+	if ls -R ${PRMDATADIR}/*.rejected 1>/dev/null 2>&1
+	then
+		arrayRejected=()
+		fieldIndex=$(for i in $(ls ${PRMDATADIR}/*.rejected); do echo $i | awk '{n=split($0, array, "_")} END{ print n-1 }';done)
+		for i in $(ls ${PRMDATADIR}/*.rejected); do echo $i | awk -v field="${fieldIndex}" 'BEGIN{FS="_"}{print $field}' ;done | uniq > rejectedBarcodes.txt
+
+		while read line
+		do
+			arrayRejected+=("${line}")
+		done<rejectedBarcodes.txt
+	fi
 
 	mkdir -vp "${TMPDATADIR}"
 
@@ -88,14 +105,20 @@ do
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz"* \
 				"${TMPDATADIR}/"
 		else
-			array_contains arrayUniqueBarcodes "${barcode[samplenumber]}-L${lane[samplenumber]}" || arrayUniqueBarcodes+=("${barcode[samplenumber]}-L${lane[samplenumber]}") 
-			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz"* \
-				"${TMPDATADIR}/"
+			array_contains arrayRejected "${barcode[samplenumber]}" "false"
+			if [ "${rejected}" == "false" ]
+			then
+				array_contains arrayUniqueBarcodes "${barcode[samplenumber]}-L${lane[samplenumber]}" "true" || arrayUniqueBarcodes+=("${barcode[samplenumber]}-L${lane[samplenumber]}") 
+				rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+					"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz"* \
+					"${TMPDATADIR}/"
 
-			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
-				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz"* \
-				"${TMPDATADIR}/"
+				rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+					"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz"* \
+					"${TMPDATADIR}/"
+			else
+				echo -e "\n############ barcode: ${barcode[samplenumber]} IS REJECTED#######################\n"
+			fi
 		fi
 	fi
 done
