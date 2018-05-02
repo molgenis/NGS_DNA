@@ -394,3 +394,11 @@ geneNetworkLiftOveredBed,${geneNetworkFolder}/mart_export.b38.sorted.cleaned.lif
 geneNetworkPrefixSample,${intermediateDir}/GeneNetwork/${externalSampleID}.geneNetwork
 geneNetworkPrefixSampleResult,${intermediateDir}/${externalSampleID}.geneNetwork
 geneNetworkVcf,${intermediateDir}/${externalSampleID}.GAVIN.geneNetwork.final.vcf
+
+##CARTENIA TREE
+manVarListDir,${dataDir}/ManVarList/
+manVarListMVL_LB_B,${manVarListDir}/MVL_2018-04-24_LB-B.bed
+manVarListMVL_VUS_LP_P,${manVarListDir}/MVL_2018-04-24_VUS-LP-P.bed
+manVarListVKGL_consensus_VUS_LP_P,${manVarListDir}/VKGL_consensus_2018-04-25_VUS-LP-P.bed
+
+vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11
