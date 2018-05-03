@@ -282,7 +282,7 @@ fileWithIndexId,${intermediateDir}/${filePrefix}_${barcode}
 ## Protocols Convading and XHMM
 convadingDataDir,${dataDir}/Convading/
 cxControlsDir,${dataDir}/Controls_Convading_XHMM/
-ControlsVersioning,${cxControlsDir}/Controls_v1.txt
+ControlsVersioning,${cxControlsDir}/Controls_v3.txt
 
 convadingDir,${intermediateDir}/Convading/
 convadingInputBamsDir,${convadingDir}/bams/${externalSampleID}/
