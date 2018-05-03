@@ -223,4 +223,7 @@ groupname=${groupname}"
 
 
 echo -e "\n################### THE FOLLOWING LINES ARE REJECTED BECAUSE OF TOO LOW PERCENTAGE READS ###############\n"
-cat "${intermediateDir}/${project}.filteredBarcodes.csv"
+if [ -f "${intermediateDir}/${project}.filteredBarcodes.csv" ]
+then
+	cat "${intermediateDir}/${project}.filteredBarcodes.csv"
+fi
