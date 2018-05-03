@@ -24,12 +24,12 @@
 
 array_contains () {
     local array="$1[@]"
-    local seeking=$2
-    local barcodeLane=$3
+    local seeking="${2}"
+    local barcodeLane="${3}"
     local in=1
     rejected="false"
     for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
+        if [[ "${element}" == "${seeking}" ]]; then
             in=0
 		if [ "${barcodeLane}" == "true" ]
 		then
@@ -41,7 +41,7 @@ array_contains () {
 		fi
         fi
     done
-    return $in
+    return "${in}"
 }
 
 max_index=${#externalSampleID[@]}-1
@@ -67,11 +67,11 @@ do
 	fi
 	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
 
-	if ls -R ${PRMDATADIR}/*.rejected 1>/dev/null 2>&1
+	if ls -R "${PRMDATADIR}/"*".rejected" 1>/dev/null 2>&1
 	then
 		arrayRejected=()
-		fieldIndex=$(for i in $(ls ${PRMDATADIR}/*.rejected); do echo $i | awk '{n=split($0, array, "_")} END{ print n-1 }';done)
-		for i in $(ls ${PRMDATADIR}/*.rejected); do echo $i | awk -v field="${fieldIndex}" 'BEGIN{FS="_"}{print $field}' ;done | uniq > rejectedBarcodes.txt
+		fieldIndex=$(for i in $(ls "${PRMDATADIR}/"*".rejected"); do echo $i | awk '{n=split($0, array, "_")} END{ print n-1 }';done)
+		for i in $(ls "${PRMDATADIR}/"*".rejected"); do echo $i | awk -v field="${fieldIndex}" 'BEGIN{FS="_"}{print $field}' ;done | uniq > "rejectedBarcodes.txt"
 
 		while read line
 		do

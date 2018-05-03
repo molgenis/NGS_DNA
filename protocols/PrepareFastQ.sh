@@ -56,8 +56,8 @@ if [ "${seqType}" == "PE" ]
 then
 	samp=$(zcat "${peEnd1BarcodeFqGz}" | tail -n10)
 	phiX=$(zcat "${phiXEnd1Gz}" | tail -n10)
-	
-	if [ "${samp}" = "${phiX}" ]; 
+
+	if [ "${samp}" = "${phiX}" ]
 	then
 		echo "Skip this step! PhiX was already spiked in!"
 		exit 0
@@ -69,7 +69,7 @@ then
 		cat "${peEnd2BarcodeFqGz}" "${phiXEnd2Gz}" >> "${peEnd2BarcodePhiXFqGz}"
 	fi
 	echo -e "finished with phiX part...\nstarting with IlluminaEncoding"
-	
+
 
 else
 	echo "Single Read, phiX spike skipped"
@@ -118,7 +118,7 @@ checkIlluminaEncoding() {
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
-				echo "LINE: " $line
+				echo "LINE: " ${line}
 			exit 1
 			fi
 			lastEncoding="${encoding}"
@@ -126,7 +126,7 @@ checkIlluminaEncoding() {
 		then
 			nodecision=$(( nodecision+1 ))
 		else
-			echo "The encoding is not matching to anything, check FastQ documentation (count=$count)"
+			echo "The encoding is not matching to anything, check FastQ documentation (count=${count})"
 		fi
 	done
 	if [ "${nodecision}" == "${numberoflines}" ]

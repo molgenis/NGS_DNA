@@ -34,7 +34,7 @@ tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
 
 bedfile=$(basename "${capturingKit}")
 
-if [ -f ${projectBatchGenotypedVariantCalls} ]
+if [ -f "${projectBatchGenotypedVariantCalls}" ]
 then 
 
 	echo "create file toCADD"
@@ -72,7 +72,7 @@ then
 	fi
 length=$(zcat "${vcfAnnoConf}" | wc -l)
 
-if [ $length -gt 8 ]
+if [ "${length}" -gt 8 ]
 then
 
 cat > "${vcfAnnoConf}" << HERE

@@ -45,17 +45,17 @@ module load "${ngsversion}"
 
 array_contains () {
     local array="$1[@]"
-    local seeking=$2
+    local seeking="${2}"
     local in=1
     rejected="false"
     for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
+        if [[ "${element}" == "${seeking}" ]]; then
             in=0
 		rejected="true"
                 continue
         fi
     done
-    return $in
+    return "${in}"
 }
 
 #
@@ -141,9 +141,9 @@ barcodesGrepCommand=""
 
 
 cd "${rocketPoint}"
-if [ -f rejectedBarcodes.txt ]
+if [ -f "rejectedBarcodes.txt" ]
 then
-	size=$(cat rejectedBarcodes.txt | wc -l)
+	size=$(cat "rejectedBarcodes.txt" | wc -l)
 	teller=1
 
 	while read line
@@ -173,7 +173,7 @@ fi
 
 batching="_small"
 
-capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${sampleSheetCsv}" | sed 's|\\||')
+capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||')
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
