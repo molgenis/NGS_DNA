@@ -131,36 +131,41 @@ done
 # Create subset of samples for this project.
 #
 extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
-perl -pi -e 's/\r(?!\n)//g' "${projectJobsDir}/${project}.csv"
+sampleSheetCsv="${projectJobsDir}/${project}.csv"
+perl -pi -e 's/\r(?!\n)//g' "${sampleSheetCsv}"
 barcodesGrepCommand=""
 
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
 #
+
+
 cd "${rocketPoint}"
+if [ -f rejectedBarcodes.txt ]
+then
+	size=$(cat rejectedBarcodes.txt | wc -l)
+	teller=1
 
-size=$(cat rejectedBarcodes.txt | wc -l)
-teller=1
+	while read line
+	do
+		if [[ "${teller}" -lt "${size}" ]]
+		then
+			barcodesGrepCommand+="${line}|"
+		elif [ "${teller}" == ${size} ]
+		then
+			echo "last line"
+			barcodesGrepCommand+="${line}"
+		fi
+		teller=$((teller+1))
+	done<rejectedBarcodes.txt
 
-while read line
-do
-	if [[ "${teller}" -lt "${size}" ]]
-        then
-		barcodesGrepCommand+="${line}|"
-        elif [ "${teller}" == ${size} ]
-        then
-		echo "last line"
-                barcodesGrepCommand+="${line}"
-        fi
-	teller=$((teller+1))
-done<rejectedBarcodes.txt
+	echo "${barcodesGrepCommand}"
 
-echo "${barcodesGrepCommand}"
-
-grep -E -v "${barcodesGrepCommand}" "${projectJobsDir}/${project}.csv" > "${projectJobsDir}/${project}.filteredRejected.csv"
-grep -E "${barcodesGrepCommand}" "${projectJobsDir}/${project}.csv" > "${intermediateDir}/${project}.filteredBarcodes.csv"
-cp "${projectJobsDir}/${project}.csv" "${projectJobsDir}/${project}.original.csv"
-
+	grep -E -v "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${projectJobsDir}/${project}.filteredRejected.csv"
+	grep -E "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${intermediateDir}/${project}.filteredBarcodes.csv"
+	cp "${sampleSheetCsv}" "${projectJobsDir}/${project}.original.csv"
+	samplesheetCsv="${projectJobsDir}/${project}.filteredRejected.csv"
+fi
 if [[ -f .compute.properties ]]
 then
 	rm .compute.properties
@@ -168,7 +173,7 @@ fi
 
 batching="_small"
 
-capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv" | sed 's|\\||')
+capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${sampleSheetCsv}" | sed 's|\\||')
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
@@ -199,7 +204,7 @@ echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${mainParameters}" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
--p "${projectJobsDir}/${project}.filteredRejected.csv" \
+-p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
 -p "${group_parameters}" \
 -p "${tmpdir_parameters}" \
