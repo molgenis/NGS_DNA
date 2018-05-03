@@ -121,7 +121,8 @@ peEnd1BarcodePhiXRecodedFqGz,${rawFile}_1.phiX.recoded.${rawFileExt}
 peEnd2BarcodePhiXRecodedFqGz,${rawFile}_2.phiX.recoded.${rawFileExt}
 peEnd1BarcodePhiXFqGz,${rawFile}_1.phiX.${rawFileExt}
 peEnd2BarcodePhiXFqGz,${rawFile}_2.phiX.${rawFileExt}
-srBarcodeFqGz,${rawFile}.phiX.${rawFileExt}
+srBarcodeRecodedFqGz,${rawFile}.recoded.${rawFileExt}
+srBarcodeFqGz,${rawFile}.${rawFileExt}
 srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
 bwaAlignCores,8
 humanPhiXdir,${dataDir}/inSilico/humanPhiX
@@ -187,6 +188,7 @@ caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.
 gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
 gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/
 gnomADExomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/exomes/
+clinvarAnnotation,${dataDir}/ClinVar/clinvar_20180401.vcf.gz
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 wgsMetrics,${dedupBam}.wgs_metrics
 
@@ -206,6 +208,7 @@ sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.ba
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
+vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
 vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
@@ -216,6 +219,7 @@ fromCADDMerged,${projectPrefix}.batch-${batchID}.fromCadd.merged.vcf
 
 ### Protocols 19, 20, 21, 21, 22, 23 and 24 (SnpEff,CmdLineAnnotator, VariantAnnotator, MergeBatches,Gavin VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
 projectVariantCallsSnpEff_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.vcf
+projectVariantCallsSnpEff_HPO_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.HPO.vcf
 projectVariantCallsSnpEff_SummaryHtml,${projectPrefix}.batch-${batchID}.variant.calls.snpeff_Summary.html
 projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.vcf
@@ -371,6 +375,7 @@ longlistPlusPlusFinal,${intermediateDir}/${externalSampleID}.longlistplusplusFin
 
 noExtension,variant.calls.genotyped.vcf
 annotatedExtension,variant.calls.snpeff.exac.gonl.cadd.vcf
+annotatedSnpEffExtension,variant.calls.snpeff.vcf
 annotatedVEPExtension,variant.calls.VEP.vcf
 
 sampleConcordanceFile,${intermediateDir}/${externalSampleID}.ConcordanceFile.txt
@@ -389,3 +394,11 @@ geneNetworkLiftOveredBed,${geneNetworkFolder}/mart_export.b38.sorted.cleaned.lif
 geneNetworkPrefixSample,${intermediateDir}/GeneNetwork/${externalSampleID}.geneNetwork
 geneNetworkPrefixSampleResult,${intermediateDir}/${externalSampleID}.geneNetwork
 geneNetworkVcf,${intermediateDir}/${externalSampleID}.GAVIN.geneNetwork.final.vcf
+
+##CARTENIA TREE
+manVarListDir,${dataDir}/ManVarList/
+manVarListMVL_LB_B,${manVarListDir}/MVL_2018-04-24_LB-B.bed
+manVarListMVL_VUS_LP_P,${manVarListDir}/MVL_2018-04-24_VUS-LP-P.bed
+manVarListVKGL_consensus_VUS_LP_P,${manVarListDir}/VKGL_consensus_2018-04-25_VUS-LP-P.bed
+
+vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11

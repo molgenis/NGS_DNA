@@ -64,8 +64,8 @@ do
 		echo "Manta output is correct"
 	fi
 
-	gavinDiff="$(fgrep TRUE ${intermediateDir}/${i}.GAVIN.rlv.vcf)"
-	gavinDiffTrue="$(fgrep TRUE /home/umcg-molgenis/NGS_DNA/${i}.GAVIN.rlv.vcf)"
+	gavinDiff="$(fgrep TRUE ${intermediateDir}/${i}.GAVIN.rlv.vcf | awk 'BEGIN {FS="\t"}{print $1,$2,$3,$4,$5,$10}')"
+	gavinDiffTrue="$(fgrep TRUE /home/umcg-molgenis/NGS_DNA/${i}.GAVIN.rlv.vcf | awk 'BEGIN {FS="\t"}{print $1,$2,$3,$4,$5,$10}')"
 
 	if [ "${gavinDiff}" != "${gavinDiffTrue}" ]
 	then

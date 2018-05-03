@@ -7,6 +7,7 @@
 #string peEnd1BarcodeFqGz
 #string peEnd2BarcodeFqGz
 #string srBarcodeFqGz
+#string srBarcodeRecodedFqGz
 #string peEnd1BarcodePhiXRecodedFqGz
 #string peEnd2BarcodePhiXRecodedFqGz
 #string peEnd1BarcodePhiXFqGz
@@ -51,24 +52,28 @@ done
 
 echo "starting with phiX part"
 # Spike phiX only once
-samp=$(zcat "${peEnd1BarcodeFqGz}" | tail -n10)
-phiX=$(zcat "${phiXEnd1Gz}" | tail -n10)
-
-if [ "${samp}" = "${phiX}" ]; 
+if [ "${seqType}" == "PE" ]
 then
-	echo "Skip this step! PhiX was already spiked in!"
-	exit 0
-else
-	rm -f "${peEnd1BarcodePhiXFqGz}"
-	rm -f "${peEnd2BarcodePhiXFqGz}"
-	if [ "${seqType}" == "PE" ]
+	samp=$(zcat "${peEnd1BarcodeFqGz}" | tail -n10)
+	phiX=$(zcat "${phiXEnd1Gz}" | tail -n10)
+
+	if [ "${samp}" = "${phiX}" ]
 	then
+		echo "Skip this step! PhiX was already spiked in!"
+		exit 0
+	else
+		rm -f "${peEnd1BarcodePhiXFqGz}"
+		rm -f "${peEnd2BarcodePhiXFqGz}"
 		echo "Append phiX reads"
 		cat "${peEnd1BarcodeFqGz}" "${phiXEnd1Gz}" >> "${peEnd1BarcodePhiXFqGz}"
 		cat "${peEnd2BarcodeFqGz}" "${phiXEnd2Gz}" >> "${peEnd2BarcodePhiXFqGz}"
 	fi
+	echo -e "finished with phiX part...\nstarting with IlluminaEncoding"
+
+
+else
+	echo "Single Read, phiX spike skipped"
 fi
-echo -e "finished with phiX part...\nstarting with IlluminaEncoding"
 
 checkIlluminaEncoding() {
 	barcodeFqGz="${1}"
@@ -113,7 +118,7 @@ checkIlluminaEncoding() {
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
-				echo "LINE: " $line
+				echo "LINE: " ${line}
 			exit 1
 			fi
 			lastEncoding="${encoding}"
@@ -121,7 +126,7 @@ checkIlluminaEncoding() {
 		then
 			nodecision=$(( nodecision+1 ))
 		else
-			echo "The encoding is not matching to anything, check FastQ documentation (count=$count)"
+			echo "The encoding is not matching to anything, check FastQ documentation (count=${count})"
 		fi
 	done
 	if [ "${nodecision}" == "${numberoflines}" ]
@@ -155,6 +160,9 @@ if [ "${seqType}" == "PE" ]
 then
         checkIlluminaEncoding "${peEnd1BarcodePhiXFqGz}" "${peEnd1BarcodePhiXRecodedFqGz}"
         checkIlluminaEncoding "${peEnd2BarcodePhiXFqGz}" "${peEnd2BarcodePhiXRecodedFqGz}"
+elif [ "${seqType}" == "SR" ]
+then
+	checkIlluminaEncoding "${srBarcodeFqGz}" "${srBarcodeRecodedFqGz}"
 else
 	echo "SeqType unknown"
 	exit 1

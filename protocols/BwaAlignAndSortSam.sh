@@ -13,7 +13,7 @@ set -o pipefail
 #string bwaAlignCores
 #string fastq1
 #string fastq2
-#string srBarcodeFqGz
+#string srBarcodeRecodedFqGz
 #string alignedSam
 #string lane
 #string externalSampleID
@@ -74,7 +74,7 @@ else
 	-R "${READGROUPLINE}" \
 	-t "${bwaAlignCores}" \
 	"${indexFile}" \
-	"${srBarcodePhiXFqGz}" \
+	"${srBarcodeRecodedFqGz}" \
 	> "${tmpAlignedSam}" &
 
 	java -Djava.io.tmpdir="${tempDir}" -Xmx29G -XX:ParallelGCThreads=4 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
