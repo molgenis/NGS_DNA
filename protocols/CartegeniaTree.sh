@@ -387,7 +387,7 @@ else
         java -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \
         -T CombineVariants \
         -R //apps//data//1000G/phase1/human_g1k_v37_phiX.fasta \
-        "${popFreqArray[@]}" \
+        ${popFreqArray[@]} \
         -o "${outputStep8_2_4_next}" \
         -genotypeMergeOptions UNSORTED
 
