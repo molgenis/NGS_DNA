@@ -36,6 +36,7 @@ s22_MergeIndelsAndSnps,protocols/MergeIndelsAndSnps.sh,s21b_IndelFiltration;s21a
 s22b_DetermineTrio,protocols/DetermineTrio.sh,s22_MergeIndelsAndSnps
 s23a_Gavin,protocols/Gavin.sh,s22_MergeIndelsAndSnps
 s23b_GeneNetwork,protocols/GeneNetwork.sh,s23a_Gavin
+s23c_CartegeniaTree,protocols/CartegeniaTree.sh,s23a_Gavin
 s24a_CompressingSampleVcf,protocols/CompressingFinalVcf.sh,s22_MergeIndelsAndSnps;finalVcf=sampleFinalVcf
 s24b_CompressingProjectVcf,protocols/CompressingFinalVcf.sh,s22_MergeIndelsAndSnps;finalVcf=projectFinalVcf
 s25_VcfToTable,protocols/VcfToTable.sh,s22_MergeIndelsAndSnps

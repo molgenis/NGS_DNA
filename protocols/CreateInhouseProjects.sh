@@ -141,6 +141,9 @@ barcodesGrepCommand=""
 
 
 cd "${rocketPoint}"
+rm -f "${projectJobsDir}/${project}.filteredRejected.csv"
+rm -f "${intermediateDir}/${project}.filteredBarcodes.csv"
+
 if [ -f "rejectedBarcodes.txt" ]
 then
 	size=$(cat "rejectedBarcodes.txt" | wc -l)
@@ -222,8 +225,8 @@ batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
 groupname=${groupname}"
 
 
-echo -e "\n################### THE FOLLOWING LINES ARE REJECTED BECAUSE OF TOO LOW PERCENTAGE READS ###############\n"
 if [ -f "${intermediateDir}/${project}.filteredBarcodes.csv" ]
 then
+	echo -e "\n################### THE FOLLOWING LINES ARE REJECTED BECAUSE OF TOO LOW PERCENTAGE READS ###############\n"
 	cat "${intermediateDir}/${project}.filteredBarcodes.csv"
 fi
