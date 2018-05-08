@@ -362,7 +362,7 @@ size8_2_3_end=$(cat "${outputStep8_2_3_end}" | wc -l)
 if [ "${size8_2_3_end}" != "${size8_2_2_next}" ]
 then
 	grep '^#' "${outputStep8_2_2_next}" > "${outputStep8_2_3ToPopFreq}"
-        grep -v '^#' "${outputStep8_2_2_next}" | grep -E 'splice.*HIGH' > "${outputStep8_2_3ToPopFreq}"
+        grep -v '^#' "${outputStep8_2_2_next}" | grep -E 'splice.*HIGH' >> "${outputStep8_2_3ToPopFreq}"
 	echo "splice variant found"
 	popFreqArray+=("--variant ${outputStep8_2_3ToPopFreq}")
 else
