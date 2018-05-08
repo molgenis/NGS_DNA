@@ -41,7 +41,7 @@ array_contains () {
 		fi
         fi
     done
-    return "${in}"
+    echo "${in}"
 }
 
 max_index=${#externalSampleID[@]}-1
