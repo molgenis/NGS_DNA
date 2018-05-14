@@ -308,4 +308,7 @@ then
 	mkdir -p "${logsDir}/${project}/"
 fi
 
+## removing phiX.recoded files
+rm ${projectResultsDir}/rawdata/ngs/*.phiX.recoded.fq.gz
+
 touch pipeline.finished
