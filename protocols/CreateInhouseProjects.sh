@@ -55,7 +55,6 @@ array_contains () {
                 continue
         fi
     done
-	echo "${in}"
 }
 
 #

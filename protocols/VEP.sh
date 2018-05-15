@@ -31,6 +31,7 @@ then
 	--cache \
 	--dir "${vepDataDir}" \
 	--db_version="${vepDBVersion}" \
+	--vcf_info_field ANN \
 	--dont_skip \
 	--buffer 1000 \
 	--assembly GRCh37 \
