@@ -22,20 +22,27 @@
 #string vcfAnnoGnomadGenomesConf
 #string batchID
 #string vcfAnnoCustomConfLua
+#string projectBatchGenotypedCGDAnnotatedVariantCalls
 #string clinvarAnnotation
+#string cgdDataDir
+#string cgdFile
 
 ml ${vcfAnnoVersion}
 ml ${htsLibVersion}
 ml ${bcfToolsVersion}
 ml ${caddVersion}
 
+
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
+
+makeTmpDir "${projectBatchGenotypedCGDAnnotatedVariantCalls}"
+tmpProjectBatchGenotypedCGDAnnotatedVariantCalls="${MC_tmpFile}"
 
 bedfile=$(basename "${capturingKit}")
 
 if [ -f "${projectBatchGenotypedVariantCalls}" ]
-then 
+then
 
 	echo "create file toCADD"
 	##create file toCADD (split alternative alleles per line)
@@ -121,6 +128,12 @@ file="${clinvarAnnotation}"
 fields=["CLNDN","CLNDISDB","CLNHGVS","CLNSIG"]
 names=["clinvar_dn","clinvar_isdb","clinvar_hgvs","clinvar_sig"]
 ops=["self","self","self","self"]
+
+[[annotation]]
+file="${cgdFile}"
+columns = [5, 6, 7, 8, 9, 10]
+names=["CGD_Condition","CGD_Inheritance","CGD_AgeGroup","CGD_Manfest_cat","CGD_invent_cat","invent_rat"]
+ops=["self","self","self","self","self","self"]
 
 HERE
 
@@ -261,7 +274,26 @@ HERE
 	vcfanno_linux64 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 
 	mv "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
-	echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
+        echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
+
+	if [ 1 == 0 ]
+	then
+	module load ${vepVersion}
+        echo "starting with custom VEP annotation"
+        $EBROOTVEP/vep \
+        -i "${projectBatchGenotypedAnnotatedVariantCalls}" \
+        --vcf \
+        --custom "${cgdDataDir}/CGD_Condition.bed.gz",CGD_Condition,bed \
+        --custom "${cgdDataDir}/CGD_Inheritance.bed.gz",CGD_Inheritance,bed \
+        --custom "${cgdDataDir}/CGD_Age.bed.gz",CGD_Age_group,bed \
+        --custom "${cgdDataDir}/CGD_manifestation_categories.bed.gz",CGD_manfest_cat,bed \
+        --custom "${cgdDataDir}/CGD_intervention_categories.bed.gz",CGD_invent_cat,bed \
+        --custom "${cgdDataDir}/CGD_intervention_rationale.bed.gz",CGD_invent_rat.bed.gz,bed \
+        -o "${tmpProjectBatchGenotypedCGDAnnotatedVariantCalls}"
+
+	mv "${tmpProjectBatchGenotypedCGDAnnotatedVariantCalls}" "${projectBatchGenotypedCGDAnnotatedVariantCalls}"
+	echo "mv ${tmpProjectBatchGenotypedCGDAnnotatedVariantCalls} ${projectBatchGenotypedCGDAnnotatedVariantCalls}" 
+	fi
 else
 	echo "${projectBatchGenotypedVariantCalls} does not exist, skipped"
 fi

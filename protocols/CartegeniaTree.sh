@@ -399,8 +399,8 @@ else
 	outputStep8_2_5_end="${name}.step8_2_5_AF_ge_point5percent.vcf"
         gnomADpopFreqCheck "${outputStep8_2_4_next}" "${outputStep8_2_5ToSpecTree}" "${outputStep8_2_5_end}" "0.5"
 
-	cat "${outputStep8_2_5FinalOutput}" | grep -v '^#' | wc -l > "${name}.step8_2_5.count"
-	specTreeArray+=("--variant ${outputStep8_2_5oSpecTree}")
+	cat "${outputStep8_2_5ToSpecTree}" | grep -v '^#' | wc -l > "${name}.step8_2_5.count"
+	specTreeArray+=("--variant ${outputStep8_2_5ToSpecTree}")
 
 
 fi
