@@ -77,12 +77,22 @@ then
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.1.sites.${i}.vcf.gz\"\nfields=[\"AF\"]\nnames=[\"gnomAD_AF\"]\nops=[\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		done
 	fi
-length=$(zcat "${vcfAnnoConf}" | wc -l)
+
+cat > "${vcfAnnoConf}" << HERE
+
+[[annotation]]
+file="${caddAnnotationVcf}"
+fields=["phred", "raw"]
+names=["CADD_SCALED","CADD"]
+ops=["self","self"]
+HERE
+
+length=$(zcat "${fromCADDMerged}.gz" | wc -l)
 
 if [ "${length}" -gt 8 ]
 then
 
-cat > "${vcfAnnoConf}" << HERE
+cat >> "${vcfAnnoConf}" << HERE
 [[annotation]]
 file="${fromCADDMerged}.gz"
 fields=["phred", "raw"]
@@ -91,13 +101,7 @@ ops=["self","self"]
 HERE
 fi
 	## write first part of conf file
-	cat > "${vcfAnnoConf}" << HERE
-
-[[annotation]]
-file="${caddAnnotationVcf}"
-fields=["phred", "raw"]
-names=["CADD_SCALED","CADD"]
-ops=["self","self"]
+	cat >> "${vcfAnnoConf}" << HERE
 
 [[annotation]]
 file="${exacAnnotation}"
