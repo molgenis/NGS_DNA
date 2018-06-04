@@ -1,3 +1,4 @@
+
 #MOLGENIS walltime=05:59:00 mem=10gb ppn=10
 
 #Parameter mapping
@@ -114,6 +115,8 @@ ml BEDTools
 input=${gavinOutputFinalMergedRLV}
 name=${gavinOutputFinalMergedRLV%.GAVIN.rlv.vcf}
 
+rm -f ${name}.step*.count
+
 stepCount_0=$(cat ${input} | wc -l)
 
 outputStep1_next="${name}.step1_next.vcf"
@@ -122,14 +125,14 @@ outputStep1_next="${name}.step1_next.vcf"
 ##
 
 outputStep1="${name}.PASS.vcf"
-grep '^#' "${input}" > "${outputStep1}"
+grep '^#' "${input}" | cat > "${outputStep1}"
 
-grep '^#' "${input}" > ${name}.notPASS.vcf
+grep '^#' "${input}" | cat > ${name}.notPASS.vcf
 
 ##PASS
-grep -v '^#' "${input}" | grep 'PASS'  >> "${outputStep1}"
+grep -v '^#' "${input}" | grep 'PASS' | cat  >> "${outputStep1}"
 ## NO PASS
-grep -v '^#' ${input} | grep -v 'PASS' >> ${name}.notPASS.vcf
+grep -v '^#' ${input} | grep -v 'PASS' | cat >> ${name}.notPASS.vcf
 
 ##
 ###STEP 1.1 GENEFILTER
@@ -149,7 +152,7 @@ cat "${outputStep1_next}" | grep -v '^#' | wc -l > "${name}.step1.count"
 ##
 outputStep2_next="${name}.step2_next.vcf"
 outputStep2_1="${name}.step2_1.moreThan20x.vcf"
-outputStep2_2="${name}.step2_1.moreThan10x.vcf"
+outputStep2_2_0="${name}.step2_1.moreThan10x.vcf"
 ml GATK/3.7-Java-1.8.0_74
 
  java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
@@ -166,17 +169,17 @@ java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
    -R "${indexFile}" \
    -T SelectVariants \
    -V "${outputStep1_next}" \
-   -o "${outputStep2_2}" \
+   -o "${outputStep2_2_0}" \
    -sn '${externalSampleID}' \
    -select "DP >= 10.0 && DP < 20.0 "
 
-cat "${outputStep2_2}" | grep -v '^#' | wc -l > "${name}.step2_2.count"
+cat "${outputStep2_2_0}" | grep -v '^#' | wc -l > "${name}.step2_2_0.count"
 
 ### 2.2.1 ManVar (V/LP/P) (SHARED STEP)
 outputStep2_2_1_next="${name}.step2_2_1.manVar_No_V_LP_P.vcf"
 outputStep2_2_1_nextHLA="${name}.step2_2_1.manVar_V_LP_P.vcf"
 
-manVarCheck "${outputStep2_2}" "${outputStep2_2_1_nextHLA}" "${outputStep2_2_1_next}" "${manVarListMVL_VUS_LP_P}"
+manVarCheck "${outputStep2_2_0}" "${outputStep2_2_1_nextHLA}" "${outputStep2_2_1_next}" "${manVarListMVL_VUS_LP_P}"
 
 cat "${outputStep2_2_1_nextHLA}" | grep -v '^#' | wc -l > "${name}.step2_2_1nextHLA.count"
 cat "${outputStep2_2_1_next}" | grep -v '^#' | wc -l > "${name}.step2_2_1next.count"
@@ -187,6 +190,13 @@ cat "${outputStep2_2_1_next}" | grep -v '^#' | wc -l > "${name}.step2_2_1next.co
 outputStep2_2_3_end="${name}.step2_2_3.noCodingEffect.vcf"
 outputStep2_2_3_nextHLA="${name}.step2_2_3.codingEffect.vcf"
 
+grep '^#' "${outputStep2_2_1_next}"  | cat > "${outputStep2_2_3_nextHLA}"
+
+grep -v '^#' "${outputStep2_2_1_next}" | grep -v -E 'start_lost|stop_gained|frameshift_variant|inframe' | cat > "${outputStep2_2_3_end}"
+grep -v '^#' "${outputStep2_2_1_next}" | grep -E 'start_lost|stop_gained|frameshift_variant|inframe' | cat >> "${outputStep2_2_3_nextHLA}"
+cat "${outputStep2_2_3_nextHLA}" | grep -v '^#' | wc -l > "${name}.step2_2_3nextHLA.count"
+
+
 ### 2.2.4 merge all variants that continue the tree
 #echo "${outputStep2_1}" "${outputStep2_2_1_overlap}" outputStep2_2_2_overlap outputStep2_2_3_overlap > "${outputFinalStep2}"
 java -jar ${EBROOTGATK}/${gatkJar} \
@@ -194,9 +204,9 @@ java -jar ${EBROOTGATK}/${gatkJar} \
    -R ${indexFile} \
    --variant "${outputStep2_1}" \
    --variant "${outputStep2_2_1_nextHLA}" \
+   --variant "${outputStep2_2_3_nextHLA}" \
    -o "${outputStep2_next}" \
    -genotypeMergeOptions UNSORTED
-
 
 cat "${outputStep2_next}" | grep -v '^#' | wc -l > "${name}.step2.count"
 
@@ -205,8 +215,8 @@ cat "${outputStep2_next}" | grep -v '^#' | wc -l > "${name}.step2.count"
 ##
 outputStep3_next="${name}.step3_noHLA.vcf"
 echo "starting step 3: No HLA check"
-grep '^#' "${outputStep2_next}" > "${outputStep3_next}"
-grep -v '^#' "${outputStep2_next}"  | grep -v 'HLA-D' >> "${outputStep3_next}"
+grep '^#' "${outputStep2_next}" | cat > "${outputStep3_next}"
+grep -v '^#' "${outputStep2_next}"  | grep -v 'HLA-D' | cat >> "${outputStep3_next}"
 
 cat "${outputStep3_next}" | grep -v '^#' | wc -l > "${name}.step3.count"
 
@@ -216,8 +226,8 @@ cat "${outputStep3_next}" | grep -v '^#' | wc -l > "${name}.step3.count"
 ##
 outputStep4_next="${name}.step4_noMT.vcf"
 echo "starting step 4: No MT check"
-grep '^#' "${outputStep3_next}" > "${outputStep4_next}"
-grep -v '^#' "${outputStep3_next}" | awk '{if ($1 != "MT"){print $0}}' "${outputStep3_next}" > "${outputStep4_next}"
+grep '^#' "${outputStep3_next}" | cat > "${outputStep4_next}"
+grep -v '^#' "${outputStep3_next}" | cat |  awk '{if ($1 != "MT"){print $0}}' "${outputStep3_next}" > "${outputStep4_next}"
 
 cat "${outputStep4_next}" | grep -v '^#' | wc -l > "${name}.step4.count"
 
@@ -260,18 +270,18 @@ cat "${outputStep7_next}" | grep -v '^#' | wc -l > "${name}.step7.count"
 
 ## STEP 8.1 RLV TRUE / 8.2 FALSE
 outputStep8ToSpecTree="${name}.step8.vcf"
-outputStep8_1="${name}.step8.RLV_TRUE.vcf"
-outputStep8_2="${name}.step8.RLV_FALSE.vcf"
+outputStep8_1_0="${name}.step8.RLV_TRUE.vcf"
+outputStep8_2_0="${name}.step8.RLV_FALSE.vcf"
 echo "starting step 8: RLV PRESENT"
-grep '^#' "${outputStep7_next}" > "${outputStep8_1}"
-grep '^#' "${outputStep7_next}" > "${outputStep8_2}"
+grep '^#' "${outputStep7_next}" > "${outputStep8_1_0}"
+grep '^#' "${outputStep7_next}" > "${outputStep8_2_0}"
 
 rlvTrue="true"
-if grep 'RLV_PRESENT=TRUE' "${outputStep7_next}"
+if grep -q 'RLV_PRESENT=TRUE' "${outputStep7_next}"
 then
-	cat "${outputStep8_1}" | grep -v '^#' | wc -l >  "${name}.step8_1.count"
+	cat "${outputStep8_1_0}" | grep -v '^#' | wc -l >  "${name}.step8_1_0.count"
 
-	grep 'RLV_PRESENT=TRUE' "${outputStep7_next}" >> "${outputStep8_1}"
+	grep 'RLV_PRESENT=TRUE' "${outputStep7_next}" >> "${outputStep8_1_0}"
 	##
 	### Step 8.1.1 HGMD
 	##
@@ -285,11 +295,11 @@ then
 
 	outputStep8_1_2_next="${name}.step8_1_2.notPathogenic.vcf"
 
-	grep '^#' "${outputStep8_1}" > "${outputStep8_1_2ToSpecTree}"
-	grep '^#' "${outputStep8_1}" > "${outputStep8_1_2_next}"
+	grep '^#' "${outputStep8_1_0}" | cat > "${outputStep8_1_2ToSpecTree}"
+	grep '^#' "${outputStep8_1_0}" | cat > "${outputStep8_1_2_next}"
 
-	grep -v '^#' "${outputStep8_1}" | grep 'pathogenic' "${outputStep8_1}" >> "${outputStep8_1_2ToSpecTree}"
-	grep -v '^#' "${outputStep8_1}" | grep -v 'pathogenic' "${outputStep8_1}" >> "${outputStep8_1_2_next}"
+	grep -v '^#' "${outputStep8_1_0}" | grep 'pathogenic' | cat >> "${outputStep8_1_2ToSpecTree}"
+	grep -v '^#' "${outputStep8_1_0}" | grep -v 'pathogenic' | cat >> "${outputStep8_1_2_next}"
 
 	specTreeArray+=("--variant ${outputStep8_1_2ToSpecTree}")
 	cat "${outputStep8_1_2_next}" | grep -v '^#' | wc -l > "${name}.step8_1_2.count"
@@ -311,9 +321,9 @@ fi
 
 
 
-grep 'RLV_PRESENT=FALSE' "${outputStep7_next}" >> "${outputStep8_2}"
+grep 'RLV_PRESENT=FALSE' "${outputStep7_next}" >> "${outputStep8_2_0}"
 
-cat "${outputStep8_2}" | grep -v '^#' | wc -l > "${name}.step8_2.count"
+cat "${outputStep8_2_0}" | grep -v '^#' | wc -l > "${name}.step8_2_0.count"
 
 ##
 ### STEP 8.2.2 Coding effect (SHARED STEP)
@@ -324,16 +334,16 @@ echo "step 8.2.2: check if there is a coding effect"
 outputStep8_2_2ToPopFreq="${name}.step8_2_2.CodingEffect.vcf"
 outputStep8_2_2_next="${name}.step8_2_2.noCodingEffect.vcf"
 ## write headers
-grep '^#' "${outputStep8_2}" > "${outputStep8_2_2_next}"
-grep -v '^#' "${outputStep8_2}" | grep -E -v 'start_lost|stop_gained|frameshift_variant|inframe' >> "${outputStep8_2_2_next}"
+grep '^#' "${outputStep8_2_0}" | cat > "${outputStep8_2_2_next}"
+grep -v '^#' "${outputStep8_2_0}" | grep -E -v 'start_lost|stop_gained|frameshift_variant|inframe' | cat >> "${outputStep8_2_2_next}"
 
-size8_2=$(cat "${outputStep8_2}" | wc -l)
+size8_2_0=$(cat "${outputStep8_2_0}" | wc -l)
 size8_2_2_next=$(cat "${outputStep8_2_2_next}" | wc -l)
 
-if [ "${size8_2_2_next}" != "${size8_2}" ]
+if [ "${size8_2_2_next}" != "${size8_2_0}" ]
 then
-	grep '^#' "${outputStep8_2}" > "${outputStep8_2_2ToPopFreq}"
-        grep -v '^#' "${outputStep8_2}" | grep -E 'start_lost|stop_gained|frameshift_variant|inframe' >> "${outputStep8_2_2ToPopFreq}"
+	grep '^#' "${outputStep8_2_0}" | cat > "${outputStep8_2_2ToPopFreq}"
+        grep -v '^#' "${outputStep8_2_0}" | grep -E 'start_lost|stop_gained|frameshift_variant|inframe' | cat >> "${outputStep8_2_2ToPopFreq}"
 	echo "coding effect found"
 	popFreqArray+=("--variant ${outputStep8_2_2ToPopFreq}")
 else
@@ -354,15 +364,15 @@ echo "step 8.2.3: check if the splice variant is at -2/+2 "
 outputStep8_2_3ToPopFreq="${name}.step8_2_3.Splicesite.vcf"
 outputStep8_2_3_end="${name}.step8_2_3.noSplicesite.vcf"
 
-grep '^#' "${outputStep8_2_2_next}" > "${outputStep8_2_3_end}"
-grep -v '^#' "${outputStep8_2_2_next}" | grep -v -E 'splice.*HIGH' >> "${outputStep8_2_3_end}"
+grep '^#' "${outputStep8_2_2_next}" | cat  > "${outputStep8_2_3_end}"
+grep -v '^#' "${outputStep8_2_2_next}" | grep -v -E 'splice.*HIGH' | cat >> "${outputStep8_2_3_end}"
 
 size8_2_3_end=$(cat "${outputStep8_2_3_end}" | wc -l)
 
 if [ "${size8_2_3_end}" != "${size8_2_2_next}" ]
 then
-	grep '^#' "${outputStep8_2_2_next}" > "${outputStep8_2_3ToPopFreq}"
-        grep -v '^#' "${outputStep8_2_2_next}" | grep -E 'splice.*HIGH' >> "${outputStep8_2_3ToPopFreq}"
+	grep '^#' "${outputStep8_2_2_next}" | cat > "${outputStep8_2_3ToPopFreq}"
+        grep -v '^#' "${outputStep8_2_2_next}" | grep -E 'splice.*HIGH' | cat >> "${outputStep8_2_3ToPopFreq}"
 	echo "splice variant found"
 	popFreqArray+=("--variant ${outputStep8_2_3ToPopFreq}")
 else
