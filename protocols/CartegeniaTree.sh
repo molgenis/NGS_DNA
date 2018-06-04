@@ -47,6 +47,7 @@ java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
    -T SelectVariants \
    -V "${input}" \
    -o "${outputOverlap}" \
+   --restrictAllelesTo BIALLELIC \
    -sn '${externalSampleID}' \
    -select "gnomAD_AF_MAX < ${freq}"
 
@@ -56,6 +57,7 @@ java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
    -T SelectVariants \
    -V "${input}" \
    -o "${outputNoOverlap}" \
+   --restrictAllelesTo BIALLELIC \
    -sn '${externalSampleID}' \
    -select "gnomAD_AF_MAX >= ${freq}"
 }
