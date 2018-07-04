@@ -24,11 +24,11 @@ s16a_VariantCalling,protocols/VariantCalling.sh,s15_GenderCheck;s06_BaseRecalibr
 #s16c_CombineVariants,protocols/VariantCombine.sh,s16a_VariantCalling
 s16d_GenotypeVariants,protocols/VariantGenotyping.sh,s16a_VariantCalling;dbSnp=dbSNP137Vcf
 s17a_AnnotateVcf,protocols/AnnotateVcf.sh,s16d_GenotypeVariants
-s17b_AnnotateWithVEP,protocols/VEP.sh,s17a_AnnotateVcf
-#s17b_SnpEff,protocols/SnpEff.sh,s17a_AnnotateVcf
+#s17b_AnnotateWithVEP,protocols/VEP.sh,s17a_AnnotateVcf
+s17b_SnpEff,protocols/SnpEff.sh,s17a_AnnotateVcf
 #s18_CmdLineAnnotator,protocols/CmdLineAnnotator.sh,s17b_SnpEff
-s19_MergeBatches,protocols/MergeBatches.sh,s17b_AnnotateWithVEP;extension=annotatedVEPExtension
-#s19_MergeBatches,protocols/MergeBatches.sh,s17b_SnpEff;extension=annotatedSnpEffExtension
+#s19_MergeBatches,protocols/MergeBatches.sh,s17b_AnnotateWithVEP;extension=annotatedVEPExtension
+s19_MergeBatches,protocols/MergeBatches.sh,s17b_SnpEff;extension=annotatedSnpEffExtension
 s20_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s19_MergeBatches
 s21a_SnpFiltration,protocols/SnpFiltration.sh,s20_SplitIndelsAndSNPs
 s21b_IndelFiltration,protocols/IndelFiltration.sh,s20_SplitIndelsAndSNPs

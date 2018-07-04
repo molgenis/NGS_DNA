@@ -12,6 +12,7 @@
 #string logsDir 
 #string groupname
 #string tmpDataDir
+#string indexFile
 #string snpEffVersion
 #string javaVersion
 #string vepDBVersion
@@ -30,7 +31,7 @@ then
 	--offline \
 	--cache \
 	--dir "${vepDataDir}" \
-	--db_version="${vepDBVersion}" \
+	--db_version=${vepDBVersion} \
 	--vcf_info_field ANN \
 	--dont_skip \
 	--buffer 1000 \
