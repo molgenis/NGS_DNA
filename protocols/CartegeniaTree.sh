@@ -649,7 +649,7 @@ filter="AC,AF,AN,DP,FS,MQ,MQRankSum,QD,CADD,CADD_SCALED,gnomAD_exome_AF,CGD_AgeG
 
 sampleName=$(basename ${name})
 ####Transform VCF file into tabular file####
-"${vcf2Table}" \
+${EBROOTNGSMINUTILS}/${vcf2Table} \
 -vcf "${outputStep9_1ToSpecTree}" \
 -output ${outputStep9_1ToSpecTree}.table \
 -filter "${filter}" \
