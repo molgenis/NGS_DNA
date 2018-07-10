@@ -20,7 +20,8 @@
 #string indexFile
 #string gavinOutputFinalMergedRLV
 #string inhouseIntervalsDir
-
+#string ngsversion
+#string vcf2Table
 ### SHARED STEPS (USED MULTIPLE TIMES)
 
 ####################
@@ -33,13 +34,13 @@ outputNoOverlap="${3}"
 manVarList="${4}"
 
 #continue to next step
-bedtools intersect -header -v -a "${input}" -b "${manVarList}" > "${outputNoOverlap}" 
+bedtools intersect -header -v -a "${input}" -b "${manVarList}" > "${outputNoOverlap}.tmp.vcf"
 
 ##found back in ManVar = continue to specific tree
-bedtools intersect -header -a "${input}" -b "${manVarList}" > "${outputOverlap}.tmp" 
+bedtools intersect -header -a "${input}" -b "${manVarList}" > "${outputOverlap}.tmp"
 
-grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}" 
-grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}.NoMatchingAlleles.vcf" 
+grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}"
+grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}.NoMatchingAlleles.vcf"
 
 while read line
 do
@@ -51,9 +52,27 @@ do
 			echo "${line}" >> "${outputOverlap}"
 		else
 			echo "${line}" >> "${outputOverlap}.NoMatchingAlleles.vcf" 
+
+
 		fi
 	fi
 done<"${outputOverlap}.tmp" 
+if [[ -f "${outputOverlap}.NoMatchingAlleles.vcf" ]]
+then
+	manList=$(basename ${manVarList%.*})
+	grep -v '^#' "${outputOverlap}.NoMatchingAlleles.vcf" | awk -v manList=${manList} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,manList":NoMatchingAlleles",$8,$10}' >> ${name}.tagsAndFilters.tsv
+fi
+
+##combine overlap and genome check
+java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
+   -R ${indexFile} \
+   --variant "${outputOverlap}.NoMatchingAlleles.vcf"  \
+   --variant "${outputNoOverlap}.tmp.vcf"  \
+   -out "${outputNoOverlap}.combined.vcf"  \
+   --assumeSorted
+
+##sort vcf
+bcftools sort "${outputNoOverlap}.combined.vcf" -O v -o "${outputNoOverlap}"
 
 }
 
@@ -82,6 +101,8 @@ java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
    --restrictAllelesTo BIALLELIC \
    -sn '${externalSampleID}' \
    -select "vc.hasAttribute('gnomAD_exome_AF_MAX') && (! vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && gnomAD_exome_AF_MAX >= ${freq}"
+grep -v '^#' "${outputOverlap}.PASS_Genome_AF_Filter.vcf" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"AF>"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
+
 
 ##missing in exome, check genome
 java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
@@ -92,6 +113,19 @@ java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
    --restrictAllelesTo BIALLELIC \
    -sn '${externalSampleID}' \
    -select "((! vc.hasAttribute('gnomAD_exome_AF_MAX')) || vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && ((! vc.hasAttribute('gnomAD_genome_AF_MAX')) || vc.getAttribute('gnomAD_genome_AF_MAX').equals('.') || gnomAD_genome_AF_MAX < ${freq})"
+grep -v '^#' "${outputOverlap}.PASS_Genome_AF_Filter.vcf" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF<"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
+
+##missing in exome, check genome
+java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
+   -R "//apps//data//1000G/phase1/human_g1k_v37_phiX.fasta" \
+   -T SelectVariants \
+   -V "${input}" \
+   -o "${outputOverlap}.NotPASS_Genome_AF_Filter.vcf" \
+   --restrictAllelesTo BIALLELIC \
+   -sn '${externalSampleID}' \
+   -select "((! vc.hasAttribute('gnomAD_exome_AF_MAX')) || vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && ( vc.hasAttribute('gnomAD_genome_AF_MAX') && (! vc.getAttribute('gnomAD_genome_AF_MAX').equals('.')) && gnomAD_genome_AF_MAX > ${freq})"
+
+grep -v '^#' "${outputOverlap}.NotPASS_Genome_AF_Filter.vcf" |  awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF>"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 ##combine overlap and genome check
 java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
@@ -155,13 +189,15 @@ module load ${bedToolsVersion}
 ### 9. Merge all continue to spec tree together
 ### 10. Annotate AR/AD/X-Linked with OMIM/HPO
 ### 11. Continue to specific tree
+
+
 grep '^#' "${gavinOutputFinalMergedRLV}" > ${gavinOutputFinalMergedRLV%.*}.removed0_0_calls.vcf
 grep -v '^#' "${gavinOutputFinalMergedRLV}" | grep -v '0/0:' >> ${gavinOutputFinalMergedRLV%.*}.removed0_0_calls.vcf
 
 input=${gavinOutputFinalMergedRLV%.*}.removed0_0_calls.vcf
 
 name=${gavinOutputFinalMergedRLV%.GAVIN.rlv.vcf}
-
+rm -f ${name}.tagsAndFilters.tsv
 
 rm -f ${name}.step*.count
 
@@ -178,6 +214,7 @@ outputStep1="${name}.PASS.vcf"
 grep '^#' "${input}" | cat > "${outputStep1}"
 
 grep '^#' "${input}" | cat > "${name}.notPASS.vcf"
+grep -v '^#' "${name}.notPASS.vcf" | awk '{print $1,$2,$4,$5,"NOT PASS",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 ##PASS
 grep -v '^#' "${input}" | grep 'PASS' | cat  >> "${outputStep1}"
@@ -253,9 +290,14 @@ outputStep2_2_3_end="${name}.step2_2_3.noCodingEffect.vcf"
 outputStep2_2_3_nextHLA="${name}.step2_2_3.codingEffect.vcf"
 
 grep '^#' "${outputStep2_2_1_next}" | cat > "${outputStep2_2_3_nextHLA}"
-
+grep '^#' "${outputStep2_2_1_next}" | cat > "${outputStep2_2_3_end}"
 grep -v '^#' "${outputStep2_2_1_next}" | grep -v -E 'start_lost|stop_gained|frameshift_variant|inframe' | cat >> "${outputStep2_2_3_end}"
 grep -v '^#' "${outputStep2_2_1_next}" | grep -E 'start_lost|stop_gained|frameshift_variant|inframe' | cat >> "${outputStep2_2_3_nextHLA}"
+
+
+grep -v '^#' "${outputStep2_2_3_nextHLA}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"coding",$8,$10}' >> ${name}.tagsAndFilters.tsv
+grep -v '^#' "${outputStep2_2_3_end}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"noCoding",$8,$10}' >> ${name}.tagsAndFilters.tsv
+
 
 count_2_2_3_true=$(cat "${outputStep2_2_3_nextHLA}" | grep -v '^#' |  wc -l | cat)
 count_2_2_3_false=$((count_2_2_1_false - count_2_2_3_true))
@@ -288,6 +330,8 @@ grep '^#' "${outputStep2_next}" | cat > "${outputStep3_end}"
 grep -v '^#' "${outputStep2_next}"  | grep -v 'HLA-D' | cat >> "${outputStep3_next}"
 grep -v '^#' "${outputStep2_next}"  | grep 'HLA-D' | cat >> "${outputStep3_end}"
 
+grep -v '^#' "${outputStep3_end}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"HLA",$8,$10}' >> ${name}.tagsAndFilters.tsv
+
 count_3_true=$(cat "${outputStep3_next}" | grep -v '^#' |  wc -l | cat)
 count_3_false=$((count_2_true - count_3_true))
 COUNTARRAY+=("Step 3(No HLA region); TRUE: ${count_3_true}, FALSE:${count_3_false}")
@@ -303,6 +347,8 @@ grep '^#' "${outputStep3_next}" | cat > "${outputStep4_end}"
 grep -v '^#' "${outputStep3_next}" | cat |  awk '{if ($1 != "MT"){print $0}}' >> "${outputStep4_next}"
 grep -v '^#' "${outputStep3_next}" | cat |  awk '{if ($1 == "MT"){print $0}}' >> "${outputStep4_end}"
 
+grep -v '^#' "${outputStep4_end}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"MT",$8,$10}' >> ${name}.tagsAndFilters.tsv
+
 count_4_true=$(cat "${outputStep4_next}" | grep -v '^#' | wc -l | cat)
 count_4_false=$((count_3_true - count_4_true))
 COUNTARRAY+=("Step 4(No MT region); TRUE: ${count_4_true}, FALSE:${count_4_false}")
@@ -316,6 +362,8 @@ outputStep5_end="${name}.step5.overlapWith_MVL_LB-B.vcf"
 
 manVarCheck "${outputStep4_next}" "${outputStep5_end}" "${outputStep5_next}" "${manVarListMVL_LB_B}"
 echo "step 5 done: ${outputStep5_next}"
+
+grep -v '^#' "${outputStep5_end}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"MVL:LB/B",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 count_5_true=$(cat "${outputStep5_next}" | grep -v '^#' | wc -l | cat)
 count_5_false=$(cat "${outputStep5_end}" | wc -l)
@@ -334,6 +382,8 @@ manVarCheck "${outputStep5_next}" "${outputStep6ToSpecTree}" "${outputStep6_next
 specTreeArray+=("--variant ${outputStep6ToSpecTree}")
 echo "step 6 done: ${outputStep6_next}"
 
+grep -v '^#' "${outputStep6ToSpecTree}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"MVL:V/LP/P",$8,$10}' >> ${name}.tagsAndFilters.tsv
+
 count_6_true=$(cat "${outputStep6ToSpecTree}" | grep -v '^#' | wc -l | cat)
 count_6_false=$(cat "${outputStep6_next}" | wc -l)
 COUNTARRAY+=("Step 6(VUS/LP/P in MVL); TRUE: ${count_6_true} (proceed to end of tree), FALSE:${count_6_false}")
@@ -347,6 +397,8 @@ outputStep7ToSpecTree="${name}.step7.overlapWith_VKGL_consensus_VUS-LP-P.vcf"
 manVarCheck "${outputStep6_next}" "${outputStep7ToSpecTree}" "${outputStep7_next}" "${manVarListVKGL_consensus_VUS_LP_P}"
 specTreeArray+=("--variant ${outputStep7ToSpecTree}")
 echo "step 7 done: ${outputStep7_next}"
+
+grep -v '^#' "${outputStep7ToSpecTree}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"VKGL:V/LP/P",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 count_7_true=$(cat "${outputStep7ToSpecTree}" | grep -v '^#' | wc -l | cat)
 count_7_false=$(cat "${outputStep7_next}" | wc -l)
@@ -364,6 +416,8 @@ rlvTrue="true"
 if grep -q 'RLV_PRESENT=TRUE' "${outputStep7_next}"
 then
 	grep 'RLV_PRESENT=TRUE' "${outputStep7_next}" >> "${outputStep8_1_0}"
+
+	grep -v '^#' "${outputStep8_1_0}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"TRUE",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 	count_8_1_0_true=$(cat "${outputStep8_1_0}" | grep -v '^#' | wc -l | cat)
 	COUNTARRAY+=("Step 8_1_0(Gavin, RLV_PRESENT=TRUE); TRUE: ${count_8_1_0_true}")
@@ -385,6 +439,8 @@ then
 
 	grep -v '^#' "${outputStep8_1_0}" | grep -E 'clinvar_sig=Pathogenic|Reported_pathogenic|clinvar_sig=Pathogenic/Likely_pathogenic|clinvar_sig=Likely_pathogenic' | cat >> "${outputStep8_1_2ToSpecTree}"
 	grep -v '^#' "${outputStep8_1_0}" | grep -v -E 'clinvar_sig=Pathogenic|Reported_pathogenic|clinvar_sig=Pathogenic/Likely_pathogenic|clinvar_sig=Likely_pathogenic' | cat >> "${outputStep8_1_2_next}"
+
+	grep -v '^#' "${outputStep8_1_2ToSpecTree}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"(likely)pathogenic",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 	specTreeArray+=("--variant ${outputStep8_1_2ToSpecTree}")
 
@@ -414,7 +470,7 @@ fi
 
 
 grep 'RLV_PRESENT=FALSE' "${outputStep7_next}" | cat >> "${outputStep8_2_0}"
-
+grep -v '^#' "${outputStep8_2_0}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"FALSE",$8,$10}' >> ${name}.tagsAndFilters.tsv
 count_8_2_0_true=$(cat "${outputStep8_2_0}" | grep -v '^#' | wc -l | cat)
 COUNTARRAY+=("Step 8_2_0(Gavin, RLV_PRESENT=FALSE); TRUE: ${count_8_2_0_true}")
 ##
@@ -445,6 +501,7 @@ then
 else
 	grep '^#' "${outputStep8_2_0}" | cat > "${outputStep8_2_2ToPopFreq}"
         grep -v '^#' "${outputStep8_2_0}" | grep -E 'start_lost|stop_gained|frameshift_variant|inframe' | cat >> "${outputStep8_2_2ToPopFreq}"
+	grep -v '^#' "${outputStep8_2_2ToPopFreq}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"coding",$8,$10}' >> ${name}.tagsAndFilters.tsv
 	echo "coding effect found"
 	popFreqArray+=("--variant ${outputStep8_2_2ToPopFreq}")
 
@@ -477,6 +534,8 @@ else
         grep -v '^#' "${outputStep8_2_2_next}" | grep -E 'splice.*HIGH' | cat >> "${outputStep8_2_3ToPopFreq}"
 	echo "splice variant found"
 	popFreqArray+=("--variant ${outputStep8_2_3ToPopFreq}")
+	grep -v '^#' "${outputStep8_2_3_end}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"NoSplice",$8,$10}' >> ${name}.tagsAndFilters.tsv
+	grep -v '^#' "${outputStep8_2_3ToPopFreq}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"splice",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
         count_8_2_3_true=$(cat "${outputStep8_2_3ToPopFreq}" | grep -v '^#' | wc -l | cat)
         count_8_2_3_false=$(cat "${outputStep8_2_3_end}" | grep -v '^#' | wc -l | cat)
@@ -517,7 +576,7 @@ else
         outputStep8_2_5ToSpecTree="${name}.step8_2_5_AF_lt_point5percent.vcf"
 	outputStep8_2_5_end="${name}.step8_2_5_AF_ge_point5percent.vcf"
         gnomADpopFreqCheck "${outputStep8_2_4_next}" "${outputStep8_2_5ToSpecTree}" "${outputStep8_2_5_end}" "0.005"
-
+	
         count_8_2_5_true=$(cat "${outputStep8_2_5ToSpecTree}" | grep -v '^#' | wc -l | cat)
         count_8_2_5_false=$(cat "${outputStep8_2_5_end}" | grep -v '^#' | wc -l | cat)
         COUNTARRAY+=("Step 8_2_5(GAVIN=FALSE, Pop Freq < 0.5%); TRUE: ${count_8_2_5_true}(proceed to end of tree), FALSE:${count_8_2_5_false}")
@@ -544,7 +603,7 @@ bcftools sort ${outputStep9}.tmp.vcf -O v -o ${outputStep9}
 ml ${bedToolsVersion}
 bedtools intersect -header -a "${outputStep9}" -b "${inhouseIntervalsDir}/Diagnostics/5GPM_NX158_target_v1.bed" > "${outputStep9_1ToSpecTree}.tmp.vcf"
 grep -v 'RF_Filter' "${outputStep9_1ToSpecTree}.tmp.vcf" > "${outputStep9_1ToSpecTree}"
-
+grep -v '^#' "${outputStep9_1ToSpecTree}.tmp.vcf" | grep 'RF_Filter' | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"RF_FILTER",$8,$10}' >> ${name}.tagsAndFilters.tsv
 count_9_true=$(cat "${outputStep9_1ToSpecTree}" | grep -v '^#' | wc -l | cat)
 COUNTARRAY+=("Step 9(Merging all the prev steps + 5GPM_NX158 bedfile to select only regions of interest); TRUE: ${count_9_true}")
 
@@ -583,8 +642,25 @@ echo "outputStep8_2_5_end: ${outputStep8_2_5_end}
 echo "outputStep9: ${outputStep9}"
 echo "This is the final output: ${outputStep9_1ToSpecTree}"
 
+sort -V ${name}.tagsAndFilters.tsv | uniq > ${name}.tagsAndFilters.sorted.tsv
+
+ml ${ngsversion}
+filter="AC,AF,AN,DP,FS,MQ,MQRankSum,QD,CADD,CADD_SCALED,gnomAD_exome_AF,CGD_AgeGroup,CGD_Condition,CGD_Inheritance,CGD_Manfest_cat,CGD_invent_cat,gnomAD_genome_AF_MAX,ANN,Samples"
+
+sampleName=$(basename ${name})
+####Transform VCF file into tabular file####
+"${vcf2Table}" \
+-vcf "${outputStep9_1ToSpecTree}" \
+-output ${outputStep9_1ToSpecTree}.table \
+-filter "${filter}" \
+-sample "${sampleName}"
+
+python ${EBROOTNGS_DNA}/scripts/CartegeniaFilterTag.py ${name}.tagsAndFilters.sorted.tsv | awk 'BEGIN {OFS="\t"}{FS="^"}{print $1,$2,$3,$4,$7,$5,$6}' | sort -V > ${name}.SearchFortagsAndFilters.tsv
+echo "this is the final output in table format: ${outputStep9_1ToSpecTree}.table"
+echo "this is the tag/filter file:" ${name}.SearchFortagsAndFilters.tsv
 
 ####################
 ## STEP 10
 ### CONTINUE TREE
 ##
+

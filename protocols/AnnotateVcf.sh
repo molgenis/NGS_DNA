@@ -1,4 +1,4 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=10
+#MOLGENIS walltime=05:59:00 mem=6gb ppn=4
 #string logsDir
 #string groupname
 #string project
@@ -242,7 +242,7 @@ type="Integer"
 HERE
 
 	echo "starting to annotate with vcfanno"
-	vcfanno_linux64 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
+	vcfanno_linux64 -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 
 	mv "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
         echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
