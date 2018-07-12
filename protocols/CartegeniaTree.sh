@@ -114,7 +114,7 @@ java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
    --restrictAllelesTo BIALLELIC \
    -sn '${externalSampleID}' \
    -select "((! vc.hasAttribute('gnomAD_exome_AF_MAX')) || vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && ((! vc.hasAttribute('gnomAD_genome_AF_MAX')) || vc.getAttribute('gnomAD_genome_AF_MAX').equals('.') || gnomAD_genome_AF_MAX < ${freq})"
-grep -v '^#' "${outputOverlap}.PASS_Genome_AF_Filter.vcf" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF<"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
+grep -v '^#' "${outputOverlap}.PASS_Genome_AF_Filter.vcf" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF<"freq" or NA",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 ##missing in exome, check genome (> freq)
 java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
@@ -581,68 +581,37 @@ java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
 
 bcftools sort ${outputStep9}.tmp.vcf -O v -o ${outputStep9}
 
-ml ${bedToolsVersion}
-bedtools intersect -header -a "${outputStep9}" -b "${inhouseIntervalsDir}/Diagnostics/5GPM_NX158_target_v1.bed" > "${outputStep9_1ToSpecTree}.tmp.vcf"
-grep -v 'RF_Filter' "${outputStep9_1ToSpecTree}.tmp.vcf" > "${outputStep9_1ToSpecTree}"
-grep -v '^#' "${outputStep9_1ToSpecTree}.tmp.vcf" | grep 'RF_Filter' | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"RF_FILTER",$8,$10}' >> ${name}.tagsAndFilters.tsv
-count_9_true=$(cat "${outputStep9_1ToSpecTree}" | grep -v '^#' | wc -l | cat)
-COUNTARRAY+=("Step 9(Merging all the prev steps + 5GPM_NX158 bedfile to select only regions of interest); TRUE: ${count_9_true}")
-
 for i in "${COUNTARRAY[@]}"
 do
 	echo "${i}"
 done
 
-echo "outputstep1: ${outputStep1_next}"
-echo "outputstep2_1: ${outputStep2_1}"
-echo "outputstep2_2_0: ${outputStep2_2_0}"
-echo "outputStep2_2_3_nextHLA: ${outputStep2_2_3_nextHLA}"
-echo "outputStep2_2_3_end: ${outputStep2_2_3_end}"
-echo "outputStep2_next: ${outputStep2_next}"
-echo "outputStep3_next: ${outputStep3_next}"
-echo "outputStep4_next: ${outputStep4_next}"
-echo "outputStep5_next: ${outputStep5_next}"
-echo "outputStep5_end: ${outputStep5_end}"
-echo "outputStep6ToSpecTree: ${outputStep6ToSpecTree}"
-echo "outputStep6_next: ${outputStep6_next}"
-echo "outputStep7ToSpecTree: ${outputStep7ToSpecTree}"
-echo "outputStep7_next: ${outputStep7_next}"
-echo "outputStep8_1_0: ${outputStep8_1_0}"
-echo "outputStep8_1_2ToSpecTree: ${outputStep8_1_2ToSpecTree}"
-echo "outputStep8_1_2_next: ${outputStep8_1_2_next}"
-echo "outputStep8_1_3ToSpecTree: ${outputStep8_1_3ToSpecTree}"
-echo "outputStep8_1_3_end: ${outputStep8_1_3_end}
-echo "outputStep8_2_0: ${outputStep8_2_0}"
-echo "outputStep8_2_2ToPopFreq: ${outputStep8_2_2ToPopFreq}"
-echo "outputStep8_2_2_next: ${outputStep8_2_2_next}"
-echo "outputStep8_2_3ToPopFreq: ${outputStep8_2_3ToPopFreq}"
-echo "outputStep8_2_3_end: ${outputStep8_2_3_end}"
-echo "outputStep8_2_4_next: ${outputStep8_2_4_next}"
-echo "outputStep8_2_5ToSpecTree: ${outputStep8_2_5ToSpecTree}"
-echo "outputStep8_2_5_end: ${outputStep8_2_5_end}
-echo "outputStep9: ${outputStep9}"
+#echo "outputstep1: ${outputStep1_next}"
+#echo "outputstep2_1: ${outputStep2_1}"
+#echo "outputstep2_2_0: ${outputStep2_2_0}"
+#echo "outputStep2_2_3_nextHLA: ${outputStep2_2_3_nextHLA}"
+#echo "outputStep2_2_3_end: ${outputStep2_2_3_end}"
+#echo "outputStep2_next: ${outputStep2_next}"
+#echo "outputStep3_next: ${outputStep3_next}"
+#echo "outputStep4_next: ${outputStep4_next}"
+#echo "outputStep5_next: ${outputStep5_next}"
+#echo "outputStep5_end: ${outputStep5_end}"
+#echo "outputStep6ToSpecTree: ${outputStep6ToSpecTree}"
+#echo "outputStep6_next: ${outputStep6_next}"
+#echo "outputStep7ToSpecTree: ${outputStep7ToSpecTree}"
+#echo "outputStep7_next: ${outputStep7_next}"
+#echo "outputStep8_1_0: ${outputStep8_1_0}"
+#echo "outputStep8_1_2ToSpecTree: ${outputStep8_1_2ToSpecTree}"
+#echo "outputStep8_1_2_next: ${outputStep8_1_2_next}"
+#echo "outputStep8_1_3ToSpecTree: ${outputStep8_1_3ToSpecTree}"
+#echo "outputStep8_1_3_end: ${outputStep8_1_3_end}
+#echo "outputStep8_2_0: ${outputStep8_2_0}"
+#echo "outputStep8_2_2ToPopFreq: ${outputStep8_2_2ToPopFreq}"
+#echo "outputStep8_2_2_next: ${outputStep8_2_2_next}"
+#echo "outputStep8_2_3ToPopFreq: ${outputStep8_2_3ToPopFreq}"
+#echo "outputStep8_2_3_end: ${outputStep8_2_3_end}"
+#echo "outputStep8_2_4_next: ${outputStep8_2_4_next}"
+#echo "outputStep8_2_5ToSpecTree: ${outputStep8_2_5ToSpecTree}"
+#echo "outputStep8_2_5_end: ${outputStep8_2_5_end}
+#echo "outputStep9: ${outputStep9}"
 echo "This is the final output: ${outputStep9_1ToSpecTree}"
-
-sort -V ${name}.tagsAndFilters.tsv | uniq > ${name}.tagsAndFilters.sorted.tsv
-
-ml "${ngsversion}"
-filter="AC,AF,AN,DP,FS,MQ,MQRankSum,QD,CADD,CADD_SCALED,gnomAD_exome_AF,CGD_AgeGroup,CGD_Condition,CGD_Inheritance,CGD_Manfest_cat,CGD_invent_cat,gnomAD_genome_AF_MAX,ANN,Samples"
-ml "${ngsUtilsVersion}"
-
-sampleName=$(basename "${name}")
-####Transform VCF file into tabular file####
-${EBROOTNGSMINUTILS}/${vcf2Table} \
--vcf "${outputStep9_1ToSpecTree}" \
--output ${outputStep9_1ToSpecTree}.table \
--filter "${filter}" \
--sample "${sampleName}"
-
-python ${EBROOTNGS_DNA}/scripts/CartegeniaFilterTag.py ${name}.tagsAndFilters.sorted.tsv | awk 'BEGIN {OFS="\t"}{FS="^"}{print $1,$2,$3,$4,$7,$5,$6}' | sort -V > ${name}.SearchFortagsAndFilters.tsv
-echo "this is the final output in table format: ${outputStep9_1ToSpecTree}.table"
-echo "this is the tag/filter file:" ${name}.SearchFortagsAndFilters.tsv
-
-####################
-## STEP 10
-### CONTINUE TREE
-##
-

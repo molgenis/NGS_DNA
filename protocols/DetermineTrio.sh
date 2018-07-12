@@ -50,11 +50,11 @@ then
 			done
 			echo "PARENTS: ${parents[0]} ${parents[1]}"
 			awk -v parent1=${parents[0]} -v parent2=${parents[1]} '{if ($0 ~ /^#CHROM/){print $(parent1+9)"\n"$(parent2+9)}}' "${inputVcfFile}" > "${trioInformationPrefix}Parents_family${teller}.tmp"
-			awk -v child="${child}" '{if ($0 ~ /^#CHROM/){print $(child+9)": Child"}}' "${inputVcfFile}" > "${trioInformationPrefix}_family${teller}.txt"
+			awk -v child="${child}" '{if ($0 ~ /^#CHROM/){print $(child+9)" Child"}}' "${inputVcfFile}" > "${trioInformationPrefix}_family${teller}.txt"
 
 			while read line
 			do
-				printf "${line}: "
+				printf "${line} "
 				if [ $(tail -1 "${intermediateDir}/${line}.chosenSex.txt") == "Female" ]
 				then
 					echo "Mother"
@@ -62,9 +62,17 @@ then
 					echo "Father"
 				fi
 			done<"${trioInformationPrefix}Parents_family${teller}.tmp" >> "${trioInformationPrefix}_family${teller}.txt"
+
 		fi
 		teller=$((teller+1))
 	done<"${inputTrioFile}"
+
+	for i in $(ls "${trioInformationPrefix}"_family*.txt)
+	do
+		child=$(head -1 "${i}" | awk '{print $1}' )
+		cp "${i}" "${intermediateDir}/${child}.hasFamily"
+	done
+
 else
 	echo "there were no trio's found in this data"
 fi
