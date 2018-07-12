@@ -95,6 +95,6 @@ else
 	sort -k1 <(awk '{print $1"_"$2"\t"$0}' "${name}.splittedAlleles.txt") > "${outputStep9_1ToSpecTree}.sorted.txt"
 	grep -v '^#' "${name}.SearchFortagsAndFilters.tsv" | awk '{print $1"_"$2"\t"$0}' | sort -k1,1  > "${name}.SearchFortagsAndFilters.sorted.tsv"
 	##combine tags&filter file with variant file
-	echo -e"chr\tposition\tsnp\tref\talt\ttag/filter\tChildA1\tChildA2" > "${name}.finalProduct.tsv"
+	echo -e "chr\tposition\tsnp\tref\talt\ttag/filter\tChildA1\tChildA2" > "${name}.finalProduct.tsv"
 	join  -t $'\t' -o '1.2,1.3,1.4,1.5,1.6,2.6,1.11,1.12' -1 1 -2 1 "${outputStep9_1ToSpecTree}.sorted.txt" "${name}.SearchFortagsAndFilters.sorted.tsv" >> "${name}.finalProduct.tsv"
 fi
