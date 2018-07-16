@@ -58,6 +58,7 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 -f "${gavinFDR}" \
 -g "${gavinCalibrations}" \
 -k \
+-s \
 -q
 
 mv "${tmpGavinOutputFinal}" "${gavinOutputFinal}"
