@@ -1,4 +1,4 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=10
+#MOLGENIS walltime=05:59:00 mem=6gb ppn=4
 #string logsDir
 #string groupname
 #string project
@@ -22,20 +22,27 @@
 #string vcfAnnoGnomadGenomesConf
 #string batchID
 #string vcfAnnoCustomConfLua
+#string projectBatchGenotypedCGDAnnotatedVariantCalls
 #string clinvarAnnotation
+#string cgdDataDir
+#string cgdFile
 
 ml ${vcfAnnoVersion}
 ml ${htsLibVersion}
 ml ${bcfToolsVersion}
 ml ${caddVersion}
 
+
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
+
+makeTmpDir "${projectBatchGenotypedCGDAnnotatedVariantCalls}"
+tmpProjectBatchGenotypedCGDAnnotatedVariantCalls="${MC_tmpFile}"
 
 bedfile=$(basename "${capturingKit}")
 
 if [ -f "${projectBatchGenotypedVariantCalls}" ]
-then 
+then
 
 	echo "create file toCADD"
 	##create file toCADD (split alternative alleles per line)
@@ -61,21 +68,43 @@ then
 
 	## Prepare gnomAD config 
 	rm -f "${vcfAnnoGnomadGenomesConf}"
-	if [ "${bedfile}" == *"Exoom"* ]
+	if [[ "${bedfile}" == *"Exoom"* ]]
 	then
-		echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.1.sites.${batchID}.vcf.gz\"\nfields=[\"AF\"]\nnames=[\"gnomAD_AF\"]\nops=[\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+		if [[ ${batchID} == *"X"* ]]
+		then
+			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chrX.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
+		elif [[ ${batchID} == *"Y"* || ${batchID} == *"MT"* ]]
+		then
+			echo "chromosome Y/MT is not in gnomAD, do nothing"
+		else
+			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${batchID}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
+		fi
 	else
 		for i in {1..22}
 		do
-			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.1.sites.${i}.vcf.gz\"\nfields=[\"AF\"]\nnames=[\"gnomAD_AF\"]\nops=[\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
+			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
+			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		done
 	fi
-length=$(zcat "${vcfAnnoConf}" | wc -l)
+
+cat > "${vcfAnnoConf}" << HERE
+
+[[annotation]]
+file="${caddAnnotationVcf}"
+fields=["phred", "raw"]
+names=["CADD_SCALED","CADD"]
+ops=["self","self"]
+HERE
+
+length=$(zcat "${fromCADDMerged}.gz" | wc -l)
 
 if [ "${length}" -gt 8 ]
 then
 
-cat > "${vcfAnnoConf}" << HERE
+cat >> "${vcfAnnoConf}" << HERE
 [[annotation]]
 file="${fromCADDMerged}.gz"
 fields=["phred", "raw"]
@@ -84,37 +113,25 @@ ops=["self","self"]
 HERE
 fi
 	## write first part of conf file
-	cat > "${vcfAnnoConf}" << HERE
+	cat >> "${vcfAnnoConf}" << HERE
+
+#[[annotation]]
+#file="${exacAnnotation}"
+#fields=["AF","AC_Het","AC_Hom"]
+#names=["EXAC_AF","EXAC_AC_HET","EXAC_AC_HOM"]
+#ops=["self","self","self"]
 
 [[annotation]]
-file="${caddAnnotationVcf}"
-fields=["phred", "raw"]
-names=["CADD_SCALED","CADD"]
-ops=["self","self"]
-
-[[annotation]]
-file="${exacAnnotation}"
-fields=["AF","AC_Het","AC_Hom"]
-names=["EXAC_AF","EXAC_AC_HET","EXAC_AC_HOM"]
-ops=["self","self","self"]
+file="${gnomADExomesAnnotation}/gnomad.exomes.r2.0.2.sites.normalized.vcf.gz"
+fields=["Hom","Hemi", "AN","AF_POPMAX","segdup","AF_POPMAX"]
+names=["gnomAD_Hom","gnomAD_Hemi","gnomAD_AN","gnomAD_exome_AF_MAX","gnomAD_exome_RF_Filter","EXAC_AF"]
+ops=["self","self","first","self","self","self"]
 
 [[annotation]]
 file="${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz"
-fields=["AC","AN", "GTC"]
-names=["GoNL_AC","GoNL_AN","GoNL_GTC"]
-ops=["self","self","self"]
-
-[[annotation]]
-file="${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz"
-fields=["AC","AN", "GTC"]
-names=["GoNL_AC","GoNL_AN","GoNL_GTC"]
-ops=["self","self","self"]
-
-[[annotation]]
-file="${gnomADExomesAnnotation}/gnomad.exomes.r2.0.1.sites.vcf.gz"
-fields=["Hom","Hemi", "AN","AF_POPMAX"]
-names=["gnomAD_Hom","gnomAD_Hemi","gnomAD_AN","gnomAD_AF_MAX"]
-ops=["self","self","self","self"]
+fields=["AC","AN"]
+names=["GoNL_AC","GoNL_AN"]
+ops=["self","first"]
 
 [[annotation]]
 file="${clinvarAnnotation}"
@@ -122,11 +139,19 @@ fields=["CLNDN","CLNDISDB","CLNHGVS","CLNSIG"]
 names=["clinvar_dn","clinvar_isdb","clinvar_hgvs","clinvar_sig"]
 ops=["self","self","self","self"]
 
+[[annotation]]
+file="${cgdFile}"
+columns = [5, 6, 7, 8, 9, 10]
+names=["CGD_Condition","CGD_Inheritance","CGD_AgeGroup","CGD_Manfest_cat","CGD_invent_cat","invent_rat"]
+ops=["self","self","self","self","self","self"]
+
 HERE
 
-## Adding gnomAD 
-cat "${vcfAnnoGnomadGenomesConf}" >> "${vcfAnnoConf}"
-
+## Adding gnomAD
+if [[ -f "${vcfAnnoGnomadGenomesConf}" ]]
+then
+	cat "${vcfAnnoGnomadGenomesConf}" >> "${vcfAnnoConf}"
+fi
 #
 ## make custom .lua for calculating hom and het frequency
 #
@@ -191,28 +216,6 @@ end
 
 join = table.concat
 
-function check_clinvar_aaf(clinvar_sig, max_aaf_all, aaf_cutoff)
-    -- didn't find an aaf for this so can't be common
-    if max_aaf_all == nil or clinvar_sig == nil then
-        return false
-    end
-    if type(clinvar_sig) ~= "string" then
-        clinvar_sig = join(clinvar_sig, ",")
-    end
-    if false == contains(clinvar_sig, "pathogenic") then
-        return false
-    end
-    if type(max_aaf_all) ~= "table" then
-        return max_aaf_all > aaf_cutoff
-    end
-    for i, aaf in pairs(max_aaf_all) do
-        if aaf > aaf_cutoff then
-            return true
-        end
-    end
-    return false
-end
-
 HERE
 
 cat >> "${vcfAnnoConf}" << HERE
@@ -236,32 +239,14 @@ name="gnomAD_AN_Hemi"
 op="lua:calculate_gnomAD_AC(gnomAD_Hemi)"
 type="Integer"
 
-[[postannotation]]
-fields=["gnomAD_AN_Hom", "gnomAD_AN"]
-name="gnomAD_AF_Hom"
-op="div2"
-type="Float"
-
-[[postannotation]]
-fields=["gnomAD_AN_Hemi", "gnomAD_AN"]
-name="gnomAD_AF_Hemi"
-op="div2"
-type="Float"
-
-[[postannotation]]
-fields=["clinvar_sig", "gnomAD_AF_MAX"]
-op="lua:check_clinvar_aaf(clinvar_sig, gnomAD_AF_MAX, 0.005)"
-name="common_pathogenic"
-type="Flag"
-
 HERE
 
-
 	echo "starting to annotate with vcfanno"
-	vcfanno_linux64 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
+	vcfanno_linux64 -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 
 	mv "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
-	echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
+        echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
+
 else
 	echo "${projectBatchGenotypedVariantCalls} does not exist, skipped"
 fi

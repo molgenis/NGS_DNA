@@ -40,7 +40,7 @@ do
         array_contains INPUTS "${sampleID}" || INPUTS+=("${sampleID}")    # If bamFile does not exist in array add it
 done
 
-filter="AC,AF,AN,BaseCounts,BaseQRankSum,ClippingRankSum,DB,dbNSFP_GERP++_RS,dbNSFP_SiPhy_29way_logOdds,dbNSFP_Ensembl_geneid,dbNSFP_CADD_phred,dbNSFP_FATHMM_score,dbNSFP_CADD_raw,dbNSFP_phastCons100way_vertebrate,dbNSFP_Polyphen2_HDIV_pred,dbNSFP_CADD_raw_rankscore,dbNSFP_1000Gp1_EUR_AF,dbNSFP_ESP6500_EA_AF,dbNSFP_Polyphen2_HVAR_pred,DP,FS,MQ,MQ0,MQRankSum,QD,ReadPosRankSum,SNPEFF_CODON_CHANGE,SNPEFF_EFFECT,SNPEFF_FUNCTIONAL_CLASS,SNPEFF_GENE_BIOTYPE,SNPEFF_GENE_NAME,SNPEFF_IMPACT,SNPEFF_TRANSCRIPT_ID,VariantType,Samples"
+filter="AC,AF,AN,DP,FS,MQ,MQRankSum,QD,CADD,CADD_SCALED,gnomAD_exome_AF,CGD_AgeGroup,CGD_Condition,CGD_Inheritance,CGD_Manfest_cat,CGD_invent_cat,gnomAD_genome_AF_MAX,ANN,Samples"
 
 for externalID in "${INPUTS[@]}"
 do

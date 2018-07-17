@@ -268,6 +268,7 @@ printf "Copying QC report to results directory "
 
 # Copy QC report to results directory
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
+rsync -av "${intermediateDir}/MultiQC" "${projectResultsDir}/qc/"
 printf "."
 printf " finished (9/11)\n"
 
@@ -307,5 +308,47 @@ if [ ! -d "${logsDir}/${project}/" ]
 then
 	mkdir -p "${logsDir}/${project}/"
 fi
+
+whichHost=$(hostname)
+diagnosticsCluster="true"
+
+if [ "${whichHost}" == "zinc-finger.gcc.rug.nl" ]
+then
+	tmpHost="localhost"
+	concordanceDir=${tmpDataDir}/Concordance/ngs/
+
+elif [[ "${whichHost}" == "leucine-zipper" ]]
+then
+	ssh -q zinc-finger.gcc.rug.nl exit
+	if $? ne 0
+	then
+		echo "zinc-finger is down, writing data to calculon gdio instead"
+		tmpHost=calculon.hpc.rug.nl
+		concordanceDir=/groups/umcg-gdio/tmp04/Concordance/ngs/
+	else
+		tmpHost="zinc-finger.gcc.rug.nl"
+		concordanceDir=/groups/umcg-gd/tmp05/Concordance/ngs/
+	fi
+else
+	diagnosticsCluster="false"
+fi
+
+if [[ "${diagnosticsCluster}" == "true" ]]
+then
+	for sample in "${UNIQUESAMPLES[@]}"
+	do
+		if [[ "${capturingKit}" == *"Exoom_v1"* ]]
+		then
+			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/Exoom_v1/
+		elif [[ "${capturingKit}" == *"ONCO_v4"* ]]
+		then
+			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/ONCO_v4/
+		else
+			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/other/
+		fi
+	done
+fi
+## removing phiX.recoded files
+rm -f ${projectResultsDir}/rawdata/ngs/*.phiX.recoded.fq.gz
 
 touch pipeline.finished
