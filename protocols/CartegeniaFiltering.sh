@@ -20,11 +20,11 @@
 #string indexFile
 #string projectPrefix
 
-ml "${ngsUtilsVersion}"
-ml "${bcfToolsVersion}"
-ml "${ngsversion}"
-ml "${bedToolsVersion}"
-ml "${gatkVersion}"
+module load "${ngsUtilsVersion}"
+module load "${bcfToolsVersion}"
+module load "${ngsversion}"
+module load "${bedToolsVersion}"
+module load "${gatkVersion}"
 
 name="${intermediateDir}/${externalSampleID}"
 

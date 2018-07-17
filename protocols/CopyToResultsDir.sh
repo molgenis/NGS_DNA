@@ -268,6 +268,7 @@ printf "Copying QC report to results directory "
 
 # Copy QC report to results directory
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
+rsync -av "${intermediateDir}/MultiQC/ ${projectResultsDir}/qc/
 printf "."
 printf " finished (9/11)\n"
 
