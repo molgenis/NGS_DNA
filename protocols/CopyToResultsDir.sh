@@ -335,16 +335,18 @@ fi
 
 if [[ "${diagnosticsCluster}" == "true" ]]
 then
-
-	if [[ "${capturingKit}" == *"Exoom_v1"* ]]
-	then
-		rsync -av ${projectResultsDir}/variants/*.gz ${tmpHost}:${concordanceDir}/Exoom_v1/
-	elif [[ "${capturingKit}" == *"ONCO_v4"* ]]
-	then
-		rsync -av ${projectResultsDir}/variants/*.gz ${tmpHost}:${concordanceDir}/ONCO_v4/
-	else
-		rsync -av ${projectResultsDir}/variants/*.gz ${tmpHost}:${concordanceDir}/other/
-	fi
+	for sample in "${UNIQUESAMPLES[@]}"
+	do
+		if [[ "${capturingKit}" == *"Exoom_v1"* ]]
+		then
+			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/Exoom_v1/
+		elif [[ "${capturingKit}" == *"ONCO_v4"* ]]
+		then
+			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/ONCO_v4/
+		else
+			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/other/
+		fi
+	done
 fi
 ## removing phiX.recoded files
 rm -f ${projectResultsDir}/rawdata/ngs/*.phiX.recoded.fq.gz
