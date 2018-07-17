@@ -64,15 +64,13 @@ do
 		echo "Manta output is correct"
 	fi
 
-	gavinDiff="$(fgrep TRUE ${intermediateDir}/${i}.GAVIN.rlv.vcf | awk 'BEGIN {FS="\t"}{print $1,$2,$3,$4,$5,$10}')"
-	gavinDiffTrue="$(fgrep TRUE /home/umcg-molgenis/NGS_DNA/${i}.GAVIN.rlv.vcf | awk 'BEGIN {FS="\t"}{print $1,$2,$3,$4,$5,$10}')"
-
-	if [ "${gavinDiff}" != "${gavinDiffTrue}" ]
+	if grep "RLV_PRESENT=FALSE" "${intermediateDir}/${i}.GAVIN.rlv.vcf"
 	then
-		echo "there are differences in the Gavin output between the test and the original output of ${i}"
+		echo "RLV_PRESENT=FALSE found in ${intermediateDir}/${i}.GAVIN.rlv.vcf"
+	else
+
+		echo "there are differences in the Gavin output between the test and the original output of ${i} (it does NOT contain RLV_PRESENT=FALSE)"
                 echo "please fix the bug or update this test"
-                echo "GAVIN output new run: ${gavinDiff}"
-                echo "GAVIN output True: ${gavinDiffTrue}"
                 exit 1
 	fi
 
