@@ -268,7 +268,7 @@ printf "Copying QC report to results directory "
 
 # Copy QC report to results directory
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
-rsync -av "${intermediateDir}/MultiQC/ ${projectResultsDir}/qc/
+rsync -av "${intermediateDir}/MultiQC" "${projectResultsDir}/qc/"
 printf "."
 printf " finished (9/11)\n"
 
@@ -310,6 +310,6 @@ then
 fi
 
 ## removing phiX.recoded files
-rm ${projectResultsDir}/rawdata/ngs/*.phiX.recoded.fq.gz
+rm -f ${projectResultsDir}/rawdata/ngs/*.phiX.recoded.fq.gz
 
 touch pipeline.finished
