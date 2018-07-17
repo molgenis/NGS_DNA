@@ -57,7 +57,7 @@ function preparePipeline(){
 	sh submit.sh
 
 	cd ${workfolder}/projects/${_projectName}/run01/jobs/
-
+	perl -pi -e "s|module load \"test\"| module load NGS_DNA|" *.sh
 	perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
 	perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
         perl -pi -e 's|\$\{EBROOTNGS_DNA\}/conf/configManta.py.ini|'${workfolder}'/tmp/NGS_DNA/conf/configManta.py.ini|' s*_Manta_0.sh
