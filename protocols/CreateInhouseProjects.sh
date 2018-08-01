@@ -211,8 +211,8 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${group_parameters}" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
---header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
+--header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -w "${workflowpath}" \
 -b slurm \

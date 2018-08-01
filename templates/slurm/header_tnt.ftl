@@ -15,11 +15,11 @@ set -u
 ENVIRONMENT_DIR='.'
 
 WHOAMI=$(whoami)
-if [[ -f "/home/$WHOAMI/molgenis.cfg" && -r "/home/$WHOAMI/molgenis.cfg" ]]
+if [[ -f "/home/${WHOAMI}/molgenis.cfg" && -r "/home/${WHOAMI}/molgenis.cfg" ]]
 then
-	source /home/$WHOAMI/molgenis.cfg
+	source /home/${WHOAMI}/molgenis.cfg
 else
-	printf '%s\n' "FATAL: cannot find or cannot access /home/$WHOAMI/molgenis.cfg"
+	printf '%s\n' "FATAL: cannot find or cannot access /home/${WHOAMI}/molgenis.cfg"
 	exit 1
 fi
 
@@ -68,10 +68,11 @@ function errorExitAndCleanUp() {
 	echo "${errorMessage}"
 	echo "${MC_doubleSeperatorLine}"                > ${MC_failedFile}
 	echo "${errorMessage}"                         >> ${MC_failedFile}
-
+set+e
 	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
 	TOKEN=${CURLRESPONSE:10:32}
 	curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+set-e
 <#noparse>
 	if [ -f "${MC_jobScriptSTDERR}" ]; then
 		echo "${MC_singleSeperatorLine}"           >> ${MC_failedFile}
@@ -129,12 +130,12 @@ trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 
 touch ${MC_jobScript}.started
 
-
+set+e
 CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
 TOKEN=${CURLRESPONSE:10:32}
 
 curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
-
+set-e
 
 
 #
