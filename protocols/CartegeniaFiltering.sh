@@ -52,7 +52,8 @@ echo "this is the final output in table format: ${outputStep9_1ToSpecTree}.table
 echo "this is the tag/filter file: ${name}.SearchFortagsAndFilters.tsv"
 
 ## in case of trio we want to know the variants of the parents too
-if [ -f "${name}.hasFamily" ]
+####### TURNED OFF THE TRIO OPTION
+if [ -f "${name}.hasFamily.TURNEDOFF" ]
 then
 
 	child=$(head -1 "${name}.hasFamily" | awk '{print $1}' )
@@ -80,7 +81,7 @@ then
 	## removing unnecessary information => keep only GT field
 	bcftools annotate -x ^FORMAT/GT "${name}.InclAllelesParents.vcf" | awk -v ch=${childPos} -v fa=${fatherPos} -v mo=${motherPos} 'BEGIN {OFS="\t"}{if ($0 !~ /^#/){split($ch,a,"/");split($fa,b,"/");split($mo,c,"/"); print $1,$2,$3,$4,$5,$6,$7,a[1],a[2],b[1],b[2],c[1],c[2],$8}}' | sort -V > "${name}.splittedAlleles.txt"
 	grep -v '^#' "${outputStep9_1ToSpecTree}" | sort -V > "${outputStep9_1ToSpecTree}.withoutHeader"
-	join -t $'\t' -o '1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.8,2.9,2.10,2.11,2.12,2.13' -1 2 -2 2 "${outputStep9_1ToSpecTree}.withoutHeader" "${name}.splittedAlleles.txt" > "${name}.CartegeniaTreeCombinedWithAllelesParents.txt"
+	join -t $'\t' -o '1.1,1.2,1.3,2.4,2.5,1.6,1.7,1.8,1.9,2.8,2.9,2.10,2.11,2.12,2.13' -1 2 -2 2 "${outputStep9_1ToSpecTree}.withoutHeader" "${name}.splittedAlleles.txt" > "${name}.CartegeniaTreeCombinedWithAllelesParents.txt"
 
 	## sort before using join
 	sort -k1 <(awk '{print $1"_"$2"\t"$0}' ${name}.CartegeniaTreeCombinedWithAllelesParents.txt) > "${name}.CartegeniaTreeCombinedWithAllelesParents.sorted.txt"
@@ -92,9 +93,9 @@ then
 else
 	## sort before using join
 	bcftools annotate -x ^FORMAT/GT "${outputStep9_1ToSpecTree}" | awk 'BEGIN {OFS="\t"}{if ($0 !~ /^#/){split($10,a,"/"); print $1,$2,$3,$4,$5,$6,$7,a[1],a[2],$8}}' | sort -V > "${name}.splittedAlleles.txt"
-	sort -k1 <(awk '{print $1"_"$2"\t"$0}' "${name}.splittedAlleles.txt") > "${outputStep9_1ToSpecTree}.sorted.txt"
-	grep -v '^#' "${name}.SearchFortagsAndFilters.tsv" | awk '{print $1"_"$2"\t"$0}' | sort -k1,1  > "${name}.SearchFortagsAndFilters.sorted.tsv"
+	sort -k1 <(awk '{print $1"_"$2"_"$4"_"$5"\t"$0}' "${name}.splittedAlleles.txt") > "${outputStep9_1ToSpecTree}.sorted.txt"
+	grep -v '^#' "${name}.SearchFortagsAndFilters.tsv" | awk '{print $1"_"$2"_"$3"_"$4"\t"$0}' | sort -k1,1  > "${name}.SearchFortagsAndFilters.sorted.tsv"
 	##combine tags&filter file with variant file
 	echo -e "chr\tposition\tsnp\tref\talt\ttag/filter\tChildA1\tChildA2" > "${name}.finalProduct.tsv"
-	join  -t $'\t' -o '1.2,1.3,1.4,1.5,1.6,2.6,1.11,1.12' -1 1 -2 1 "${outputStep9_1ToSpecTree}.sorted.txt" "${name}.SearchFortagsAndFilters.sorted.tsv" >> "${name}.finalProduct.tsv"
+	join  -t $'\t' -o '1.2,1.3,1.5,1.6,2.6,1.9,1.10' -1 1 -2 1 "${outputStep9_1ToSpecTree}.sorted.txt" "${name}.SearchFortagsAndFilters.sorted.tsv" | sort -V  >> "${name}.finalProduct.tsv"
 fi

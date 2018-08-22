@@ -79,14 +79,9 @@ count=1
 printf "Copying ${EXTERN} realigned bams "
 for sample in "${UNIQUESAMPLES[@]}"
 do
-	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam" "${projectResultsDir}/alignment/"
-	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.bai" "${projectResultsDir}/alignment/"
-	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.md5" "${projectResultsDir}/alignment/"
-	if [ -f "${intermediateDir}/${sample}.merged.dedup.bam.cram" ]
-	then
-		rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram" "${projectResultsDir}/alignment/"
-		rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram.md5" "${projectResultsDir}/alignment/"
-	fi
+	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram" "${projectResultsDir}/alignment/"
+	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram.crai" "${projectResultsDir}/alignment/"
+	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram.md5" "${projectResultsDir}/alignment/"
 
 	printf "."
 done
@@ -268,7 +263,7 @@ printf "Copying QC report to results directory "
 
 # Copy QC report to results directory
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
-rsync -av "${intermediateDir}/MultiQC" "${projectResultsDir}/qc/"
+rsync -av "${intermediateDir}/multiqc_data" "${projectResultsDir}/"
 printf "."
 printf " finished (9/11)\n"
 

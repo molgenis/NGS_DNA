@@ -401,9 +401,9 @@ grep '^#' "${outputStep7_next}" > "${outputStep8_1_0}"
 grep '^#' "${outputStep7_next}" > "${outputStep8_2_0}"
 
 rlvTrue="true"
-if grep -q 'RLV_PRESENT=TRUE' "${outputStep7_next}"
+if grep -q -P 'RLV_PRESENT=\[[^\]]*\]TRUE' "${outputStep7_next}"
 then
-	grep 'RLV_PRESENT=TRUE' "${outputStep7_next}" >> "${outputStep8_1_0}"
+	grep -P 'RLV_PRESENT=\[[^\]]*\]TRUE' "${outputStep7_next}" >> "${outputStep8_1_0}"
 
 	grep -v '^#' "${outputStep8_1_0}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"TRUE",$8,$10}' >> ${name}.tagsAndFilters.tsv
 

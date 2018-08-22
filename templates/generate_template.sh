@@ -54,7 +54,13 @@ if [ -f "${samplesheet}.temp" ]
 then
 	mv "${samplesheet}.temp" "${samplesheet}"
 fi
-python "${EBROOTNGS_DNA}/scripts/gender.py" "${samplesheet}"
+
+python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "Gender" ; mv "${samplesheet}.tmp" "${samplesheet}" 
+python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "MotherSampleId"; mv "${samplesheet}.tmp" "${samplesheet}" 
+python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "FatherSampleId"; mv "${samplesheet}.tmp" "${samplesheet}" 
+python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "MotherAffected"; mv "${samplesheet}.tmp" "${samplesheet}" 
+python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "FatherAffected"; mv "${samplesheet}.tmp" "${samplesheet}" 
+python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "FirstPriority"; mv "${samplesheet}.tmp" "${samplesheet}" 
 
 ## get only uniq lines and removing txt.tmp file
 for i in $(ls *.txt.tmp); do cat "${i}" | sort -u > ${i%.*} ; rm "${i}" ;done
@@ -66,9 +72,6 @@ if [ -s build.txt ]; then build=$(cat build.txt);fi
 if [ -s species.txt ];then species=$(cat species.txt); fi
 
 sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleSize}"
-genderColumn=$(cat "${samplesheet}.tmp" | wc -l)
-
-if [ "${genderColumn}" != 0 ];then mv "${samplesheet}.tmp" "${samplesheet}"; echo "samplesheet updated with Gender column" ;fi
 
 if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
 

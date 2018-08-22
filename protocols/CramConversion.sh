@@ -10,8 +10,10 @@
 #string groupname
 #string intermediateDir
 #string iolibVersion
+#string samtoolsVersion
 
 module load "${iolibVersion}"
+module load "${samtoolsVersion}"
 module list
 
 makeTmpDir "${dedupBamCram}"
@@ -36,6 +38,7 @@ echo "dirname"
 mv "${tmpDedupBamCram}" "${dedupBamCram}"
 cd "${intermediateDir}"
 
+samtools index "${dedupBamCram}"
 md5sum $(basename "${dedupBamCram}") > $(basename "${dedupBamCram}").md5
 
 cd -

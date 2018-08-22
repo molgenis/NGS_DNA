@@ -176,7 +176,7 @@ fi
 batching="_small"
 
 capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||')
-captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
+captKit=$(echo "${capturingKitProject}" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
@@ -184,7 +184,7 @@ then
 	exit 1
 fi
 
-if [[ "${capturingKitProject}" == *"Exoom"* || "${capturingKitProject}" == *"All_Exon_v1"* || "${capturingKitProject}" == *"wgs"* || "${capturingKitProject}" == *"WGS"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
