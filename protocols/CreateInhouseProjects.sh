@@ -184,7 +184,7 @@ then
 	exit 1
 fi
 
-if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
