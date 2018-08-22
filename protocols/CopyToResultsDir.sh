@@ -79,6 +79,8 @@ count=1
 printf "Copying ${EXTERN} realigned bams "
 for sample in "${UNIQUESAMPLES[@]}"
 do
+	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam" "${projectResultsDir}/alignment/"
+	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.bai" "${projectResultsDir}/alignment/"
 	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram" "${projectResultsDir}/alignment/"
 	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram.crai" "${projectResultsDir}/alignment/"
 	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram.md5" "${projectResultsDir}/alignment/"
