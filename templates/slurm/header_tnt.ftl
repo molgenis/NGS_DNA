@@ -68,14 +68,17 @@ function errorExitAndCleanUp() {
 	echo "${errorMessage}"
 	echo "${MC_doubleSeperatorLine}"                > ${MC_failedFile}
 	echo "${errorMessage}"                         >> ${MC_failedFile}
-	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-	TOKEN=${CURLRESPONSE:10:32}
-
-	if curl -s -f -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+	if curl -s -f -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
 	then
-		echo "have set Error status"
-	else
-		echo "cannot set Error status"
+		CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
+		TOKEN=${CURLRESPONSE:10:32}
+
+		if curl -s -f -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+		then
+			echo "have set Error status"
+		else
+			echo "cannot set Error status"
+		fi
 	fi
 <#noparse>
 	if [ -f "${MC_jobScriptSTDERR}" ]; then
@@ -133,17 +136,18 @@ trap 'errorExitAndCleanUp EXIT NA $?' EXIT
 trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 
 touch ${MC_jobScript}.started
-
-CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-TOKEN=${CURLRESPONSE:10:32}
-
-if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
+if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
 then
-	echo "set"
-else
-	echo "not set"
-fi
+	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
+	TOKEN=${CURLRESPONSE:10:32}
 
+	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
+	then
+		echo "set"
+	else
+		echo "not set"
+	fi
+fi
 #
 # When dealing with timing / synchronization issues of large parallel file systems,
 # you can uncomment the sleep statement below to allow for flushing of IO buffers/caches.
