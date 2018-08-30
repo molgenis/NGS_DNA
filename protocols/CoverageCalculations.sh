@@ -42,14 +42,15 @@ then
 
 		sed '1d' "${sampleNameID}.${perBase}.coveragePerBase" > "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader"
 		sort -V "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader" > "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted"
-		paste "${perBaseDir}/${perBase}.uniq.per_base.bed" "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted" > "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
+		tail -n+87 "${perBaseDir}/${perBase}.captured.uniq.per_base.interval_list" > "${sampleNameID}.${perBase}.uniqperbase_chompedHeaders.txt"
+		paste "${sampleNameID}.${perBase}.uniqperbase_chompedHeaders.txt" "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted" > "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
 
 		##Paste command produces ^M character
 		perl -p -i -e "s/\r//g" "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
 
 		echo -e "Index\tChr\tChr Position Start\tDescription\tMin Counts\tCDS\tContig" > "${sampleNameID}.${perBase}.coveragePerBase.txt"
 
-		awk -v OFS='\t' '{print NR,$1,$2,$4,$6,"CDS","1"}' "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt" >> "${sampleNameID}.${perBase}.coveragePerBase.txt"
+		awk -v OFS='\t' '{print NR,$1,$2,$5,$7,"CDS","1"}' "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt" >> "${sampleNameID}.${perBase}.coveragePerBase.txt"
 
 		#remove phiX
 		grep -v "NC_001422.1" "${sampleNameID}.${perBase}.coveragePerBase.txt" > "${sampleNameID}.${perBase}.coveragePerBase.txt.tmp"
