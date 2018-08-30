@@ -24,6 +24,9 @@
 #string indexFile
 #string indexFileFastaIndex
 #string extension
+#string dataDir
+#string capturingKit
+
 
 #Load module GATK,tabix
 ${stage} "${gatkVersion}"
@@ -75,6 +78,9 @@ sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpProjectVarian
 
 bgzip "${tmpProjectVariantsMergedSorted}"
 tabix -p vcf "${tmpProjectVariantsMergedSorted}.gz"
+
+### make allChromosomes bedfile to use it later in CheckOutput script
+awk '{print $1}' "${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed" | uniq > "${intermediateDir}/allChromosomes.txt"
 
 mv "${tmpProjectVariantsMergedSortedGz}"* "${intermediateDir}"
 
