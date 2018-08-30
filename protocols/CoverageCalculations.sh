@@ -42,7 +42,7 @@ then
 
 		sed '1d' "${sampleNameID}.${perBase}.coveragePerBase" > "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader"
 		sort -V "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader" > "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted"
-		tail -n+87 "${perBaseDir}/${perBase}.captured.uniq.per_base.interval_list" > "${sampleNameID}.${perBase}.uniqperbase_chompedHeaders.txt"
+		tail -n+87 "${perBaseDir}/${perBase}.uniq.per_base.interval_list" > "${sampleNameID}.${perBase}.uniqperbase_chompedHeaders.txt"
 		paste "${sampleNameID}.${perBase}.uniqperbase_chompedHeaders.txt" "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted" > "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
 
 		##Paste command produces ^M character
