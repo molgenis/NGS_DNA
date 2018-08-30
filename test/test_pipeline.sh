@@ -39,7 +39,7 @@ function preparePipeline(){
 	## Grep used version of molgenis compute out of the parameters file
 	perl -pi -e "s|module load ${NGS_DNA_VERSION}|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	perl -pi -e 's|ngsversion=.*|ngsversion="test";\\|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
-	perl -pi -e 's|sh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
+	perl -pi -e 's|sh "\${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh"|module load Molgenis-Compute/dummy\nsh \$EBROOTMOLGENISMINCOMPUTE/molgenis_compute.sh|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 	perl -pi -e "s|module load Molgenis-Compute/dummy|module load Molgenis-Compute/\$mcVersion|" ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
 
 	perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=\${EBROOTNGS_DNA}/test_workflow.csv|' ${workfolder}/generatedscripts/${_projectName}/generate_template.sh
@@ -52,15 +52,16 @@ function preparePipeline(){
 	###### Load a version of molgenis compute
 	perl -pi -e "s|module load \"test\"| module load NGS_DNA|" *.sh
 	######
+	perl -pi -e 's|batching="_small"|batching="_small"\nEBROOTNGS_DNA='"${workfolder}"'/tmp/NGS_DNA/|' *.sh
 	perl -pi -e "s|/apps/software/${NGS_DNA_VERSION}/|${workfolder}/tmp/NGS_DNA/|g" *.sh
-	perl -pi -e 's|\$\{EBROOTNGS_DNA\}/scripts/getCapturingKit.py|'${workfolder}'/tmp/NGS_DNA/scripts/getCapturingKit.py|' *.sh
+	perl -pi -e 's|\${EBROOTNGS_DNA}/scripts/getCapturingKit.py|'${workfolder}'/tmp/NGS_DNA/scripts/getCapturingKit.py|' *.sh
 	sh submit.sh
 
 	cd ${workfolder}/projects/${_projectName}/run01/jobs/
 	perl -pi -e "s|module load \"test\"| module load NGS_DNA|" *.sh
 	perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
 	perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
-        perl -pi -e 's|\$\{EBROOTNGS_DNA\}/conf/configManta.py.ini|'${workfolder}'/tmp/NGS_DNA/conf/configManta.py.ini|' s*_Manta_0.sh
+        perl -pi -e 's|\${EBROOTNGS_DNA}/conf/configManta.py.ini|'${workfolder}'/tmp/NGS_DNA/conf/configManta.py.ini|' s*_Manta_0.sh
 
 	for i in $(ls s*_Manta_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 
@@ -73,9 +74,22 @@ function preparePipeline(){
 	perl -pi -e "s|module load \"test\"|EBROOTNGS_DNA=${workfolder}/tmp/NGS_DNA/|" s*_DecisionTree_*.sh
 	perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
 	perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
+	if [ "${_workflowType}" == "ExternalSamples" ]
+	then
+		cd ${workfolder}/projects/${_projectName}/run01/jobs/
+		perl -pi -e 's|ExternalSamples|InhouseSamples|g' s01*_0.sh
+		var=$(diff s01*_0.sh ${workfolder}/projects/PlatinumInhouseSamples/run01/jobs/s01*_0.sh | wc -l)
+		if [[ "${var}" == 0 ]]
+		then
+			echo "ExternalSamples is correct"
+		else
+			echo "PlatinumExternalSamples is not creating the same scripts as the PlatinumInhouseSamples (compared s01*_1.sh "
+			exit 1
+		fi
+	else
 
-	sh submit.sh --qos=dev
-
+		sh submit.sh --qos=dev
+	fi
 
 
 }
@@ -154,4 +168,3 @@ preparePipeline "InhouseSamples"
 preparePipeline "ExternalSamples"
 
 checkIfFinished "InhouseSamples"
-checkIfFinished "ExternalSamples"
