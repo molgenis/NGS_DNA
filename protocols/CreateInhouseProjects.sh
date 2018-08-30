@@ -181,6 +181,7 @@ captKit=$(echo "${capturingKitProject}" | awk 'BEGIN {FS="/"}{print $2}')
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
 	echo "Bedfile does not exist! Exiting"
+	echo "ls ${dataDir}/${capturingKitProject}"
 	exit 1
 fi
 
@@ -190,12 +191,14 @@ then
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
 	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
 		exit 1
 	fi
 else
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
                 echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
                 exit 1
         fi
 fi
