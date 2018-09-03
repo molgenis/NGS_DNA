@@ -57,6 +57,8 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 -d "${gavinCGD}" \
 -f "${gavinFDR}" \
 -g "${gavinCalibrations}" \
+-x \
+-y \
 -k \
 -s \
 -q

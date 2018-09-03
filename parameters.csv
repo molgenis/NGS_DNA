@@ -16,7 +16,7 @@ convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,cutadapt/1.13-${toolChain}-Python-2.7.10
 fastqcVersion,FastQC/0.11.5-Java-1.8.0_74
 gatkVersion,GATK/3.7-Java-1.8.0_74
-gavinPlusVersion,GAVIN-Plus/1.3beta-Java-1.8.0_74 
+gavinPlusVersion,GAVIN-Plus/1.3beta-Java-1.8.0_74
 gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
@@ -45,7 +45,7 @@ wkHtmlToPdfVersion,wkhtmltox/0.12.3
 xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain}
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
-gavinPlusJar,GAVIN-Plus-1.3beta.jar
+gavinPlusJar,gavin-plus-1.3.0-SNAPSHOT.jar
 gavinJar,GAVIN-APP-1.0.jar
 gavinMergeBackToolJar,MergeBackTool-0.2.jar
 gavinSplitRlvToolJar,SplitRlvTool-0.2.jar
