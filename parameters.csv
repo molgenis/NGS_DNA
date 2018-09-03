@@ -54,7 +54,7 @@ picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
 vepDBVersion,90
 vepAssemblyVersion,GRCh37
-multiQCVersion,multiqc/1.5-${toolChain}-Python-2.7.11
+multiQCVersion,multiqc/1.6-${toolChain}-Python-2.7.11
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
