@@ -25,7 +25,6 @@
 #string htsLibVersion
 #string bcfToolsVersion
 
-#string gavinJar
 #string gavinOutputFinalMerged
 #string gavinOutputFinalMergedRLV
 #string sampleFinalVcf
