@@ -21,7 +21,6 @@
 #string iolibVersion
 #string javaVersion
 #string mantaVersion
-#string molgenisAnnotatorVersion
 #string multiQCVersion
 #string ngsUtilsVersion
 #string perlPlusVersion
@@ -76,7 +75,6 @@ echo -e "report_header_info:
     - '': '${iolibVersion}'
     - '': '${javaVersion}'
     - '': '${mantaVersion}'
-    - '': '${molgenisAnnotatorVersion}'
     - '': '${ngsUtilsVersion}'
     - '': '${perlPlusVersion}'
     - '': '${plink1Version}'
