@@ -76,7 +76,7 @@ ${INPUTS[@]} \
 echo "sorting vcf"
 sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpProjectVariantsMerged}" -outputVcf "${tmpProjectVariantsMergedSorted}"
 
-bgzip -c "${tmpProjectVariantsMergedSorted}" > ${projectVariantsMergedSortedGz}
+bgzip -c "${tmpProjectVariantsMergedSorted}" > "${projectVariantsMergedSortedGz}"
 tabix -p vcf "${projectVariantsMergedSortedGz}"
 
 ### make allChromosomes bedfile to use it later in CheckOutput script

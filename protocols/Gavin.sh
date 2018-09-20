@@ -41,8 +41,6 @@ ${stage} "${gavinPlusVersion}"
 ${stage} "${bcfToolsVersion}"
 ${stage} "${ngsUtilsVersion}"
 
-${checkStage}
-
 touch "${intermediateDir}/emptyFile.tsv"
 
 bcftools norm -f "${indexFile}" -m -any "${sampleFinalVcf}" > "${sampleFinalVcf}.splitPerAllele.vcf"
@@ -64,5 +62,5 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 
 echo "Gavin finished, now sorting the vcf"
 
-sortVCFbyFai.pl -fastaIndexFile ${indexFile}.fai -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
+sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
 
