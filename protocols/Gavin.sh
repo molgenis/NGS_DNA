@@ -25,16 +25,13 @@
 #string htsLibVersion
 #string bcfToolsVersion
 
-#string gavinToolPackVersion
-#string gavinJar
-#string gavinSplitRlvToolJar
-#string gavinMergeBackToolJar
 #string gavinOutputFinalMerged
 #string gavinOutputFinalMergedRLV
 #string sampleFinalVcf
 
 #string gavinPlusVersion
 #string gavinPlusJar
+#string ngsUtilsVersion
 
 makeTmpDir "${gavinOutputFinal}"
 tmpGavinOutputFinal="${MC_tmpFile}"
@@ -42,7 +39,7 @@ tmpGavinOutputFinal="${MC_tmpFile}"
 ${stage} "${htsLibVersion}"
 ${stage} "${gavinPlusVersion}"
 ${stage} "${bcfToolsVersion}"
-${checkStage}
+${stage} "${ngsUtilsVersion}"
 
 touch "${intermediateDir}/emptyFile.tsv"
 
@@ -57,37 +54,13 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 -d "${gavinCGD}" \
 -f "${gavinFDR}" \
 -g "${gavinCalibrations}" \
+-x \
+-y \
 -k \
 -s \
 -q
 
-mv "${tmpGavinOutputFinal}" "${gavinOutputFinal}"
-echo "mv ${tmpGavinOutputFinal} ${gavinOutputFinal}"
-cp "${gavinOutputFinal}" "${gavinOutputFinalMergedRLV}"
+echo "Gavin finished, now sorting the vcf"
 
-if [ 1 == 0 ]
-then
-#echo 'GAVIN round 2 finished, too see how many results are left do : grep -v "#" ${gavinOutputFinal} | wc -l'
+sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
 
-echo "Merging ${sampleFinalVcf} and ${gavinOutputFinal}"
-
-java -jar -Xmx4g "${EBROOTGAVINMINTOOLPACK}/${gavinMergeBackToolJar}" \
--i "${sampleFinalVcf}.splitPerAllele.vcf" \
--r \
--v "${gavinOutputFinal}" \
--o "${gavinOutputFinalMerged}"
-
-
-#gavinSplitRlvToolJar
-java -jar -Xmx4g "${EBROOTGAVINMINTOOLPACK}/${gavinSplitRlvToolJar}" \
--i "${gavinOutputFinalMerged}" \
--r \
--o "${gavinOutputFinalMergedRLV}"
-
-perl -pi -e 's|INFO=<ID=EXAC_AF,Number=.,Type=String|INFO=<ID=EXAC_AF,Number=.,Type=Float|' "${gavinOutputFinalMergedRLV}"
-perl -pi -e 's|INFO=<ID=EXAC_AC_HOM,Number=.,Type=String|INFO=<ID=EXAC_AC_HOM,Number=.,Type=Integer|' "${gavinOutputFinalMergedRLV}"
-perl -pi -e 's|INFO=<ID=EXAC_AC_HET,Number=.,Type=String|INFO=<ID=EXAC_AC_HET,Number=.,Type=Integer|' "${gavinOutputFinalMergedRLV}"
-perl -pi -e 's| |_|g' "${gavinOutputFinalMergedRLV}"
-
-echo "output: ${gavinOutputFinalMergedRLV}"
-fi

@@ -176,26 +176,29 @@ fi
 batching="_small"
 
 capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||')
-captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
+captKit=$(echo "${capturingKitProject}" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
 	echo "Bedfile does not exist! Exiting"
+	echo "ls ${dataDir}/${capturingKitProject}"
 	exit 1
 fi
 
-if [[ "${capturingKitProject}" == *"Exoom"* || "${capturingKitProject}" == *"All_Exon_v1"* || "${capturingKitProject}" == *"wgs"* || "${capturingKitProject}" == *"WGS"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
 	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
 		exit 1
 	fi
 else
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
                 echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
                 exit 1
         fi
 fi
@@ -211,8 +214,8 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${group_parameters}" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
---header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
+--header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -w "${workflowpath}" \
 -b slurm \

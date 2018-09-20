@@ -35,6 +35,5 @@ for row in reader:
                         count+=1
 			hpoID="no"
 	elif hpoID == "no":
-		print "no hpoID found in this line"
 		out.write(','.join(row.values())+","+'\n')
 			

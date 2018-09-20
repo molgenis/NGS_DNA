@@ -54,7 +54,11 @@ if [ -f "${samplesheet}.temp" ]
 then
 	mv "${samplesheet}.temp" "${samplesheet}"
 fi
-python "${EBROOTNGS_DNA}/scripts/gender.py" "${samplesheet}"
+## adding columns if they are not present in the samplesheet
+for i in "Gender" "MotherSampleId" "FatherSampleId" "MotherAffected" "FatherAffected" "FirstPriority"
+do
+	python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}" 
+done
 
 ## get only uniq lines and removing txt.tmp file
 for i in $(ls *.txt.tmp); do cat "${i}" | sort -u > ${i%.*} ; rm "${i}" ;done
@@ -66,12 +70,10 @@ if [ -s build.txt ]; then build=$(cat build.txt);fi
 if [ -s species.txt ];then species=$(cat species.txt); fi
 
 sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleSize}"
-genderColumn=$(cat "${samplesheet}.tmp" | wc -l)
-
-if [ "${genderColumn}" != 0 ];then mv "${samplesheet}.tmp" "${samplesheet}"; echo "samplesheet updated with Gender column" ;fi
 
 if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
 
+### Converting parameters to compute parameters
 echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/parameters_converted.csv"

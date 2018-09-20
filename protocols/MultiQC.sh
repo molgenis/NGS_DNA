@@ -17,11 +17,11 @@
 #string cutadaptVersion
 #string fastqcVersion
 #string gatkVersion
-#string gavinToolPackVersion
+#string gavinPlusVersion
 #string iolibVersion
 #string javaVersion
 #string mantaVersion
-#string molgenisAnnotatorVersion
+#string multiQCVersion
 #string ngsUtilsVersion
 #string perlPlusVersion
 #string plink1Version
@@ -36,9 +36,9 @@
 #string snpEffVersion
 #string htsLibVersion
 #string tabixVersion
+#string vcfAnnoVersion
 #string vepVersion
 #string verifyBamIDVersion
-#string wkHtmlToPdfVersion
 #string xhmmVersion
 #string hpoVersion
 
@@ -46,7 +46,6 @@
 #string capturingKit
 #string stage
 #string checkStage
-#string multiQCVersion
 #string runDateInfoFile
 #list externalSampleID
 #list capturingKit
@@ -72,11 +71,10 @@ echo -e "report_header_info:
     - '': '${cutadaptVersion}'
     - '': '${fastqcVersion}'
     - '': '${gatkVersion}'
-    - '': '${gavinToolPackVersion}'
+    - '': '${gavinPlusVersion}'
     - '': '${iolibVersion}'
     - '': '${javaVersion}'
     - '': '${mantaVersion}'
-    - '': '${molgenisAnnotatorVersion}'
     - '': '${ngsUtilsVersion}'
     - '': '${perlPlusVersion}'
     - '': '${plink1Version}'
@@ -92,8 +90,8 @@ echo -e "report_header_info:
     - '': '${htsLibVersion}'
     - '': '${tabixVersion}'
     - '': '${vepVersion}'
+    - '': '${vcfAnnoVersion}'
     - '': '${verifyBamIDVersion}'
-    - '': '${wkHtmlToPdfVersion}'
     - '': '${xhmmVersion}'
     - '': '${hpoVersion}'
     - '': '${multiQCVersion}'

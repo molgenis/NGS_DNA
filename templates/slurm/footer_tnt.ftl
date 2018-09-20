@@ -26,14 +26,27 @@ mydate_finished=$(date +"%Y-%m-%dT%H:%M:%S+0200")
 step=$(echo "${taskId}" | awk -F'_' '{print $1"_"$2}')
 
 <#noparse>
+if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
+then
+	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
+	TOKEN=${CURLRESPONSE:10:32}
 
-CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-TOKEN=${CURLRESPONSE:10:32}
+	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "finished" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+	then
+		echo "set"
+	else
+		echo "not set"
+	fi
 
-curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "finished" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
-<#noparse>
-sleep 1
-curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_finished}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/finished_date
+	<#noparse>
+	sleep 1
+	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_finished}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/finished_date
+	then
+	        echo "set"
+	else
+        	echo "not set"
+	fi
+fi
 trap - EXIT
 exit 0
 

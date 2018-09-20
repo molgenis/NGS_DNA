@@ -16,13 +16,11 @@ convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,cutadapt/1.13-${toolChain}-Python-2.7.10
 fastqcVersion,FastQC/0.11.5-Java-1.8.0_74
 gatkVersion,GATK/3.7-Java-1.8.0_74
-gavinPlusVersion,GAVIN-Plus/1.3beta-Java-1.8.0_74 
-gavinToolPackVersion,Gavin-ToolPack/1.0-Java-1.8.0_74
+gavinPlusVersion,gavin-plus/1.3.0-Java-1.8.0_74
 iolibVersion,io_lib/1.14.6-${toolChain}
 javaVersion,Java/1.8.0_74
 mantaVersion,manta/1.2.1-${toolChain}
-molgenisAnnotatorVersion,CmdLineAnnotator/1.21.1-Java-1.8.0_45
-ngsUtilsVersion,ngs-utils/16.12.1
+ngsUtilsVersion,ngs-utils/18.06.2
 perlPlusVersion,PerlPlus/5.22.0-${toolChain}-v17.08.1
 plink1Version,PLINK/1.07-x86_64
 plink2Version,plink/1.9-${toolChain}
@@ -34,7 +32,7 @@ sambambaVersion,sambamba/${sambambaVer}-${toolChain}
 sambambaVer,v0.6.6
 samtoolsVersion,SAMtools/1.2-${toolChain}
 seqTkVersion,seqtk/1.2-${toolChain}
-snpEffVersion,snpEff/4.3-Java-1.7.0_80
+snpEffVersion,snpEff/4.3t-Java-1.8.0_74
 htsLibVersion,HTSlib/1.3.2-${toolChain}
 vcfAnnoVersion,vcfanno/v0.2.9
 bcfToolsVersion,BCFtools/1.6-${toolChain}
@@ -45,16 +43,12 @@ wkHtmlToPdfVersion,wkhtmltox/0.12.3
 xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain}
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
-gavinPlusJar,GAVIN-Plus-1.3beta.jar
-gavinJar,GAVIN-APP-1.0.jar
-gavinMergeBackToolJar,MergeBackTool-0.2.jar
-gavinSplitRlvToolJar,SplitRlvTool-0.2.jar
-molgenisAnnotatorJar,CmdLineAnnotator-1.21.1.jar
+gavinPlusJar,gavin-plus-1.3.0.jar
 picardJar,picard.jar
 sambambaTool,sambamba_${sambambaVer}
 vepDBVersion,90
 vepAssemblyVersion,GRCh37
-multiQCVersion,multiqc/1.5-${toolChain}-Python-2.7.11
+multiQCVersion,multiqc/1.6-${toolChain}-Python-2.7.11
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -401,7 +395,7 @@ geneNetworkPrefixSample,${intermediateDir}/GeneNetwork/${externalSampleID}.geneN
 geneNetworkPrefixSampleResult,${intermediateDir}/${externalSampleID}.geneNetwork
 geneNetworkVcf,${intermediateDir}/${externalSampleID}.GAVIN.geneNetwork.final.vcf
 
-##CARTENIA TREE
+##CARTAGENIA TREE
 manVarListDir,${dataDir}/ManVarList/
 manVarListMVL_LB_B,${manVarListDir}/MVL_2018-06-27_LB-B.bed
 manVarListMVL_VUS_LP_P,${manVarListDir}/MVL_2018-06-27_VUS-LP-P.bed

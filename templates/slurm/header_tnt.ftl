@@ -13,16 +13,16 @@ set -e
 set -u
 
 ENVIRONMENT_DIR='.'
-
+<#noparse>
 WHOAMI=$(whoami)
-if [[ -f "/home/$WHOAMI/molgenis.cfg" && -r "/home/$WHOAMI/molgenis.cfg" ]]
+if [[ -f "/home/${WHOAMI}/molgenis.cfg" && -r "/home/${WHOAMI}/molgenis.cfg" ]]
 then
-	source /home/$WHOAMI/molgenis.cfg
+	source /home/${WHOAMI}/molgenis.cfg
 else
-	printf '%s\n' "FATAL: cannot find or cannot access /home/$WHOAMI/molgenis.cfg"
+	printf '%s\n' "FATAL: cannot find or cannot access /home/${WHOAMI}/molgenis.cfg"
 	exit 1
 fi
-
+</#noparse>
 #
 # Variables declared in MOLGENIS Compute headers/footers always start with a MC_ prefix.
 #
@@ -68,10 +68,18 @@ function errorExitAndCleanUp() {
 	echo "${errorMessage}"
 	echo "${MC_doubleSeperatorLine}"                > ${MC_failedFile}
 	echo "${errorMessage}"                         >> ${MC_failedFile}
+	if curl -s -f -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
+	then
+		CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
+		TOKEN=${CURLRESPONSE:10:32}
 
-	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-	TOKEN=${CURLRESPONSE:10:32}
-	curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+		if curl -s -f -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+		then
+			echo "have set Error status"
+		else
+			echo "cannot set Error status"
+		fi
+	fi
 <#noparse>
 	if [ -f "${MC_jobScriptSTDERR}" ]; then
 		echo "${MC_singleSeperatorLine}"           >> ${MC_failedFile}
@@ -128,15 +136,18 @@ trap 'errorExitAndCleanUp EXIT NA $?' EXIT
 trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 
 touch ${MC_jobScript}.started
+if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
+then
+	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
+	TOKEN=${CURLRESPONSE:10:32}
 
-
-CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-TOKEN=${CURLRESPONSE:10:32}
-
-curl -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
-
-
-
+	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
+	then
+		echo "set"
+	else
+		echo "not set"
+	fi
+fi
 #
 # When dealing with timing / synchronization issues of large parallel file systems,
 # you can uncomment the sleep statement below to allow for flushing of IO buffers/caches.

@@ -1,6 +1,6 @@
 queue,lz-compute
-prmName,prm02
-prmHost,calculon.hpc.rug.nl
+prmName,prm06
+prmHost,chaperone.umcg.nl
 root,/
 appsDir,${root}/apps/
 toolChain,foss-2015b
