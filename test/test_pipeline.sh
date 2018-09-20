@@ -11,24 +11,24 @@ function preparePipeline(){
 	pwd
 	rsync -r --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials ${pipelinefolder}/test/rawdata/MY_TEST_BAM_PROJECT${_workflowType} ${tmpfolder}/rawdata/ngs/
 
-	if [ -d ${tmpfolder}/generatedscripts/${_projectName} ] 
+	if [ -d "${tmpfolder}/generatedscripts/${_projectName}" ] 
 	then
-		rm -rf ${tmpfolder}/generatedscripts/${_projectName}/
+		rm -rf "${tmpfolder}/generatedscripts/${_projectName}/"
 	fi
 
-	if [ -d ${tmpfolder}/projects/${_projectName} ] 
+	if [ -d "${tmpfolder}/projects/${_projectName}" ]
 	then
-		rm -rf ${tmpfolder}/projects/${_projectName}/
+		rm -rf "${tmpfolder}/projects/${_projectName}/"
 	fi
 
-	if [ -d ${tmpfolder}/tmp/${_projectName} ] 
+	if [ -d "${tmpfolder}/tmp/${_projectName}" ]
 	then
-		rm -rf ${tmpfolder}/tmp/${_projectName}/
+		rm -rf "${tmpfolder}/tmp/${_projectName}/"
 	fi
-	mkdir ${tmpfolder}/generatedscripts/${_projectName}/
+	mkdir "${tmpfolder}/generatedscripts/${_projectName}/"
 
-	cp ${pipelinefolder}/templates/generate_template.sh ${tmpfolder}/generatedscripts/${_projectName}/generate_template.sh
-	fgrep "computeVersion," "${pipelinefolder}/parameters.csv" > ${tmpfolder}/generatedscripts/${_projectName}/mcVersion.txt
+	cp "${pipelinefolder}/templates/generate_template.sh" "${tmpfolder}/generatedscripts/${_projectName}/generate_template.sh"
+	fgrep "computeVersion," "${pipelinefolder}/parameters.csv" > "${tmpfolder}/generatedscripts/${_projectName}/mcVersion.txt"
 
 ##############
 	perl -pi -e "s|${NGS_DNA_VERSION}|NGS_DNA/betaAutotest|" ${tmpfolder}/generatedscripts/${_projectName}/generate_template.sh
@@ -54,16 +54,16 @@ EOF
 
 	## Grep used version of molgenis compute out of the parameters file
 
-	cp ${pipelinefolder}/test/${_projectName}.csv ${tmpfolder}/generatedscripts/${_projectName}/
-	perl -pi -e "s|/groups/umcg-atd/tmp03/|${tmpfolder}/|g" ${tmpfolder}/generatedscripts/${_projectName}/${_projectName}.csv
-	cd ${tmpfolder}/generatedscripts/${_projectName}/
-	perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=\${EBROOTNGS_DNA}/test_workflow.csv|' ${tmpfolder}/generatedscripts/${_projectName}/generate_template.sh
+	cp "${pipelinefolder}/test/${_projectName}.csv" "${tmpfolder}/generatedscripts/${_projectName}/"
+	perl -pi -e "s|/groups/umcg-atd/tmp03/|${tmpfolder}/|g" "${tmpfolder}/generatedscripts/${_projectName}/${_projectName}.csv"
+	cd "${tmpfolder}/generatedscripts/${_projectName}/"
+	perl -pi -e 's|workflow=\${EBROOTNGS_DNA}/workflow.csv|workflow=\${EBROOTNGS_DNA}/test_workflow.csv|' "${tmpfolder}/generatedscripts/${_projectName}/generate_template.sh"
 	sh generate_template.sh
 	cd scripts
 
 	sh submit.sh
 
-	cd ${tmpfolder}/projects/${_projectName}/run01/jobs/
+	cd "${tmpfolder}/projects/${_projectName}/run01/jobs/"
 	perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
 	perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
 
@@ -73,13 +73,13 @@ EOF
 	## "gender cannot be determined for Male NA12891"
 	for i in $(ls s*_GenderCheck_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 	for i in $(ls s*_GenderCalculate_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
-	printf "This is a male\n" > ${tmpfolder}//tmp//${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt
-	printf "Male\n" >> ${tmpfolder}/tmp//${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt
+	printf "This is a male\n" > "${tmpfolder}//tmp//${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt"
+	printf "Male\n" >> "${tmpfolder}/tmp//${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt"
 	perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
 	perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
 	if [ "${_workflowType}" == "ExternalSamples" ]
 	then
-		cd ${tmpfolder}/projects/${_projectName}/run01/jobs/
+		cd "${tmpfolder}/projects/${_projectName}/run01/jobs/"
 		perl -pi -e 's|ExternalSamples|InhouseSamples|g' s01*_0.sh
 		var=$(diff s01*_0.sh ${tmpfolder}/projects/PlatinumSubsetInhouseSamples/run01/jobs/s01*_0.sh | wc -l)
 		if [[ "${var}" == 0 ]]
@@ -100,7 +100,7 @@ function checkIfFinished(){
 	local _projectName="PlatinumSubset${1}"
 	count=0
 	minutes=0
-	while [ ! -f ${tmpfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished ]
+	while [ ! -f "${tmpfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished" ]
 	do
 
 		echo "${_projectName} is not finished in $minutes minutes, sleeping for 2 minutes"
@@ -108,15 +108,15 @@ function checkIfFinished(){
 		minutes=$((minutes+2))
 
 		count=$((count+2))
-		if [ $count -eq 60 ]
+		if [ "${count}" -eq 60 ]
 		then
 			echo "the test was not finished within 60 minutes, let's kill it"
 			echo -e "\n"
-			for i in $(ls ${tmpfolder}/projects/${_projectName}/run01/jobs/*.sh)
+			for i in $(ls "${tmpfolder}/projects/${_projectName}/run01/jobs/"*.sh)
 			do
-				if [ ! -f $i.finished ]
+				if [ ! -f "${i}.finished" ]
 				then
-					echo "$(basename $i) is not finished"
+					echo "$(basename ${i}) is not finished"
 				fi
 			done
 			exit 1
@@ -139,7 +139,7 @@ tmpfolder="/groups/${groupName}/${tmpdirectory}"
 
 if [ -d "${pipelinefolder}" ]
 then
-	rm -rf ${pipelinefolder}
+	rm -rf "${pipelinefolder}"
 	echo "removed ${pipelinefolder}"
 	mkdir "${pipelinefolder}"
 fi
@@ -147,7 +147,7 @@ cd "${pipelinefolder}"
 
 echo "pr number: $1"
 
-PULLREQUEST=$1
+PULLREQUEST="${1}"
 NGS_DNA_VERSION=NGS_DNA/3.4.4
 
 git clone https://github.com/molgenis/NGS_DNA.git
