@@ -231,4 +231,5 @@ if [ -f "${intermediateDir}/${project}.filteredBarcodes.csv" ]
 then
 	echo -e "\n################### THE FOLLOWING LINES ARE REJECTED BECAUSE OF TOO LOW PERCENTAGE READS ###############\n"
 	cat "${intermediateDir}/${project}.filteredBarcodes.csv"
+	cat "${intermediateDir}/${project}.filteredBarcodes.csv" > "${logsDir}/${project}/${runid}.pipeline.rejectedsamples"
 fi
