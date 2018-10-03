@@ -203,6 +203,14 @@ else
         fi
 fi
 
+if [ "${captKit}" == *"ONCO"* ]
+then
+	if [ ! -f ${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed
+	then
+		echo "cannot do concordance check later on since ${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed is missing! EXIT!"
+		exit 1
+	fi
+fi
 
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
 

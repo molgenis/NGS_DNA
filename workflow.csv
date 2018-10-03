@@ -22,6 +22,7 @@ s14d_CollectGCBiasMetrics,protocols/CollectGCBiasMetrics.sh,s07_MarkDuplicates
 s15_GenderCheck,protocols/GenderCheck.sh,s10_GenderCalculate;s14b_CollectHSMetrics
 s16a_VariantCalling,protocols/VariantCalling.sh,s15_GenderCheck;s06_BaseRecalibrator;dbSnp=dbSNP137Vcf
 #s16c_CombineVariants,protocols/VariantCombine.sh,s16a_VariantCalling
+s16c_VariantConcordanceGenotyping,protocols/VariantConcordanceGenotyping.sh,s16a_VariantCalling
 s16d_GenotypeVariants,protocols/VariantGenotyping.sh,s16a_VariantCalling;dbSnp=dbSNP137Vcf
 s17a_AnnotateVcf,protocols/AnnotateVcf.sh,s16d_GenotypeVariants
 #s17b_AnnotateWithVEP,protocols/VEP.sh,s17a_AnnotateVcf
