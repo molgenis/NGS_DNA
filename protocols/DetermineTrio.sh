@@ -37,7 +37,7 @@ then
 			child=$(echo -e "${trioFile}" | awk '{print $2}')
 
 			trio=()
-			IFS="," trio=($(echo "$trioString"))
+			trio=($(echo "${trioString}" | awk '{split($0, array, ","); for (i=1; i <= length(array); i++) {print array[i]}}'))
 
 			parents=()
 
