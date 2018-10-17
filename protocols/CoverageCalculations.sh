@@ -23,7 +23,18 @@ module load "${gatkVersion}"
 module load "${ngsUtilsVersion}"
 
 ### Per base bed files
-bedfile=$(basename "${capturingKit}")
+bedfileRaw=$(basename "${capturingKit}")
+if [[ "${bedfileRaw}" =~ "QXT" ]]
+then
+	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,4)}')
+elif [[ "${bedfileRaw}" =~ "XT" ]]
+then
+	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,3)}')
+else
+	bedfile="${bedfileRaw}"
+fi
+
+echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
 if [ -d "${coveragePerBaseDir}/${bedfile}" ]
 then
 	for i in $(ls -d "${coveragePerBaseDir}/${bedfile}"/*)

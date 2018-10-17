@@ -1,6 +1,6 @@
 #!/bin/bash
 
-module load NGS_DNA/3.4.4
+module load NGS_DNA/3.5.1
 module list
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
