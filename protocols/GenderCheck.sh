@@ -135,7 +135,8 @@ then
 	else
 		echo "ALARM ALARM"
 		echo "ALARM, ALARM, the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!"
-		echo -e "ALARM!\n For sample ${dedupBam%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${runNumber}.pipeline.gendercheckfailed"
+		sampleName=$(basename ${dedupBam})
+		echo -e "ALARM!\nFor sample ${sampleName%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${runNumber}.pipeline.gendercheckfailed"
 	fi
 fi
 
