@@ -113,11 +113,11 @@ projectQcDir,${projectDir}/qc/
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
-peEnd1BarcodePhiXRecodedFqGz,${rawFile}_1.phiX.recoded.${rawFileExt}
-peEnd2BarcodePhiXRecodedFqGz,${rawFile}_2.phiX.recoded.${rawFileExt}
-peEnd1BarcodePhiXFqGz,${rawFile}_1.phiX.${rawFileExt}
-peEnd2BarcodePhiXFqGz,${rawFile}_2.phiX.${rawFileExt}
-srBarcodeRecodedFqGz,${rawFile}.recoded.${rawFileExt}
+peEnd1BarcodePhiXRecodedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.phiX.recoded.${rawFileExt}
+peEnd2BarcodePhiXRecodedFqGz,${intermediateDir}/${filePrefix}_${barcode}_2.phiX.recoded.${rawFileExt}
+peEnd1BarcodePhiXFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.phiX.${rawFileExt}
+peEnd2BarcodePhiXFqGz,${intermediateDir}/${filePrefix}_${barcode}_2.phiX.${rawFileExt}
+srBarcodeRecodedFqGz,${intermediateDir}/${filePrefix}_${barcode}.recoded.${rawFileExt}
 srBarcodeFqGz,${rawFile}.${rawFileExt}
 srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
 bwaAlignCores,8
