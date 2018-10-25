@@ -35,11 +35,12 @@
 #string intermediateDir
 #string bedToolsVersion
 
-module load "${ngsversion}"
-module load "${bedToolsVersion}"
 
 if [ ! -f "${intermediateDir}/convading.skipped" ]
 then
+
+	module load "${ngsversion}"
+	module load "${bedToolsVersion}"
 
 	if [ ! -d "${decisionTreeDir}" ]
 	then

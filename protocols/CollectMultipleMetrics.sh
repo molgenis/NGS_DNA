@@ -1,4 +1,4 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=6
+#MOLGENIS walltime=05:59:00 mem=6gb ppn=3
 
 
 #Parameter mapping
@@ -25,7 +25,7 @@ makeTmpDir "${collectBamMetricsPrefix}"
 tmpCollectBamMetricsPrefix="${MC_tmpFile}"
 
 #Run Picard CollectAlignmentSummaryMetrics, CollectInsertSizeMetrics, CollectGcBiasMetrics, QualityScoreDistribution and MeanQualityByCycle
-java -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" "${collectMultipleMetricsJar}" \
+java -jar -Xmx4g -XX:ParallelGCThreads=2 "${EBROOTPICARD}/${picardJar}" "${collectMultipleMetricsJar}" \
 I="${dedupBam}" \
 R="${indexFile}" \
 O="${tmpCollectBamMetricsPrefix}" \
@@ -48,7 +48,7 @@ if [ "${seqType}" == "PE" ]
 then
 	echo -e "\nDetected paired-end data, moving all files.\n\n"
 	mv "${tmpCollectBamMetricsPrefix}.insert_size_metrics" "${dedupBam}.insert_size_metrics"
-    	mv "${tmpCollectBamMetricsPrefix}.insert_size_histogram.pdf" "${dedupBam}.insert_size_histogram.pdf"
+	mv "${tmpCollectBamMetricsPrefix}.insert_size_histogram.pdf" "${dedupBam}.insert_size_histogram.pdf"
 
 else
     echo -e "\nDetected single read data, no *.insert_size_metrics files to be moved.\n\n"

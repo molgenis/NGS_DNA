@@ -28,6 +28,7 @@ scramble \
 -I bam \
 -O cram \
 -r "${indexFile}" \
+-P \
 -m \
 -t 8 \
 "${dedupBam}" \

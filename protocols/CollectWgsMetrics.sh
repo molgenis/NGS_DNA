@@ -1,4 +1,4 @@
-#MOLGENIS walltime=11:59:00 mem=6gb ppn=6
+#MOLGENIS walltime=11:59:00 mem=6gb ppn=3
 
 #Parameter mapping
 #string tmpName
@@ -24,7 +24,7 @@ makeTmpDir "${wgsMetrics}"
 tmpWgsMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics
-java -XX:ParallelGCThreads=4 -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" CollectWgsMetrics \
+java -XX:ParallelGCThreads=2 -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" CollectWgsMetrics \
 R="${indexFile}" \
 I="${dedupBam}" \
 O="${tmpWgsMetrics}" \
