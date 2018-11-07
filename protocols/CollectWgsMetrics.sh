@@ -13,6 +13,7 @@
 #string	project
 #string logsDir 
 #string groupname
+#string intermediateDir
 
 #string wgsMetrics
 
@@ -20,7 +21,7 @@
 ${stage} "${picardVersion}"
 ${checkStage}
 
-makeTmpDir "${wgsMetrics}"
+makeTmpDir "${wgsMetrics}" "${intermediateDir}"
 tmpWgsMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics

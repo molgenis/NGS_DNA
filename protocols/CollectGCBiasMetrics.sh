@@ -23,6 +23,7 @@
 #string	project
 #string logsDir 
 #string groupname
+#string intermediateDir
 
 #Load Picard module
 ${stage} "${picardVersion}"
@@ -30,7 +31,7 @@ ${stage} "${rVersion}"
 ${stage} "${ngsUtilsVersion}"
 ${checkStage}
 
-makeTmpDir "${gcBiasMetrics}"
+makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"
 tmpGcBiasMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics

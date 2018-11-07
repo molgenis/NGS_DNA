@@ -16,11 +16,12 @@
 #string project
 #string logsDir 
 #string groupname
+#string intermediateDir
 
 #Load Picard module
 ${stage} "${picardVersion}"
 
-makeTmpDir "${bamIndexStats}"
+makeTmpDir "${bamIndexStats}" "${intermediateDir}"
 tmpBamIndexStats="${MC_tmpFile}"
 
 

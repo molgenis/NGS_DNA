@@ -111,6 +111,7 @@ projectResultsDir,${projectDir}/results/
 projectQcDir,${projectDir}/qc/
 
 ### Protocols 1, 2, 3 and 4 (SpikePhiX, CheckIlluminaEncoding, FastQC, BWA) ###
+outputFolderFastQC,${projectResultsDir}/qc/
 peEnd1BarcodeFqGz,${rawFile}_1.${rawFileExt}
 peEnd2BarcodeFqGz,${rawFile}_2.${rawFileExt}
 peEnd1BarcodePhiXRecodedFqGz,${intermediateDir}/${filePrefix}_${barcode}_1.phiX.recoded.${rawFileExt}
@@ -141,12 +142,12 @@ alignedSortedBamIdx,${fileWithIndexId}.sorted.bam.bai
 sampleMergedBam,${sampleNameID}.merged.bam
 sampleMergedBai,${sampleNameID}.merged.bai
 sampleMergedBamIdx,${sampleNameID}.merged.bam.bai
-dedupBam,${sampleNameID}.merged.dedup.bam
-dedupBamIdx,${sampleNameID}.merged.dedup.bam.bai
-dedupMetrics,${sampleNameID}.merged.dedup.metrics,
-dedupBamCram,${sampleNameID}.merged.dedup.bam.cram
-dedupBamCramIdx,${sampleNameID}.merged.dedup.bam.cram.bai
-dedupBamCramBam,${sampleNameID}.merged.dedup.bam.cram.bam
+dedupBam,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam
+dedupBamIdx,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.bai
+dedupBamMetrics,${projectResultsDir}/qc/statistics/${externalSampleID}.merged.dedup.bam
+dedupBamCram,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.cram
+dedupBamCramIdx,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.cram.crai
+dedupBamCramBam,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.cram.bam
 KGPhase1IndelsVcf,${indicesDir}/indels/1000G_phase1.indels.b37.vcf
 KGPhase1IndelsVcfIdx,${KGPhase1IndelsVcf}.idx
 MillsGoldStandardDir,${indicesDir}/Mills_and_1000G_gold_standard/
@@ -163,16 +164,16 @@ sampleConcordanceFile,${sampleNameID}.concordance.ngsVSarray.txt
 sequenomReport,${tmpDataDir}/rawdata/array/${project}_Sequenom_Report.txt
 sequenomInfo,${sequenomDir}/Sequonome_SNPinfo.txt
 collectMultipleMetricsJar,CollectMultipleMetrics
-alignmentMetrics,${dedupBam}.alignment_summary_metrics
-bamIndexStats,${dedupBam}.bam_index_stats
+alignmentMetrics,${dedupBamMetrics}.alignment_summary_metrics
+bamIndexStats,${dedupBamMetrics}.bam_index_stats
 bamIndexStatsJar,BamIndexStats
-flagstatMetrics,${dedupBam}.flagstat
-gcBiasMetrics,${dedupBam}.gc_bias_metrics
+flagstatMetrics,${dedupBamMetrics}.flagstat
+gcBiasMetrics,${dedupBamMetrics}.gc_bias_metrics
 gcBiasMetricsJar,CollectGcBiasMetrics
-insertSizeMetrics,${dedupBam}.insert_size_metrics
+insertSizeMetrics,${dedupBamMetrics}.insert_size_metrics
 hsMetricsJar,CalculateHsMetrics
-hsMetrics,${dedupBam}.hs_metrics
-hsMetricsNonAutosomalRegionChrX,${dedupBam}.nonAutosomalRegionChrX_hs_metrics
+hsMetrics,${dedupBamMetrics}.hs_metrics
+hsMetricsNonAutosomalRegionChrX,${dedupBamMetrics}.nonAutosomalRegionChrX_hs_metrics
 recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
@@ -186,7 +187,7 @@ gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/r2.0.2/
 gnomADExomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/exomes/
 clinvarAnnotation,${dataDir}/ClinVar/clinvar_20180401.vcf.gz
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
-wgsMetrics,${dedupBam}.wgs_metrics
+wgsMetrics,${dedupBamMetrics}.wgs_metrics
 
 
 ### Protocols 18a 18b 18c and  (gVCF VariantCalling, VariantCombine, VariantGenotyping) ###
@@ -194,12 +195,13 @@ dbSNP137Vcf,${dbSNPDir}/dbsnp_137.b37.vcf
 dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
-sampleBatchVariantCalls,${sampleNameID}.batch-${batchID}.variant.calls.g.vcf.gz
+sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
-sampleBatchVariantCallsFemale,${sampleNameID}.batch-${batchID}.chrX.female.variant.calls.g.vcf.gz
-sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
-sampleBatchVariantCallsMaleNONPAR,${sampleNameID}.batch-${batchID}.chrX.male.NONPAR.variant.calls.g.vcf.gz
+#sampleBatchVariantCallsFemale,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.female.variant.calls.g.vcf.gz
+#sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
+sampleBatchVariantCallsMaleNONPAR,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.male.NONPAR.variant.calls.g.vcf.gz
 sampleBatchVariantCallsMaleNONPARIndex,${sampleBatchVariantCallsMaleNONPAR}.tbi
+
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf

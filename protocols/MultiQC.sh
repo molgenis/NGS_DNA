@@ -41,7 +41,7 @@
 #string verifyBamIDVersion
 #string xhmmVersion
 #string hpoVersion
-
+#string projectResultsDir
 #string ngsversion
 #string capturingKit
 #string stage
@@ -145,7 +145,7 @@ cp "${intermediateDir}/"*.dedup.bam.flagstat "${multiQCdir}"
 cp "${intermediateDir}/"*metrics* "${multiQCdir}"
 
 
-multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${multiQCdir}" ${intermediateDir}/*_fastqc.zip -o "${intermediateDir}"
+multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${multiQCdir}" ${projectResultsDir}/qc/*_fastqc.zip -o "${intermediateDir}"
 
 mv "${intermediateDir}/multiqc_report.html" "${intermediateDir}/${project}_multiqc_report.html"
 echo "moved ${intermediateDir}/multiqc_report.html ${intermediateDir}/${project}_multiqc_report.html"
