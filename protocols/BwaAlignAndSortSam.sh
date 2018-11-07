@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 nodes=1 ppn=4 mem=5gb
+#MOLGENIS walltime=23:59:00 nodes=1 ppn=4 mem=13gb
 
 set -o pipefail
 
@@ -58,7 +58,7 @@ then
 	"${fastq2}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx4G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
+	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
         INPUT="${tmpAlignedSam}" \
         OUTPUT="${tmpAlignedSortedBam}"  \
         SORT_ORDER=coordinate \
@@ -77,12 +77,12 @@ else
 	bwa mem \
 	-M \
 	-R "${READGROUPLINE}" \
-	-t "${bwaAlignCores}" \
+	-t 4 \
 	"${indexFile}" \
 	"${srBarcodeRecodedFqGz}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx4G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
+	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
         INPUT="${tmpAlignedSam}" \
         OUTPUT="${tmpAlignedSortedBam}"  \
         SORT_ORDER=coordinate \
