@@ -8,7 +8,7 @@
 #string project
 #string logsDir 
 #string groupname
-
+#string intermediateDir
 ### Other parameters
 
 

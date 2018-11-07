@@ -14,12 +14,13 @@
 #string project
 #string logsDir 
 #string groupname
+#string intermediateDir
 
 #Load module
 ${stage} "${fastqcVersion}"
 ${checkStage}
 
-makeTmpDir "${outputFolderFastQC}"
+makeTmpDir "${outputFolderFastQC}" "${intermediateDir}"
 tmpOutputFolderFastQC="${MC_tmpFile}"
 
 #If paired-end do fastqc for both ends, else only for one
@@ -35,7 +36,5 @@ else
 	-o "${tmpOutputFolderFastQC}"
 	echo -e "\nFastQC finished succesfull. Moving temp files to final.\n\n"
 	mv "${tmpOutputFolderFastQC}"/* "${outputFolderFastQC}"
-	
+
 fi
-
-

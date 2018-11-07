@@ -68,7 +68,6 @@ EOF
 	perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
 
 	for i in $(ls s*_Manta_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
-	for i in $(ls s*_CheckOutput_*.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 
 	## "gender cannot be determined for Male NA12891"
 	for i in $(ls s*_GenderCheck_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
@@ -148,7 +147,7 @@ cd "${pipelinefolder}"
 echo "pr number: $1"
 
 PULLREQUEST="${1}"
-NGS_DNA_VERSION=NGS_DNA/3.4.4
+NGS_DNA_VERSION=NGS_DNA/3.5.1
 
 git clone https://github.com/molgenis/NGS_DNA.git
 cd NGS_DNA

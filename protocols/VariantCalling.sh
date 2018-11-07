@@ -14,10 +14,6 @@
 #string dbSnp
 #string sampleBatchVariantCalls
 #string sampleBatchVariantCallsIndex
-#string sampleBatchVariantCallsMaleNONPAR
-#string sampleBatchVariantCallsMaleNONPARIndex
-#string sampleBatchVariantCallsFemale
-#string sampleBatchVariantCallsFemaleIndex
 #string tmpDataDir
 #string externalSampleID
 #string	project
@@ -44,10 +40,10 @@ array_contains () {
 ${stage} "${gatkVersion}"
 ${checkStage}
 
-makeTmpDir "${sampleBatchVariantCalls}"
+makeTmpDir "${sampleBatchVariantCalls}" "${intermediateDir}"
 tmpSampleBatchVariantCalls="${MC_tmpFile}"
 
-makeTmpDir "${sampleBatchVariantCallsIndex}"
+makeTmpDir "${sampleBatchVariantCallsIndex}" "${intermediateDir}"
 tmpSampleBatchVariantCallsIndex="${MC_tmpFile}"
 
 bams=()
@@ -61,11 +57,6 @@ sex=$(less "${intermediateDir}/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
 if [ -f "${capturedBatchBed}" ] 
 then
 	baitBatchLength=$(cat "${capturedBatchBed}" | wc -l)
-fi
-
-if [ ! -d "${intermediateDir}/gVCF" ]
-then
-	mkdir -p "${intermediateDir}/gVCF"
 fi
 
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
@@ -128,8 +119,6 @@ else
 		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
 		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
 
-		cp "${sampleBatchVariantCalls}" "${intermediateDir}/gVCF/"
-		cp "${sampleBatchVariantCallsIndex}" "${intermediateDir}/gVCF/"
 	else
 		echo "ERROR: output file is missing"
 		exit 1

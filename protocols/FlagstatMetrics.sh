@@ -9,21 +9,18 @@
 #string tmpDataDir
 #string sambambaVersion
 #string sambambaTool
-#string dedupMetrics
 #string	project
 #string logsDir 
 #string groupname
 #string flagstatMetrics
+#string intermediateDir
 
 #Load Picard module
 ${stage} "${sambambaVersion}"
 ${checkStage}
 
-makeTmpDir "${flagstatMetrics}"
+makeTmpDir "${flagstatMetrics}" "${intermediateDir}"
 tmpFlagstatMetrics="${MC_tmpFile}"
-
-makeTmpDir "${dedupMetrics}"
-tmpDedupMetrics="${MC_tmpFile}"
 
 echo "starting to calculate flagstat metrics"
 #make metrics file

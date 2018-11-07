@@ -21,7 +21,7 @@
 #string groupname
 
 #Function to check if array contains value
-array_contains () { 
+array_contains () {
     local array="$1[@]"
     local seeking="${2}"
     local in=1

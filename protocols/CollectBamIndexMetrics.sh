@@ -1,4 +1,4 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=6
+#MOLGENIS walltime=05:59:00 mem=6gb ppn=3
 
 
 #Parameter mapping
@@ -16,16 +16,17 @@
 #string project
 #string logsDir 
 #string groupname
+#string intermediateDir
 
 #Load Picard module
 ${stage} "${picardVersion}"
 
-makeTmpDir "${bamIndexStats}"
+makeTmpDir "${bamIndexStats}" "${intermediateDir}"
 tmpBamIndexStats="${MC_tmpFile}"
 
 
 #Run Picard BamIndexStats
-java -jar -Xmx4g "${EBROOTPICARD}/${picardJar}" "${bamIndexStatsJar}" \
+java -jar -Xmx4g -XX:ParallelGCThreads=2 "${EBROOTPICARD}/${picardJar}" "${bamIndexStatsJar}" \
 INPUT="${dedupBam}" \
 VALIDATION_STRINGENCY=LENIENT \
 TMP_DIR="${tempDir}" \

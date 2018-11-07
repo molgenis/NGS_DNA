@@ -109,23 +109,29 @@ function errorExitAndCleanUp() {
 #                   when the first argument was a file, MC_tmpFile will be a path to a tmp file inside MC_tmpFolder.
 #
 function makeTmpDir {
-	local originalPath=$1
+	local originalName=$(basename "${1}")
+	if [ ! -z "${2:-}" ]
+	then
+		local intermediatePath="${2}"
+	else
+		</#noparse>local intermediatePath="${intermediateDir}"<#noparse>
+	fi
+
 	local myMD5=$(md5sum ${MC_jobScript})
 	myMD5=${myMD5%% *} # remove everything after the first space character to keep only the MD5 checksum itself.
 	local tmpSubFolder="tmp_${MC_jobScript}_${myMD5}"
-	local dir
-	local base
-	if [[ -d "${originalPath}" ]]; then
-		dir="${originalPath}"
-		base=''
+	
+	### check whether variable $1 is a directory or not
+	if [ -d "${1}" ]
+	then
+		MC_tmpFolder="${intermediatePath}/${tmpSubFolder}/${originalName}"
+		MC_tmpFile="${MC_tmpFolder}"
 	else
-		base=$(basename "${originalPath}")
-		dir=$(dirname "${originalPath}")
+		MC_tmpFolder="${intermediatePath}/${tmpSubFolder}/"
+		MC_tmpFile="$MC_tmpFolder/${originalName}"	
 	fi
-	MC_tmpFolder="${dir}/${tmpSubFolder}/"
-	MC_tmpFile="$MC_tmpFolder/${base}"
-	echo "DEBUG ${MC_jobScript}::makeTmpDir: dir='${dir}';base='${base}';MC_tmpFile='${MC_tmpFile}'"
-	mkdir -p ${MC_tmpFolder}
+	echo "DEBUG ${MC_jobScript}::makeTmpDir: MC_tmpFile='${MC_tmpFile}'"
+	mkdir -p "${MC_tmpFolder}"
 }
 
 trap 'errorExitAndCleanUp HUP  NA $?' HUP

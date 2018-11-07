@@ -3,6 +3,7 @@
 #string dedupBam
 #string indexFile
 #string dedupBamCram
+#string dedupBamCramIdx
 #string dedupBamCramBam
 #string indexFile
 #string	project
@@ -16,10 +17,13 @@ module load "${iolibVersion}"
 module load "${samtoolsVersion}"
 module list
 
-makeTmpDir "${dedupBamCram}"
+makeTmpDir "${dedupBamCram}" "${intermediateDir}"
 tmpDedupBamCram="${MC_tmpFile}"
 
-makeTmpDir "${dedupBamCramBam}"
+makeTmpDir "${dedupBamCramIdx}" "${intermediateDir}"
+tmpDedupBamCramIdx="${MC_tmpFile}"
+
+makeTmpDir "${dedupBamCramBam}" "${intermediateDir}"
 tmpDedupBamCramBam="${MC_tmpFile}"
 
 echo "Starting scramble BAM to CRAM conversion"
@@ -28,20 +32,26 @@ scramble \
 -I bam \
 -O cram \
 -r "${indexFile}" \
+-P \
 -m \
 -t 8 \
 "${dedupBam}" \
 "${tmpDedupBamCram}"
 
-
-echo "dirname"
-mv "${tmpDedupBamCram}" "${dedupBamCram}"
-cd "${intermediateDir}"
-
-samtools index "${dedupBamCram}"
-md5sum $(basename "${dedupBamCram}") > $(basename "${dedupBamCram}").md5
-
+echo "conversion completed, now indexing the cramfile"
+cd "${MC_tmpFolder}"
+samtools index "${tmpDedupBamCram}"
+echo "indexing completed, now starting to make a checksum"
+md5sum $(basename "${tmpDedupBamCram}") > $(basename "${tmpDedupBamCram}").md5
 cd -
+echo "moving ${tmpDedupBamCram} to ${dedupBamCram}"
+mv "${tmpDedupBamCram}" "${dedupBamCram}"
+
+echo "moving ${tmpDedupBamCramIdx} to ${dedupBamCramIdx}"
+mv "${tmpDedupBamCramIdx}" "${dedupBamCramIdx}"
+
+echo "moving ${tmpDedupBamCram}.md5 to ${dedupBamCram}.md5"
+mv "${tmpDedupBamCram}.md5" "${dedupBamCram}.md5"
 
 #To convert from CRAM -> BAM do:
 #scramble \

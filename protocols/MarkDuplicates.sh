@@ -16,16 +16,17 @@
 #string	project
 #string logsDir 
 #string groupname
+#string intermediateDir
 #string flagstatMetrics
 
 #Load Picard module
 ${stage} "${sambambaVersion}"
 ${checkStage}
 
-makeTmpDir "${dedupBam}"
+makeTmpDir "${dedupBam}" "${intermediateDir}"
 tmpDedupBam="${MC_tmpFile}"
 
-makeTmpDir "${dedupBamIdx}"
+makeTmpDir "${dedupBamIdx}" "${intermediateDir}"
 tmpDedupBamIdx="${MC_tmpFile}"
 
 ##Run picard, sort BAM file and create index on the fly
@@ -42,3 +43,11 @@ mv "${tmpDedupBam}" "${dedupBam}"
 echo "moved ${tmpDedupBam} ${dedupBam}"
 mv "${tmpDedupBamIdx}" "${dedupBamIdx}"
 echo "mv ${tmpDedupBamIdx} ${dedupBamIdx}"
+
+echo "making symlinks of the bams in the results folder to ${intermediateDir} for later use"
+cd "${intermediateDir}" 
+
+ln -sf "${dedupBam}"
+ln -sf "${dedupBamIdx}"
+
+cd -

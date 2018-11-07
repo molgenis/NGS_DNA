@@ -1,4 +1,4 @@
-#MOLGENIS walltime=23:59:00 nodes=1 ppn=8 mem=30gb
+#MOLGENIS walltime=23:59:00 nodes=1 ppn=4 mem=13gb
 
 set -o pipefail
 
@@ -52,13 +52,13 @@ then
 	bwa mem \
 	-M \
 	-R "${READGROUPLINE}" \
-	-t "${bwaAlignCores}" \
+	-t 4 \
 	"${indexFile}" \
 	"${fastq1}" \
 	"${fastq2}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx29G -XX:ParallelGCThreads=4 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
+	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
         INPUT="${tmpAlignedSam}" \
         OUTPUT="${tmpAlignedSortedBam}"  \
         SORT_ORDER=coordinate \
@@ -67,17 +67,22 @@ then
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
 	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
 
+#	echo "moving prepared FastQ to intermediateDir"
+#	mv "${fastq1}" "${intermediateDir}"
+#	mv "${fastq2}" "${intermediateDir}"
+
+
 else
 	#Run BWA for single-read
 	bwa mem \
 	-M \
 	-R "${READGROUPLINE}" \
-	-t "${bwaAlignCores}" \
+	-t 4 \
 	"${indexFile}" \
 	"${srBarcodeRecodedFqGz}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx29G -XX:ParallelGCThreads=4 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
+	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
         INPUT="${tmpAlignedSam}" \
         OUTPUT="${tmpAlignedSortedBam}"  \
         SORT_ORDER=coordinate \
@@ -85,6 +90,9 @@ else
 
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
 	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
+
+#	echo "moving prepared FastQ to intermediateDir"
+#        mv "${srBarcodeRecodedFqGz}" "${intermediateDir}"
 
 fi
 

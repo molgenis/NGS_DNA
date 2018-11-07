@@ -26,6 +26,7 @@
 #string clinvarAnnotation
 #string cgdDataDir
 #string cgdFile
+#string intermediateDir
 
 ml ${vcfAnnoVersion}
 ml ${htsLibVersion}
