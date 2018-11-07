@@ -55,12 +55,7 @@ EXTERN=${#UNIQUESAMPLES[@]}
 # Copy project csv file to project results directory
 printf "Copied project csv file to project results directory.."
 rsync -a "${projectJobsDir}/${project}.csv" "${projectResultsDir}"
-printf ".. finished (2/11)\n"
-
-# Copy fastQC output to results directory
-#printf "Copying fastQC output to results directory.."
-#rsync -a "${intermediateDir}/"*_fastqc.zip "${projectResultsDir}/qc/"
-#printf ".. finished (3/11)\n"
+printf ".. finished \n"
 
 ##Copy GAVIN results
 for sample in "${UNIQUESAMPLES[@]}"
@@ -72,54 +67,6 @@ do
 done
 
 count=1
-#copy realigned bams
-#printf "Copying ${EXTERN} realigned bams "
-#for sample in "${UNIQUESAMPLES[@]}"
-#do
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam" "${projectResultsDir}/alignment/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.bai" "${projectResultsDir}/alignment/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram" "${projectResultsDir}/alignment/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram.crai" "${projectResultsDir}/alignment/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.cram.md5" "${projectResultsDir}/alignment/"
-
-#	printf "."
-#done
-#printf " finished (4/11)\n"
-
-#Copy g.vcf.gz + g.vcf.gz.tbi
-#printf "Copying gVCF files + index file"
-#for sample in "${UNIQUESAMPLES[@]}"
-#do
-#        rsync -a "${intermediateDir}/gVCF/${sample}."*.g.vcf.gz "${projectResultsDir}/alignment/gVCF/"
-#        rsync -a "${intermediateDir}/gVCF/${sample}."*.g.vcf.gz.tbi "${projectResultsDir}/alignment/gVCF/"
-
-#        printf "."
-#done
-#printf " finished (5/11)\n"
-
-# Copy alignment stats (lane and sample) to results directory
-
-count=1
-#printf "Copying alignment stats (lane and sample) to results directory "
-#for sample in "${UNIQUESAMPLES[@]}"
-#do
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.alignment_summary_metrics" "${projectResultsDir}/qc/statistics/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.gc_bias_metrics" "${projectResultsDir}/qc/statistics/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.quality_by_cycle_metrics" "${projectResultsDir}/qc/statistics/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.quality_distribution_metrics" "${projectResultsDir}/qc/statistics/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.hs_metrics" "${projectResultsDir}/qc/statistics/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.bam_index_stats" "${projectResultsDir}/qc/statistics/"
-#	rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.flagstat" "${projectResultsDir}/qc/statistics/"
-#	rsync -a "${intermediateDir}/${sample}"*.pdf "${projectResultsDir}/qc/statistics/"
-#	if [ -f "${intermediateDir}/${sample}.merged.dedup.bam.insert_size_metrics" ]
-#	then
-#		rsync -a "${intermediateDir}/${sample}.merged.dedup.bam.insert_size_metrics" "${projectResultsDir}/qc/statistics/"
-#	else
-#		echo "no insertsize metrics are available, skipped"
-#	fi
-#	printf "."
-#done
-#	printf " finished (6/11)\n"
 
 printf "Copying variants vcf and tables to results directory "
 # Copy variants vcf and tables to results directory
@@ -203,7 +150,7 @@ do
 
 
 done
-printf " finished (7/11)\n"
+printf " finished\n"
 
 #copy vcf file + coveragePerBase.txt + gender determination
 printf "Copying vcf files, gender determination, coverage per base and per target files "
@@ -254,7 +201,7 @@ do
 	fi
 
 done
-printf " finished (8/11)\n"
+printf " finished\n"
 
 
 # print README.txt files
@@ -264,7 +211,7 @@ printf "Copying QC report to results directory "
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
 rsync -av "${intermediateDir}/multiqc_data" "${projectResultsDir}/"
 printf "."
-printf " finished (9/11)\n"
+printf " finished\n"
 
 echo "Creating zip file"
 # Create zip file for all "small text" files
@@ -277,12 +224,12 @@ zip -g "${projectResultsDir}/${project}.zip" "${project}.csv"
 zip -g "${projectResultsDir}/${project}.zip" "${project}_multiqc_report.html"
 zip -gr "${projectResultsDir}/${project}.zip" coverage
 
-echo "Zip file created: ${projectResultsDir}/${project}.zip (10/11)"
+echo "Zip file created: ${projectResultsDir}/${project}.zip "
 
 # Create md5sum for zip file
 
 md5sum "${project}.zip" > "${projectResultsDir}/${project}.zip.md5"
-echo "Made md5 file for ${projectResultsDir}/${project}.zip (11/11)"
+echo "Made md5 file for ${projectResultsDir}/${project}.zip "
 
 cd "${CURRENT_DIR}"
 
