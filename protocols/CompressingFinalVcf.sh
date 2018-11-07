@@ -9,6 +9,7 @@
 #string groupname
 #string	project
 #string finalVcf
+#string intermediateDir
 
 #Function to check if array contains value
 array_contains () {
