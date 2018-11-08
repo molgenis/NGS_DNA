@@ -39,5 +39,5 @@ then
 	mv "${tmpHsMetricsNonAutosomalRegionChrX}" "${hsMetricsNonAutosomalRegionChrX}"
 	echo "mv ${tmpHsMetricsNonAutosomalRegionChrX} ${hsMetricsNonAutosomalRegionChrX}"
 else
-	touch "${dedupBam}.noChrX"
+	touch "${dedupBamMetrics}.noChrX"
 fi

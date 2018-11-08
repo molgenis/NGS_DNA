@@ -1,5 +1,6 @@
 #MOLGENIS ppn=4 mem=6gb walltime=00:30:00
 #string tmpName
+#string dedupBamMetrics
 #string dedupBam
 #string capturedIntervals
 #string capturedIntervals_nonAutoChrX
@@ -18,7 +19,7 @@
 
 module load "${picardVersion}"
 
-if [ -f "${dedupBam}.noChrX" ]
+if [ -f "${dedupBamMetrics}.noChrX" ]
 then
 	printf "There is no chrX, a gender cannot be determined\n" > "${whichSex}"
 	printf "Unknown\n" >> "${whichSex}"
@@ -39,7 +40,8 @@ if ($0 ~ /^#/){
 		}else{
 			print $23
 	}
-	}' "${dedupBam}.hs_metrics" >> "${checkSexMeanCoverage}"
+	}' "${dedupBamMetrics}.hs_metrics" >> "${checkSexMeanCoverage}"
+
 
 	avgCov=$(awk '{print $1}' "${checkSexMeanCoverage}")
 
@@ -86,11 +88,11 @@ if ($0 ~ /^#/){
 		echo "\$2 is the mean coverage of non autosomal chrX"
 		awk '{
 			if ( length($1) == 0){
-				print "${dedupBam}.hs_metrics has not a MEAN TARGET COVERAGE value"
+				print "${dedupBamMetrics}.hs_metrics has not a MEAN TARGET COVERAGE value"
 				exit 0
 			}
 			else if ( length($2) == 0 ){
-				print "${dedupBam}.nonAutosomalRegionChrX_hs_metrics has not a MEAN TARGET COVERAGE value"
+				print "${dedupBamMetrics}.nonAutosomalRegionChrX_hs_metrics has not a MEAN TARGET COVERAGE value"
 				exit 0
 			}
 			else if ( "NA" == $1 || "?" == $2 ) {
@@ -135,7 +137,7 @@ then
 	else
 		echo "ALARM ALARM"
 		echo "ALARM, ALARM, the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!"
-		sampleName=$(basename ${dedupBam})
+		sampleName=$(basename ${dedupBamMetrics})
 		echo -e "ALARM!\nFor sample ${sampleName%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${runNumber}.pipeline.gendercheckfailed"
 	fi
 fi
