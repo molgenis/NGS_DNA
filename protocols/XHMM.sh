@@ -145,14 +145,14 @@ else
 					#
 					## Creating bams directory
 					rm -f "${xhmmDir}/${CAPT}.READS.bam.list"
-					echo "${dedupBam}" > "${dedupBam}.READS.bam.list"
+					echo "${dedupBam}" > "${intermediateDir}/${externalSampleID}.READS.bam.list"
 
 					sID=$(basename "${dedupBam}")
 					sampleID=${sID%%.*}
 
 					java -Xmx3072m -jar "${EBROOTGATK}/${gatkJar}" \
 					-T DepthOfCoverage \
-					-I "${dedupBam}.READS.bam.list" \
+					-I "${intermediateDir}/${externalSampleID}.READS.bam.list" \
 					-L "${capturedBed}" \
 					-R "${indexFile}" \
 					-dt BY_SAMPLE -dcov 5000 -l INFO --omitDepthOutputAtEachBase --omitLocusTable \

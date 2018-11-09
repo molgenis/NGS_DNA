@@ -20,6 +20,9 @@
 #list externalSampleID
 #list batchID
 #list seqType
+#string intervalListDir
+#string coveragePerBaseDir
+#string coveragePerTargetDir
 # Change permissions
 
 
@@ -43,6 +46,7 @@ array_contains () {
 mkdir -p "${projectResultsDir}/coverage/CoveragePerBase"
 mkdir -p "${projectResultsDir}/coverage/CoveragePerTarget"
 mkdir -p "${projectResultsDir}/general"
+mkdir -p "${projectResultsDir}/bedfile/"
 
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
@@ -52,9 +56,15 @@ done
 
 EXTERN=${#UNIQUESAMPLES[@]}
 
-# Copy project csv file to project results directory
+# Copy project csv file and capturingKitFolder to project results directory
 printf "Copied project csv file to project results directory.."
 rsync -a "${projectJobsDir}/${project}.csv" "${projectResultsDir}"
+rsync -a "${intervalListDir}" "${projectResultsDir}/bedfile/"
+
+bedfileName=$(basename "${capturingKit}")
+ls -1 ${coveragePerBaseDir}/${bedfileName}/ > ${projectResultsDir}/coverage/CoveragePerBase/CovPerBase.txt
+ls -1 ${coveragePerTargetDir}/${bedfileName}/ > ${projectResultsDir}/coverage/CoveragePerTarget/CovPerTarget.txt
+
 printf ".. finished \n"
 
 ##Copy GAVIN results

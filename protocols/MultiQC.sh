@@ -141,9 +141,7 @@ multiQCdir="${intermediateDir}/MultiQC/"
 mkdir -p "${multiQCdir}"
 
 #cp "${intermediateDir}/"*.snpeff.vcf.csvStats.csv "${multiQCdir}"
-cp "${intermediateDir}/"*.dedup.bam.flagstat "${multiQCdir}"
-cp "${intermediateDir}/"*metrics* "${multiQCdir}"
-
+cp "${projectResultsDir}/qc/statistics/"* "${multiQCdir}"
 
 multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${multiQCdir}" ${projectResultsDir}/qc/*_fastqc.zip -o "${intermediateDir}"
 
