@@ -266,7 +266,7 @@ diagnosticsCluster="true"
 if [ "${whichHost}" == "zinc-finger.gcc.rug.nl" ]
 then
 	tmpHost="localhost"
-	concordanceDir=${tmpDataDir}/Concordance/ngs/
+	concordanceDir="${tmpDataDir}/Concordance/ngs/"
 
 elif [[ "${whichHost}" == "leucine-zipper" ]]
 then
@@ -274,11 +274,11 @@ then
 	if $? eq 0
 	then
 		tmpHost="zinc-finger.gcc.rug.nl"
-		concordanceDir=/groups/umcg-gd/tmp05/Concordance/ngs/
+		concordanceDir="/groups/umcg-gd/tmp05/Concordance/ngs/"
 	else
 		echo "zinc-finger is down, writing data to leucine-zipper instead"
-		tmpHost=localhost
-		concordanceDir=/groups/umcg-gdio/tmp06/Concordance/ngs/
+		tmpHost="localhost"
+		concordanceDir="${tmpDataDir}/Concordance/ngs/"
 	fi
 else
 	diagnosticsCluster="false"
@@ -290,16 +290,16 @@ then
 	do
 		if [[ "${capturingKit}" == *"Exoom_v1"* ]]
 		then
-			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/Exoom_v1/
+			rsync -av ${projectResultsDir}/variants/${sample}*.gz "${tmpHost}:${concordanceDir}/Exoom_v1/"
 		elif [[ "${capturingKit}" == *"ONCO_v4"* ]]
 		then
-			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/ONCO_v4/
+			rsync -av "${projectResultsDir}/variants/${sample}"*".gz" "${tmpHost}:${concordanceDir}/ONCO_v4/"
 		else
-			rsync -av ${projectResultsDir}/variants/${sample}*.gz ${tmpHost}:${concordanceDir}/other/
+			rsync -av "${projectResultsDir}/variants/${sample}"*".gz" "${tmpHost}:${concordanceDir}/other/"
 		fi
 	done
 fi
 ## removing phiX.recoded files
-rm -f ${projectResultsDir}/rawdata/ngs/*.phiX.recoded.fq.gz
+rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
 
 touch pipeline.finished
