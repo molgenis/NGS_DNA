@@ -58,7 +58,7 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 -y \
 -k \
 -s \
--q
+-q BOTH
 
 echo "Gavin finished, now sorting the vcf"
 
