@@ -271,14 +271,14 @@ then
 elif [[ "${whichHost}" == "leucine-zipper" ]]
 then
 	ssh -q zinc-finger.gcc.rug.nl exit
-	if $? ne 0
+	if $? eq 0
 	then
-		echo "zinc-finger is down, writing data to calculon gdio instead"
-		tmpHost=calculon.hpc.rug.nl
-		concordanceDir=/groups/umcg-gdio/tmp04/Concordance/ngs/
-	else
 		tmpHost="zinc-finger.gcc.rug.nl"
 		concordanceDir=/groups/umcg-gd/tmp05/Concordance/ngs/
+	else
+		echo "zinc-finger is down, writing data to leucine-zipper instead"
+		tmpHost=localhost
+		concordanceDir=/groups/umcg-gdio/tmp06/Concordance/ngs/
 	fi
 else
 	diagnosticsCluster="false"
