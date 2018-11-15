@@ -30,7 +30,7 @@ java -XX:ParallelGCThreads=4 -Djava.io.tmpdir="${tempDir}" -Xmx8g -Xms6g -jar "$
 -R "${indexFile}" \
 -o "${tmpProjectVariantsMergedSnpsFilteredVcf}" \
 --variant "${projectVariantsMergedSnpsVcf}" \
---filterExpression "QD < 1.5" \
+--filterExpression "QD < 2.0" \
 --filterName "filterQD" \
 --filterExpression "MQ < 25.0" \
 --filterName "filterMQ" \
