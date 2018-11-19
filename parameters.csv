@@ -34,7 +34,7 @@ samtoolsVersion,SAMtools/1.2-${toolChain}
 seqTkVersion,seqtk/1.2-${toolChain}
 snpEffVersion,snpEff/4.3t-Java-1.8.0_74
 htsLibVersion,HTSlib/1.3.2-${toolChain}
-vcfAnnoVersion,vcfanno/v0.2.9
+vcfAnnoVersion,vcfanno/v0.3.1
 bcfToolsVersion,BCFtools/1.6-${toolChain}
 tabixVersion,tabix/0.2.6-${toolChain}
 vepVersion,VEP/90.5
