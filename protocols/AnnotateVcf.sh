@@ -75,9 +75,9 @@ then
 		then
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chrX.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-		elif [[ ${batchID} == *"Y"* || ${batchID} == *"MT"* ]]
+		elif [[ ${batchID} == *"Y"* || ${batchID} == *"NC_001422.1"* ||  ${batchID} == *"MT"* ]]
 		then
-			echo "chromosome Y/MT is not in gnomAD, do nothing"
+			echo "chromosome Y/MT/NC_001422.1 is not in gnomAD, do nothing"
 		else
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${batchID}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
