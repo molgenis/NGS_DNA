@@ -39,7 +39,6 @@ bcfToolsVersion,BCFtools/1.6-${toolChain}
 tabixVersion,tabix/0.2.6-${toolChain}
 vepVersion,VEP/90.5
 verifyBamIDVersion,verifyBamID/1.1.3-${toolChain}
-wkHtmlToPdfVersion,wkhtmltox/0.12.3
 xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain}
 hpoVersion,90
 gatkJar,GenomeAnalysisTK.jar
