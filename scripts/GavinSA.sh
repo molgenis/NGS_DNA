@@ -37,7 +37,7 @@ then
 fi
 
 
-cd "/groups/${group}/${tmpDirectory}GavinStandAlone/input/"
+cd "/groups/${groupname}/${tmpDirectory}GavinStandAlone/input/"
 
 
 INPUTDIR=$(pwd)
