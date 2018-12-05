@@ -2,7 +2,7 @@
 
 set -e
 set -u
-module load NGS_DNA/3.5.1
+module load NGS_DNA/3.5.2
 module list
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
