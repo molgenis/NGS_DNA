@@ -1,0 +1,3 @@
+ml Python/2.7.11-foss-2015b
+ml Graphviz
+dot -Tpng <(python workflow2dot.py workflow.csv) > output.png

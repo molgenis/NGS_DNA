@@ -45,3 +45,11 @@ testproject,run1,010101,sequencer2,flowcell3,Sample1,PE,PATH_RELATIVE_TO_apps/da
 testproject,run1,010101,sequencer2,flowcell3,Sample2,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},S2,Sample2,,,Female,2_S2_L001_R1_001.fastq.gz,2_S2_L001_R2_001.fastq.gz
 testproject,run1,010101,sequencer2,flowcell3,Sample3,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},S3,Sample3,,,Male,3_S3_L001_R1_001.fastq.gz,3_S3_L001_R2_001.fastq.gz
 testproject,run1,010101,sequencer2,flowcell3,Sample4,PE,PATH_RELATIVE_TO_apps/data/${NAMEOFCAPTURINGKIT},S4,Sample4,,,Unknown,4_S4_L001_R1_001.fastq.gz,4_S4_L001_R2_001.fastq.gz
+
+can be blank:
+
+- barcode (when there is a barcode used fill in barcode, **NOTE: should be filled in case of external samples, see below** )
+- lane (in case of different lanes fill in lane number)
+- barcodeType (can fill the barcode type e.g. AGI,rPI etc)
+- Gender (Male,Female or Unknown)
+
