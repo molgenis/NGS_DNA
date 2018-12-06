@@ -5,7 +5,7 @@ This is the Quick tutorial, when there are problems first go to the detailed [in
 We first have to load EasyBuild, this can be done with this command
 ```bash
 module load EasyBuild
-eb NGS_DNA-3.4.4.eb --robot -–robot-paths=${pathToMYeasybuild}/easybuild-easyconfigs/easybuild/easyconfigs/:
+eb NGS_DNA-3.5.1.eb --robot -–robot-paths=${pathToMYeasybuild}/easybuild-easyconfigs/easybuild/easyconfigs/:
 ```
 **_Note:_** some software cannot be downloaded automagically due to for example licensing or technical issues and the build will fail initially.
 In these cases you will have to download manually and copy the sources to
@@ -13,8 +13,8 @@ ${HPC_ENV_PREFIX}/sources/[a-z]/NameOfTheSoftwarePackage/ for more details check
 
 Run the script NGS_resources to install the required resources and create directory structure, you can download the scripts [here](attachments/scripts.tar.gz)
 ```bash
-sh makestructure.sh
-sh NGS_DNA-resources.sh
+bash makestructure.sh
+bash NGS_DNA-resources.sh
 ```
 **_Note:_** Sometimes the GATK ftp server can be down/instable, try it a couple of times
 
@@ -31,17 +31,17 @@ scp –r TestRun username@yourcluster:/groups/$groupname/${tmpDir}/generatedscri
 module load NGS_DNA
 cd ${root}/groups/$groupname/${tmpDir}/generatedscripts/TestRun
 cp $EBROOTNGS_DNA/generate_template.sh .
-sh generate_template.sh
+bash generate_template.sh
 cd scripts
 ```
 **_Note:_** if you want to run locally, you should change in the CreateInhouseProjects.sh script the backend (this can be done almost at the end of the script where you have something like:
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh
 <u>search for –b slurm and change it into –b localhost</u>
 ```bash
-sh submit.sh
+bash submit.sh
 ```
 
 navigate to jobs folder (this will be outputted at the step before this one).
 ```bash
-sh submit.sh
+bash submit.sh
 ```

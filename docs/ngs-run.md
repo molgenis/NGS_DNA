@@ -19,7 +19,7 @@ scp –r TestRun.csv username@yourcluster:/groups/$groupname/${tmpDir}/generated
 module load NGS_DNA
 cd ${root}/groups/$groupname/${tmpDir}/generatedscripts/TestRun
 cp $EBROOTNGS_DNA/generate_template.sh .
-sh generate_template.sh
+bash generate_template.sh
 cd scripts
 ```
 
@@ -27,11 +27,11 @@ cd scripts
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh
 <u>search for –b slurm and change it into –b localhost</u>
 ```bash
-sh submit.sh
+bash submit.sh
 ```
 ### 5) Submit jobs
 
 navigate to jobs folder. The location of the jobs folder will be outputted at the step before this one (step 4).
 ```bash
-sh submit.sh
+bash submit.sh
 ```
