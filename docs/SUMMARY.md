@@ -17,7 +17,7 @@
 
 - Releases
   - [latest_release_diagnostics](ngs-latestrelease.md)
-  -3.5
+  - 3.5
     - [3.5.2 (Ragdoll)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.2)
     - [3.5.1 (Quetzal)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.1)
   - 3.4

@@ -11,6 +11,7 @@
 #string checkSexMeanCoverage
 #string picardJar
 #string picardVersion
+#string dedupBamMetrics
 #string hsMetricsNonAutosomalRegionChrX
 #string	project
 #string logsDir 
