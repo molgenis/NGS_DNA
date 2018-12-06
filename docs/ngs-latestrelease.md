@@ -1,6 +1,8 @@
-# Latest release
+# Latest release Genetics diagnostics department UMCG 
 
-download here: https://github.com/molgenis/NGS_DNA/releases/tag/3.4.4
+## Is in use since 05-12-2018 (December 5th 2018)
+
+download here: https://github.com/molgenis/NGS_DNA/releases/tag/3.5.1
 
 ## Release notes 3.5.1:
 
