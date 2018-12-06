@@ -1,1 +1,1 @@
-![](attachments/workflow.flowchart.png)
+![](attachments/workflow.png)
