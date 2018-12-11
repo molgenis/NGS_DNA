@@ -72,7 +72,7 @@ for sample in "${UNIQUESAMPLES[@]}"
 do
 	if [ -f "${intermediateDir}/${sample}.GAVIN.rlv.vcf" ]
 	then
-		rsync -a "${intermediateDir}/${sample}.GAVIN.rlv.vcf" "${projectResultsDir}/variants/GAVIN/"
+		rsync -a "${intermediateDir}/${sample}.GAVIN.rlv.vcf.gz" "${projectResultsDir}/variants/GAVIN/"
 	fi
 done
 
