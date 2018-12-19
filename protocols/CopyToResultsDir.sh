@@ -271,7 +271,7 @@ then
 elif [[ "${whichHost}" == "leucine-zipper" ]]
 then
 	ssh -q zinc-finger.gcc.rug.nl exit
-	if $? eq 0
+	if [ $? -eq 0 ]
 	then
 		tmpHost="zinc-finger.gcc.rug.nl"
 		concordanceDir="/groups/umcg-gd/tmp05/Concordance/ngs/"
@@ -288,7 +288,9 @@ if [[ "${diagnosticsCluster}" == "true" ]]
 then
 	for sample in "${UNIQUESAMPLES[@]}"
 	do
-		rsync -av ${projectResultsDir}/variants/${sample}*.gz "${tmpHost}:${concordanceDir}"
+		zcat ${projectResultsDir}/variants/${sample}.final.vcf.gz > ${projectResultsDir}/variants/${sample}.final.vcf
+		rsync -av ${projectResultsDir}/variants/${sample}.final.vcf "${tmpHost}:${concordanceDir}"
+		rm  ${projectResultsDir}/variants/${sample}.final.vcf
 	done
 fi
 ## removing phiX.recoded files
