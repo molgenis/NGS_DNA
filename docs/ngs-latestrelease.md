@@ -2,12 +2,16 @@
 
 ## Is in use since 05-12-2018 (December 5th 2018)
 
-download here: https://github.com/molgenis/NGS_DNA/releases/tag/3.5.1
+download here: https://github.com/molgenis/NGS_DNA/releases/tag/3.5.2
 
-## Release notes 3.5.1:
+## Release notes 3.5.2 (and 3.5.1):
+### 3.5.2
+- added GavinStandAlone to the NGS_DNA repo
+- updated docs
+- tiny bugs in the dependencies in the workflow
+- bugfix in GenderCalculate, when there is noChrX it will produces an error due to missing initialisation of a variable
 
-** updated docs **
-
+### 3.5.1
 ** updated **
 - changed prm/cluster for diagnostics 
 - decreased resources used in some protocols

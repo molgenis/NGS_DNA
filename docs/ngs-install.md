@@ -9,7 +9,7 @@ The NGS_DNA pipeline has a lot of dependencies, these are handled by easybuild w
 
 **_Note:_** the order in which you give the paths are important! To original easybuild path can be left empty (just a colon is enough)
 ```bash
-eb NGS_Automated/2.0.13-NGS_DNA-3.5.1.eb --robot --robot-paths=${pathToMYeasybuild}/easybuild-easyconfigs/easybuild/easyconfigs/:
+eb NGS_Automated/2.0.13-NGS_DNA-3.5.2.eb --robot --robot-paths=${pathToMYeasybuild}/easybuild-easyconfigs/easybuild/easyconfigs/:
 ```
 **_Note:_** some software cannot be downloaded automagically due to for example licensing or technical issues and the build will fail initially.
 In these cases you will have to download manually and copy the sources to
