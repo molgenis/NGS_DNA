@@ -68,10 +68,10 @@ else
 
 		size=$(cat ${intermediateDir}/chrXRegions.txt | wc -l)
 		#1
-		makeTmpDir "${DepthOfCoveragePerSample}"
+		makeTmpDir "${DepthOfCoveragePerSample}" "${DepthOfCoveragePerSample}"
 		tmpDepthOfCoveragePerSample="${MC_tmpFile}"
 
-		makeTmpDir "${DepthOfCoveragePerSampleGender}"
+		makeTmpDir "${DepthOfCoveragePerSampleGender}" "${DepthOfCoveragePerSampleGender}"
 		tmpDepthOfCoveragePerSampleGender="${MC_tmpFile}"
 
 		tmpPrefix="${tmpDepthOfCoveragePerSample}"
