@@ -23,7 +23,7 @@ bash generate_template.sh
 cd scripts
 ```
 
-**_Note:_** if you want to run locally, you should change in the CreateInhouseProjects.sh script the backend (this can be done almost at the end of the script where you have something like:
+**_Note:_** If you want to run the pipeline locally, you should change the backend in the CreateInhouseProjects.sh script (this can be done almost at the end of the script where you have something like:
 sh ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh
 <u>search for –b slurm and change it into –b localhost</u>
 ```bash
@@ -31,7 +31,7 @@ bash submit.sh
 ```
 ### 5) Submit jobs
 
-navigate to jobs folder. The location of the jobs folder will be outputted at the step before this one (step 4).
+Navigate to jobs folder. The location of the jobs folder will be outputted at the step before this one (step 4).
 ```bash
 bash submit.sh
 ```
