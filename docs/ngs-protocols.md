@@ -447,7 +447,8 @@ Based on certain quality thresholds (based on GATK best practices) the SNPs and 
 **Scriptname:** VariantFiltration<br/>
 **Input:**
 - annotated.snps.vcf
-- .annotated.indels.vcf<br/>
+- .annotated.indels.vcf
+
 **Output:**
 - Filtered snp vcf file (.annotated.filtered.snps.vcf)
 - Filtered indel vcf file (.annotated.filtered.indels.vcf)
@@ -490,7 +491,10 @@ Merge all the SNPs and indels into one file (per project) and merge SNPs and ind
 
 **Toolname:** GATK CombineVariants<br/>
 **Scriptname:** MergeIndelsAndSnps<br/>
-**Input:** .annotated.filtered.indels.vcf and .annotated.snps.vcf<br/>
+**Input:**
+- .annotated.filtered.indels.vcf
+- .annotated.snps.vcf
+
 **Output:**
 - sample.final.vcf
 - project.final.vcf
