@@ -447,7 +447,7 @@ Based on certain quality thresholds (based on GATK best practices) the SNPs and 
 **Scriptname:** VariantFiltration<br/>
 **Input:**
 - annotated.snps.vcf
-- .annotated.indels.vcf
+- .annotated.indels.vcf<br/>
 **Output:**
 - Filtered snp vcf file (.annotated.filtered.snps.vcf)
 - Filtered indel vcf file (.annotated.filtered.indels.vcf)
@@ -533,7 +533,7 @@ Tool that predicts the impact of the SNP with the help of different databases (C
 **Scriptname:** Gavin<br/>
 **Toolname:** gavin-plus<br/>
 **Input:** merged vcf per sample ${sample}.variant.calls.GATK.vcf<br/>
-**Output:Gavin final output (.GAVIN.RVCF.final.vcf)**<br/>
+**Output:** Gavin final output (.GAVIN.RVCF.final.vcf)<br/>
 ```
 java -Xmx4g -jar /path/to/Gavin_toolpack/GAVIN-APP.jar \
 -i input.vcf \
