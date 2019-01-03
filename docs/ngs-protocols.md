@@ -2,22 +2,22 @@
 ### Step 1: PrepareFastQ
 #####Spike in the PhiX reads
 
-To see whether the pipeline ran correctly. The reads will be inserted in each sample. Later on (step 23) of the pipeline there will be a concordance check to see if the SNPs that are put in, will be found.
+The PhiX reads will be inserted in each sample to see whether the pipeline ran correctly. Later on (step 23 of the pipeline) there will be a concordance check to see if the SNPs that are put in, will be found back.
 
 ** Scriptname:** SpikePhiX
 
-**Input:** raw sequence file in the form of a gzipped fastq file
+**Input:** Raw sequence file in the form of a gzipped fastQ file
 
 **Output:** FastQ files (${filePrefix}_${lane}_${barcode}.fq.gz)*
 
 #####Check the Illumina encoding
 
-In this step the encoding of the FastQ files will be checked. Older (2012 and older) sequence data contains the old Phred+64 encoding (this is called Illumina 1.5 encoding), new sequence data is encoded in Illumina 1.8 or 1.9 (Phred+33). If the data is 1.5, it will be converted to 1.9 encoding
+In this step the encoding of the FastQ files will be checked. Older (2012 and older) sequence data contains the old Phred+64 encoding (this is called Illumina 1.5 encoding). New sequence data is encoded in Illumina 1.8 or 1.9 (Phred+33). If the data is enoded with Illumina 1.5, it will be converted to the 1.9 encoding
 
 **Toolname:** seqTk
 **Scriptname:** CheckIlluminaEncoding
 **Input:** FastQ files (${filePrefix}_${lane}_${barcode}.fq.gz)
-**Output:** If necessary encoded.fq.gz
+**Output:** If conversion took place, encoded.fq.gz
 
 ```
 seqtk seq fastq_1.fq.gz -Q 64 -V > fastq_1.encoded.fq.gz
@@ -25,14 +25,14 @@ seqtk seq fastq_2.fq.gz -Q 64 -V > fastq_2.encoded.fq.gz
 ```
 ### Step 2: Alignment + SortSam
 
-In this step, the Burrows-Wheeler Aligner (BWA) is used to align the (mostly paired end) sequencing data to the reference genome. The method that is used is BWA mem. The output is a FIFO piped SAM file, this way we can do the sorting of the sam/bam file in one go without writing it to disk in between.
+In this step, the Burrows-Wheeler Aligner (BWA) is used to align the (mostly paired end) sequencing data to the reference genome. The method that is used is BWA mem. The output is a FIFO piped SAM file, in this way we can do the sorting of the SAM/BAM file in one go without writing it to disk in between.
 
 **Scriptname:** BwaAlignAndSortBam
 
 #####Aligning
 
 **Toolname:** BWA
-**Input:** raw sequence file in the form of a gzipped fastq file (${filePrefix}.fq.gz)
+**Input:** Raw sequence file in the form of a gzipped fastQ file (${filePrefix}.fq.gz)
 **Output:** FIFO piped SAM formatted file (${filePrefix}.sam)
 
 
@@ -46,7 +46,7 @@ bwa mem \
 	-fastq2.gz \
 	> aligned.sam &
 
-##### Sorting Sam/bam file
+##### Sorting SAM/BAM file
 
 **Toolname:** Picard SortSam
 **Input**: fifo piped sam file
@@ -63,7 +63,7 @@ CREATE_INDEX=true
 
 ### Step 3: Calculate QC metrics on raw data
 
-In this step, Fastqc, quality control (QC) metrics are calculated for the raw sequencing data. This is done using the tool FastQC. This tool will run a series of tests on the input file. The output is a text file containing the output data which is used to create a summary in the form of several HTML pages with graphs for each test. Both the text file and the HTML document provide a flag for each test: pass, warning or fail. This flag is based on criteria set by the makers of this tool. Warnings or even failures do not necessarily mean that there is a problem with the data, only that it is unusual compared to the used criteria. It is possible that the biological nature of the sample means that this particular bias is to be expected.
+In this step (Fastqc), quality control (QC) metrics are calculated for the raw sequencing data. This is done using the tool FastQC. This tool will run a series of tests on the input file. The output is a text file containing the output data which is used to create a summary in the form of several HTML pages with graphs for each test. Both the text file and the HTML document provide a flag for each test: pass, warning or fail. This flag is based on criteria set by the makers of this tool. Warnings or even failures do not necessarily mean that there is a problem with the data, only that it is unusual compared to the used criteria. It is possible that the biological nature of the sample means that this particular bias is to be expected.
 
 **Toolname:** FastQC
 **Scriptname:** Fastqc
@@ -130,7 +130,7 @@ sambamba markdup \
 ```
 
 ### Step 10: Flagstat (dedup metrics)
-Calculating dedup metrics
+Calculating dedup metrics.
 
 **Toolname:** Sambamba flagstat
 **Scriptname:** FlagstatMetrics
@@ -147,7 +147,7 @@ sambamba flagstat \
 # Indel calling with Manta, Convading & XHMM
 ### Step 11a: Calling big deletions with Manta
 
-In this step, the progam Manta calls all types (DEL,DUP,INV,TRA,INS) from the merged BAM file. The calls are written to 3 different gzipped VCF files. These files are candidateSmallIndels, candidateSV and diploidSV along with information such as difference in length between REF and ALT alleles, type of structural variant end information about allele depth.
+In this step, the program Manta calls all types of structural variants (DEL,DUP,INV,TRA,INS) from the merged BAM file. The calls are written to 3 different gzipped VCF files. These files are candidateSmallIndels, candidateSV and diploidSV along with information such as difference in length between REF and ALT alleles, type of structural variant and information about allele depth.
 
 **Toolname:** Manta
 **Scriptname:** Manta
@@ -222,7 +222,7 @@ perl ${EBROOTCONVADING}/CoNVaDING.pl \
 	-targetQcList targetQcList.txt
 ```	
 ### Step 12b: XHMM
-The XHMM software suite was written to call copy number variation (CNV) from next-generation sequencing projects, where exome capture was used (or targeted sequencing, more generally)
+The XHMM software suite was written to call copy number variation (CNV) from next-generation sequencing projects, where exome capture was used (or targeted sequencing, more generally).
 This protocol contains all the steps described here http://atgu.mgh.harvard.edu/xhmm/tutorial.shtml
 
 **Toolname:** XHMM
@@ -234,7 +234,7 @@ This protocol contains all the steps described here http://atgu.mgh.harvard.edu/
 **Output:** file containing regions that contain a CNV ${sample}.xcnv
 
 ### Step 12c: Decision tree
-To determine if a CNV is true the output from steps Convading and XHMM will be checked. There is a decision tree developed by L. Johannson and a student him (M. Frans). The end results of the decision tree will result in a file with a very high confidence CNVs.
+To determine if a CNV is true, the output from steps Convading and XHMM will be checked usinh a decision tree developed by L. Johannson together with his student (M. Frans). The end results of the decision tree will result in a file with very high confidence CNVs.
 
 **Scriptname:** DecisionTree
 
@@ -246,7 +246,7 @@ To determine if a CNV is true the output from steps Convading and XHMM will be c
 # Determine gender
 ### Step 07: GenderCalculate
 
-Due to the fact a male has only one X chromosome it is important to know if the sample is male or female. Calculating the coverage on the non pseudo autosomal region and compare this to the average coverage on the complete genome predicts male or female well.
+Due to the fact a male has only one X chromosome it is important to know if the sample is from a male or a female. Calculating the coverage on the non pseudo autosomal region and compare this to the average coverage on the complete genome predicts male or female well.
 
 **Toolname:** Picard CalculateHSMetrics
 **Scriptname:** GenderCalculate
@@ -263,7 +263,7 @@ java -jar -Xmx4g picard.jar CalculateHsMetrics \
 # Side steps
 ### Step 13: CramConversion
 
-Producing more compressed bam files, decreasing size with 40%
+Producing more compressed BAM files, decreasing size with 40%.
 
 **Toolname:** Scramble
 **Scriptname:**CramConversion
@@ -294,7 +294,7 @@ md5sum merged.dedup.bam > merged.dedup.bam.md5
 ```
 
 
-# Coverage calculations (Diagnostics only)
+# Coverage calculations (diagnostics only)
 ### Step 15: Calculate coverage per base and per target
 
 Calculates coverage per base and per target, the output will contain chromosomal position, coverage per base and gene annotation
@@ -302,7 +302,7 @@ Calculates coverage per base and per target, the output will contain chromosomal
 **Toolname:** GATK DepthOfCoverage
 **Scriptname:** CoverageCalculations
 **Input:** dedup BAM file (.merged.dedup.bam)
-**Output:** tab delimeted file containing chromosomal position, coverage per base and Gene annotation name (.coveragePerBase.txt)
+**Output:** Tab-delimited file containing chromosomal position, coverage per base and Gene annotation name (.coveragePerBase.txt).
 
 Per base:
 ```
@@ -335,13 +335,13 @@ java -Xmx10g -jar /path/to/GATK/GenomeAnalysisTK.jar \
 
 In this step, QC metrics are calculated for the alignment created in the previous steps. This is done using several QC related Picard tools:
 
-● CollectAlignmentSummaryMetrics
-● CollectGcBiasMetrics
-● CollectInsertSizeMetrics
-● MeanQualityByCycle (machine cycle)
-● QualityScoreDistribution
-● CalculateHsMetrics (hybrid selection)
-● BamIndexStats
+- CollectAlignmentSummaryMetrics
+- CollectGcBiasMetrics
+- CollectInsertSizeMetrics
+- MeanQualityByCycle (machine cycle)
+- QualityScoreDistribution
+- CalculateHsMetrics (hybrid selection)
+- BamIndexStats
 
 These metrics are later used to create tables and graphs (step 24). The Picard tools also output a PDF version of the data themselves, containing graphs.
 
@@ -353,7 +353,7 @@ These metrics are later used to create tables and graphs (step 24). The Picard t
 # Determine Gender
 ### Step 09: Gender check
 
-Due to the fact a male has only one X chromosome it is important to know if the sample is male or female. Calculating the coverage on the non pseudo autosomal region and compare this to the average coverage on the complete genome predicts male or female well.
+Due to the fact that a male has only one X chromosome it is important to know if the sample is from a male or a female. Calculating the coverage on the non pseudo autosomal region and compare this to the average coverage on the complete genome predicts male or female well.
 
 **Scriptname:** GenderCheck
 **Input:** ${dedupBam}.hs\_metrics (CalculateHsMetrics step) (${dedupBam}.nonAutosomalRegionChrX_hs_metrics (GenderCalculate step)
@@ -386,7 +386,7 @@ java -Xmx12g -jar /path/to/GATK/GenomeAnalysisTK.jar \
 
 ### Step 16b: Genotype variants
 
-In this step there will be a joint analysis over all the samples in the project. This leads to a posterior probability of a variant allele at a site. SNPs and small Indels are written to a VCF file, along with information such as genotype quality, allele frequency, strand bias and read depth for that SNP/Indel.
+This step performs a joint analysis over all the samples in the project. This leads to a posterior probability of a variant allele at a site. SNPs and small Indels are written to a VCF file, along with information such as genotype quality, allele frequency, strand bias and read depth for that SNP/Indel.
 
 **Toolname:** GATK GenotypeGVCFs
 **Scriptname:** VariantGVCFGenotype
@@ -405,9 +405,9 @@ java -Xmx16g -jar /path/to/GATK/GenomeAnalysisTK.jar \
 # Annotation
 ### Step 17: Annotating with vcfanno
 Data will be annotated with a tool called vcfanno.
-Databases as CGD, CADD, ClinVar, gnomAD and GoNL are used to pick fields of interest.
+Databases such as CGD, CADD, ClinVar, gnomAD and GoNL are used to pick fields of interest.
 
-In the script there is first some preprocessing step to split all the alternative alleles into seperate lines in the vcf. This is to get for every variant a CADD score. Then they will be joined together to run the annotation.
+Initially, a preprocessing step is performed to split all the alternative alleles into separate lines in the vcf. This is done in order to get a CADD score for every variant. Then, they will be joined together to run the annotation.
 
 **Toolname:** vcfanno and bcftools
 **ScriptName:** AnnotateVCF
@@ -446,7 +446,7 @@ java -XX:ParallelGCThreads=4 -Xmx4g -jar \
 
 ### Step s19: Merge batches
 
-Running GATK CatVariants to merge all the files created in the previous into one.
+Running GATK CatVariants to merge all the files created in the previous step into one.
 
 **Toolname:** GATK CatVariants
 **Scriptname:** MergeChrAndSplitVariants
@@ -463,7 +463,7 @@ ${arrayWithVcfs[@]} \
 
 ### Step 20: Split indels and SNPs
 
-This step is necessary because the filtering of the vcf needs to be done seperately.
+This step is necessary because the filtering of the vcf needs to be done separately.
 
 **Toolname:** GATK SelectVariants
 **Scriptname:** SplitIndelsAndSNPs
@@ -564,7 +564,7 @@ ${arrayWithAllSampleFinalVcf[@]} \
 
 ### Step 23: Determine trio
 
-This step will determine which samples are related in the project vcf
+This step will determine which samples are related in the project vcf.
 
 **Toolname:** vcfped
 **Scriptname:** DetermineTrio
@@ -578,7 +578,7 @@ vcfped ${projectPrefix}.final.vcf -o "${projectPrefix}"
 ```
 
 ### Step s24a: Gavin
-Tool that predict the impact of the SNP with the help of different databases (CADD etc). 
+Tool that predicts the impact of the SNP with the help of different databases (CADD etc). 
 
 **Scriptname:** Gavin
 **Toolname:** gavin-plus
@@ -628,7 +628,7 @@ bcftools annotate -x ^FORMAT/GT "${outputStep9_1ToSpecTree}" | awk 'BEGIN {OFS="
 ```
 
 ### Step 25a/b: Compressing sample and project vcf
-compressing the vcfs
+Compressing the vcfs.
 
 
 ### Step 26: Convert structural variants VCF to table
@@ -650,7 +650,7 @@ The reads that are inserted contain SNPs that are handmade. To see whether the p
 
 ### Step 28: Generate quality control report
 
-The step in the inhouse sequence analysis pipeline is to output the statistics and metrics from each step that produced such data that was collected in the QCStats step before. We use the multiQC tool to create an interactive html with all the statistics 
+The step in the in-house sequence analysis pipeline outputs the statistics and metrics from each step that produced such data that was collected in the QCStats step before. We use the multiQC tool to create an interactive HTML file with all the statistics.
 
 **Toolname:** multiqc
 **Scriptname:** MultiQC
@@ -659,7 +659,7 @@ The step in the inhouse sequence analysis pipeline is to output the statistics a
 
 ### Step 29: Check if all files are finished
 
-This step is checking if all the steps in the pipeline are actually finished. It sometimes happens that a job is not submitted to the scheduler. If everything is finished than it will write a file called CountAllFinishedFiles_CORRECT, if not it will make CountAllFinishedFiles_INCORRECT. When it is not all finished it will show in the CountAllFinishedFiles_INCORRECT file which files are not finished yet.
+This step performs checking if all the steps in the pipeline are actually finished. It sometimes happens that a job is not submitted to the scheduler. If everything is finished than it will write a file called CountAllFinishedFiles_CORRECT. If not, it will make CountAllFinishedFiles_INCORRECT. This file contains the name(s) of the file(s) that are not finished yet.
 
 **Scriptname:** CountAllFinishedFiles
 **Input:** all .sh scripts + all .sh.finished files in the jobs folder
@@ -667,7 +667,7 @@ This step is checking if all the steps in the pipeline are actually finished. It
 
 ### Step 30: Prepare data to ship to the customer
 
-In this last step the final results of the inhouse sequence analysis pipeline are gathered and prepared to be shipped to the customer. The pipeline tools and scripts write intermediate results to a temporary directory. From these, a selection is copied to a results directory. This directory has five subdirectories:
+In this last step, the final results of the in-house sequence analysis pipeline are gathered and prepared to be shipped to the customer. The pipeline tools and scripts write intermediate results to a temporary directory. From the files in the temporary directory, a selection is copied to a results directory. This directory has five subdirectories:
 
 o alignment: the merged BAM file with index
 o coverage: coverage statistics and plots
