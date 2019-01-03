@@ -1,6 +1,6 @@
 # Preprocessing (aligning --> bam )
 ### Step 1: PrepareFastQ
-#### __Spike in the PhiX reads__
+__#### Spike in the PhiX reads__
 
 The PhiX reads will be inserted in each sample to see whether the pipeline ran correctly. Later on (step 23 of the pipeline) there will be a concordance check to see if the SNPs that are put in, will be found back.
 
