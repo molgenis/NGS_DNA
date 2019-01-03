@@ -1,16 +1,14 @@
 # Preprocessing (aligning --> bam )
 ### Step 1: PrepareFastQ
-##### Spike in the PhiX reads
+#### Spike in the PhiX reads
 
 The PhiX reads will be inserted in each sample to see whether the pipeline ran correctly. Later on (step 23 of the pipeline) there will be a concordance check to see if the SNPs that are put in, will be found back.
 
-**Scriptname:** SpikePhiX
+**Scriptname:** SpikePhiX<br/>
+**Input:** Raw sequence file in the form of a gzipped fastQ file<br/>
+**Output:** FastQ files (${filePrefix}_${lane}_${barcode}.fq.gz)*<br/>
 
-**Input:** Raw sequence file in the form of a gzipped fastQ file
-
-**Output:** FastQ files (${filePrefix}_${lane}_${barcode}.fq.gz)*
-
-##### Check the Illumina encoding
+#### Check the Illumina encoding
 
 In this step the encoding of the FastQ files will be checked. Older (2012 and older) sequence data contains the old Phred+64 encoding (this is called Illumina 1.5 encoding). New sequence data is encoded in Illumina 1.8 or 1.9 (Phred+33). If the data is enoded with Illumina 1.5, it will be converted to the 1.9 encoding
 
@@ -28,7 +26,7 @@ In this step, the Burrows-Wheeler Aligner (BWA) is used to align the (mostly pai
 
 **Scriptname:** BwaAlignAndSortBam
 
-##### Aligning
+#### Aligning
 
 **Toolname:** BWA<br/>
 **Input:** Raw sequence file in the form of a gzipped fastQ file (${filePrefix}.fq.gz)<br/>
@@ -43,7 +41,7 @@ bwa mem \
 	-fastq2.gz \
 	> aligned.sam &
 ```
-##### Sorting SAM/BAM file
+#### Sorting SAM/BAM file
 
 **Toolname:** Picard SortSam<br/>
 **Input**: fifo piped sam file<br/>
