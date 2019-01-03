@@ -446,7 +446,7 @@ Based on certain quality thresholds (based on GATK best practices) the SNPs and 
 **Toolname:** GATK VariantFiltration<br/>
 **Scriptname:** VariantFiltration<br/>
 **Input:**
-- annotated.snps.vcf
+- .annotated.snps.vcf
 - .annotated.indels.vcf
 
 **Output:**
