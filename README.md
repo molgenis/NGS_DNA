@@ -13,7 +13,6 @@ The bwa-mem command from Burrows-Wheeler Aligner(BWA) [[2]](#r2) is used to alig
 
 ### Variant discovery
 
-
 The GATK [[4]](#r4) HaplotypeCaller estimates the most likely genotypes and allele frequencies in an alignment using a Bayesian likelihood model for every position of the genome regardless of whether a variant was detected at that site or not. This information can later be used in the project based genotyping step.
 A joint analysis has been performed of all the samples in the project. This leads to a posterior probability of a variant allele at a site. SNPs and small Indels are written to a VCF file, along with information such as genotype quality, allele frequency, strand bias and read depth for that SNP/Indel. Based on quality thresholds from the GATK "best practices" [[5]](#r5). The SNPs and indels are filtered and marked as Lowqual or Pass resulting in a final VCF file.
 
@@ -27,5 +26,4 @@ A joint analysis has been performed of all the samples in the project. This lead
 <a name="r4"> 4. McKenna et al. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data. </a>
 
 <a name="r5"> 5. Van der Auwera et al. From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline.</a>
-
 
