@@ -1,4 +1,4 @@
-# Preprocessing (aligning --> bam )
+# Preprocessing (aligning --> BAM )
 ### Step 1: PrepareFastQ
 #### Spike in the PhiX reads
 
@@ -44,8 +44,8 @@ bwa mem \
 #### Sorting SAM/BAM file
 
 **Toolname:** Picard SortSam<br/>
-**Input**: fifo piped sam file<br/>
-**Output**: sorted bamfile (.sorted.bam)<br/>
+**Input**: fifo piped SAM file<br/>
+**Output**: sorted BAM file (.sorted.bam)<br/>
 ```
 java -Djava.io.tmpdir=${tempDir} -XX:ParallelGCThreads=4
 -Xmx29G -jar /folder/to/picard/picard.jar \
@@ -180,9 +180,9 @@ perl CoNVaDING.pl \
 ```
 perl ${EBROOTCONVADING}/CoNVaDING.pl \
 	-mode StartWithMatchScore \
-    -inputDir Convading/StartWithBam/ \
-    -outputDir Convading/StartWithMatchScore/ \
-    -controlsDir Convading/ControlsDir/
+    	-inputDir Convading/StartWithBam/ \
+    	-outputDir Convading/StartWithMatchScore/ \
+    	-controlsDir Convading/ControlsDir/
 ```						
 **Step 3:StartWithBestScore**
 ```
@@ -252,7 +252,7 @@ scramble \
 	merged.dedup.bam \
 	merged.dedup.bam.cram
 ```
-### Step 14: Make md5’s for the bam files
+### Step 14: Make md5’s for the BAM files
 
 Small step to create md5sums for the bams created in the MarkDuplicates step
 
@@ -366,12 +366,12 @@ java -Xmx16g -jar /path/to/GATK/GenomeAnalysisTK.jar \
 Data will be annotated with a tool called vcfanno.
 Databases such as CGD, CADD, ClinVar, gnomAD and GoNL are used to pick fields of interest.
 
-Initially, a preprocessing step is performed to split all the alternative alleles into separate lines in the vcf. This is done in order to get a CADD score for every variant. Then, they will be joined together to run the annotation.
+Initially, a preprocessing step is performed to split all the alternative alleles into separate lines in the VCF. This is done in order to get a CADD score for every variant. Then, they will be joined together to run the annotation.
 
 **Toolname:** vcfanno and bcftools<br/>
 **ScriptName:** AnnotateVCF<br/>
-**Input:** genotyped vcf (.genotyped.vcf)<br/>
-**Output:** VEP annotated vcf (.calls.genotyped.annotated.vcf)<br/>
+**Input:** genotyped VCF (.genotyped.vcf)<br/>
+**Output:** VEP annotated VCF (.calls.genotyped.annotated.vcf)<br/>
 ```
  vcfanno_linux64 \
  -p 4 \
@@ -386,8 +386,8 @@ Genetic variant annotation and effect prediction toolbox. It annotates and predi
 
 **Toolname:** SnpEff<br/>
 **ScriptName:** SnpEff<br/>
-**Input:** genotyped vcf (.genotyped.vcf)<br/>
-**Output:** snpeff annotated vcf (.snpeff.vcf)<br/>
+**Input:** genotyped VCF (.genotyped.vcf)<br/>
+**Output:** snpeff annotated VCF (.snpeff.vcf)<br/>
 ```
 java -XX:ParallelGCThreads=4 -Xmx4g -jar \
         /path/to/snpEff/snpEff.jar \
@@ -407,8 +407,8 @@ Running GATK CatVariants to merge all the files created in the previous step int
 
 **Toolname:** GATK CatVariants<br/>
 **Scriptname:** MergeChrAndSplitVariants<br/>
-**Input:** CmdLineAnnotator vcf file (.genotyped.snpeff.exac.gonl.cadd.vcf)<br/>
-**Output:** merged (batches) vcf per project (${project}.variant.calls.vcf)<br/>
+**Input:** CmdLineAnnotator VCF file (.genotyped.snpeff.exac.gonl.cadd.vcf)<br/>
+**Output:** merged (batches) VCF per project (${project}.variant.calls.vcf)<br/>
 ```
 java -Xmx12g -Djava.io.tmpdir=${tempDir} -cp /path/to/GATK/GenomeAnalysisTK.jar \
 org.broadinstitute.gatk.tools.CatVariants \
@@ -419,11 +419,11 @@ ${arrayWithVcfs[@]} \
 
 ### Step 20: Split indels and SNPs
 
-This step is necessary because the filtering of the vcf needs to be done separately.
+This step is necessary because the filtering of the VCF needs to be done separately.
 
 **Toolname:** GATK SelectVariants<br/>
 **Scriptname:** SplitIndelsAndSNPs<br/>
-**Input:** merged (batches) vcf per project (${project}.variant.calls.GATK.vcf) (from step 22)<br/>
+**Input:** merged (batches) VCF per project (${project}.variant.calls.GATK.vcf) (from step 22)<br/>
 **Output:**
 - .annotated.indels.vcf 
 - .annotated.snps.vcf
@@ -450,8 +450,8 @@ Based on certain quality thresholds (based on GATK best practices) the SNPs and 
 - .annotated.indels.vcf
 
 **Output:**
-- Filtered snp vcf file (.annotated.filtered.snps.vcf)
-- Filtered indel vcf file (.annotated.filtered.indels.vcf)
+- Filtered snp VCF file (.annotated.filtered.snps.vcf)
+- Filtered indel VCF file (.annotated.filtered.indels.vcf)
 
 SNP:
 ```
@@ -519,11 +519,11 @@ ${arrayWithAllSampleFinalVcf[@]} \
 ```
 ### Step 23: Determine trio
 
-This step will determine which samples are related in the project vcf.
+This step will determine which samples are related in the project VCF.
 
 **Toolname:** vcfped<br/>
 **Scriptname:** DetermineTrio<br/>
-**Input:** vcf with all the samples (${projectPrefix}.final.vcf)<br/>
+**Input:** VCF with all the samples (${projectPrefix}.final.vcf)<br/>
 **Output:**
 - "${trioInformationPrefix}"_family{1-9}.txt
 - ${child}.hasFamily
@@ -536,7 +536,7 @@ Tool that predicts the impact of the SNP with the help of different databases (C
 
 **Scriptname:** Gavin<br/>
 **Toolname:** gavin-plus<br/>
-**Input:** merged vcf per sample ${sample}.variant.calls.GATK.vcf<br/>
+**Input:** merged VCF per sample ${sample}.variant.calls.GATK.vcf<br/>
 **Output:** Gavin final output (.GAVIN.RVCF.final.vcf)<br/>
 ```
 java -Xmx4g -jar /path/to/Gavin_toolpack/GAVIN-APP.jar \
@@ -575,9 +575,9 @@ Adding tags where the variant is filtered out (or why it is included) in the pre
 ```
 bcftools annotate -x ^FORMAT/GT "${outputStep9_1ToSpecTree}" | awk 'BEGIN {OFS="\t"}{if ($0 !~ /^#/){split($10,a,"/"); print $1,$2,$3,$4,$5,$6,$7,a[1],a[2],$8}}' | sort -V > "${name}.splittedAlleles.txt"
 ```
-### Step 25a/b: Compressing sample and project vcf
+### Step 25a/b: Compressing sample and project VCF
 
-Compressing the vcfs.
+Compressing the VCFs.
 
 ### Step 26: Convert structural variants VCF to table
 
