@@ -142,7 +142,7 @@ In this step, the program Manta calls all types of structural variants (DEL,DUP,
 - ${sample}.candidateSV.vcf.gz
 - ${sample}.diploidSV.vcf.gz
 
-Prepare workflow
+Prepare workflow:
 ```
 python configManta.py \
         --bam merged.dedup.bam \
@@ -150,7 +150,7 @@ python configManta.py \
         --exome \
         --runDir /run/dir/manta
 ```
-run workflow
+run workflow:
 ```
         python /run/dir/manta/runWorkflow.py \ 
 		-m local \
@@ -239,7 +239,7 @@ java -jar -Xmx4g picard.jar CalculateHsMetrics \
 Producing more compressed BAM files, decreasing size with 40%.
 
 **Toolname:** Scramble<br/>
-**Scriptname:**CramConversion<br/>
+**Scriptname:** CramConversion<br/>
 **Input:** dedup BAM file (${sample}.dedup.bam)<br/>
 **Output:** dedup CRAM file (${sample}.dedup.bam.cram)<br/>
 ```
@@ -605,9 +605,9 @@ The step in the in-house sequence analysis pipeline outputs the statistics and m
 
 This step performs checking if all the steps in the pipeline are actually finished. It sometimes happens that a job is not submitted to the scheduler. If everything is finished than it will write a file called CountAllFinishedFiles_CORRECT. If not, it will make CountAllFinishedFiles_INCORRECT. This file contains the name(s) of the file(s) that are not finished yet.
 
-**Scriptname:** CountAllFinishedFiles
-**Input:** all .sh scripts + all .sh.finished files in the jobs folder
-**Output:** CountAllFinishedFiles_CORRECT or CountAllFinishedFiles_INCORRECT
+**Scriptname:** CountAllFinishedFiles<br/>
+**Input:** all .sh scripts + all .sh.finished files in the jobs folder<br/>
+**Output:** CountAllFinishedFiles_CORRECT or CountAllFinishedFiles_INCORRECT<br/>
 
 ### Step 30: Prepare data to ship to the customer
 
@@ -620,6 +620,7 @@ o qc: all QC files, from which the QC report is made<br/>
 o rawdata/ngs: symbolic links to the raw sequence files and their md5 sum<br/>
 o snps: all SNP calls in VCF format and in tab-delimited format<br/>
 o structural_variants: all SVs calls in VCF and in tab-delimited format<br/>
+
 Additionally, the results directory contains the final QC report, the worksheet which was the basis for this analysis (see 4.2) and a zipped archive with the data that will be shipped to the client (see: GCC_P0006_Datashipment.docx). The archive is accompanied by an md5 sum and README file explaining the contents.<br/>
 
 **Scriptname:** CopyToResultsDir<br/>
