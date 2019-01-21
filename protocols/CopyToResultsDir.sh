@@ -23,6 +23,7 @@
 #string intervalListDir
 #string coveragePerBaseDir
 #string coveragePerTargetDir
+#string tmpDataDir
 # Change permissions
 
 
@@ -260,15 +261,21 @@ then
 	mkdir -p "${logsDir}/${project}/"
 fi
 
-whichHost=$(hostname)
 diagnosticsCluster="true"
 
-if [ "${whichHost}" == "zinc-finger.gcc.rug.nl" ]
+if [ -z "${SLURM_CLUSTER_NAME:-}" ]
+then
+	echo -e "There is no SLURM_CLUSTER_NAME defined since you are probably not running this via the sbatch command\n"
+	echo -e	"FYI: If you are using this pipeline on a non-diagnostic cluster, the vcf files for the concordance check will not be copied."
+	exit 1
+fi
+
+if [ "${SLURM_CLUSTER_NAME}" == "zinc-finger" ]]
 then
 	tmpHost="localhost"
 	concordanceDir="${tmpDataDir}/Concordance/ngs/"
 
-elif [[ "${whichHost}" == "leucine-zipper" ]]
+elif [[ "${SLURM_CLUSTER_NAME}" == "leucine-zipper" ]]
 then
 	ssh -q zinc-finger.gcc.rug.nl exit
 	if [ $? -eq 0 ]
