@@ -23,6 +23,7 @@
 #string intervalListDir
 #string coveragePerBaseDir
 #string coveragePerTargetDir
+#string tmpDataDir
 # Change permissions
 
 
@@ -260,15 +261,14 @@ then
 	mkdir -p "${logsDir}/${project}/"
 fi
 
-whichHost=$(hostname)
 diagnosticsCluster="true"
 
-if [ "${whichHost}" == "zinc-finger.gcc.rug.nl" ]
+if [ "${SLURM_CLUSTER_NAME}" == "zinc-finger.gcc.rug.nl" ]]
 then
 	tmpHost="localhost"
 	concordanceDir="${tmpDataDir}/Concordance/ngs/"
 
-elif [[ "${whichHost}" == "leucine-zipper" ]]
+elif [[ "${SLURM_CLUSTER_NAME}" == "leucine-zipper" ]]
 then
 	ssh -q zinc-finger.gcc.rug.nl exit
 	if [ $? -eq 0 ]
