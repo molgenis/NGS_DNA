@@ -263,7 +263,7 @@ fi
 
 diagnosticsCluster="true"
 
-if [ "${SLURM_CLUSTER_NAME}" == "zinc-finger.gcc.rug.nl" ]]
+if [ "${SLURM_CLUSTER_NAME}" == "zinc-finger" ]]
 then
 	tmpHost="localhost"
 	concordanceDir="${tmpDataDir}/Concordance/ngs/"
