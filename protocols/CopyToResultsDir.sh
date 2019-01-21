@@ -263,6 +263,13 @@ fi
 
 diagnosticsCluster="true"
 
+if [ -z "${SLURM_CLUSTER_NAME:-}" ]
+then
+	echo -e "There is no SLURM_CLUSTER_NAME defined since you are probably not running this via the sbatch command\n"
+	echo -e	"FYI: If you are using this pipeline on a non diagnostic cluster, the copying of the vcf files for the concordance check will not be copied."
+	exit 1
+fi
+
 if [ "${SLURM_CLUSTER_NAME}" == "zinc-finger" ]]
 then
 	tmpHost="localhost"
