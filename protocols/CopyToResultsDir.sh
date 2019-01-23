@@ -270,7 +270,7 @@ then
 	exit 1
 fi
 
-if [ "${SLURM_CLUSTER_NAME}" == "zinc-finger" ]]
+if [[ "${SLURM_CLUSTER_NAME}" == "zinc-finger" ]]
 then
 	tmpHost="localhost"
 	concordanceDir="${tmpDataDir}/Concordance/ngs/"
