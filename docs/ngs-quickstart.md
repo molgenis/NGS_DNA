@@ -29,7 +29,7 @@ scp –r 198210_SEQ_RUNTEST_FLOWCELLXX username@yourcluster:${root}/groups/$grou
 mkdir ${root}/groups/$groupname/${tmpDir}/generatedscripts/TestRun
 
 3) Copy samplesheet to generatedscripts folder
-scp –r TestRun.cvs username@yourcluster:/groups/$groupname/${tmpDir}/generatedscripts/
+scp –r TestRun.csv username@yourcluster:/groups/$groupname/${tmpDir}/generatedscripts/
 
 4) Run the generate script
 module load NGS_DNA
