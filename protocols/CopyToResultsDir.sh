@@ -296,7 +296,14 @@ then
 	for sample in "${UNIQUESAMPLES[@]}"
 	do
 		zcat ${projectResultsDir}/variants/${sample}.final.vcf.gz > ${projectResultsDir}/variants/${sample}.final.vcf
-		rsync -av ${projectResultsDir}/variants/${sample}.final.vcf "${tmpHost}:${concordanceDir}"
+
+		if [ "${tmpHost}" == "localhost" ]
+		then
+			rsync -av ${projectResultsDir}/variants/${sample}.final.vcf "${concordanceDir}"
+		else
+			rsync -av ${projectResultsDir}/variants/${sample}.final.vcf "${tmpHost}:${concordanceDir}"
+		fi
+
 		rm  ${projectResultsDir}/variants/${sample}.final.vcf
 	done
 fi
