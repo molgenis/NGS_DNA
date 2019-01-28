@@ -22,12 +22,16 @@ bash NGS_DNA-resources.sh
 #  Preparing and running NGS_DNA pipeline
 
 ```bash
+1) Copy rawdata to rawdata ngs folder
 scp –r 198210_SEQ_RUNTEST_FLOWCELLXX username@yourcluster:${root}/groups/$groupname/${tmpDir}/rawdata/ngs/
 
+2) Create a folder in the generatedscripts folder
 mkdir ${root}/groups/$groupname/${tmpDir}/generatedscripts/TestRun
 
-scp –r TestRun username@yourcluster:/groups/$groupname/${tmpDir}/generatedscripts/
+3) Copy samplesheet to generatedscripts folder
+scp –r TestRun.cvs username@yourcluster:/groups/$groupname/${tmpDir}/generatedscripts/
 
+4) Run the generate script
 module load NGS_DNA
 cd ${root}/groups/$groupname/${tmpDir}/generatedscripts/TestRun
 cp $EBROOTNGS_DNA/generate_template.sh .
