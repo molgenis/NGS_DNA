@@ -229,11 +229,12 @@ echo "Creating zip file"
 CURRENT_DIR=$(pwd)
 cd "${projectResultsDir}"
 
-zip -gr "${projectResultsDir}/${project}.zip" variants
+zip -gr "${projectResultsDir}/${project}.zip" variants/*.vcf*
+zip -gr "${projectResultsDir}/${project}.zip" variants/cnv
+zip -gr "${projectResultsDir}/${project}.zip" variants/GAVIN
 zip -gr "${projectResultsDir}/${project}.zip" qc
 zip -g "${projectResultsDir}/${project}.zip" "${project}.csv"
 zip -g "${projectResultsDir}/${project}.zip" "${project}_multiqc_report.html"
-zip -gr "${projectResultsDir}/${project}.zip" coverage
 
 echo "Zip file created: ${projectResultsDir}/${project}.zip "
 
@@ -244,17 +245,6 @@ echo "Made md5 file for ${projectResultsDir}/${project}.zip "
 
 cd "${CURRENT_DIR}"
 
-echo "pipeline is finished"
-#touch ${logsDir}/${project}/${project}.pipeline.finished
-runNumber=$(basename $( dirname "${projectResultsDir}"))
-if [ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]
-then
-	mv "${logsDir}/${project}/${runNumber}.pipeline".{started,finished}
-else
-	touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
-fi
-rm -f "${logsDir}/${project}/${runNumber}.pipeline.failed"
-echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
 
 if [ ! -d "${logsDir}/${project}/" ]
 then
@@ -309,5 +299,18 @@ then
 fi
 ## removing phiX.recoded files
 rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
+
+echo "pipeline is finished"
+#touch ${logsDir}/${project}/${project}.pipeline.finished
+runNumber=$(basename $( dirname "${projectResultsDir}"))
+if [ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]
+then
+	mv "${logsDir}/${project}/${runNumber}.pipeline".{started,finished}
+else
+	touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
+fi
+rm -f "${logsDir}/${project}/${runNumber}.pipeline.failed"
+echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
+
 
 touch pipeline.finished
