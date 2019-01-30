@@ -1,5 +1,3 @@
-#MOLGENIS walltime=02:00:00 mem=4gb
-
 #string tmpName
 #list seqType
 #string project
@@ -217,6 +215,9 @@ then
 fi
 
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
+
+module load Molgenis-Compute/v19.01.1-Java-11.0.2
+module list 
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${mainParameters}" \

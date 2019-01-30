@@ -1,5 +1,3 @@
-#MOLGENIS ppn=4 mem=8gb walltime=07:00:00 
-
 #Parameter mapping
 #string logsDir
 #string seqType

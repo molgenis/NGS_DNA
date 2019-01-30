@@ -1,5 +1,5 @@
 mem,4
-walltime,23:59:00
+#walltime,23:59:00
 nodes,1
 ppn,1
 defaultInterpreter,#!/bin/bash
@@ -406,3 +406,4 @@ vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 
+walltime_protocols_PrepareFastQ,17:00:00

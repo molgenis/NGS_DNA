@@ -1,4 +1,3 @@
-#MOLGENIS walltime=02:00:00 mem=4gb
 #string tmpName
 #list seqType
 #string projectRawArrayTmpDataDir

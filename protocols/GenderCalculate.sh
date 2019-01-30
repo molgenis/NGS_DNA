@@ -1,4 +1,3 @@
-#MOLGENIS ppn=4 mem=6gb walltime=03:00:00
 #string tmpName
 #string dedupBam
 #string capturedIntervals
@@ -30,7 +29,7 @@ lengthCap2=$(cat "${capturedIntervals_nonAutoChrX}" | wc -l)
 if [ "${lengthCap1}" -ne "${lengthCap2}" ]
 then
 	#Calculate coverage chromosome X
-	java -jar -XX:ParallelGCThreads=2 -Xmx4g "${EBROOTPICARD}/${picardJar}" CalculateHsMetrics \
+	java -jar -XX:ParallelGCThreads=2 -Xmx2g "${EBROOTPICARD}/${picardJar}" CalculateHsMetrics \
 	INPUT="${dedupBam}" \
 	TARGET_INTERVALS="${capturedIntervals_nonAutoChrX}" \
 	BAIT_INTERVALS="${capturedIntervals_nonAutoChrX}" \

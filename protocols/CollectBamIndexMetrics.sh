@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=3
-
 
 #Parameter mapping
 #string tmpName
@@ -26,7 +24,7 @@ tmpBamIndexStats="${MC_tmpFile}"
 
 
 #Run Picard BamIndexStats
-java -jar -Xmx4g -XX:ParallelGCThreads=2 "${EBROOTPICARD}/${picardJar}" "${bamIndexStatsJar}" \
+java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${bamIndexStatsJar}" \
 INPUT="${dedupBam}" \
 VALIDATION_STRINGENCY=LENIENT \
 TMP_DIR="${tempDir}" \

@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=12gb nodes=1 ppn=1
-
 #Parameter mapping
 #string tmpName
 #string gatkVersion
@@ -42,7 +40,7 @@ then
 		perBase=$(basename "${i}")
 		perBaseDir=$(echo $(dirname "${i}")/${perBase}/human_g1k_v37/)
 		echo "perBaseDir: ${perBaseDir}"
-		java -Xmx10g -XX:ParallelGCThreads=4 -jar "${EBROOTGATK}/${gatkJar}" \
+		java -Xmx7g -XX:ParallelGCThreads=1 -jar "${EBROOTGATK}/${gatkJar}" \
 		-R "${indexFile}" \
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perBase}.coveragePerBase" \
@@ -81,7 +79,7 @@ then
 		perTarget=$(basename "${i}")
 		perTargetDir=$(echo $(dirname "${i}")"/${perTarget}/human_g1k_v37/")
 
-		java -Xmx10g -XX:ParallelGCThreads=4 -jar "${EBROOTGATK}/${gatkJar}" \
+		java -Xmx7g -XX:ParallelGCThreads=1 -jar "${EBROOTGATK}/${gatkJar}" \
 		-R "${indexFile}" \
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perTarget}.coveragePerTarget" \

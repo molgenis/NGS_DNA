@@ -1,5 +1,3 @@
-#MOLGENIS walltime=23:59:00 mem=13gb ppn=1
-
 #Parameter mapping
 #string tmpName
 #string stage
@@ -100,7 +98,7 @@ else
 		fi
 	fi
 
-	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx12g -jar \
+	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx7g -jar \
 	"${EBROOTGATK}/${gatkJar}" \
 	-T HaplotypeCaller \
 	-R "${indexFile}" \

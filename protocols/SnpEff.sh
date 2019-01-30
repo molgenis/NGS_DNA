@@ -1,5 +1,3 @@
-#MOLGENIS walltime=23:59:00 mem=5gb ppn=2
-
 #Parameter mapping
 #string tmpName
 #string stage
@@ -30,7 +28,7 @@ then
         ##
 	#
 	#Run snpEff
-	java -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar \
+	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx3g -jar \
 	"${EBROOTSNPEFF}/snpEff.jar" \
 	-v hg19 \
 	-csvStats "${tmpProjectVariantCallsSnpEff_Annotated}.csvStats.csv" \
