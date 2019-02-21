@@ -45,6 +45,7 @@ then
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perBase}.coveragePerBase" \
 		--omitLocusTable \
+		-mmq 20 \
 		--includeRefNSites \
 		-I "${dedupBam}" \
 		-L "${perBaseDir}/${perBase}.interval_list"
@@ -84,6 +85,7 @@ then
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perTarget}.coveragePerTarget" \
 		-I "${dedupBam}" \
+                -mmq 20 \
 		--omitDepthOutputAtEachBase \
 		-L "${perTargetDir}/${perTarget}.interval_list"
 

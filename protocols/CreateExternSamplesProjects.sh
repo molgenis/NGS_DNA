@@ -130,6 +130,7 @@ then
 fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
+	resourcesParameters=${EBROOTNGS_DNA}/parameters_resources_exome.csv
 	batching="_chr"
         if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
         then
@@ -137,6 +138,7 @@ then
                 exit 1
         fi
 else
+	resourcesParameters=${EBROOTNGS_DNA}/parameters_resources_exome.csv
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
@@ -154,6 +156,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -p "${projectJobsDir}/${project}.csv" \
 -p "${environment_parameters}" \
 -p "${group_parameters}" \
+-p "${resourcesParameters}" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 -w "${workflowpath}" \

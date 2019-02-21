@@ -77,6 +77,12 @@ mkdir -p -m 2770 "${logsDir}/${project}/"
 # (There may be multiple sequence files per sample)
 #
 rocketPoint=$(pwd)
+arrayRejected=()
+while read line
+do
+	arrayRejected+=("${line}")
+done<rejectedBarcodes.txt
+
 cd "${projectRawTmpDataDir}"
 max_index=${#externalSampleID[@]}-1
 
@@ -168,7 +174,7 @@ then
 	grep -E -v "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${projectJobsDir}/${project}.filteredRejected.csv"
 	grep -E "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${intermediateDir}/${project}.filteredBarcodes.csv"
 	cp "${sampleSheetCsv}" "${projectJobsDir}/${project}.original.csv"
-	samplesheetCsv="${projectJobsDir}/${project}.filteredRejected.csv"
+	sampleSheetCsv="${projectJobsDir}/${project}.filteredRejected.csv"
 fi
 if [[ -f .compute.properties ]]
 then
@@ -190,6 +196,7 @@ fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
+	resourcesParameters=${EBROOTNGS_DNA}/parameters_resources_exome.csv
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
 	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
@@ -197,6 +204,7 @@ then
 		exit 1
 	fi
 else
+	resourcesParameters=${EBROOTNGS_DNA}/parameters_resources_exome.csv
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
                 echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
@@ -215,8 +223,8 @@ then
 fi
 
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
-
-module load Molgenis-Compute/v19.01.1-Java-11.0.2
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > resources_parameters.converted.csv
+#module load Molgenis-Compute/v19.01.1-Java-11.0.2
 module list 
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
@@ -225,6 +233,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
 -p "${group_parameters}" \
+-p resources_parameters.converted.csv \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 --header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
