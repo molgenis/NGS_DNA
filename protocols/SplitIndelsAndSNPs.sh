@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=2
-
 #Parameter mapping
 #string tmpName
 #string stage
@@ -27,7 +25,7 @@ makeTmpDir "${projectVariantsMergedSnpsVcf}"
 tmpProjectVariantsMergedSnpsVcf="${MC_tmpFile}"
 
 #select only Indels
-java -XX:ParallelGCThreads=2 -Xmx4g -jar "${EBROOTGATK}/${gatkJar}" \
+java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 -R "${indexFile}" \
 -T SelectVariants \
 --variant "${projectVariantsMergedSortedGz}" \
@@ -39,7 +37,7 @@ mv "${tmpProjectVariantsMergedIndelsVcf}" "${projectVariantsMergedIndelsVcf}"
 echo "moved ${tmpProjectVariantsMergedIndelsVcf} to ${projectVariantsMergedIndelsVcf}"
 
 #Select SNPs and MNPs
-java -XX:ParallelGCThreads=2 -Xmx4g -jar "${EBROOTGATK}/${gatkJar}" \
+java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 -R "${indexFile}" \
 -T SelectVariants \
 --variant "${projectVariantsMergedSortedGz}" \

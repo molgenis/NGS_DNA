@@ -1,4 +1,3 @@
-#MOLGENIS walltime=00:05:00 mem=1gb
 #string tmpName
 #string projectJobsDir
 #string intermediateDir

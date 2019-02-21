@@ -1,5 +1,3 @@
-#MOLGENIS walltime=02:00:00 mem=4gb
-
 #string tmpName
 #string allRawNgsTmpDataDir
 #string allRawNgsPrmDataDir
@@ -58,28 +56,39 @@ fi
 
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
+
 	RUNNAME="${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}"
+	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
+	mkdir -vp "${TMPDATADIR}"
+
 	if [ "${prmHost}" == "localhost" ]
 	then
 		PRMDATADIR="${allRawNgsPrmDataDir}/${RUNNAME}"
+		if ls -R "${PRMDATADIR}/rejectedBarcodes.txt" 1>/dev/null 2>&1
+		then
+			rsync -av "${PRMDATADIR}/rejectedBarcodes.txt" "${TMPDATADIR}"
+			arrayRejected=()
+
+			while read line
+			do
+				arrayRejected+=("${line}")
+			done<${TMPDATADIR}/rejectedBarcodes.txt
+		fi
+		cp ${TMPDATADIR}/rejectedBarcodes.txt .
 	else
 		PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
+                if ssh "${prmHost}" "ls -R ${allRawNgsPrmDataDir}/${RUNNAME}/rejectedBarcodes.txt" 1>/dev/null 2>&1
+                then
+			rsync -av "${PRMDATADIR}/rejectedBarcodes.txt" "${TMPDATADIR}"
+                        arrayRejected=()
+
+                        while read line
+                        do
+                                arrayRejected+=("${line}")
+                        done<"${TMPDATADIR}/rejectedBarcodes.txt"
+                fi
+		cp ${TMPDATADIR}/rejectedBarcodes.txt .
 	fi
-	TMPDATADIR="${allRawNgsTmpDataDir}/${RUNNAME}"
-
-	if ls -R "${PRMDATADIR}/"*".rejected" 1>/dev/null 2>&1
-	then
-		arrayRejected=()
-		fieldIndex=$(for i in $(ls "${PRMDATADIR}/"*".rejected"); do echo $i | awk '{n=split($0, array, "_")} END{ print n-1 }';done)
-		for i in $(ls "${PRMDATADIR}/"*".rejected"); do echo $i | awk -v field="${fieldIndex}" 'BEGIN{FS="_"}{print $field}' ;done | uniq > "rejectedBarcodes.txt"
-
-		while read line
-		do
-			arrayRejected+=("${line}")
-		done<rejectedBarcodes.txt
-	fi
-
-	mkdir -vp "${TMPDATADIR}"
 
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]
 	then

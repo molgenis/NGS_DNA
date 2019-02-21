@@ -1,7 +1,4 @@
 mem,4
-walltime,23:59:00
-nodes,1
-ppn,1
 defaultInterpreter,#!/bin/bash
 stage,module load
 targetedInsertSize,200
@@ -10,7 +7,7 @@ checkStage,module list
 ### Tool versions ####
 bedToolsVersion,BEDTools/2.25.0-${toolChain}
 bwaVersion,BWA/0.7.15-${toolChain}
-computeVersion,v17.08.1-Java-1.8.0_74
+computeVersion,v19.01.1-Java-11.0.2
 caddVersion,CADD/v1.3
 convadingVersion,CoNVaDING/1.1.6
 cutadaptVersion,cutadapt/1.13-${toolChain}-Python-2.7.10

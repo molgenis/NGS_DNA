@@ -1,4 +1,3 @@
-#MOLGENIS walltime=01:59:00 mem=1gb
 #string tmpName
 #Parameter mapping
 #string stage

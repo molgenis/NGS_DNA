@@ -1,4 +1,3 @@
-#MOLGENIS ppn=4 mem=6gb walltime=00:30:00
 #string tmpName
 #string dedupBamMetrics
 #string dedupBam
