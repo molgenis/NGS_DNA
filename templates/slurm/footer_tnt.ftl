@@ -1,3 +1,5 @@
+mydate_finished=$(date +"%Y-%m-%dT%H:%M:%S+0200")
+
 <#noparse>
 if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
 then
@@ -42,7 +44,6 @@ sync
 
 mv "${MC_jobScript}.started" "${MC_jobScript}.finished"
 
-mydate_finished=$(date +"%Y-%m-%dT%H:%M:%S+0200")
 
 </#noparse>
 step=$(echo "${taskId}" | awk -F'_' '{print $1"_"$2}')
