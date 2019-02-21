@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=1
-
 #Parameter mapping
 #string tmpName
 #string vcf2Table

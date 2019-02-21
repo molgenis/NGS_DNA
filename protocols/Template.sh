@@ -1,8 +1,3 @@
-#MOLGENIS walltime=23:59:00 mem=5gb ppn=10
-### walltime = HH:MM:SS 
-### mem      = memory per job
-### ppn      = cores per job
-
 #Parameter mapping
 ### Required parameters in the NGS_DNA pipeline (needed for logging)
 #string project

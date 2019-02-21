@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=1
-
 #list externalSampleID
 #string tmpName
 #string htsLibVersion

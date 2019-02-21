@@ -1,4 +1,3 @@
-#MOLGENIS walltime=00:20:00 mem=4gb ppn=1
 # worksheet params:
 #string tmpName
 #string project
