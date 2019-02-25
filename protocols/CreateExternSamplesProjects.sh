@@ -151,12 +151,14 @@ then
      rm ../.compute.properties
 fi
 
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > resources_parameters.converted.csv
+
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${projectJobsDir}/${project}.csv" \
 -p "${environment_parameters}" \
 -p "${group_parameters}" \
--p "${resourcesParameters}" \
+-p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 -w "${workflowpath}" \
