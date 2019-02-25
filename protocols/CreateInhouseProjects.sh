@@ -77,12 +77,15 @@ mkdir -p -m 2770 "${logsDir}/${project}/"
 # (There may be multiple sequence files per sample)
 #
 rocketPoint=$(pwd)
-arrayRejected=()
-while read line
-do
-	arrayRejected+=("${line}")
-done<rejectedBarcodes.txt
 
+if [ -f rejectedBarcodes.txt ]
+then
+	arrayRejected=()
+	while read line
+	do
+		arrayRejected+=("${line}")
+	done<rejectedBarcodes.txt
+fi
 cd "${projectRawTmpDataDir}"
 max_index=${#externalSampleID[@]}-1
 
