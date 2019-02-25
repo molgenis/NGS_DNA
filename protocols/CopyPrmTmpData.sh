@@ -73,8 +73,10 @@ do
 			do
 				arrayRejected+=("${line}")
 			done<${TMPDATADIR}/rejectedBarcodes.txt
+
+			cp ${TMPDATADIR}/rejectedBarcodes.txt .
+
 		fi
-		cp ${TMPDATADIR}/rejectedBarcodes.txt .
 	else
 		PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
                 if ssh "${prmHost}" "ls -R ${allRawNgsPrmDataDir}/${RUNNAME}/rejectedBarcodes.txt" 1>/dev/null 2>&1
@@ -86,8 +88,10 @@ do
                         do
                                 arrayRejected+=("${line}")
                         done<"${TMPDATADIR}/rejectedBarcodes.txt"
+
+			cp ${TMPDATADIR}/rejectedBarcodes.txt .
+
                 fi
-		cp ${TMPDATADIR}/rejectedBarcodes.txt .
 	fi
 
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]
