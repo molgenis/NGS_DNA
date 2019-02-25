@@ -8,6 +8,7 @@
 #string projectResultsDir
 #string projectQcDir
 #string tmpdir_parameters
+#string computeVersion
 
 #list sequencingStartDate
 #list sequencer
@@ -150,7 +151,7 @@ if [ -f .compute.properties ];
 then
      rm ../.compute.properties
 fi
-
+module load ${computeVersion}
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > resources_parameters.converted.csv
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \

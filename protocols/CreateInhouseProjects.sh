@@ -227,7 +227,7 @@ fi
 
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > resources_parameters.converted.csv
-#module load Molgenis-Compute/v19.01.1-Java-11.0.2
+module load ${computeVersion}
 module list 
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
