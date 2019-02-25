@@ -1,4 +1,4 @@
-memory_protocols_AnnotateVcf,4gb
+mem_protocols_AnnotateVcf,4gb
 memory_protocols_BaseRecalibrator,10gb
 memory_protocols_BwaAlignAndSortSam,13gb
 memory_protocols_CartegeniaFiltering,4gb
