@@ -1,4 +1,3 @@
-mem,4
 defaultInterpreter,#!/bin/bash
 stage,module load
 targetedInsertSize,200
