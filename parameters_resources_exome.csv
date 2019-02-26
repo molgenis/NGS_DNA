@@ -12,7 +12,7 @@ mem_protocols_Convading,4gb
 mem_protocols_CopyToResultsDir,1gb
 mem_protocols_CountAllFinishedFiles,1gb
 mem_protocols_CoverageCalculations,8gb
-mem_protocols_CramConversion,2gb
+mem_protocols_CramConversion,8gb
 mem_protocols_DecisionTree,5gb
 mem_protocols_DetermineTrio,1gb
 mem_protocols_FastQC,2gb
