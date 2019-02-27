@@ -1,12 +1,10 @@
-#MOLGENIS walltime=05:59:00 mem=10gb ppn=10
-
 #Parameter mapping
 #string project
 #string logsDir
 #string groupname
 #string tmpName
-#string stage
-#string checkStage
+
+
 
 #string ngsversion
 #string ngsUtilsVersion

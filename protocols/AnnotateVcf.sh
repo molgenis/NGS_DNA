@@ -1,4 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=4
 #string logsDir
 #string groupname
 #string project
@@ -28,11 +27,10 @@
 #string cgdFile
 #string intermediateDir
 
-ml ${vcfAnnoVersion}
-ml ${htsLibVersion}
-ml ${bcfToolsVersion}
-ml ${caddVersion}
-
+module load "${vcfAnnoVersion}"
+module load "${htsLibVersion}"
+module load "${bcfToolsVersion}"
+module load "${caddVersion}"
 
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"

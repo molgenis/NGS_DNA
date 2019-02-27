@@ -1,12 +1,10 @@
-#MOLGENIS walltime=05:59:00 mem=10gb ppn=10
-
 #Parameter mapping
 #string project
 #string logsDir
 #string groupname
 #string tmpName
-#string stage
-#string checkStage
+
+
 
 #string intermediateDir
 #string externalSampleID
@@ -141,7 +139,7 @@ bcftools sort "${outputOverlap}.tmp.vcf" -O v -o "${outputOverlap}"
 }
 
 i="${externalSampleID}"
-module load ${bedToolsVersion}
+module load "${bedToolsVersion}"
 ################################################################################################
 ### 1. Pass
 	### 1.1 yes

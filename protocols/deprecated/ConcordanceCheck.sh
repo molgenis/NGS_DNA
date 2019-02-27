@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:59 mem=10gb ppn=1
-
 ### Parameters
 #string project
 #string logsDir 

@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=10gb ppn=10
-
 #Parameter mapping
 #string tmpName
 #string tmpDirectory
@@ -44,8 +42,8 @@
 #string projectResultsDir
 #string ngsversion
 #string capturingKit
-#string stage
-#string checkStage
+
+
 #string runDateInfoFile
 #list externalSampleID
 #list capturingKit
@@ -133,8 +131,8 @@ picard_config:
         - 50
         - 100" >> ${intermediateDir}/${project}.multiqc_config.yaml
 
-${stage} "${multiQCVersion}"
-${checkStage}
+module load "${multiQCVersion}"
+module list
 
 ##copying data of interest to a new folder
 multiQCdir="${intermediateDir}/MultiQC/"

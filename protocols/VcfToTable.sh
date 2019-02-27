@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=1
-
 #Parameter mapping
 #string tmpName
 #string vcf2Table
@@ -11,13 +9,13 @@
 #string intermediateDir
 #list externalSampleID
 #string	project
-#string stage
+
 #string ngsUtilsVersion
 
 
 makeTmpDir "${variantsFinalProjectVcfTable}"
 tmpVariantsFinalProjectVcfTable="${MC_tmpFile}"
-${stage} "${ngsUtilsVersion}"
+module load "${ngsUtilsVersion}"
 module list
 
 #Function to check if array contains value

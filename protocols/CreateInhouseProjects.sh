@@ -1,5 +1,3 @@
-#MOLGENIS walltime=02:00:00 mem=4gb
-
 #string tmpName
 #list seqType
 #string project
@@ -79,6 +77,15 @@ mkdir -p -m 2770 "${logsDir}/${project}/"
 # (There may be multiple sequence files per sample)
 #
 rocketPoint=$(pwd)
+
+if [ -f "rejectedBarcodes.txt" ]
+then
+	arrayRejected=()
+	while read line
+	do
+		arrayRejected+=("${line}")
+	done<"rejectedBarcodes.txt"
+fi
 cd "${projectRawTmpDataDir}"
 max_index=${#externalSampleID[@]}-1
 
@@ -170,7 +177,7 @@ then
 	grep -E -v "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${projectJobsDir}/${project}.filteredRejected.csv"
 	grep -E "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${intermediateDir}/${project}.filteredBarcodes.csv"
 	cp "${sampleSheetCsv}" "${projectJobsDir}/${project}.original.csv"
-	samplesheetCsv="${projectJobsDir}/${project}.filteredRejected.csv"
+	sampleSheetCsv="${projectJobsDir}/${project}.filteredRejected.csv"
 fi
 if [[ -f .compute.properties ]]
 then
@@ -192,6 +199,7 @@ fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
 	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
@@ -199,6 +207,7 @@ then
 		exit 1
 	fi
 else
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
                 echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
@@ -209,7 +218,7 @@ fi
 
 if [ "${captKit}" == *"ONCO"* ]
 then
-	if [ ! -f ${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed
+	if [ ! -f "${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed"
 	then
 		echo "cannot do concordance check later on since ${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed is missing! EXIT!"
 		exit 1
@@ -217,6 +226,10 @@ then
 fi
 
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > "resources_parameters.converted.csv"
+
+module load "${computeVersion}"
+module list 
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${mainParameters}" \
@@ -224,6 +237,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
 -p "${group_parameters}" \
+-p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 --header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \

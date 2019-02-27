@@ -1,8 +1,7 @@
-#MOLGENIS walltime=05:59:00 mem=6gb
 #string tmpName
 #Parameter mapping
-#string stage
-#string checkStage
+
+
 #string tempDir
 #string intermediateDir
 #string project
@@ -36,10 +35,10 @@
 makeTmpDir "${gavinOutputFinal}"
 tmpGavinOutputFinal="${MC_tmpFile}"
 
-${stage} "${htsLibVersion}"
-${stage} "${gavinPlusVersion}"
-${stage} "${bcfToolsVersion}"
-${stage} "${ngsUtilsVersion}"
+module load "${htsLibVersion}"
+module load "${gavinPlusVersion}"
+module load "${bcfToolsVersion}"
+module load "${ngsUtilsVersion}"
 
 touch "${intermediateDir}/emptyFile.tsv"
 

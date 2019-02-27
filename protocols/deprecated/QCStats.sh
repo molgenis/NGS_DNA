@@ -1,5 +1,3 @@
-#MOLGENIS ppn=1 mem=8gb walltime=01:00:00
-
 #Parameter mapping
 #string tmpName
 #string intermediateDir

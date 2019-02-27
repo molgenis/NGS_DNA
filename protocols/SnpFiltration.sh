@@ -1,9 +1,7 @@
-#MOLGENIS walltime=05:59:00 mem=10gb
-
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -15,17 +13,17 @@
 #string project
 #string logsDir
 #string groupname
-#string stage
+
 
 #Load GATK module
-${stage} "${gatkVersion}"
+module load "${gatkVersion}"
 
 makeTmpDir "${projectVariantsMergedSnpsFilteredVcf}"
 tmpProjectVariantsMergedSnpsFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called SNPs on
 
-java -XX:ParallelGCThreads=4 -Djava.io.tmpdir="${tempDir}" -Xmx8g -Xms6g -jar "${EBROOTGATK}/${gatkJar}" \
+java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar "${EBROOTGATK}/${gatkJar}" \
 -T VariantFiltration \
 -R "${indexFile}" \
 -o "${tmpProjectVariantsMergedSnpsFilteredVcf}" \

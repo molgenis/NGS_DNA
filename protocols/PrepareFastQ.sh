@@ -1,5 +1,3 @@
-#MOLGENIS ppn=4 mem=8gb walltime=07:00:00 
-
 #Parameter mapping
 #string logsDir
 
@@ -25,11 +23,11 @@
 #string phiXEnd2Gz
 #string seqTkVersion
 #string pigzVersion
-#string stage
+
 
 #Load module
-${stage} "${seqTkVersion}"
-${stage} ${pigzVersion}
+module load "${seqTkVersion}"
+module load ${pigzVersion}
 
 array_contains () {
     local array="$1[@]"

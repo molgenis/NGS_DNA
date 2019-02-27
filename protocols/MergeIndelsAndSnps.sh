@@ -1,12 +1,10 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=1
-
 #list externalSampleID
 #string tmpName
 #string gatkVersion
 #string gatkJar
 #string indexFile
-#string stage
-#string checkStage
+
+
 #string projectPrefix
 #string logsDir 
 #string groupname
@@ -28,8 +26,8 @@ array_contains () {
 }
 
 #Load GATK module
-${stage} "${gatkVersion}"
-${checkStage}
+module load "${gatkVersion}"
+module list
 
 INPUTS=()
 for sampleID in "${externalSampleID[@]}"
@@ -42,7 +40,7 @@ do
 	#create variant array
 	VARIANTS+=("--variant ${intermediateDir}/${externalID}.final.vcf")
 
-	java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
+	java -Xmx3g -jar "${EBROOTGATK}/${gatkJar}" \
 	-R "${indexFile}" \
 	-T CombineVariants \
 	--variant "${intermediateDir}/${externalID}.annotated.filtered.indels.vcf" \

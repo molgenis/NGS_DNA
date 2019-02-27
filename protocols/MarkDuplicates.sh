@@ -1,9 +1,7 @@
-#MOLGENIS walltime=16:00:00 mem=30gb ppn=5
-
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string sampleMergedBam
 #string sampleMergedBamIdx
 #string tempDir
@@ -20,8 +18,8 @@
 #string flagstatMetrics
 
 #Load Picard module
-${stage} "${sambambaVersion}"
-${checkStage}
+module load "${sambambaVersion}"
+module list
 
 makeTmpDir "${dedupBam}" "${intermediateDir}"
 tmpDedupBam="${MC_tmpFile}"

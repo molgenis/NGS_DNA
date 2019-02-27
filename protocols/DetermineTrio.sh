@@ -1,5 +1,3 @@
-#MOLGENIS walltime=05:59:00 mem=10gb ppn=10
-
 #Parameter mapping
 #string vcfPedVersion
 #string project
@@ -7,8 +5,6 @@
 #string groupname
 #string intermediateDir
 #string projectPrefix
-
-set -eu
 
 module load "${vcfPedVersion}"
 

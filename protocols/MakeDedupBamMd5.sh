@@ -1,5 +1,3 @@
-#MOLGENIS walltime=01:00:00 mem=4gb
-
 #string tmpName
 #string dedupBam
 #string	project

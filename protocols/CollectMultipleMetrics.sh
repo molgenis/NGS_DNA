@@ -1,10 +1,7 @@
-#MOLGENIS walltime=05:59:00 mem=6gb ppn=3
-
-
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string picardVersion
 #string collectMultipleMetricsJar
 #string dedupBam
@@ -21,13 +18,13 @@
 #string intermediateDir
 
 #Load Picard module
-${stage} "${picardVersion}"
+module load "${picardVersion}"
 
 makeTmpDir "${collectBamMetricsPrefix}" "${intermediateDir}"
 tmpCollectBamMetricsPrefix="${MC_tmpFile}"
 
 #Run Picard CollectAlignmentSummaryMetrics, CollectInsertSizeMetrics, CollectGcBiasMetrics, QualityScoreDistribution and MeanQualityByCycle
-java -jar -Xmx4g -XX:ParallelGCThreads=2 "${EBROOTPICARD}/${picardJar}" "${collectMultipleMetricsJar}" \
+java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${collectMultipleMetricsJar}" \
 I="${dedupBam}" \
 R="${indexFile}" \
 O="${tmpCollectBamMetricsPrefix}" \

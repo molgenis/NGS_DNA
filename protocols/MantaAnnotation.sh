@@ -1,14 +1,12 @@
-#MOLGENIS walltime=23:59:00 mem=6gb ppn=2
-
 #Parameter mapping
 #string project
 #string logsDir
 #string groupname
-#string stage
+
 #string vepVersion
 #string htsLibVersion
 #string ngsUtilsVersion
-#string checkStage
+
 #string intermediateDir
 #string mantaDir
 #string vepDataDir
@@ -19,10 +17,10 @@ set -e
 set -u
 
 
-${stage} "${ngsUtilsVersion}"
-${stage} "${vepVersion}"
-${stage} "${htsLibVersion}"
-${checkStage}
+module load "${ngsUtilsVersion}"
+module load "${vepVersion}"
+module load "${htsLibVersion}"
+module list
 
 makeTmpDir "${intermediateDir}"
 tmpIntermediateDir="${MC_tmpFile}"

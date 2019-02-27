@@ -1,9 +1,7 @@
-#MOLGENIS walltime=05:59:00 mem=13gb ppn=2
-
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string gatkVersion
 #string gatkJar
 #string htsLibVersion
@@ -29,11 +27,11 @@
 
 
 #Load module GATK,tabix
-${stage} "${gatkVersion}"
-${stage} "${htsLibVersion}"
-${stage} "${ngsUtilsVersion}"
+module load "${gatkVersion}"
+module load "${htsLibVersion}"
+module load "${ngsUtilsVersion}"
 
-${checkStage}
+module list
 
 makeTmpDir "${projectVariantsMerged}"
 tmpProjectVariantsMerged="${MC_tmpFile}"
@@ -68,7 +66,7 @@ do
 	fi
 done
 
-java -Xmx12g -Djava.io.tmpdir="${tempDir}" -cp "${EBROOTGATK}/${gatkJar}" org.broadinstitute.gatk.tools.CatVariants \
+java -Xmx5g -Djava.io.tmpdir="${tempDir}" -cp "${EBROOTGATK}/${gatkJar}" org.broadinstitute.gatk.tools.CatVariants \
 -R "${indexFile}" \
 ${INPUTS[@]} \
 -out "${tmpProjectVariantsMerged}"
