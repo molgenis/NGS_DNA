@@ -17,13 +17,11 @@ count=0
 for i in PlatinumSample_NA12891
 do
 
-	differencePerTarget="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt)"
-
-	if [ "${differencePerTarget}" != "" ]
-        then
+	if diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt >/dev/null
+	then
 		echo "there are differences in the CoveragePerTarget step between the test and the original output of ${i}"
 		echo "please fix the bug or update this test"
-                echo "${differencePerTarget}"
+                diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt
                 exit 1
         else
 		echo "CoveragePerTarget is correct"
@@ -37,14 +35,11 @@ for i in PlatinumSample_NA12878
 do
 	head -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
 	tail -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" >> "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
-	differencePerBase="$(diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt)"
-
-
-	if [ "${differencePerBase}" != "" ]
+	if diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt >/dev/null
 	then
 		echo "there are differences in the CoveragePerBase step between the test and the original output of ${i}"
 		echo "please fix the bug or update this test"
-		echo "${differencePerBase}"
+		diff /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt
 		exit 1
 	else
 		echo "CoveragePerBase is correct"
