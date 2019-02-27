@@ -1,8 +1,8 @@
 
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string picardVersion
 #string bamIndexStatsJar
 #string dedupBam
@@ -17,7 +17,8 @@
 #string intermediateDir
 
 #Load Picard module
-${stage} "${picardVersion}"
+module load "${picardVersion}"
+module list
 
 makeTmpDir "${bamIndexStats}" "${intermediateDir}"
 tmpBamIndexStats="${MC_tmpFile}"

@@ -6,8 +6,6 @@
 #string intermediateDir
 #string projectPrefix
 
-set -eu
-
 module load "${vcfPedVersion}"
 
 inputVcfFile="${projectPrefix}.final.vcf"

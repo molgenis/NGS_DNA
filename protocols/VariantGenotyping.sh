@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -36,8 +36,8 @@ makeTmpDir "${projectBatchGenotypedVariantCalls}"
 tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 #Load GATK module
-${stage} "${gatkVersion}"
-${checkStage}
+module load "${gatkVersion}"
+module list
 
 SAMPLESIZE=$(cat "${projectJobsDir}/${project}.csv" | wc -l)
 numberofbatches=$(("${SAMPLESIZE}" / 200))

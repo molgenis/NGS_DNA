@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string samtoolsVersion
 #string sampleMergedBam
 #string sampleMergedBai
@@ -36,8 +36,8 @@ tmpSampleMergedBam="${MC_tmpFile}"
 makeTmpDir "${sampleMergedBamIdx}"
 tmpSampleMergedBamIdx="${MC_tmpFile}"
 
-${stage} "${sambambaVersion}"
-${checkStage}
+module load "${sambambaVersion}"
+module list
 
 #Create string with input BAM files for Picard
 #This check needs to be performed because Compute generates duplicate values in array

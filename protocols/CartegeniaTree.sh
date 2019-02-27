@@ -3,8 +3,8 @@
 #string logsDir
 #string groupname
 #string tmpName
-#string stage
-#string checkStage
+
+
 
 #string intermediateDir
 #string externalSampleID
@@ -139,7 +139,7 @@ bcftools sort "${outputOverlap}.tmp.vcf" -O v -o "${outputOverlap}"
 }
 
 i="${externalSampleID}"
-module load ${bedToolsVersion}
+module load "${bedToolsVersion}"
 ################################################################################################
 ### 1. Pass
 	### 1.1 yes

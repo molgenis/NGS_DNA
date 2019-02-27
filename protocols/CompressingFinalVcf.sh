@@ -1,8 +1,8 @@
 #list externalSampleID
 #string tmpName
 #string htsLibVersion
-#string stage
-#string checkStage
+
+
 #string logsDir 
 #string groupname
 #string	project
@@ -24,8 +24,8 @@ array_contains () {
 }
 
 #Load Tabix module
-${stage} "${htsLibVersion}"
-${checkStage}
+module load "${htsLibVersion}"
+module list
 
 INPUTS=()
 for SampleID in "${finalVcf}"

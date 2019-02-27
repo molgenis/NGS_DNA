@@ -4,8 +4,8 @@
 #string fastq1
 #string fastq2
 #string srBarcodeFqGz
-#string stage
-#string checkStage
+
+
 #string fastqcVersion
 #string outputFolderFastQC
 #string tmpDataDir
@@ -15,8 +15,8 @@
 #string intermediateDir
 
 #Load module
-${stage} "${fastqcVersion}"
-${checkStage}
+module load "${fastqcVersion}"
+module list
 
 makeTmpDir "${outputFolderFastQC}" "${intermediateDir}"
 tmpOutputFolderFastQC="${MC_tmpFile}"

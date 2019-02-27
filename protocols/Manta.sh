@@ -13,18 +13,18 @@
 #string capturedBed
 #string bedToolsVersion
 #string htsLibVersion
-#string stage
-#string checkStage
+
+
 #string externalSampleID
 #string ngsversion
 
-${stage} "${ngsversion}"
-${stage} "${mantaVersion}"
-${stage} "${pythonVersion}"
-${stage} "${htsLibVersion}"
-${stage} "${bedToolsVersion}"
+module load "${ngsversion}"
+module load "${mantaVersion}"
+module load "${pythonVersion}"
+module load "${htsLibVersion}"
+module load "${bedToolsVersion}"
 
-${checkStage}
+module list
 
 rm -rf "${mantaDir}"
 mkdir -p "${mantaDir}"

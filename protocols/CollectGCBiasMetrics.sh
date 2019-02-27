@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string picardVersion
 #string gcBiasMetricsJar
 #string dedupBam
@@ -23,10 +23,10 @@
 #string intermediateDir
 
 #Load Picard module
-${stage} "${picardVersion}"
-${stage} "${rVersion}"
-${stage} "${ngsUtilsVersion}"
-${checkStage}
+module load "${picardVersion}"
+module load "${rVersion}"
+module load "${ngsUtilsVersion}"
+module list
 
 makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"
 tmpGcBiasMetrics="${MC_tmpFile}"

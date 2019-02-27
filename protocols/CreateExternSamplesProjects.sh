@@ -121,7 +121,7 @@ extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${pro
 
 batching="_small"
 
-capturingKitProject=$(python ${EBROOTNGS_DNA}/scripts/getCapturingKit.py "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
+capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
@@ -131,7 +131,7 @@ then
 fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
-	resourcesParameters=${EBROOTNGS_DNA}/parameters_resources_exome.csv
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	batching="_chr"
         if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
         then
@@ -139,7 +139,7 @@ then
                 exit 1
         fi
 else
-	resourcesParameters=${EBROOTNGS_DNA}/parameters_resources_exome.csv
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
@@ -147,12 +147,13 @@ else
         fi
 fi
 
-if [ -f .compute.properties ];
+if [ -f ".compute.properties" ];
 then
-     rm ../.compute.properties
+     rm "../.compute.properties"
 fi
-module load ${computeVersion}
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > resources_parameters.converted.csv
+
+module load "${computeVersion}"
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > "resources_parameters.converted.csv"
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \

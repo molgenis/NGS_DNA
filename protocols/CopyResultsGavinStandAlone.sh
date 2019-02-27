@@ -1,7 +1,7 @@
 #string tmpName
 #Parameter mapping
-#string stage
-#string checkStage
+
+
 #string tempDir
 #string intermediateDir
 #string project

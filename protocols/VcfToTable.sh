@@ -9,13 +9,13 @@
 #string intermediateDir
 #list externalSampleID
 #string	project
-#string stage
+
 #string ngsUtilsVersion
 
 
 makeTmpDir "${variantsFinalProjectVcfTable}"
 tmpVariantsFinalProjectVcfTable="${MC_tmpFile}"
-${stage} "${ngsUtilsVersion}"
+module load "${ngsUtilsVersion}"
 module list
 
 #Function to check if array contains value

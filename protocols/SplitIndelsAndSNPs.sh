@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string intermediateDir
 #string project
 #string logsDir
@@ -16,7 +16,7 @@
 #string externalSampleID
 
 
-${stage} "${gatkVersion}"
+module load "${gatkVersion}"
 
 makeTmpDir "${projectVariantsMergedIndelsVcf}"
 tmpProjectVariantsMergedIndelsVcf="${MC_tmpFile}"

@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string gatkVersion
 #string gatkJar
 #string htsLibVersion
@@ -27,11 +27,11 @@
 
 
 #Load module GATK,tabix
-${stage} "${gatkVersion}"
-${stage} "${htsLibVersion}"
-${stage} "${ngsUtilsVersion}"
+module load "${gatkVersion}"
+module load "${htsLibVersion}"
+module load "${ngsUtilsVersion}"
 
-${checkStage}
+module list
 
 makeTmpDir "${projectVariantsMerged}"
 tmpProjectVariantsMerged="${MC_tmpFile}"

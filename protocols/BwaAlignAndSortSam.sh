@@ -3,8 +3,8 @@ set -o pipefail
 #Parameter mapping
 #string tmpName
 #string tempDir
-#string stage
-#string checkStage
+
+
 #string seqType
 #string bwaVersion
 #string indexFile
@@ -33,9 +33,9 @@ makeTmpDir "${alignedSortedBam}"
 tmpAlignedSortedBam="${MC_tmpFile}"
 
 #Load module BWA
-${stage} "${bwaVersion}"
-${stage} "${picardVersion}"
-${checkStage}
+module load "${bwaVersion}"
+module load "${picardVersion}"
+module list
 
 READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${externalSampleID}\tSM:${externalSampleID}"
 rm -f "${tmpAlignedSam}"

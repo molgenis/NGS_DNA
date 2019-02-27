@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string sampleMergedBam
 #string sampleMergedBamIdx
 #string tempDir
@@ -18,8 +18,8 @@
 #string flagstatMetrics
 
 #Load Picard module
-${stage} "${sambambaVersion}"
-${checkStage}
+module load "${sambambaVersion}"
+module list
 
 makeTmpDir "${dedupBam}" "${intermediateDir}"
 tmpDedupBam="${MC_tmpFile}"

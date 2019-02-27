@@ -3,8 +3,8 @@
 #string gatkVersion
 #string gatkJar
 #string indexFile
-#string stage
-#string checkStage
+
+
 #string projectPrefix
 #string logsDir 
 #string groupname
@@ -26,8 +26,8 @@ array_contains () {
 }
 
 #Load GATK module
-${stage} "${gatkVersion}"
-${checkStage}
+module load "${gatkVersion}"
+module list
 
 INPUTS=()
 for sampleID in "${externalSampleID[@]}"

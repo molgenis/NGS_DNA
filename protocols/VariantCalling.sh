@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -35,8 +35,8 @@ array_contains () {
 }
 
 #Load GATK module
-${stage} "${gatkVersion}"
-${checkStage}
+module load "${gatkVersion}"
+module list
 
 makeTmpDir "${sampleBatchVariantCalls}" "${intermediateDir}"
 tmpSampleBatchVariantCalls="${MC_tmpFile}"

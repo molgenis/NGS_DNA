@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string picardVersion
 #string hsMetricsJar
 #string hsMetrics
@@ -19,7 +19,8 @@
 #string intermediateDir
 
 #Load Picard module
-${stage} "${picardVersion}"
+
+module load "${picardVersion}"
 
 makeTmpDir "${hsMetrics}" "${intermediateDir}"
 tmpHsMetrics="${MC_tmpFile}"

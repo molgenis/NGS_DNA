@@ -27,11 +27,10 @@
 #string cgdFile
 #string intermediateDir
 
-ml ${vcfAnnoVersion}
-ml ${htsLibVersion}
-ml ${bcfToolsVersion}
-ml ${caddVersion}
-
+module load "${vcfAnnoVersion}"
+module load "${htsLibVersion}"
+module load "${bcfToolsVersion}"
+module load "${caddVersion}"
 
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"

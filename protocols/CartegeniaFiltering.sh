@@ -3,8 +3,8 @@
 #string logsDir
 #string groupname
 #string tmpName
-#string stage
-#string checkStage
+
+
 
 #string ngsversion
 #string ngsUtilsVersion

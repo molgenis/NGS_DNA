@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -13,10 +13,10 @@
 #string project
 #string logsDir
 #string groupname
-#string stage
+
 
 #Load GATK module
-${stage} "${gatkVersion}"
+module load "${gatkVersion}"
 
 makeTmpDir "${projectVariantsMergedIndelsFilteredVcf}"
 tmpProjectVariantsMergedIndelsFilteredVcf="${MC_tmpFile}"

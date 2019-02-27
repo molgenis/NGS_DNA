@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-#string stage
-#string checkStage
+
+
 #string tempDir
 #string intermediateDir
 #string projectVariantCallsSnpEff_Annotated
@@ -17,8 +17,8 @@
 makeTmpDir "${projectVariantCallsSnpEff_Annotated}"
 tmpProjectVariantCallsSnpEff_Annotated="${MC_tmpFile}"
 
-${stage} "${snpEffVersion}"
-${checkStage}
+module load "${snpEffVersion}"
+module list
 
 if [ -f "${projectBatchGenotypedAnnotatedVariantCalls}" ]
 then
