@@ -196,7 +196,7 @@ then
 	exit 1
 fi
 
-if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
 	batching="_chr"
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
@@ -206,6 +206,10 @@ then
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
 		exit 1
 	fi
+elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
+then
+	batching="_chr"
+        resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
