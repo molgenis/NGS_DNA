@@ -42,7 +42,7 @@ do
         array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("-I $bamFile")    # If bamFile does not exist in array add it
 done
 
-makeTmpDir "${mergedBamRecalibratedTable}"
+makeTmpDir "${mergedBamRecalibratedTable}" "${intermediateDir}"
 tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
 "${sambambaTool}" index "${sampleMergedBam}"

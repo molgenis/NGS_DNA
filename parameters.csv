@@ -381,7 +381,7 @@ arrayMapFile,${intermediateDir}/${externalSampleID}.concordance.map
 familyList,${intermediateDir}/${externalSampleID}.familyList.txt
 arrayFileLocation,${inputData}/${arrayFile}
 
-mergedBamRecalibratedTable,${sampleMergedBam}.recalibrated.table
+mergedBamRecalibratedTable,${projectResultsDir}/alignment/${externalSampleID}.recalibrated.table
 pigzVersion,pigz/2.3.1-foss-2015b
 
 geneNetworkFolder,${dataDir}/GeneNetwork/
