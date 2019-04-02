@@ -62,6 +62,7 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 echo "Gavin finished, now sorting the vcf"
 
 sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
+perl -pi -e 's|RLV=|;RLV=|' ${gavinOutputFinalMergedRLV}
 
 printf "bgzipping ${gavinOutputFinalMergedRLV}"
 bgzip -c "${gavinOutputFinalMergedRLV}" > "${gavinOutputFinalMergedRLV}.gz"
