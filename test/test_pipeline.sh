@@ -31,7 +31,7 @@ function preparePipeline(){
 	fgrep "computeVersion," "${pipelinefolder}/parameters.csv" > "${tmpfolder}/generatedscripts/${_projectName}/mcVersion.txt"
 
 ##############
-	perl -pi -e "s|${NGS_DNA_VERSION}|NGS_DNA/betaAutotest|" ${tmpfolder}/generatedscripts/${_projectName}/generate_template.sh
+	perl -pi -e "s|module load NGS_DNA|module load NGS_DNA/betaAutotest|" ${tmpfolder}/generatedscripts/${_projectName}/generate_template.sh
 	###### Load a version of molgenis compute
 sudo -u umcg-envsync bash -l << EOF
 
@@ -147,7 +147,7 @@ cd "${pipelinefolder}"
 echo "pr number: $1"
 
 PULLREQUEST="${1}"
-NGS_DNA_VERSION=NGS_DNA/3.5.2
+#NGS_DNA_VERSION=NGS_DNA/3.5.2
 
 git clone https://github.com/molgenis/NGS_DNA.git
 cd NGS_DNA
