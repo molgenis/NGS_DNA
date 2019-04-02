@@ -269,7 +269,7 @@ then
 	if [ $? -eq 0 ]
 	then
 		tmpHost="zinc-finger.gcc.rug.nl"
-		concordanceDir="/groups/umcg-gd/tmp05/Concordance/ngs/"
+		concordanceDir="/groups/${groupname}/tmp05/Concordance/ngs/"
 	else
 		echo "zinc-finger is down, writing data to leucine-zipper instead"
 		tmpHost="localhost"
