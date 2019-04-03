@@ -7,7 +7,7 @@
 #SBATCH --mem ${mem}
 #SBATCH --open-mode=append
 #SBATCH --export=NONE
-#SBATCH --get-user-env=30L
+#SBATCH --get-user-env=60L
 
 set -e
 set -u
