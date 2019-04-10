@@ -265,7 +265,7 @@ then
 
 elif [[ "${SLURM_CLUSTER_NAME}" == "leucine-zipper" ]]
 then
-	ssh -q zinc-finger.gcc.rug.nl exit
+	ssh -tt -q zinc-finger.gcc.rug.nl exit
 	if [ $? -eq 0 ]
 	then
 		tmpHost="zinc-finger.gcc.rug.nl"
