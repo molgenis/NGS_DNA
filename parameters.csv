@@ -218,8 +218,8 @@ projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.varia
 projectVariantCallsSnpEff_ExAC_GoNL_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
-projectVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
-projectVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
+sampleVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
+sampleVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsMergedIdx,${projectPrefix}.variant.calls.GATK.vcf.idx
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
@@ -248,8 +248,8 @@ sampleVariantsMergedGavin,${sampleNameID}.variant.calls.GATK.vcf
 projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.VEP.vcf
 
 ### 25, 26
-projectVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
-projectVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
+sampleVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
+sampleVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
 sampleFinalVcf,${intermediateDir}/${externalSampleID}.final.vcf
 projectFinalVcf,${projectPrefix}.final.vcf
 
