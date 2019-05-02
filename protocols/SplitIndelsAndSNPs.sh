@@ -11,39 +11,39 @@
 #string indexFile
 #string capturedIntervals
 #string projectVariantsMergedSortedGz
-#string projectVariantsMergedSnpsVcf
-#string projectVariantsMergedIndelsVcf
+#string sampleVariantsMergedSnpsVcf
+#string sampleVariantsMergedIndelsVcf
 #string externalSampleID
 
 
 module load "${gatkVersion}"
 
-makeTmpDir "${projectVariantsMergedIndelsVcf}"
-tmpProjectVariantsMergedIndelsVcf="${MC_tmpFile}"
+makeTmpDir "${sampleVariantsMergedIndelsVcf}"
+tmpSampleVariantsMergedIndelsVcf="${MC_tmpFile}"
 
-makeTmpDir "${projectVariantsMergedSnpsVcf}"
-tmpProjectVariantsMergedSnpsVcf="${MC_tmpFile}"
+makeTmpDir "${sampleVariantsMergedSnpsVcf}"
+tmpSampleVariantsMergedSnpsVcf="${MC_tmpFile}"
 
 #select only Indels
 java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 -R "${indexFile}" \
 -T SelectVariants \
 --variant "${projectVariantsMergedSortedGz}" \
--o "${tmpProjectVariantsMergedIndelsVcf}" \
+-o "${tmpSampleVariantsMergedIndelsVcf}" \
 --selectTypeToInclude INDEL \
 -sn "${externalSampleID}"
 
-mv "${tmpProjectVariantsMergedIndelsVcf}" "${projectVariantsMergedIndelsVcf}"
-echo "moved ${tmpProjectVariantsMergedIndelsVcf} to ${projectVariantsMergedIndelsVcf}"
+mv "${tmpSampleVariantsMergedIndelsVcf}" "${sampleVariantsMergedIndelsVcf}"
+echo "moved ${tmpSampleVariantsMergedIndelsVcf} to ${sampleVariantsMergedIndelsVcf}"
 
 #Select SNPs and MNPs
 java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 -R "${indexFile}" \
 -T SelectVariants \
 --variant "${projectVariantsMergedSortedGz}" \
--o "${tmpProjectVariantsMergedSnpsVcf}" \
+-o "${tmpSampleVariantsMergedSnpsVcf}" \
 --selectTypeToExclude INDEL \
 -sn "${externalSampleID}"
 
-mv "${tmpProjectVariantsMergedSnpsVcf}" "${projectVariantsMergedSnpsVcf}"
-echo "moved ${tmpProjectVariantsMergedSnpsVcf} to ${projectVariantsMergedSnpsVcf}"
+mv "${tmpSampleVariantsMergedSnpsVcf}" "${sampleVariantsMergedSnpsVcf}"
+echo "moved ${tmpSampleVariantsMergedSnpsVcf} to ${sampleVariantsMergedSnpsVcf}"

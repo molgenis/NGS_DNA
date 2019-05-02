@@ -28,7 +28,8 @@ mem_protocols_Manta,5gb
 mem_protocols_MarkDuplicates,10gb
 mem_protocols_MergeBam,2gb
 mem_protocols_MergeBatches,6gb
-mem_protocols_MergeIndelsAndSnps,4gb
+mem_protocols_MergeIndelsAndSnpsSample,4gb
+mem_protocols_MergeIndelsAndSnpsProject,4gb
 mem_protocols_MultiQC,5gb
 mem_protocols_PrepareFastQ,1gb
 mem_protocols_SnpEff,4gb
@@ -68,7 +69,8 @@ ppn_protocols_Manta,6
 ppn_protocols_MarkDuplicates,5
 ppn_protocols_MergeBam,10
 ppn_protocols_MergeBatches,2
-ppn_protocols_MergeIndelsAndSnps,1
+ppn_protocols_MergeIndelsAndSnpsProject,1
+ppn_protocols_MergeIndelsAndSnpsSample,1
 ppn_protocols_MultiQC,1
 ppn_protocols_PrepareFastQ,4
 ppn_protocols_SnpEff,2
@@ -108,7 +110,8 @@ walltime_protocols_Manta,05:59:00
 walltime_protocols_MarkDuplicates,05:59:00
 walltime_protocols_MergeBam,05:59:00
 walltime_protocols_MergeBatches,05:59:00
-walltime_protocols_MergeIndelsAndSnps,05:59:00
+walltime_protocols_MergeIndelsAndSnpsProject,05:59:00
+walltime_protocols_MergeIndelsAndSnpsSample,05:59:00
 walltime_protocols_MultiQC,05:59:00
 walltime_protocols_PrepareFastQ,05:59:00
 walltime_protocols_SnpEff,05:59:00
