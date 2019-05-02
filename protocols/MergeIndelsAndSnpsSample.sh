@@ -2,6 +2,8 @@
 #string tmpName
 #string gatkVersion
 #string gatkJar
+#string bcfToolsVersion
+#string barcode
 #string indexFile
 #string logsDir 
 #string groupname
@@ -13,6 +15,7 @@
 
 #Load GATK module
 module load "${gatkVersion}"
+module load "${bcfToolsVersion}"
 module list
 
 makeTmpDir "${sampleFinalVcf}"
@@ -27,5 +30,9 @@ java -Xmx3g -jar "${EBROOTGATK}/${gatkJar}" \
 -o "${tmpSampleFinalVcf}"
 
 
-echo "moving ${tmpSampleFinalVcf} to ${sampleFinalVcf}"
-mv "${tmpSampleFinalVcf}" "${sampleFinalVcf}"
+echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
+
+bcftools annotate -h "${tmpSampleFinalVcf}.barcode.txt" "${tmpSampleFinalVcf}" > "${tmpSampleFinalVcf}.tmp"
+
+echo "moving ${tmpSampleFinalVcf}.tmp to ${sampleFinalVcf}"
+mv "${tmpSampleFinalVcf}.tmp" "${sampleFinalVcf}"
