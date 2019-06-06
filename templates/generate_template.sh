@@ -73,6 +73,17 @@ sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleS
 
 if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
 
+IFS="${SAMPLESHEET_SEP}" _sampleSheetColumnNames=($(head -1 "${_sampleSheet}"))
+for (( _offset = 0 ; _offset < ${#_sampleSheetColumnNames[@]:-0} ; _offset++ ))
+do
+	_sampleSheetColumnOffsets["${_sampleSheetColumnNames[${_offset}]}"]="${_offset}"
+done
+pipeline=""
+if [[ ! -z "${_sampleSheetColumnOffsets['pipeline']+isset}" ]]; then
+		_projectFieldIndex=$((${_sampleSheetColumnOffsets['pipeline']} + 1))
+		IFS=$'\n' pipeline=($(tail -n +2 "${_sampleSheet}" | cut -d "${SAMPLESHEET_SEP}" -f "${_projectFieldIndex}" | sort | uniq ))
+fi
+
 ### Converting parameters to compute parameters
 echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
@@ -100,6 +111,7 @@ groupname=${group};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
 environment_parameters=${genScripts}/parameters_environment_converted.csv;\
 tmpdir_parameters=${genScripts}/parameters_tmpdir_converted.csv;\
-worksheet=${genScripts}/${filePrefix}.csv" \
+worksheet=${genScripts}/${filePrefix}.csv;\
+runid=${runID}" \
 -weave \
 --generate
