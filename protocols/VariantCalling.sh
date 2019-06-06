@@ -1,7 +1,6 @@
 #Parameter mapping
 #string tmpName
-
-
+#string projectResultsDir
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -51,7 +50,7 @@ do
         array_contains INPUTS "${sampleID}" || INPUTS+=("$sampleID")    # If bamFile does not exist in array add it
 done
 baitBatchLength=""
-sex=$(less "${intermediateDir}/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
+sex=$(less "${projectResultsDir}/general/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
 if [ -f "${capturedBatchBed}" ] 
 then
 	baitBatchLength=$(cat "${capturedBatchBed}" | wc -l)
