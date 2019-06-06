@@ -11,7 +11,6 @@ module load ${hashdeepVersion}
 
 thisFolder=$(pwd)
 cd "${projectDir}/"
-cd ..
 
 echo "starting to checksum"
 md5deep -r -j0 -o f -l "results/" > "${intermediateDir}/results.md5"
