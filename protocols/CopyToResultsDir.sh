@@ -246,3 +246,19 @@ fi
 
 ## removing phiX.recoded files
 rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
+
+echo "pipeline is finished"
+#touch ${logsDir}/${project}/${project}.pipeline.finished
+runNumber=$(basename $( dirname "${projectResultsDir}"))
+if [ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]
+then
+	mv "${logsDir}/${project}/${runNumber}.pipeline".{started,finished}
+else
+	touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
+fi
+echo "finished: $(date +%FT%T%z)" >> ${logsDir}/${project}/${runNumber}.pipeline.totalRuntime
+rm -f "${logsDir}/${project}/${runNumber}.pipeline.failed"
+echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
+
+
+touch pipeline.finished
