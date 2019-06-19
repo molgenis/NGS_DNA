@@ -248,7 +248,7 @@ fi
 rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
 
 echo "pipeline is finished"
-#touch ${logsDir}/${project}/${project}.pipeline.finished
+
 runNumber=$(basename $( dirname "${projectResultsDir}"))
 if [ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]
 then
