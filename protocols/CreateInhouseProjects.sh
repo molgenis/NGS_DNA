@@ -11,7 +11,7 @@
 #string computeVersion
 #string group_parameters
 #string groupname
-
+#string runid
 #list sequencingStartDate
 #list sequencer
 #list run
@@ -68,6 +68,7 @@ mkdir -p "${projectResultsDir}/qc/statistics/"
 mkdir -p "${projectResultsDir}/variants/cnv/"
 mkdir -p "${projectResultsDir}/variants/gVCF/"
 mkdir -p "${projectResultsDir}/variants/GAVIN/"
+mkdir -p "${projectResultsDir}/general"
 mkdir -p "${projectQcDir}"
 mkdir -p "${intermediateDir}/GeneNetwork/"
 mkdir -p -m 2770 "${logsDir}/${project}/"
@@ -254,7 +255,8 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
-groupname=${groupname}"
+groupname=${groupname};\
+runid=${runid}"
 
 
 if [ -f "${intermediateDir}/${project}.filteredBarcodes.csv" ]

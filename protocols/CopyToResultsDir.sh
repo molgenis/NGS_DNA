@@ -44,7 +44,6 @@ array_contains () {
 # Make result directories
 mkdir -p "${projectResultsDir}/coverage/CoveragePerBase"
 mkdir -p "${projectResultsDir}/coverage/CoveragePerTarget"
-mkdir -p "${projectResultsDir}/general"
 mkdir -p "${projectResultsDir}/bedfile/"
 
 UNIQUESAMPLES=()
@@ -173,10 +172,6 @@ do
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
 	printf "."
 
-
-	rsync -a "${intermediateDir}/${sa}.chosenSex.txt" "${projectResultsDir}/general/"
-	printf "."
-
 	if ls "${intermediateDir}/${sa}."*.coveragePerBase.txt 1> /dev/null 2>&1
 	then
 		for i in $(ls "${intermediateDir}/${sa}."*.coveragePerBase.txt )
@@ -249,57 +244,11 @@ then
 	mkdir -p "${logsDir}/${project}/"
 fi
 
-diagnosticsCluster="true"
-
-if [ -z "${SLURM_CLUSTER_NAME:-}" ]
-then
-	echo -e "There is no SLURM_CLUSTER_NAME defined since you are probably not running this via the sbatch command\n"
-	echo -e	"FYI: If you are using this pipeline on a non-diagnostic cluster, the vcf files for the concordance check will not be copied."
-	exit 1
-fi
-
-if [[ "${SLURM_CLUSTER_NAME}" == "zinc-finger" ]]
-then
-	tmpHost="localhost"
-	concordanceDir="${tmpDataDir}/Concordance/ngs/"
-
-elif [[ "${SLURM_CLUSTER_NAME}" == "leucine-zipper" ]]
-then
-	ssh -tt -q zinc-finger.gcc.rug.nl exit
-	if [ $? -eq 0 ]
-	then
-		tmpHost="zinc-finger.gcc.rug.nl"
-		concordanceDir="/groups/${groupname}/tmp05/Concordance/ngs/"
-	else
-		echo "zinc-finger is down, writing data to leucine-zipper instead"
-		tmpHost="localhost"
-		concordanceDir="${tmpDataDir}/Concordance/ngs/"
-	fi
-else
-	diagnosticsCluster="false"
-fi
-
-if [[ "${diagnosticsCluster}" == "true" ]]
-then
-	for sample in "${UNIQUESAMPLES[@]}"
-	do
-		zcat ${projectResultsDir}/variants/${sample}.final.vcf.gz > ${projectResultsDir}/variants/${sample}.final.vcf
-
-		if [ "${tmpHost}" == "localhost" ]
-		then
-			rsync -av ${projectResultsDir}/variants/${sample}.final.vcf "${concordanceDir}"
-		else
-			rsync -av ${projectResultsDir}/variants/${sample}.final.vcf "${tmpHost}:${concordanceDir}"
-		fi
-
-		rm  ${projectResultsDir}/variants/${sample}.final.vcf
-	done
-fi
 ## removing phiX.recoded files
 rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
 
 echo "pipeline is finished"
-#touch ${logsDir}/${project}/${project}.pipeline.finished
+
 runNumber=$(basename $( dirname "${projectResultsDir}"))
 if [ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]
 then
@@ -307,6 +256,7 @@ then
 else
 	touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
 fi
+echo "finished: $(date +%FT%T%z)" >> ${logsDir}/${project}/${runNumber}.pipeline.totalRuntime
 rm -f "${logsDir}/${project}/${runNumber}.pipeline.failed"
 echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
 

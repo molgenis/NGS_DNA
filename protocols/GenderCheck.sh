@@ -4,6 +4,7 @@
 #string capturedIntervals
 #string capturedIntervals_nonAutoChrX
 #string indexFileDictionary
+#string projectResultsDir
 #string intermediateDir
 #string whichSex
 #string Gender
@@ -140,4 +141,5 @@ then
 		echo -e "ALARM!\nFor sample ${sampleName%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${runNumber}.pipeline.gendercheckfailed"
 	fi
 fi
-
+echo "moving ${whichSex} to ${projectResultsDir}/general/"
+mv "${whichSex}" "${projectResultsDir}/general/"
