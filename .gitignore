@@ -3,3 +3,6 @@
 *.settings
 *.md.html
 *.includepath
+*.sublime-project
+*.sublime-workspace
+*.spyproject/
