@@ -26,20 +26,20 @@ module list
 array_contains () {
     local array="$1[@]"
     local seeking=$2
-    local in=1
+    local in=0
     for element in "${!array-}"; do
         if [[ "$element" == "$seeking" ]]; then
-            in=0
+            in=1
             break
         fi
     done
     return $in
 }
 
+INPUTS=()
 for bamFile in "${sampleMergedBam[@]}"
 do
-	array_contains INPUTS "$bamFile" || INPUTS+=("-I $bamFile")    # If bamFile does not exist in array add it
-        array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("-I $bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTS "-I ${bamFile}" && INPUTS+=("-I ${bamFile}")    # If bamFile does not exist in array add it
 done
 
 makeTmpDir "${mergedBamRecalibratedTable}" "${intermediateDir}"
@@ -52,14 +52,6 @@ gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir="${tempDir}" -Xmx9
 "${INPUTS[@]}" \
 --known-sites "${dbSnp}" \
 -O "${tmpMergedBamRecalibratedTable}"
-
-# java -XX:ParallelGCThreads=7 -Djava.io.tmpdir="${tempDir}" -Xmx9g -jar "${EBROOTGATK}/${gatkJar}" \
-#    -T BaseRecalibrator \
-#    -R "${indexFile}" \
-#    ${INPUTS[@]} \
-#    -nct 8 \
-#    -knownSites "${dbSnp}" \
-#    -o "${tmpMergedBamRecalibratedTable}"
 
 mv "${tmpMergedBamRecalibratedTable}" "${mergedBamRecalibratedTable}"
 echo "moved ${tmpMergedBamRecalibratedTable}  ${mergedBamRecalibratedTable}"
