@@ -21,6 +21,7 @@
 #string sortVCFpl
 #string indexFile
 #string indexFileFastaIndex
+#string indexFileDictionary
 #string extension
 #string dataDir
 #string capturingKit
@@ -46,10 +47,10 @@ tmpProjectVariantsMergedSortedGz="${MC_tmpFile}"
 array_contains () {
     local array="$1[@]"
     local seeking=${2}
-    local in=1
+    local in=0
     for element in "${!array-}"; do
         if [[ "${element}" == "${seeking}" ]]; then
-            in=0
+            in=1
             break
         fi
     done
@@ -57,29 +58,18 @@ array_contains () {
 }
 
 INPUTS=()
-
 for b in "${batchID[@]}"
 do
 	if [ -f "${projectPrefix}.batch-${b}.${extension}" ]
 	then
-		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.${extension}")
+		array_contains INPUTS "-I ${projectPrefix}.batch-${b}.${extension}" && INPUTS+=("-I ${projectPrefix}.batch-${b}.${extension}")
 	fi
 done
 
-#WIP
 gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
-${INPUTS[@]} \
-
-java -Xmx5g -Djava.io.tmpdir="${tempDir}" -cp "${EBROOTGATK}/${gatkJar}" org.broadinstitute.gatk.tools.CatVariants \
--R "${indexFile}" \
-${INPUTS[@]} \
--out "${tmpProjectVariantsMerged}"
-
-echo "sorting vcf"
-sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpProjectVariantsMerged}" -outputVcf "${tmpProjectVariantsMergedSorted}"
-
-bgzip -c "${tmpProjectVariantsMergedSorted}" > "${projectVariantsMergedSortedGz}"
-tabix -p vcf "${projectVariantsMergedSortedGz}"
+"${INPUTS[@]}" \
+-O "${projectVariantsMergedSortedGz}" \
+-D "${indexFileDictionary}"
 
 ### make allChromosomes bedfile to use it later in CheckOutput script
 awk '{print $1}' "${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed" | uniq > "${intermediateDir}/allChromosomes.txt"
