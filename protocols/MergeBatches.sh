@@ -66,6 +66,10 @@ do
 	fi
 done
 
+#WIP
+gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
+${INPUTS[@]} \
+
 java -Xmx5g -Djava.io.tmpdir="${tempDir}" -cp "${EBROOTGATK}/${gatkJar}" org.broadinstitute.gatk.tools.CatVariants \
 -R "${indexFile}" \
 ${INPUTS[@]} \
