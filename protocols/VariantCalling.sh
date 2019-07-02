@@ -97,6 +97,18 @@ else
 		fi
 	fi
 
+	gatk ApplyBQSR \
+	-R "${indexFile}" \
+	${inputs} \
+	--bqsr-recal-file "${mergedBamRecalibratedTable}" \
+	-O 
+
+	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
+	-R "${indexFile}" \
+	${inputs} \
+	-new-qual \
+
+
 	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx7g -jar \
 	"${EBROOTGATK}/${gatkJar}" \
 	-T HaplotypeCaller \
