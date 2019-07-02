@@ -25,7 +25,7 @@ tmpSampleVariantsMergedSnpsFilteredVcf="${MC_tmpFile}"
 gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
 -R "${indexFile}" \
 -O "${tmpSampleVariantsMergedSnpsFilteredVcf}" \
--V "${tmpSampleVariantsMergedSnpsFilteredVcf}" \
+-V "${sampleVariantsMergedSnpsVcf}" \
 --filter-name "filterQD_lt2.0" \
 --filter-expression "QD < 2.0" \
 --filter-name "filterMQ_lt40.0" \
