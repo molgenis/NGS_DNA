@@ -75,16 +75,6 @@ then
 	-sn "${mother}" \
 	-L "${name}.allVariants.bed"
 
-	# java -jar ${EBROOTGATK}/GenomeAnalysisTK.jar \
-	# -T SelectVariants \
-	# -R "${indexFile}" \
-	# -V "${projectPrefix}.final.vcf" \
-	# -o "${name}.InclAllelesParents.vcf" \
-	# -sn "${child}" \
-	# -sn "${father}" \
-	# -sn "${mother}" \
-	# -L "${name}.allVariants.bed"
-
 	## removing unnecessary information => keep only GT field
 	bcftools annotate -x ^FORMAT/GT "${name}.InclAllelesParents.vcf" | awk -v ch=${childPos} -v fa=${fatherPos} -v mo=${motherPos} 'BEGIN {OFS="\t"}{if ($0 !~ /^#/){split($ch,a,"/");split($fa,b,"/");split($mo,c,"/"); print $1,$2,$3,$4,$5,$6,$7,a[1],a[2],b[1],b[2],c[1],c[2],$8}}' | sort -V > "${name}.splittedAlleles.txt"
 	grep -v '^#' "${outputStep9_1ToSpecTree}" | sort -V > "${outputStep9_1ToSpecTree}.withoutHeader"
