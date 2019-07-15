@@ -64,6 +64,14 @@ fi
 gvcfSize=${#ALLGVCFs[@]}
 if [ ${gvcfSize} -ne 0 ]
 then
+	# gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
+	# 	-R "${indexFile}" \
+	# 	-L "${capturedBatchBed}" \
+		
+
+
+
+
 java -Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
 	"${EBROOTGATK}/${gatkJar}" \
 	-T GenotypeGVCFs \
