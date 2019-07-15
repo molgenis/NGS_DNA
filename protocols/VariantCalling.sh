@@ -16,8 +16,7 @@
 #string	project
 #string logsDir
 #string groupname
-#string dedupBam
-#string mergedBamRecalibratedTable
+#string sampleMergedRecalibratedBam
 
 #Function to check if array contains value
 array_contains () {
@@ -56,7 +55,7 @@ then
 	baitBatchLength=$(cat "${capturedBatchBed}" | wc -l)
 fi
 
-bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
+bams=($(printf '%s\n' "${sampleMergedRecalibratedBam[@]}" | sort -u ))
 inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
 
 genderCheck=""
@@ -97,29 +96,13 @@ else
 		fi
 	fi
 
-	gatk ApplyBQSR \
-	-R "${indexFile}" \
-	${inputs} \
-	--bqsr-recal-file "${mergedBamRecalibratedTable}" \
-	-O 
-
 	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
 	-R "${indexFile}" \
-	${inputs} \
-	-new-qual \
-
-
-	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx7g -jar \
-	"${EBROOTGATK}/${gatkJar}" \
-	-T HaplotypeCaller \
-	-R "${indexFile}" \
-	${inputs} \
-	-newQual \
-	--BQSR "${mergedBamRecalibratedTable}" \
+	"${inputs}" \
 	--dbsnp "${dbSnp}" \
-	-o "${tmpSampleBatchVariantCalls}" \
+	-O "${tmpSampleBatchVariantCalls}" \
 	-L "${myBed}" \
-	--emitRefConfidence GVCF \
+	--emit-ref-confidence GVCF \
 	-ploidy "${ploidy}"
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
