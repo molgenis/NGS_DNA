@@ -138,6 +138,9 @@ alignedSortedBamIdx,${fileWithIndexId}.sorted.bam.bai
 sampleMergedBam,${sampleNameID}.merged.bam
 sampleMergedBai,${sampleNameID}.merged.bai
 sampleMergedBamIdx,${sampleNameID}.merged.bam.bai
+sampleMergedRecalibratedBam,${sampleNameID}.merged.recalibrated.bam
+sampleMergedRecalibratedBai,${sampleNameID}.merged.recalibrated.bai
+sampleMergedRecalibratedBamIdx,${sampleNameID}.merged.recalibrated.bam.bai
 dedupBam,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam
 dedupBamIdx,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.bai
 dedupBamMetrics,${projectResultsDir}/qc/statistics/${externalSampleID}.merged.dedup.bam
