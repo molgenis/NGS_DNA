@@ -12,6 +12,7 @@
 #string sampleFinalVcf
 #string intermediateDir
 #string	project
+#string indexFileDictionary
 
 #Load GATK module
 module load "${gatkVersion}"
@@ -21,14 +22,11 @@ module list
 makeTmpDir "${sampleFinalVcf}"
 tmpSampleFinalVcf="${MC_tmpFile}"
 
-java -Xmx3g -jar "${EBROOTGATK}/${gatkJar}" \
--R "${indexFile}" \
--T CombineVariants \
---variant "${sampleVariantsMergedSnpsFilteredVcf}" \
---variant "${sampleVariantsMergedIndelsFilteredVcf}" \
---genotypemergeoption UNSORTED \
--o "${tmpSampleFinalVcf}"
-
+gatk --java-options "-Xmx3g" MergeVcfs \
+-I "${sampleVariantsMergedSnpsFilteredVcf}" \
+-I "${sampleVariantsMergedIndelsFilteredVcf}" \
+-D "${indexFileDictionary}" \
+-O "${tmpSampleFinalVcf}"
 
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
 
