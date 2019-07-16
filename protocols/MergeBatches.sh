@@ -27,18 +27,9 @@
 #string capturingKit
 
 
-#Load module GATK,tabix
+#Load module GATK.
 module load "${gatkVersion}"
-module load "${htsLibVersion}"
-module load "${ngsUtilsVersion}"
-
 module list
-
-makeTmpDir "${projectVariantsMerged}"
-tmpProjectVariantsMerged="${MC_tmpFile}"
-
-makeTmpDir "${projectVariantsMergedSorted}"
-tmpProjectVariantsMergedSorted="${MC_tmpFile}"
 
 makeTmpDir "${projectVariantsMergedSortedGz}"
 tmpProjectVariantsMergedSortedGz="${MC_tmpFile}"
@@ -68,8 +59,11 @@ done
 
 gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
 "${INPUTS[@]}" \
--O "${projectVariantsMergedSortedGz}" \
+-O "${tmpProjectVariantsMergedSortedGz}" \
 -D "${indexFileDictionary}"
+
+mv "${tmpProjectVariantsMergedSortedGz}" "${projectVariantsMergedSortedGz}"
+echo "moved ${tmpProjectVariantsMergedSortedGz} to ${projectVariantsMergedSortedGz}"
 
 ### make allChromosomes bedfile to use it later in CheckOutput script
 awk '{print $1}' "${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed" | uniq > "${intermediateDir}/allChromosomes.txt"
