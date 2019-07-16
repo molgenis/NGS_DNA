@@ -9,6 +9,7 @@
 #string groupname
 
 #string projectFinalVcf
+#string externalSampleID
 #string sampleFinalVcf
 
 #string intermediateDir
@@ -23,10 +24,10 @@ module list
 makeTmpDir "${sampleFinalVcf}"
 tmpSampleFinalVcf="${MC_tmpFile}"
 
-gatk --java-options "-Xmx3g" MergeVcfs \
--I "${sampleVariantsMergedSnpsFilteredVcf}" \
--I "${sampleVariantsMergedIndelsFilteredVcf}" \
--D "${indexFileDictionary}" \
+gatk --java-options "-Xmx3g" SelectVariants \
+-R "${indexFile}" \
+-V "${projectFinalVcf}" \
+-sn "${externalSampleID}" \
 -O "${tmpSampleFinalVcf}"
 
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
