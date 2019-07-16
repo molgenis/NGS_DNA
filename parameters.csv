@@ -224,6 +224,8 @@ projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batc
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
 sampleVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
 sampleVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
+projectVariantsIndelsOnlyVcf,${projectPrefix}.annotated.indels.vcf
+projectVariantsSnpsOnlyVcf,${projectPrefix}.annotated.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsMergedIdx,${projectPrefix}.variant.calls.GATK.vcf.idx
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
@@ -254,6 +256,8 @@ projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls
 ### 25, 26
 sampleVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
 sampleVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
+projectVariantsIndelsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.indels.vcf
+projectVariantsSnpsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.snps.vcf
 sampleFinalVcf,${intermediateDir}/${externalSampleID}.final.vcf
 projectFinalVcf,${projectPrefix}.final.vcf
 

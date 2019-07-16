@@ -7,8 +7,10 @@
 #string tempDir
 #string intermediateDir
 #string indexFile
-#string sampleVariantsMergedSnpsVcf
-#string sampleVariantsMergedSnpsFilteredVcf
+
+#string projectVariantsSnpsOnlyVcf
+#string projectVariantsSnpsOnlyFilteredVcf
+
 #string tmpDataDir
 #string project
 #string logsDir
@@ -18,14 +20,14 @@
 #Load GATK module
 module load "${gatkVersion}"
 
-makeTmpDir "${sampleVariantsMergedSnpsFilteredVcf}"
-tmpSampleVariantsMergedSnpsFilteredVcf="${MC_tmpFile}"
+makeTmpDir "${projectVariantsSnpsOnlyFilteredVcf}"
+tmpProjectVariantsSnpsOnlyFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called SNPs on
 gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
 -R "${indexFile}" \
--O "${tmpSampleVariantsMergedSnpsFilteredVcf}" \
--V "${sampleVariantsMergedSnpsVcf}" \
+-O "${tmpProjectVariantsSnpsOnlyFilteredVcf}" \
+-V "${projectVariantsSnpsOnlyVcf}" \
 --filter-name "filterQD_lt2.0" \
 --filter-expression "QD < 2.0" \
 --filter-name "filterMQ_lt40.0" \
@@ -37,5 +39,5 @@ gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g"
 --filter-name "filterReadPosRankSum_lt-8.0" \
 --filter-expression "ReadPosRankSum < -8.0"
 
-mv "${tmpSampleVariantsMergedSnpsFilteredVcf}" "${sampleVariantsMergedSnpsFilteredVcf}"
-echo "moved ${tmpSampleVariantsMergedSnpsFilteredVcf} ${sampleVariantsMergedSnpsFilteredVcf}"
+mv "${tmpProjectVariantsSnpsOnlyFilteredVcf}" "${projectVariantsSnpsOnlyFilteredVcf}"
+echo "moved ${tmpProjectVariantsSnpsOnlyFilteredVcf} ${projectVariantsSnpsOnlyFilteredVcf}"

@@ -7,8 +7,10 @@
 #string tempDir
 #string intermediateDir
 #string indexFile
-#string sampleVariantsMergedIndelsVcf
-#string sampleVariantsMergedIndelsFilteredVcf
+
+#string projectVariantsIndelsOnlyVcf
+#string projectVariantsIndelsOnlyFilteredVcf
+
 #string tmpDataDir
 #string project
 #string logsDir
@@ -18,14 +20,14 @@
 #Load GATK module
 module load "${gatkVersion}"
 
-makeTmpDir "${sampleVariantsMergedIndelsFilteredVcf}"
-tmpSampleVariantsMergedIndelsFilteredVcf="${MC_tmpFile}"
+makeTmpDir "${projectVariantsIndelsOnlyFilteredVcf}"
+tmpProjectVariantsIndelsOnlyFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called Indels on
 gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
 -R "${indexFile}" \
--O "${tmpSampleVariantsMergedIndelsFilteredVcf}" \
--V "${sampleVariantsMergedIndelsVcf}" \
+-O "${tmpProjectVariantsIndelsOnlyFilteredVcf}" \
+-V "${projectVariantsIndelsOnlyVcf}" \
 --filter-name "filterQD" \
 --filter-expression "QD < 2.0" \
 --filter-name "filterSOR_gt10.0" \
@@ -33,5 +35,5 @@ gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g"
 --filter-name "filterReadPosRankSum" \
 --filter-expression "ReadPosRankSum < -20.0"
 
-mv "${tmpSampleVariantsMergedIndelsFilteredVcf}" "${sampleVariantsMergedIndelsFilteredVcf}"
-echo " moved ${tmpSampleVariantsMergedIndelsFilteredVcf} ${sampleVariantsMergedIndelsFilteredVcf}"
+mv "${tmpProjectVariantsIndelsOnlyFilteredVcf}" "${projectVariantsIndelsOnlyFilteredVcf}"
+echo " moved ${tmpProjectVariantsIndelsOnlyFilteredVcf} ${projectVariantsIndelsOnlyFilteredVcf}"

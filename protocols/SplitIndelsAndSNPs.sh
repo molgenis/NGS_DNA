@@ -11,37 +11,36 @@
 #string indexFile
 #string capturedIntervals
 #string projectVariantsMergedSortedGz
-#string sampleVariantsMergedSnpsVcf
-#string sampleVariantsMergedIndelsVcf
 #string externalSampleID
-
+#string projectVariantsSnpsOnlyVcf
+#string projectVariantsIndelsOnlyVcf
 
 module load "${gatkVersion}"
 
-makeTmpDir "${sampleVariantsMergedIndelsVcf}"
-tmpSampleVariantsMergedIndelsVcf="${MC_tmpFile}"
-
-makeTmpDir "${sampleVariantsMergedSnpsVcf}"
-tmpSampleVariantsMergedSnpsVcf="${MC_tmpFile}"
+makeTmpDir "${projectVariantsIndelsOnlyVcf}"
+tmpProjectVariantsIndelsOnlyVcf="${MC_tmpFile}"
 
 # Select indels only.
 gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 -R "${indexFile}" \
 -V "${projectVariantsMergedSortedGz}" \
--O "${tmpSampleVariantsMergedIndelsVcf}" \
--sn "${externalSampleID}" \
+-O "${tmpProjectVariantsIndelsOnlyVcf}" \
 --select-type-to-include INDEL
 
-mv "${tmpSampleVariantsMergedIndelsVcf}" "${sampleVariantsMergedIndelsVcf}"
-echo "moved ${tmpSampleVariantsMergedIndelsVcf} to ${sampleVariantsMergedIndelsVcf}"
+mv "${tmpProjectVariantsIndelsOnlyVcf}" "${projectVariantsIndelsOnlyVcf}"
+echo "moved ${tmpProjectVariantsIndelsOnlyVcf} to ${projectVariantsIndelsOnlyVcf}"
+
+
+
+makeTmpDir "${projectVariantsSnpsOnlyVcf}"
+tmpProjectVariantsSnpsOnlyVcf="${MC_tmpFile}"
 
 # Select non-indels only.
 gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 -R "${indexFile}" \
 -V "${projectVariantsMergedSortedGz}" \
--O "${tmpSampleVariantsMergedSnpsVcf}" \
--sn "${externalSampleID}" \
+-O "${tmpProjectVariantsSnpsOnlyVcf}" \
 --select-type-to-exclude INDEL
 
-mv "${tmpSampleVariantsMergedSnpsVcf}" "${sampleVariantsMergedSnpsVcf}"
-echo "moved ${tmpSampleVariantsMergedSnpsVcf} to ${sampleVariantsMergedSnpsVcf}"
+mv "${tmpProjectVariantsSnpsOnlyVcf}" "${projectVariantsSnpsOnlyVcf}"
+echo "moved ${tmpProjectVariantsSnpsOnlyVcf} to ${projectVariantsSnpsOnlyVcf}"
