@@ -7,9 +7,10 @@
 #string indexFile
 #string logsDir 
 #string groupname
-#string sampleVariantsMergedSnpsFilteredVcf
-#string sampleVariantsMergedIndelsFilteredVcf
+
+#string projectFinalVcf
 #string sampleFinalVcf
+
 #string intermediateDir
 #string	project
 #string indexFileDictionary
