@@ -12,6 +12,7 @@
 #string	project
 #string projectVariantsSnpsOnlyFilteredVcf
 #string projectVariantsIndelsOnlyFilteredVcf
+#string projectFinalVcf
 
 #Load GATK module
 module load "${gatkVersion}"
@@ -21,7 +22,7 @@ gatk --java-options "-Xmx3g" MergeVcfs \
 -I "${projectVariantsSnpsOnlyFilteredVcf}" \
 -I "${projectVariantsIndelsOnlyFilteredVcf}" \
 -D "${indexFileDictionary}" \
--O "${projectPrefix}.final.vcf.tmp"
+-O "${projectFinalVcf}.tmp"
 
-echo "moving ${projectPrefix}.final.vcf.tmp to ${projectPrefix}.final.vcf"
-mv "${projectPrefix}.final.vcf.tmp" "${projectPrefix}.final.vcf"
+echo "moving ${projectFinalVcf}.tmp to ${projectFinalVcf}"
+mv "${projectFinalVcf}.tmp" "${projectFinalVcf}"
