@@ -8,8 +8,6 @@
 #string ngsUtilsVersion
 #string tempDir
 #string intermediateDir
-#string projectVariantsMerged
-#string projectVariantsMergedSorted
 #string projectVariantsMergedSortedGz
 #list batchID
 #string projectPrefix
