@@ -29,142 +29,137 @@
 ##
 ## ManVar (inputfile,outputfile)
 function manVarCheck(){
-input="${1}"
-outputOverlap="${2}"
-outputNoOverlap="${3}"
-manVarList="${4}"
+   input="${1}"
+   outputOverlap="${2}"
+   outputNoOverlap="${3}"
+   manVarList="${4}"
 
-#continue to next step
-bedtools intersect -header -v -a "${input}" -b "${manVarList}" > "${outputNoOverlap}.tmp.vcf"
+   #continue to next step
+   bedtools intersect -header -v -a "${input}" -b "${manVarList}" > "${outputNoOverlap}.tmp.vcf"
 
-##found back in ManVar = continue to specific tree
-bedtools intersect -header -a "${input}" -b "${manVarList}" > "${outputOverlap}.tmp"
+   ##found back in ManVar = continue to specific tree
+   bedtools intersect -header -a "${input}" -b "${manVarList}" > "${outputOverlap}.tmp"
 
-grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}"
-grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}.NoMatchingAlleles.vcf"
+   grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}"
+   grep "^#" "${outputOverlap}.tmp"  > "${outputOverlap}.NoMatchingAlleles.vcf"
 
-while read line
-do
-	if [[ "${line}" != \#* ]]
-	then
-		getLine=$(echo "${line}" | awk '{print $1"\t"$2"\t"$4"\t"$5}')
-		if grep -q "${getLine}" ${manVarList}.pos.bed
-		then
-			echo "${line}" >> "${outputOverlap}"
-		else
-			echo "${line}" >> "${outputOverlap}.NoMatchingAlleles.vcf" 
-		fi
-	fi
-done<"${outputOverlap}.tmp" 
-if [[ -f "${outputOverlap}.NoMatchingAlleles.vcf" ]]
-then
-	manList=$(basename ${manVarList%.*})
-	grep -v '^#' "${outputOverlap}.NoMatchingAlleles.vcf" | awk -v manList=${manList} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,manList":NoMatchingAlleles",$8,$10}' >> ${name}.tagsAndFilters.tsv
-fi
+   while read line
+   do
+      if [[ "${line}" != \#* ]]
+      then
+         getLine=$(echo "${line}" | awk '{print $1"\t"$2"\t"$4"\t"$5}')
+         if grep -q "${getLine}" ${manVarList}.pos.bed
+         then
+            echo "${line}" >> "${outputOverlap}"
+         else
+            echo "${line}" >> "${outputOverlap}.NoMatchingAlleles.vcf" 
+         fi
+      fi
+   done<"${outputOverlap}.tmp"
+   if [[ -f "${outputOverlap}.NoMatchingAlleles.vcf" ]]
+   then
+      manList=$(basename ${manVarList%.*})
+      grep -v '^#' "${outputOverlap}.NoMatchingAlleles.vcf" | awk -v manList=${manList} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,manList":NoMatchingAlleles",$8,$10}' >> ${name}.tagsAndFilters.tsv
+   fi
 
-##combine overlap and genome check
-java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
-   -R ${indexFile} \
-   --variant "${outputOverlap}.NoMatchingAlleles.vcf"  \
-   --variant "${outputNoOverlap}.tmp.vcf"  \
-   -out "${outputNoOverlap}.combined.vcf"  \
-   --assumeSorted
+   ##combine overlap and genome check
+   gatk MergeVcfs \
+      -R "${indexFile}" \
+      -I "${outputOverlap}.NoMatchingAlleles.vcf" \
+      -I "${outputNoOverlap}.tmp.vcf" \
+      -O "${outputNoOverlap}.combined.vcf"
 
-##sort vcf
-bcftools sort "${outputNoOverlap}.combined.vcf" -O v -o "${outputNoOverlap}"
-
+   ##sort vcf
+   bcftools sort "${outputNoOverlap}.combined.vcf" -O v -o "${outputNoOverlap}"
 }
 
 function gnomADpopFreqCheck(){
-input="${1}"
-outputOverlap="${2}"
-outputNoOverlap="${3}"
-freq="${4}"
+   input="${1}"
+   outputOverlap="${2}"
+   outputNoOverlap="${3}"
+   freq="${4}"
 
-##overlap
-java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
-   -R "//apps//data//1000G/phase1/human_g1k_v37_phiX.fasta" \
-   -T SelectVariants \
-   -V "${input}" \
-   -o "${outputOverlap}.PASS_Exome_AF_Filter.vcf" \
-   --restrictAllelesTo BIALLELIC \
-   -sn '${externalSampleID}' \
-   -select "vc.hasAttribute('gnomAD_exome_AF_MAX') && (! vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && gnomAD_exome_AF_MAX < ${freq}"
+   ##overlap
+   gatk --java-options "-Xmx2g" SelectVariants \
+      -R "${indexFile}" \
+      -V "${input}" \
+      -O "${outputOverlap}.PASS_Exome_AF_Filter.vcf" \
+      --restrict-alleles-to BIALLELIC \
+      -sn '${externalSampleID}' \
+      -select "vc.hasAttribute('gnomAD_exome_AF_MAX') && (! vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && gnomAD_exome_AF_MAX < ${freq}"
 
-##No overlap
-java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
-   -R "//apps//data//1000G/phase1/human_g1k_v37_phiX.fasta" \
-   -T SelectVariants \
-   -V "${input}" \
-   -o "${outputNoOverlap}" \
-   --restrictAllelesTo BIALLELIC \
-   -sn '${externalSampleID}' \
-   -select "vc.hasAttribute('gnomAD_exome_AF_MAX') && (! vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && gnomAD_exome_AF_MAX >= ${freq}"
-grep -v '^#' "${outputNoOverlap}" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"AF>"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
+   ##No overlap
+   gatk --java-options "-Xmx2g" SelectVariants \
+      -R "${indexFile}" \
+      -V "${input}" \
+      -O "${outputNoOverlap}" \
+      --restrict-alleles-to BIALLELIC \
+      -sn '${externalSampleID}' \
+      -select "vc.hasAttribute('gnomAD_exome_AF_MAX') && (! vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && gnomAD_exome_AF_MAX >= ${freq}"
+
+   grep -v '^#' "${outputNoOverlap}" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"AF>"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 
-##missing in exome, check genome (< freq)
-java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
-   -R "//apps//data//1000G/phase1/human_g1k_v37_phiX.fasta" \
-   -T SelectVariants \
-   -V "${input}" \
-   -o "${outputOverlap}.PASS_Genome_AF_Filter.vcf" \
-   --restrictAllelesTo BIALLELIC \
-   -sn '${externalSampleID}' \
-   -select "((! vc.hasAttribute('gnomAD_exome_AF_MAX')) || vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && ((! vc.hasAttribute('gnomAD_genome_AF_MAX')) || vc.getAttribute('gnomAD_genome_AF_MAX').equals('.') || gnomAD_genome_AF_MAX < ${freq})"
-grep -v '^#' "${outputOverlap}.PASS_Genome_AF_Filter.vcf" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF<"freq" or NA",$8,$10}' >> ${name}.tagsAndFilters.tsv
+   ##missing in exome, check genome (< freq)
+   gatk --java-options "-Xmx2g" SelectVariants \
+      -R "${indexFile}" \
+      -V "${input}" \
+      -O "${outputOverlap}.PASS_Genome_AF_Filter.vcf" \
+      --restrict-alleles-to BIALLELIC \
+      -sn '${externalSampleID}' \
+      -select "((! vc.hasAttribute('gnomAD_exome_AF_MAX')) || vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && ((! vc.hasAttribute('gnomAD_genome_AF_MAX')) || vc.getAttribute('gnomAD_genome_AF_MAX').equals('.') || gnomAD_genome_AF_MAX < ${freq})"
 
-##missing in exome, check genome (> freq)
-java -Xmx2g -jar "${EBROOTGATK}/GenomeAnalysisTK.jar" \
-   -R "//apps//data//1000G/phase1/human_g1k_v37_phiX.fasta" \
-   -T SelectVariants \
-   -V "${input}" \
-   -o "${outputOverlap}.NotPASS_Genome_AF_Filter.vcf" \
-   --restrictAllelesTo BIALLELIC \
-   -sn '${externalSampleID}' \
-   -select "((! vc.hasAttribute('gnomAD_exome_AF_MAX')) || vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && ( vc.hasAttribute('gnomAD_genome_AF_MAX') && (! vc.getAttribute('gnomAD_genome_AF_MAX').equals('.')) && gnomAD_genome_AF_MAX > ${freq})"
+   grep -v '^#' "${outputOverlap}.PASS_Genome_AF_Filter.vcf" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF<"freq" or NA",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
-grep -v '^#' "${outputOverlap}.NotPASS_Genome_AF_Filter.vcf" |  awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF>"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
+   ##missing in exome, check genome (> freq)
+   gatk --java-options "-Xmx2g" SelectVariants \
+      -R "${indexFile}" \
+      -V "${input}" \
+      -O "${outputOverlap}.NotPASS_Genome_AF_Filter.vcf" \
+      --restrict-alleles-to BIALLELIC \
+      -sn '${externalSampleID}' \
+      -select "((! vc.hasAttribute('gnomAD_exome_AF_MAX')) || vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && ( vc.hasAttribute('gnomAD_genome_AF_MAX') && (! vc.getAttribute('gnomAD_genome_AF_MAX').equals('.')) && gnomAD_genome_AF_MAX > ${freq})"
 
-##combine overlap and genome check
-java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
-   -R ${indexFile} \
-   --variant "${outputOverlap}.PASS_Exome_AF_Filter.vcf" \
-   --variant "${outputOverlap}.PASS_Genome_AF_Filter.vcf" \
-   -out "${outputOverlap}.tmp.vcf" \
-   --assumeSorted
+   grep -v '^#' "${outputOverlap}.NotPASS_Genome_AF_Filter.vcf" |  awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF>"freq,$8,$10}' >> ${name}.tagsAndFilters.tsv
 
-##sort vcf
-bcftools sort "${outputOverlap}.tmp.vcf" -O v -o "${outputOverlap}"
+   ##combine overlap and genome check
+   gatk MergeVcfs \
+      -R "${indexFile}" \
+      -I "${outputOverlap}.PASS_Exome_AF_Filter.vcf" \
+      -I "${outputOverlap}.PASS_Genome_AF_Filter.vcf" \
+      -O "${outputOverlap}.tmp.vcf"
+
+   ##sort vcf
+   bcftools sort "${outputOverlap}.tmp.vcf" -O v -o "${outputOverlap}"
 }
 
 i="${externalSampleID}"
 module load "${bedToolsVersion}"
 ################################################################################################
-### 1. Pass
-	### 1.1 yes
-	### 1.2 Genesfilter (set of genes that always should be included)
-### 2. Read Depth
-	### 2.1 >20x
-	### 2.2 >10x ####
-		### 2.2.1 ManVar (V/LP/P)
-		### 2.2.3 Coding effect
-### 3. No HLA
-### 4. No MT
-### 5. MVL LB/B
-### 6. MVL VUS/LP/P Cartegenia
-### 7. VKGL Consensus Cartegenia
-### 8. RLV Present Cartegenia
-	### 8.1 RLV_True
-		### 8.1.2 ClinVar
-		### 8.1.3 Pop freq <1% (GnomAD) annotate Homozygous/Hemizygous
-	### 8.2 RLV_False
-		### 8.2.2 Coding effect (frameshift, startloss, stopgain, in-frame
-		### 8.2.3 Splice site (-2 / +2)
-		### 8.2.4 Pop freq <0.5% (GnomAD) annotate Homozygous/Hemizygous
-### 9. Merge all continue to spec tree together
-### 10. Annotate AR/AD/X-Linked with OMIM/HPO
-### 11. Continue to specific tree
+   ### 1. Pass
+      ### 1.1 yes
+      ### 1.2 Genesfilter (set of genes that always should be included)
+   ### 2. Read Depth
+   ### 2.1 >20x
+      ### 2.2 >10x ####
+         ### 2.2.1 ManVar (V/LP/P)
+         ### 2.2.3 Coding effect
+   ### 3. No HLA
+   ### 4. No MT
+   ### 5. MVL LB/B
+   ### 6. MVL VUS/LP/P Cartegenia
+   ### 7. VKGL Consensus Cartegenia
+   ### 8. RLV Present Cartegenia
+      ### 8.1 RLV_True
+         ### 8.1.2 ClinVar
+         ### 8.1.3 Pop freq <1% (GnomAD) annotate Homozygous/Hemizygous
+      ### 8.2 RLV_False
+         ### 8.2.2 Coding effect (frameshift, startloss, stopgain, in-frame
+         ### 8.2.3 Splice site (-2 / +2)
+         ### 8.2.4 Pop freq <0.5% (GnomAD) annotate Homozygous/Hemizygous
+   ### 9. Merge all continue to spec tree together
+   ### 10. Annotate AR/AD/X-Linked with OMIM/HPO
+   ### 11. Continue to specific tree
 #################################################################################################
 
 ##First step is to remove the homozygous reference calls
@@ -225,34 +220,30 @@ outputStep2_2_0_end="${name}.step2_2.lessThan10x.vcf"
 ml ${gatkVersion}
 ml ${bcfToolsVersion}
 
- java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
+gatk --java-options "-Xmx2g" SelectVariants \
    -R "${indexFile}" \
-   -T SelectVariants \
    -V "${outputStep1_next}" \
-   -o "${outputStep2_1}" \
+   -O "${outputStep2_1}" \
    -sn '${externalSampleID}' \
    -select "DP >= 20.0"
-
 
 count_2_1_true=$(cat "${outputStep2_1}" | grep -v '^#' | cat | wc -l)
 count_2_1_false=$((count_1_true - count_2_1_true))
 COUNTARRAY+=("step 2.1(Read depth > 20); TRUE:${count_2_1_true},FALSE:${count_2_1_false}")
-java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
+gatk --java-options "-Xmx2g" SelectVariants \
    -R "${indexFile}" \
-   -T SelectVariants \
    -V "${outputStep1_next}" \
-   -o "${outputStep2_2_0}" \
+   -O "${outputStep2_2_0}" \
    -sn '${externalSampleID}' \
    -select "DP >= 10.0 && DP < 20.0"
 
 grep -v '^#' "${outputStep2_2_0}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,">10x<20x",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 ###
-java -Xmx2g -jar "${EBROOTGATK}/${gatkJar}" \
+gatk --java-options "-Xmx2g" SelectVariants \
    -R "${indexFile}" \
-   -T SelectVariants \
    -V "${outputStep1_next}" \
-   -o "${outputStep2_2_0_end}" \
+   -O "${outputStep2_2_0_end}" \
    -sn '${externalSampleID}' \
    -select "DP < 10.0"
 
@@ -293,13 +284,12 @@ COUNTARRAY+=("Step 2.2.3(> 10 <20x AND Coding Effect); TRUE: ${count_2_2_3_true}
 
 ### 2.2.4 merge all variants that continue the tree
 #echo "${outputStep2_1}" "${outputStep2_2_1_overlap}" outputStep2_2_2_overlap outputStep2_2_3_overlap > "${outputFinalStep2}"
-java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
+gatk MergeVcfs \
    -R ${indexFile} \
-   --variant "${outputStep2_1}" \
-   --variant "${outputStep2_2_1_nextHLA}" \
-   --variant "${outputStep2_2_3_nextHLA}" \
-   -out "${outputStep2_next}.tmp.vcf" \
-   --assumeSorted
+   -I "${outputStep2_1}" \
+   -I "${outputStep2_2_1_nextHLA}" \
+   -I "${outputStep2_2_3_nextHLA}" \
+   -O "${outputStep2_next}.tmp.vcf"
 
 bcftools sort ${outputStep2_next}.tmp.vcf -O v -o ${outputStep2_next}
 
@@ -365,7 +355,7 @@ outputStep6_next="${name}.step6.NoOverlapWith_MVL_VUS-LP-P.vcf"
 outputStep6ToSpecTree="${name}.step6.overlapWith_MVL_VUS-LP-P.vcf"
 
 manVarCheck "${outputStep5_next}" "${outputStep6ToSpecTree}" "${outputStep6_next}" "${manVarListMVL_VUS_LP_P}"
-specTreeArray+=("--variant ${outputStep6ToSpecTree}")
+specTreeArray+=("-I ${outputStep6ToSpecTree}")
 echo "step 6 done: ${outputStep6_next}"
 
 grep -v '^#' "${outputStep6ToSpecTree}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"V/LP/P",$8,$10}' >> ${name}.tagsAndFilters.tsv
@@ -381,7 +371,7 @@ outputStep7_next="${name}.step7.NoOverlapWith_VKGL_consensus_VUS-LP-P.vcf"
 outputStep7ToSpecTree="${name}.step7.overlapWith_VKGL_consensus_VUS-LP-P.vcf"
 
 manVarCheck "${outputStep6_next}" "${outputStep7ToSpecTree}" "${outputStep7_next}" "${manVarListVKGL_consensus_VUS_LP_P}"
-specTreeArray+=("--variant ${outputStep7ToSpecTree}")
+specTreeArray+=("-I ${outputStep7ToSpecTree}")
 echo "step 7 done: ${outputStep7_next}"
 
 grep -v '^#' "${outputStep7ToSpecTree}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"VKGL:V/LP/P",$8,$10}' >> ${name}.tagsAndFilters.tsv
@@ -424,7 +414,7 @@ then
 
 	grep -v '^#' "${outputStep8_1_2ToSpecTree}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"(likely)pathogenic",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
-	specTreeArray+=("--variant ${outputStep8_1_2ToSpecTree}")
+	specTreeArray+=("-I ${outputStep8_1_2ToSpecTree}")
 
 	count_8_1_2_true=$(cat "${outputStep8_1_2ToSpecTree}" | grep -v '^#' | wc -l | cat)
 	count_8_1_2_false=$(cat "${outputStep8_1_2_next}" | wc -l)
@@ -438,7 +428,7 @@ then
 	outputStep8_1_3_end="${name}.step8_1_3_AF_ge_1percent.vcf"
 
 	gnomADpopFreqCheck "${outputStep8_1_2_next}" "${outputStep8_1_3ToSpecTree}" "${outputStep8_1_3_end}" "0.01"
-	specTreeArray+=("--variant ${outputStep8_1_3ToSpecTree}")
+	specTreeArray+=("-I ${outputStep8_1_3ToSpecTree}")
 
         count_8_1_3_true=$(cat "${outputStep8_1_3ToSpecTree}" | grep -v '^#' | wc -l | cat)
         count_8_1_3_false=$((count_8_1_2_false - count_8_1_3_true))
@@ -484,7 +474,7 @@ else
         grep -v '^#' "${outputStep8_2_0}" | grep -E 'start_lost|stop_gained|frameshift_variant|inframe' | cat >> "${outputStep8_2_2ToPopFreq}"
 	grep -v '^#' "${outputStep8_2_2ToPopFreq}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"coding",$8,$10}' >> ${name}.tagsAndFilters.tsv
 	echo "coding effect found"
-	popFreqArray+=("--variant ${outputStep8_2_2ToPopFreq}")
+	popFreqArray+=("-I ${outputStep8_2_2ToPopFreq}")
 
 	count_8_2_2_true=$(cat "${outputStep8_2_2ToPopFreq}" | grep -v '^#' | wc -l | cat)
 	count_8_2_2_false=$(cat ${outputStep8_2_2_next} | grep -v '^#' | wc -l | cat)
@@ -513,7 +503,7 @@ else
 	grep '^#' "${outputStep8_2_2_next}" | cat > "${outputStep8_2_3ToPopFreq}"
         grep -v '^#' "${outputStep8_2_2_next}" | grep -E 'splice.*HIGH' | cat >> "${outputStep8_2_3ToPopFreq}"
 	echo "splice variant found"
-	popFreqArray+=("--variant ${outputStep8_2_3ToPopFreq}")
+	popFreqArray+=("-I ${outputStep8_2_3ToPopFreq}")
 	grep -v '^#' "${outputStep8_2_3_end}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"NoSplice",$8,$10}' >> ${name}.tagsAndFilters.tsv
 	grep -v '^#' "${outputStep8_2_3ToPopFreq}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"splice",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
@@ -538,11 +528,10 @@ else
 		##
 		### STEP 8.2.4 merge outputs together
 		echo "merging steps 8.2.2 and 8.2.3 together"
-		java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
-		-R ${indexFile} \
-		${popFreqArray[@]} \
-		-out "${outputStep8_2_4_next}.tmp.vcf" \
-		--assumeSorted
+		gatk MergeVcfs \
+		   -R ${indexFile} \
+		   "${popFreqArray[@]}" \
+		   -O "${outputStep8_2_4_next}.tmp.vcf"
 
 		bcftools sort ${outputStep8_2_4_next}.tmp.vcf -O v -o ${outputStep8_2_4_next}
 	fi
@@ -561,7 +550,7 @@ else
         count_8_2_5_false=$(cat "${outputStep8_2_5_end}" | grep -v '^#' | wc -l | cat)
         COUNTARRAY+=("Step 8_2_5(GAVIN=FALSE, Pop Freq < 0.5%); TRUE: ${count_8_2_5_true}(proceed to end of tree), FALSE:${count_8_2_5_false}")
 
-	specTreeArray+=("--variant ${outputStep8_2_5ToSpecTree}")
+	specTreeArray+=("-I ${outputStep8_2_5ToSpecTree}")
 
 fi
 
@@ -571,11 +560,10 @@ fi
 echo "starting step 9"
 outputStep9="${name}.step9.vcf"
 outputStep9_1ToSpecTree="${name}.step9_filteredOnTargets.proceedToSpecTree.vcf"
-java -cp ${EBROOTGATK}/${gatkJar} org.broadinstitute.gatk.tools.CatVariants \
-   -R //apps//data//1000G/phase1/human_g1k_v37_phiX.fasta \
-   ${specTreeArray[@]} \
-   -out "${outputStep9}.tmp.vcf" \
-   --assumeSorted
+gatk MergeVcfs \
+   -R "${indexFile}" \
+   "${specTreeArray[@]}" \
+   -O "${outputStep9}.tmp.vcf"
 
 bcftools sort ${outputStep9}.tmp.vcf -O v -o ${outputStep9}
 
