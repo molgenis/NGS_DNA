@@ -1,4 +1,3 @@
-#list externalSampleID
 #string tmpName
 #string gatkVersion
 #string gatkJar
