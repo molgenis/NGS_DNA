@@ -1,15 +1,14 @@
-#list externalSampleID
+#string groupname
 #string tmpName
-#string gatkVersion
-#string gatkJar
-#string indexFile
-
-
 #string projectPrefix
 #string logsDir 
-#string groupname
 #string intermediateDir
+
+#string gatkVersion
+#string gatkJar
+
 #string	project
+#string indexFile
 #string projectVariantsSnpsOnlyFilteredVcf
 #string projectVariantsIndelsOnlyFilteredVcf
 #string projectFinalVcf
