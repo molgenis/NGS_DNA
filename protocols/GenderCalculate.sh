@@ -8,15 +8,14 @@
 #string whichSex
 #string tempDir
 #string checkSexMeanCoverage
-#string picardJar
-#string picardVersion
+#string gatkVersion
 #string dedupBamMetrics
 #string hsMetricsNonAutosomalRegionChrX
 #string	project
 #string logsDir 
 #string groupname
 
-module load "${picardVersion}"
+module load "${gatkVersion}"
 
 if [[ "${capturedIntervals}" == *"ONCO_v"* || "${capturedIntervals}" == *"wgs"* ]]
 then
@@ -34,12 +33,12 @@ else
 	if [ "${lengthCap1}" -ne "${lengthCap2}" ]
 	then
 		#Calculate coverage chromosome X
-		java -jar -XX:ParallelGCThreads=2 -Xmx2g "${EBROOTPICARD}/${picardJar}" CalculateHsMetrics \
-		INPUT="${dedupBam}" \
-		TARGET_INTERVALS="${capturedIntervals_nonAutoChrX}" \
-		BAIT_INTERVALS="${capturedIntervals_nonAutoChrX}" \
-		TMP_DIR="${tempDir}" \
-		OUTPUT="${tmpHsMetricsNonAutosomalRegionChrX}"
+		gatk --java-options "-XX:ParallelGCThreads=2 -Xmx2g" CollectHsMetrics \
+		--INPUT "${dedupBam}" \
+		--TARGET_INTERVALS "${capturedIntervals_nonAutoChrX}" \
+		--BAIT_INTERVALS "${capturedIntervals_nonAutoChrX}" \
+		--TMP_DIR "${tempDir}" \
+		--OUTPUT "${tmpHsMetricsNonAutosomalRegionChrX}"
 
 		mv "${tmpHsMetricsNonAutosomalRegionChrX}" "${hsMetricsNonAutosomalRegionChrX}"
 		echo "mv ${tmpHsMetricsNonAutosomalRegionChrX} ${hsMetricsNonAutosomalRegionChrX}"
