@@ -11,7 +11,6 @@
 #string indexFile
 #string capturedIntervals
 #string projectVariantsMergedSortedGz
-#string externalSampleID
 #string projectVariantsSnpsOnlyVcf
 #string projectVariantsIndelsOnlyVcf
 
