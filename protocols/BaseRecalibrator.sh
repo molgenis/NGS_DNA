@@ -49,7 +49,7 @@ tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
 gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
 -R "${indexFile}" \
-"${INPUTS[@]}" \
+${INPUTS[@]} \
 --known-sites "${dbSnp}" \
 -O "${tmpMergedBamRecalibratedTable}"
 
