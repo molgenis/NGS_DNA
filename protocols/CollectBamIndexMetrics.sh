@@ -29,7 +29,7 @@ tmpBamIndexStats="${MC_tmpFile}"
 gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" BamIndexStats \
 --INPUT "${dedupBam}" \
 --VALIDATION_STRINGENCY LENIENT \
---TMP_DIR"${tempDir}" \
+--TMP_DIR "${tempDir}" \
 > "${tmpBamIndexStats}"
 
 mv "${tmpBamIndexStats}" "${bamIndexStats}"
