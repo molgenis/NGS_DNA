@@ -47,7 +47,7 @@ tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
 "${sambambaTool}" index "${sampleMergedBam}"
 
-gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir="${tempDir}" -Xmx9g" BaseRecalibrator \
+gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
 -R "${indexFile}" \
 "${INPUTS[@]}" \
 --known-sites "${dbSnp}" \
