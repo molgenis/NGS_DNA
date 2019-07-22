@@ -58,7 +58,7 @@ then
 	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
         --INPUT="${tmpAlignedSam}" \
         --OUTPUT="${tmpAlignedSortedBam}"  \
-        --SORT_ORDER=coordinate \
+        --SORT_ORDER coordinate \
         --CREATE_INDEX=true
 
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
@@ -82,7 +82,7 @@ else
 	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
         --INPUT="${tmpAlignedSam}" \
         --OUTPUT="${tmpAlignedSortedBam}"  \
-        --SORT_ORDER=coordinate \
+        --SORT_ORDER coordinate \
         --CREATE_INDEX=true
 
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
