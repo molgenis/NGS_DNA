@@ -17,7 +17,7 @@
 module load "${gatkVersion}"
 module list
 
-gatk --java-options="-Xmx3g" MergeVcfs \
+gatk --java-options "-Xmx3g" MergeVcfs \
 --INPUT="${projectVariantsSnpsOnlyFilteredVcf}" \
 --INPUT="${projectVariantsIndelsOnlyFilteredVcf}" \
 --SEQUENCE_DICTIONARY="${indexFileDictionary}" \

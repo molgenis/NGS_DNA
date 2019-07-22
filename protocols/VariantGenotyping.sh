@@ -70,12 +70,12 @@ fi
 gvcfSize=${#ALLGVCFs[@]}
 if [ ${gvcfSize} -ne 0 ]
 then
-    gatk --java-options="-Xmx5g -Djava.io.tmpdir=${tempDir}" CombineGVCFs \
+    gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" CombineGVCFs \
         --reference="${indexFile}" \
         "${ALLGVCFs[@]}" \
         --output="${tmpProjectBatchCombinedVariantCalls}"
 
-    gatk --java-options="-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
+    gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
         --reference="${indexFile}" \
         --variant="${tmpProjectBatchCombinedVariantCalls}" \
         --intervals="${capturedBatchBed}" \

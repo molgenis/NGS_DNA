@@ -96,7 +96,7 @@ else
 		fi
 	fi
 
-	gatk --java-options="-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
+	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
 	--reference="${indexFile}" \
 	"${inputs}" \
 	--dbsnp="${dbSnp}" \

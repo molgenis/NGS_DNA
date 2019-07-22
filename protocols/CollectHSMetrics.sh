@@ -24,7 +24,7 @@ tmpHsMetrics="${MC_tmpFile}"
 #Run Picard HsMetrics if capturingKit was used
 if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
 then
-	gatk --java-options="-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
+	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
 	--INPUT="${dedupBam}" \
 	--OUTPUT="${tmpHsMetrics}" \
 	--BAIT_INTERVALS="${capturedExomeIntervals}" \
@@ -35,7 +35,7 @@ then
 	--MINIMUM_BASE_QUALITY=0 \
 	--TMP_DIR="${tempDir}"
 else
-	gatk --java-options="-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
+	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
 	--INPUT="${dedupBam}" \
 	--OUTPUT="${tmpHsMetrics}" \
 	--BAIT_INTERVALS="${capturedIntervals}" \

@@ -20,7 +20,7 @@ makeTmpDir "${projectVariantsIndelsOnlyVcf}"
 tmpProjectVariantsIndelsOnlyVcf="${MC_tmpFile}"
 
 # Select indels only.
-gatk --java-options="-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 --reference="${indexFile}" \
 --variant="${projectVariantsMergedSortedGz}" \
 --output="${tmpProjectVariantsIndelsOnlyVcf}" \
@@ -35,7 +35,7 @@ makeTmpDir "${projectVariantsSnpsOnlyVcf}"
 tmpProjectVariantsSnpsOnlyVcf="${MC_tmpFile}"
 
 # Select non-indels only.
-gatk --java-options="-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 --reference="${indexFile}" \
 --variant="${projectVariantsMergedSortedGz}" \
 --output="${tmpProjectVariantsSnpsOnlyVcf}" \

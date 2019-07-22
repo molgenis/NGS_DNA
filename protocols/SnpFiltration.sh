@@ -24,7 +24,7 @@ makeTmpDir "${projectVariantsSnpsOnlyFilteredVcf}"
 tmpProjectVariantsSnpsOnlyFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called SNPs on
-gatk --java-options="-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
+gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
 --reference="${indexFile}" \
 --output="${tmpProjectVariantsSnpsOnlyFilteredVcf}" \
 --variant="${projectVariantsSnpsOnlyVcf}" \

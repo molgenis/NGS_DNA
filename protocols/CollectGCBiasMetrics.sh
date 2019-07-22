@@ -33,7 +33,7 @@ makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"
 tmpGcBiasMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics
-gatk --java-options="-XX:ParallelGCThreads=1 -Xmx3g" CollectGcBiasMetrics \
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx3g" CollectGcBiasMetrics \
 --REFERENCE_SEQUENCE="${indexFile}" \
 --INPUT="${dedupBam}" \
 --OUTPUT= "${tmpGcBiasMetrics}" \

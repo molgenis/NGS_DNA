@@ -23,7 +23,7 @@ module list
 makeTmpDir "${sampleFinalVcf}"
 tmpSampleFinalVcf="${MC_tmpFile}"
 
-gatk --java-options="-Xmx3g" SelectVariants \
+gatk --java-options "-Xmx3g" SelectVariants \
 --reference="${indexFile}" \
 --variant="${projectFinalVcf}" \
 --sample-name="${externalSampleID}" \

@@ -32,7 +32,7 @@ tmpSampleMergedRecalibratedBam="${MC_tmpFile}"
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
 inputs=$(printf ' --input=%s ' $(printf '%s\n' ${bams[@]}))
 
-gatk --java-options="-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx9g" ApplyBQSR \
+gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx9g" ApplyBQSR \
 --reference="${indexFile}" \
 ${inputs} \
 --bqsr-recal-file="${mergedBamRecalibratedTable}" \

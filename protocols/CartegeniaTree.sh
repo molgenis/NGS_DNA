@@ -80,7 +80,7 @@ function gnomADpopFreqCheck(){
    freq="${4}"
 
    ##overlap
-   gatk --java-options="-Xmx2g" SelectVariants \
+   gatk --java-options "-Xmx2g" SelectVariants \
       --reference="${indexFile}" \
       --variant="${input}" \
       --output="${outputOverlap}.PASS_Exome_AF_Filter.vcf" \
@@ -89,7 +89,7 @@ function gnomADpopFreqCheck(){
       --selectExpressions="vc.hasAttribute('gnomAD_exome_AF_MAX') && (! vc.getAttribute('gnomAD_exome_AF_MAX').equals('.')) && gnomAD_exome_AF_MAX < ${freq}"
 
    ##No overlap
-   gatk --java-options="-Xmx2g" SelectVariants \
+   gatk --java-options "-Xmx2g" SelectVariants \
       --reference="${indexFile}" \
       --variant="${input}" \
       --output="${outputNoOverlap}" \
@@ -101,7 +101,7 @@ function gnomADpopFreqCheck(){
 
 
    ##missing in exome, check genome (< freq)
-   gatk --java-options="-Xmx2g" SelectVariants \
+   gatk --java-options "-Xmx2g" SelectVariants \
       --reference="${indexFile}" \
       --variant="${input}" \
       --output="${outputOverlap}.PASS_Genome_AF_Filter.vcf" \
@@ -112,7 +112,7 @@ function gnomADpopFreqCheck(){
    grep -v '^#' "${outputOverlap}.PASS_Genome_AF_Filter.vcf" | awk -v freq=${freq} 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,"GenomeAF<"freq" or NA",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
    ##missing in exome, check genome (> freq)
-   gatk --java-options="-Xmx2g" SelectVariants \
+   gatk --java-options "-Xmx2g" SelectVariants \
       --reference="${indexFile}" \
       --variant="${input}" \
       --output="${outputOverlap}.NotPASS_Genome_AF_Filter.vcf" \
@@ -220,7 +220,7 @@ outputStep2_2_0_end="${name}.step2_2.lessThan10x.vcf"
 ml ${gatkVersion}
 ml ${bcfToolsVersion}
 
-gatk --java-options="-Xmx2g" SelectVariants \
+gatk --java-options "-Xmx2g" SelectVariants \
    --reference="${indexFile}" \
    --variant="${outputStep1_next}" \
    --output="${outputStep2_1}" \
@@ -230,7 +230,7 @@ gatk --java-options="-Xmx2g" SelectVariants \
 count_2_1_true=$(cat "${outputStep2_1}" | grep -v '^#' | cat | wc -l)
 count_2_1_false=$((count_1_true - count_2_1_true))
 COUNTARRAY+=("step 2.1(Read depth > 20); TRUE:${count_2_1_true},FALSE:${count_2_1_false}")
-gatk --java-options="-Xmx2g" SelectVariants \
+gatk --java-options "-Xmx2g" SelectVariants \
    --reference="${indexFile}" \
    --variant="${outputStep1_next}" \
    --output="${outputStep2_2_0}" \
@@ -240,7 +240,7 @@ gatk --java-options="-Xmx2g" SelectVariants \
 grep -v '^#' "${outputStep2_2_0}" | awk 'BEGIN {OFS="\t"}{print $1,$2,$4,$5,">10x<20x",$8,$10}' >> ${name}.tagsAndFilters.tsv
 
 ###
-gatk --java-options="-Xmx2g" SelectVariants \
+gatk --java-options "-Xmx2g" SelectVariants \
    --reference="${indexFile}" \
    --variant="${outputStep1_next}" \
    --output="${outputStep2_2_0_end}" \

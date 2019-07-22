@@ -55,7 +55,7 @@ then
 	"${fastq2}" \
 	> "${tmpAlignedSam}" &
 
-	gatk --java-options="-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
+	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
         --INPUT="${tmpAlignedSam}" \
         --OUTPUT="${tmpAlignedSortedBam}"  \
         --SORT_ORDER=coordinate \
@@ -79,7 +79,7 @@ else
 	"${srBarcodeRecodedFqGz}" \
 	> "${tmpAlignedSam}" &
 
-	gatk --java-options="-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
+	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
         --INPUT="${tmpAlignedSam}" \
         --OUTPUT="${tmpAlignedSortedBam}"  \
         --SORT_ORDER=coordinate \
