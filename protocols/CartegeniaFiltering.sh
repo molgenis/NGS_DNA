@@ -67,13 +67,13 @@ then
 	grep -v '^#'  "${outputStep9_1ToSpecTree}" | awk 'BEGIN {OFS="\t"}{print $1,($2-1),$2,"GENE"}' > "${name}.allVariants.bed"
 
 	gatk SelectVariants \
-	-R "${indexFile}" \
-	-V "${projectPrefix}.final.vcf" \
-	-O "${name}.InclAllelesParents.vcf" \
-	-sn "${child}" \
-	-sn "${father}" \
-	-sn "${mother}" \
-	-L "${name}.allVariants.bed"
+	--reference="${indexFile}" \
+	--variant="${projectPrefix}.final.vcf" \
+	--output="${name}.InclAllelesParents.vcf" \
+	--sample-name="${child}" \
+	--sample-name="${father}" \
+	--sample-name="${mother}" \
+	--intervals="${name}.allVariants.bed"
 
 	## removing unnecessary information => keep only GT field
 	bcftools annotate -x ^FORMAT/GT "${name}.InclAllelesParents.vcf" | awk -v ch=${childPos} -v fa=${fatherPos} -v mo=${motherPos} 'BEGIN {OFS="\t"}{if ($0 !~ /^#/){split($ch,a,"/");split($fa,b,"/");split($mo,c,"/"); print $1,$2,$3,$4,$5,$6,$7,a[1],a[2],b[1],b[2],c[1],c[2],$8}}' | sort -V > "${name}.splittedAlleles.txt"

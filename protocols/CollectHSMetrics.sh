@@ -24,21 +24,21 @@ tmpHsMetrics="${MC_tmpFile}"
 #Run Picard HsMetrics if capturingKit was used
 if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
 then
-	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
-	--INPUT "${dedupBam}" \
-	--OUTPUT "${tmpHsMetrics}" \
-	--BAIT_INTERVALS "${capturedExomeIntervals}" \
-	--TARGET_INTERVALS "${capturedExomeIntervals}" \
-	--VALIDATION_STRINGENCY LENIENT \
-	--TMP_DIR "${tempDir}"
+	gatk --java-options="-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
+	--INPUT="${dedupBam}" \
+	--OUTPUT="${tmpHsMetrics}" \
+	--BAIT_INTERVALS="${capturedExomeIntervals}" \
+	--TARGET_INTERVALS="${capturedExomeIntervals}" \
+	--VALIDATION_STRINGENCY=LENIENT \
+	--TMP_DIR="${tempDir}"
 else
-	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
-	--INPUT "${dedupBam}" \
-	--OUTPUT "${tmpHsMetrics}" \
-	--BAIT_INTERVALS "${capturedIntervals}" \
-	--TARGET_INTERVALS "${capturedIntervals}" \
-	--VALIDATION_STRINGENCY LENIENT \
-	--TMP_DIR "${tempDir}"
+	gatk --java-options="-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
+	--INPUT="${dedupBam}" \
+	--OUTPUT="${tmpHsMetrics}" \
+	--BAIT_INTERVALS="${capturedIntervals}" \
+	--TARGET_INTERVALS="${capturedIntervals}" \
+	--VALIDATION_STRINGENCY=LENIENT \
+	--TMP_DIR="${tempDir}"
 fi
 
 mv "${tmpHsMetrics}" "${hsMetrics}"

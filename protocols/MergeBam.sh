@@ -73,7 +73,7 @@ then
 else
 	"${sambambaTool}" merge \
 	"${tmpSampleMergedBam}" \
-	${INPUTS[@]}
+	"${INPUTS[@]}"
 
 	mv "${tmpSampleMergedBam}" "${sampleMergedBam}"
 	echo "moved ${tmpSampleMergedBam} ${sampleMergedBam}"

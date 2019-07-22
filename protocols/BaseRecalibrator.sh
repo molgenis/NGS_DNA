@@ -39,7 +39,7 @@ array_contains () {
 INPUTS=()
 for bamFile in "${sampleMergedBam[@]}"
 do
-	array_contains INPUTS "-I ${bamFile}" && INPUTS+=("-I ${bamFile}")    # If bamFile does not exist in array add it
+	array_contains INPUTS "--input=${bamFile}" && INPUTS+=("--input=${bamFile}")    # If bamFile does not exist in array add it
 done
 
 makeTmpDir "${mergedBamRecalibratedTable}" "${intermediateDir}"
@@ -47,11 +47,11 @@ tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
 "${sambambaTool}" index "${sampleMergedBam}"
 
-gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
--R "${indexFile}" \
-${INPUTS[@]} \
---known-sites "${dbSnp}" \
--O "${tmpMergedBamRecalibratedTable}"
+gatk --java-options="-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
+--reference="${indexFile}" \
+"${INPUTS[@]}" \
+--known-sites="${dbSnp}" \
+--output="${tmpMergedBamRecalibratedTable}"
 
 mv "${tmpMergedBamRecalibratedTable}" "${mergedBamRecalibratedTable}"
 echo "moved ${tmpMergedBamRecalibratedTable}  ${mergedBamRecalibratedTable}"

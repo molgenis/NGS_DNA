@@ -51,14 +51,14 @@ for b in "${batchID[@]}"
 do
 	if [ -f "${projectPrefix}.batch-${b}.${extension}" ]
 	then
-		array_contains INPUTS "-I ${projectPrefix}.batch-${b}.${extension}" && INPUTS+=("-I ${projectPrefix}.batch-${b}.${extension}")
+		array_contains INPUTS "--INPUT=${projectPrefix}.batch-${b}.${extension}" && INPUTS+=("--INPUT=${projectPrefix}.batch-${b}.${extension}")
 	fi
 done
 
-gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
+gatk --java-options="-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
 "${INPUTS[@]}" \
--O "${tmpProjectVariantsMergedSortedGz}" \
--D "${indexFileDictionary}"
+--OUTPUT="${tmpProjectVariantsMergedSortedGz}" \
+--SEQUENCE_DICTIONARY="${indexFileDictionary}"
 
 mv "${tmpProjectVariantsMergedSortedGz}" "${projectVariantsMergedSortedGz}"
 echo "moved ${tmpProjectVariantsMergedSortedGz} to ${projectVariantsMergedSortedGz}"

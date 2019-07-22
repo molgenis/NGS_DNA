@@ -52,9 +52,9 @@ if [ "${SAMPLESIZE}" -gt 200 ]
 then
     for b in $(seq 0 "${numberofbatches}")
     do
-        if [ -f "${projectBatchCombinedVariantCalls}".$b ]
+        if [ -f "${projectBatchCombinedVariantCalls}.${b}" ]
         then
-            ALLGVCFs+=(--variant "${projectBatchCombinedVariantCalls}"."${b}")
+            ALLGVCFs+=("--variant=${projectBatchCombinedVariantCalls}.${b}")
         fi
     done
 else
@@ -62,7 +62,7 @@ else
         do
         if [ -f "${sbatch}" ]
         then
-            array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant $sbatch")
+            array_contains ALLGVCFs "--variant=${sbatch}" || ALLGVCFs+=("--variant=$sbatch")
         fi
         done
 fi 
@@ -70,17 +70,17 @@ fi
 gvcfSize=${#ALLGVCFs[@]}
 if [ ${gvcfSize} -ne 0 ]
 then
-    gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" CombineGVCFs \
-        -R "${indexFile}" \
+    gatk --java-options="-Xmx5g -Djava.io.tmpdir=${tempDir}" CombineGVCFs \
+        --reference="${indexFile}" \
         "${ALLGVCFs[@]}" \
-        -O "${tmpProjectBatchCombinedVariantCalls}"
+        --output="${tmpProjectBatchCombinedVariantCalls}"
 
-    gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
-        -R "${indexFile}" \
-        --variant "${tmpProjectBatchCombinedVariantCalls}" \
-        -L "${capturedBatchBed}" \
-        --dbsnp "${dbSnp}" \
-        -O "${tmpProjectBatchGenotypedVariantCalls}"
+    gatk --java-options="-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
+        --reference="${indexFile}" \
+        --variant="${tmpProjectBatchCombinedVariantCalls}" \
+        --intervals="${capturedBatchBed}" \
+        --dbsnp="${dbSnp}" \
+        --output="${tmpProjectBatchGenotypedVariantCalls}"
 
     mv "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
     echo "moved ${tmpProjectBatchGenotypedVariantCalls} to ${projectBatchGenotypedVariantCalls} "

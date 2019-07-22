@@ -17,11 +17,11 @@
 module load "${gatkVersion}"
 module list
 
-gatk --java-options "-Xmx3g" MergeVcfs \
--I "${projectVariantsSnpsOnlyFilteredVcf}" \
--I "${projectVariantsIndelsOnlyFilteredVcf}" \
--D "${indexFileDictionary}" \
--O "${projectFinalVcf}.tmp"
+gatk --java-options="-Xmx3g" MergeVcfs \
+--INPUT="${projectVariantsSnpsOnlyFilteredVcf}" \
+--INPUT="${projectVariantsIndelsOnlyFilteredVcf}" \
+--SEQUENCE_DICTIONARY="${indexFileDictionary}" \
+--OUTPUT="${projectFinalVcf}.tmp"
 
 echo "moving ${projectFinalVcf}.tmp to ${projectFinalVcf}"
 mv "${projectFinalVcf}.tmp" "${projectFinalVcf}"

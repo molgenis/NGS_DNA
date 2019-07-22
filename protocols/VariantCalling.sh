@@ -56,7 +56,7 @@ then
 fi
 
 bams=($(printf '%s\n' "${sampleMergedRecalibratedBam[@]}" | sort -u ))
-inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
+inputs=$(printf ' --input=%s ' $(printf '%s\n' ${bams[@]}))
 
 genderCheck=""
 
@@ -96,14 +96,14 @@ else
 		fi
 	fi
 
-	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
-	-R "${indexFile}" \
+	gatk --java-options="-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
+	--reference="${indexFile}" \
 	"${inputs}" \
-	--dbsnp "${dbSnp}" \
-	-O "${tmpSampleBatchVariantCalls}" \
-	-L "${myBed}" \
-	--emit-ref-confidence GVCF \
-	-ploidy "${ploidy}"
+	--dbsnp="${dbSnp}" \
+	--output="${tmpSampleBatchVariantCalls}" \
+	--intervals="${myBed}" \
+	--emit-ref-confidence=GVCF \
+	--sample-ploidy="${ploidy}"
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]

@@ -33,14 +33,14 @@ makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"
 tmpGcBiasMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics
-gatk --java-options "-XX:ParallelGCThreads=1 -Xmx3g" CollectGcBiasMetrics \
--R "${indexFile}" \
--I "${dedupBam}" \
--O "${tmpGcBiasMetrics}" \
--S "${tmpGcBiasMetrics}.summary_metrics.txt" \
--CHART "${tmpGcBiasMetrics}.pdf" \
---VALIDATION_STRINGENCY STRICT \
---TMP_DIR "${tempDir}"
+gatk --java-options="-XX:ParallelGCThreads=1 -Xmx3g" CollectGcBiasMetrics \
+--REFERENCE_SEQUENCE="${indexFile}" \
+--INPUT="${dedupBam}" \
+--OUTPUT= "${tmpGcBiasMetrics}" \
+--SUMMARY_OUTPUT="${tmpGcBiasMetrics}.summary_metrics.txt" \
+--CHART_OUTPUT="${tmpGcBiasMetrics}.pdf" \
+--VALIDATION_STRINGENCY=STRICT \
+--TMP_DIR="${tempDir}"
 
 echo -e "\nGcBiasMetrics finished succesfull. Moving temp files to final.\n\n"
 mv "${tmpGcBiasMetrics}" "${gcBiasMetrics}"
