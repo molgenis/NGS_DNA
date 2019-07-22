@@ -30,6 +30,9 @@ then
 	--BAIT_INTERVALS="${capturedExomeIntervals}" \
 	--TARGET_INTERVALS="${capturedExomeIntervals}" \
 	--VALIDATION_STRINGENCY=LENIENT \
+	--CLIP_OVERLAPPING_READS=false \
+	--MINIMUM_MAPPING_QUALITY=1 \
+	--MINIMUM_BASE_QUALITY=0 \
 	--TMP_DIR="${tempDir}"
 else
 	gatk --java-options="-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
@@ -38,6 +41,9 @@ else
 	--BAIT_INTERVALS="${capturedIntervals}" \
 	--TARGET_INTERVALS="${capturedIntervals}" \
 	--VALIDATION_STRINGENCY=LENIENT \
+	--CLIP_OVERLAPPING_READS=false \
+	--MINIMUM_MAPPING_QUALITY=1 \
+	--MINIMUM_BASE_QUALITY=0 \
 	--TMP_DIR="${tempDir}"
 fi
 
