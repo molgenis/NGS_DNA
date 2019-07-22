@@ -38,7 +38,11 @@ else
 		--TARGET_INTERVALS="${capturedIntervals_nonAutoChrX}" \
 		--BAIT_INTERVALS="${capturedIntervals_nonAutoChrX}" \
 		--TMP_DIR="${tempDir}" \
-		--OUTPUT="${tmpHsMetricsNonAutosomalRegionChrX}"
+		--OUTPUT="${tmpHsMetricsNonAutosomalRegionChrX}" \
+		--CLIP_OVERLAPPING_READS=false \
+		--MINIMUM_MAPPING_QUALITY=1 \
+		--MINIMUM_BASE_QUALITY=0 \
+		--TMP_DIR="${tempDir}"
 
 		mv "${tmpHsMetricsNonAutosomalRegionChrX}" "${hsMetricsNonAutosomalRegionChrX}"
 		echo "mv ${tmpHsMetricsNonAutosomalRegionChrX} ${hsMetricsNonAutosomalRegionChrX}"
