@@ -34,7 +34,7 @@ inputs=$(printf -- '--input=%s ' $(printf '%s\n' "${bams[@]}"))
 
 gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx9g" ApplyBQSR \
 --reference="${indexFile}" \
-"${inputs}" \
+${inputs} \
 --bqsr-recal-file="${mergedBamRecalibratedTable}" \
 --output="${tmpSampleMergedRecalibratedBam}"
 

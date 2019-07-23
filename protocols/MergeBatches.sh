@@ -56,7 +56,7 @@ do
 done
 
 gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
-"${INPUTS[@]}" \
+${INPUTS[@]} \
 --OUTPUT="${tmpProjectVariantsMergedSortedGz}" \
 --SEQUENCE_DICTIONARY="${indexFileDictionary}"
 
