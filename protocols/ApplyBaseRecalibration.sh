@@ -30,13 +30,14 @@ tmpSampleMergedRecalibratedBam="${MC_tmpFile}"
 
 # Create the list of BAM files for input.
 bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
-inputs=$(printf ' --input=%s ' $(printf '%s\n' ${bams[@]}))
+inputs=$(printf -- '--input=%s ' $(printf '%s\n' "${bams[@]}"))
 
 gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx9g" ApplyBQSR \
 --reference="${indexFile}" \
-${inputs} \
+"${inputs}" \
 --bqsr-recal-file="${mergedBamRecalibratedTable}" \
 --output="${tmpSampleMergedRecalibratedBam}"
 
 mv "${tmpSampleMergedRecalibratedBam}" "${sampleMergedRecalibratedBam}"
+mv "${tmpSampleMergedRecalibratedBam%.bam}.bai" "${sampleMergedRecalibratedBam%.bam}.bai"
 echo "moved ${tmpSampleMergedRecalibratedBam}  ${sampleMergedRecalibratedBam}"

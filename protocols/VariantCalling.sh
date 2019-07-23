@@ -56,7 +56,7 @@ then
 fi
 
 bams=($(printf '%s\n' "${sampleMergedRecalibratedBam[@]}" | sort -u ))
-inputs=$(printf ' --input=%s ' $(printf '%s\n' ${bams[@]}))
+inputs=$(printf -- '--input=%s ' $(printf '%s\n' "${bams[@]}"))
 
 genderCheck=""
 
