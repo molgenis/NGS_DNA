@@ -98,7 +98,7 @@ else
 
 	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
 	--reference="${indexFile}" \
-	"${inputs}" \
+	${inputs} \
 	--dbsnp="${dbSnp}" \
 	--output="${tmpSampleBatchVariantCalls}" \
 	--intervals="${myBed}" \
