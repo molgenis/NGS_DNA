@@ -31,7 +31,7 @@ gatk --java-options "-Xmx3g" SelectVariants \
 
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
 
-bcftools annotate -h "${tmpSampleFinalVcf}.barcode.txt" "${tmpSampleFinalVcf}" > "${tmpSampleFinalVcf}.tmp"
+bcftools annotate -h "${tmpSampleFinalVcf}.barcode.txt" -O v -o "${tmpSampleFinalVcf}.tmp" "${tmpSampleFinalVcf}"
 
 echo "moving ${tmpSampleFinalVcf}.tmp to ${sampleFinalVcf}"
 mv "${tmpSampleFinalVcf}.tmp" "${sampleFinalVcf}"
