@@ -4,11 +4,11 @@
 #string logsDir 
 #string groupname
 #string intermediateDir
-#string projectPrefix
+#string projectFinalVcf
 
 module load "${vcfPedVersion}"
 
-inputVcfFile="${projectPrefix}.final.vcf"
+inputVcfFile="${projectFinalVcf}"
 
 vcfped "${inputVcfFile}" -o "${projectPrefix}"
 
