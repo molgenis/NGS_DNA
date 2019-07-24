@@ -61,8 +61,8 @@ ${INPUTS[@]} \
 --SEQUENCE_DICTIONARY="${indexFileDictionary}"
 
 mv "${tmpProjectVariantsMergedSortedGz}" "${projectVariantsMergedSortedGz}"
+mv "${tmpProjectVariantsMergedSortedGz}.tbi" "${projectVariantsMergedSortedGz}.tbi"
 echo "moved ${tmpProjectVariantsMergedSortedGz} to ${projectVariantsMergedSortedGz}"
 
 ### make allChromosomes bedfile to use it later in CheckOutput script
 awk '{print $1}' "${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed" | uniq > "${intermediateDir}/allChromosomes.txt"
-
