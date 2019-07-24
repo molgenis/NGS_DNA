@@ -7,8 +7,8 @@
 #string gatkVersion
 #string gatkJar
 
-#string	project
-#string indexFile
+#string project
+#string indexFileDictionary
 #string projectVariantsSnpsOnlyFilteredVcf
 #string projectVariantsIndelsOnlyFilteredVcf
 #string projectFinalVcf
@@ -17,11 +17,15 @@
 module load "${gatkVersion}"
 module list
 
+makeTmpDir "${projectFinalVcf}"
+tmpProjectFinalVcf="${MC_tmpFile}"
+
 gatk --java-options "-Xmx3g" MergeVcfs \
 --INPUT="${projectVariantsSnpsOnlyFilteredVcf}" \
 --INPUT="${projectVariantsIndelsOnlyFilteredVcf}" \
 --SEQUENCE_DICTIONARY="${indexFileDictionary}" \
---OUTPUT="${projectFinalVcf}.tmp"
+--OUTPUT="${tmpProjectFinalVcf}"
 
-echo "moving ${projectFinalVcf}.tmp to ${projectFinalVcf}"
-mv "${projectFinalVcf}.tmp" "${projectFinalVcf}"
+echo "moving ${tmpProjectFinalVcf} to ${projectFinalVcf}"
+mv "${tmpProjectFinalVcf}" "${projectFinalVcf}"
+
