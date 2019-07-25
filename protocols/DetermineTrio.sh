@@ -5,6 +5,7 @@
 #string groupname
 #string intermediateDir
 #string projectFinalVcf
+#string projectPrefix
 
 module load "${vcfPedVersion}"
 
