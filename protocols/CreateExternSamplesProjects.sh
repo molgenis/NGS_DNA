@@ -122,7 +122,7 @@ extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${pro
 
 batching="_small"
 
-capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
+capturingKitProject=$(python "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/getCapturingKit.py" "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
@@ -132,7 +132,7 @@ then
 fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
 then
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+	resourcesParameters="/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/parameters_resources_exome.csv"
 	batching="_chr"
         if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
         then
@@ -140,7 +140,7 @@ then
                 exit 1
         fi
 else
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+	resourcesParameters="/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
         then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
@@ -154,10 +154,10 @@ then
 fi
 
 module load "${computeVersion}"
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > "resources_parameters.converted.csv"
+perl "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > "resources_parameters.converted.csv"
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
--p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
+-p "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/batchIDList${batching}.csv" \
 -p "${projectJobsDir}/${project}.csv" \
 -p "${environment_parameters}" \
 -p "${group_parameters}" \
@@ -165,12 +165,12 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 -w "${workflowpath}" \
---header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
---submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
+--header "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/templates/slurm/header.ftl" \
+--footer "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/templates/slurm/footer.ftl" \
+--submit "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/templates/slurm/submit.ftl" \
 -b slurm \
 -g -weave \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
-batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
+batchIDList=/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/batchIDList${batching}.csv;\
 groupname=${groupname}"
