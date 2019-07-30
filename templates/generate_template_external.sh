@@ -49,7 +49,7 @@ samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
 ## Checking for genderColumn
 #
-python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
+python "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/sampleSheetChecker.py" "${samplesheet}"
 if [ -f "${samplesheet}.temp" ]
 then
 	mv "${samplesheet}.temp" "${samplesheet}"
@@ -57,7 +57,7 @@ fi
 ## adding columns if they are not present in the samplesheet
 for i in "Gender" "MotherSampleId" "FatherSampleId" "MotherAffected" "FatherAffected" "FirstPriority"
 do
-	python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}" 
+	python "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}" 
 done
 
 ## get only uniq lines and removing txt.tmp file
@@ -71,7 +71,7 @@ if [ -s species.txt ];then species=$(cat species.txt); fi
 
 sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleSize}"
 
-if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
+if [ $sampleSize -gt 199 ];then	workflow=/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/workflow_samplesize_bigger_than_200.csv ; else workflow=/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/workflow_custom.csv ;fi
 
 IFS="${SAMPLESHEET_SEP}" _sampleSheetColumnNames=($(head -1 "${_sampleSheet}"))
 for (( _offset = 0 ; _offset < ${#_sampleSheetColumnNames[@]:-0} ; _offset++ ))
@@ -86,10 +86,10 @@ fi
 
 ### Converting parameters to compute parameters
 echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/parameters_converted.csv"
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/parameters_group_converted.csv"
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/${environmentParameters}.csv" > "${genScripts}/parameters_environment_converted.csv"
+perl "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
+perl "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/convertParametersGitToMolgenis.pl" "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/parameters.csv" > "${genScripts}/parameters_converted.csv"
+perl "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/convertParametersGitToMolgenis.pl" "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/parameters_${group}.csv" > "${genScripts}/parameters_group_converted.csv"
+perl "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/convertParametersGitToMolgenis.pl" "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/${environmentParameters}.csv" > "${genScripts}/parameters_environment_converted.csv"
 
 ## has to be set, otherwise it will crash due to parameters which are not set, this variable will be updated in the next step
 batching="_small"
@@ -97,11 +97,11 @@ batching="_small"
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${genScripts}/parameters_converted.csv" \
 -p "${genScripts}/parameters_tmpdir_converted.csv" \
--p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
+-p "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/batchIDList${batching}.csv" \
 -p "${genScripts}/parameters_group_converted.csv" \
 -p "${genScripts}/parameters_environment_converted.csv" \
 -p "${genScripts}/${filePrefix}.csv" \
--w "${EBROOTNGS_DNA}/create_external_samples_ngs_projects_workflow.csv" \
+-w "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/create_external_samples_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
 --runid "${runID}" \
 -o workflowpath="${workflow};\
