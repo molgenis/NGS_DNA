@@ -60,7 +60,7 @@ then
         --bam "${dedupBam}" \
         --referenceFasta "${indexFile}" \
         --exome \
-	--config ${EBROOTNGS_DNA}/conf/configManta.py.ini \
+	--config /groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/conf/configManta.py.ini \
         --runDir "${tmpMantaDir}" 
 
 else
