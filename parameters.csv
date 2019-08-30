@@ -23,6 +23,7 @@ plink1Version,PLINK/1.07-x86_64
 plink2Version,plink/1.9-${toolChain}
 plinkSeqVersion,plinkseq/x86_64-0.10
 picardVersion,picard/2.9.0-Java-1.8.0_74
+pigzVersion,pigz/2.3.1-${toolChain}
 pythonVersion,Python/2.7.10-${toolChain}
 rVersion,R/3.3.3-${toolChain}-bare
 sambambaVersion,sambamba/${sambambaVer}-${toolChain}
@@ -390,7 +391,6 @@ familyList,${intermediateDir}/${externalSampleID}.familyList.txt
 arrayFileLocation,${inputData}/${arrayFile}
 
 mergedBamRecalibratedTable,${projectResultsDir}/alignment/${externalSampleID}.recalibrated.table
-pigzVersion,pigz/2.3.1-foss-2015b
 
 geneNetworkFolder,${dataDir}/GeneNetwork/
 geneNetworkSource,${geneNetworkFolder}/TermGeneZScores-2016-10-13HPO-propergenes-cov-genescompsscaled-307comps.txt
