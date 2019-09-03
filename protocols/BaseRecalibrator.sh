@@ -26,10 +26,10 @@ module list
 array_contains () {
     local array="$1[@]"
     local seeking=$2
-    local in=0
+    local in=1
     for element in "${!array-}"; do
         if [[ "$element" == "$seeking" ]]; then
-            in=1
+            in=0
             break
         fi
     done
@@ -39,7 +39,7 @@ array_contains () {
 INPUTS=()
 for bamFile in "${sampleMergedBam[@]}"
 do
-	array_contains INPUTS "--input=${bamFile}" && INPUTS+=("--input=${bamFile}")    # If bamFile does not exist in array add it
+	array_contains INPUTS "--input=${bamFile}" || INPUTS+=("--input=${bamFile}")    # If bamFile does not exist in array add it
 done
 
 makeTmpDir "${mergedBamRecalibratedTable}" "${intermediateDir}"
