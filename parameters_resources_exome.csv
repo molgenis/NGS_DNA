@@ -1,4 +1,5 @@
 mem_protocols_AnnotateVcf,4gb
+mem_protocols_ApplyBaseRecalibration,12gb
 mem_protocols_Autotest,4gb
 mem_protocols_BaseRecalibrator,10gb
 mem_protocols_BwaAlignAndSortSam,13gb
@@ -41,6 +42,7 @@ mem_protocols_VcfToTable,1gb
 mem_protocols_XHMM,4gb
 ppn_protocols_AnnotateVcf,4
 ppn_protocols_Autotest,1
+ppn_protocols_ApplyBaseRecalibration,4
 ppn_protocols_BaseRecalibrator,8
 ppn_protocols_BwaAlignAndSortSam,4
 ppn_protocols_CartegeniaFiltering,2
@@ -81,6 +83,7 @@ ppn_protocols_VariantGenotyping,2
 ppn_protocols_VcfToTable,1
 ppn_protocols_XHMM,1
 walltime_protocols_AnnotateVcf,05:59:00
+walltime_protocols_ApplyBaseRecalibration,05:59:00
 walltime_protocols_Autotest,05:59:00
 walltime_protocols_BaseRecalibrator,05:59:00
 walltime_protocols_BwaAlignAndSortSam,05:59:00
