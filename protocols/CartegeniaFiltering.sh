@@ -44,7 +44,7 @@ count_9_true=$(cat "${outputStep9_1ToSpecTree}" | grep -v '^#' | wc -l | cat)
 echo "Step 9(Merging all the prev steps + 5GPM_NX158 bedfile to select only regions of interest); TRUE: ${count_9_true}"
 echo "This is the final output: ${outputStep9_1ToSpecTree}"
 
-python "/groups/umcg-atd/tmp03/umcg-tmedina/repos/NGS_DNA/scripts/CartegeniaFilterTag.py" "${name}.tagsAndFilters.sorted.tsv" | awk 'BEGIN {OFS="\t"}{FS="^"}{print $1,$2,$3,$4,$7,$5,$6}' | sort -V > "${name}.SearchFortagsAndFilters.tsv"
+python "${EBROOTNGS_DNA}/scripts/CartegeniaFilterTag.py" "${name}.tagsAndFilters.sorted.tsv" | awk 'BEGIN {OFS="\t"}{FS="^"}{print $1,$2,$3,$4,$7,$5,$6}' | sort -V > "${name}.SearchFortagsAndFilters.tsv"
 
 echo "this is the final output in table format: ${outputStep9_1ToSpecTree}.table"
 echo "this is the tag/filter file: ${name}.SearchFortagsAndFilters.tsv"

@@ -9,7 +9,7 @@
 #string capturedIntervals
 #string capturedExomeIntervals
 #string capturingKit
-#string	project
+#string project
 #string logsDir 
 #string groupname
 #string intermediateDir
