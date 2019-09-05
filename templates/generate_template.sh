@@ -1,7 +1,7 @@
 #!/bin/bash
 
-module load NGS_DNA
 module list
+
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
 
@@ -57,7 +57,7 @@ fi
 ## adding columns if they are not present in the samplesheet
 for i in "Gender" "MotherSampleId" "FatherSampleId" "MotherAffected" "FatherAffected" "FirstPriority"
 do
-	python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}" 
+	python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}"
 done
 
 ## get only uniq lines and removing txt.tmp file
@@ -73,19 +73,8 @@ sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleS
 
 if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
 
-IFS="${SAMPLESHEET_SEP}" _sampleSheetColumnNames=($(head -1 "${_sampleSheet}"))
-for (( _offset = 0 ; _offset < ${#_sampleSheetColumnNames[@]:-0} ; _offset++ ))
-do
-	_sampleSheetColumnOffsets["${_sampleSheetColumnNames[${_offset}]}"]="${_offset}"
-done
-pipeline=""
-if [[ ! -z "${_sampleSheetColumnOffsets['pipeline']+isset}" ]]; then
-		_projectFieldIndex=$((${_sampleSheetColumnOffsets['pipeline']} + 1))
-		IFS=$'\n' pipeline=($(tail -n +2 "${_sampleSheet}" | cut -d "${SAMPLESHEET_SEP}" -f "${_projectFieldIndex}" | sort | uniq ))
-fi
-
 ### Converting parameters to compute parameters
-echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
+echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/parameters_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/parameters_group_converted.csv"
