@@ -36,10 +36,10 @@ tmpProjectVariantsMergedSortedGz="${MC_tmpFile}"
 array_contains () {
     local array="$1[@]"
     local seeking=${2}
-    local in=0
+    local in=1
     for element in "${!array-}"; do
         if [[ "${element}" == "${seeking}" ]]; then
-            in=1
+            in=0
             break
         fi
     done
@@ -51,7 +51,7 @@ for b in "${batchID[@]}"
 do
 	if [ -f "${projectPrefix}.batch-${b}.${extension}" ]
 	then
-		array_contains INPUTS "--INPUT=${projectPrefix}.batch-${b}.${extension}" && INPUTS+=("--INPUT=${projectPrefix}.batch-${b}.${extension}")
+		array_contains INPUTS "--INPUT=${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("--INPUT=${projectPrefix}.batch-${b}.${extension}")
 	fi
 done
 
