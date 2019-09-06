@@ -4,50 +4,44 @@ targetedInsertSize,200
 checkStage,module list
 
 ### Tool versions ####
-bedToolsVersion,BEDTools/2.28.0-${toolChain}
-bwaVersion,BWA/0.7.17-${toolChain}
-computeVersion,Molgenis-Compute/v19.01.1-Java-11.0.2
-caddVersion,CADD/v1.3
-convadingVersion,CoNVaDING/1.2.1
-cutadaptVersion,cutadapt/1.13-${toolChain}-Python-2.7.10
+bcfToolsVersion,BCFtools/1.9-${toolChain_min}
+bedToolsVersion,BEDTools/2.28.0-${toolChain_min}
+bwaVersion,BWA/0.7.17-${toolChain_min}
+### MISSING:
+### caddVersion,CADD/v1.3 ###
+computeVersion,Molgenis-Compute/v19.01.1-Java-11-LTS
+convadingVersion,CoNVaDING/1.2.1-${toolChain_min}
+### USED ONLY FOR GONL:
+### cutadaptVersion,cutadapt/1.13-${toolChain}-Python-2.7.10 ###
 fastqcVersion,FastQC/0.11.8-Java-11-LTS
+### WON'T BE NECESSARY FOR ANY GATK4 TOOLS:
+gatkJar,gatk-package-4.1.3.0-local.jar
+### GATK3 IS NECESSARY FOR COVERAGE CALCULATIONS, BUT IS MISSING.
 gatkVersion,GATK/4.1.3.0-Java-8-LTS
-gavinPlusVersion,gavin-plus/1.5.0-Java-11-LTS
-hashdeepVersion,hashdeep/4.4-foss-2015b
-iolibVersion,io_lib/1.14.11-${toolChain}
-## UPDATE JAVA VERSION
-javaVersion,Java/1.8.0_74
-mantaVersion,manta/1.6.0-${toolChain}
-ngsUtilsVersion,ngs-utils/19.03.3
-perlPlusVersion,PerlPlus/5.22.0-${toolChain}-v17.08.1
-plink1Version,PLINK/1.07-x86_64
-plink2Version,plink/1.9-${toolChain}
-plinkSeqVersion,plinkseq/x86_64-0.10
-picardVersion,picard/2.20.5-Java-11-LTS
-pigzVersion,pigz/2.4-${toolChain}
-pythonVersion,Python/2.7.10-${toolChain}
-rVersion,R/3.3.3-${toolChain}-bare
-sambambaVersion,sambamba/${sambambaVer}-${toolChain}
-## OLD ONE WAS V0.6.0, CHECK IF THERE NEEDS TO BE A 'V'
-sambambaVer,0.7.0
-samtoolsVersion,SAMtools/1.9-${toolChain}
-seqTkVersion,seqtk/1.3-${toolChain}
-snpEffVersion,snpEff/4.3t-Java-11-LTS
-htsLibVersion,HTSlib/1.9-${toolChain}
-vcfAnnoVersion,vcfanno/v0.3.2
-bcfToolsVersion,BCFtools/1.9-${toolChain}
-tabixVersion,tabix/0.2.6-${toolChain}
-vepVersion,VEP/90.5
-verifyBamIDVersion,verifyBamID/1.1.3-${toolChain}
-xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain}
-hpoVersion,90
-gatkJar,gatk-package-4.1.2.0-local.jar
 gavinPlusJar,gavin-plus-1.5.0-RELEASE.jar
+gavinPlusVersion,gavin-plus/1.5.0-Java-11-LTS
+### NO DATA ON THE CLUSTER YET:
+### hpoVersion,90 ###
+htsLibVersion,HTSlib/1.9-${toolChain_min}
+iolibVersion,io_lib/1.14.11-${toolChain_min}
+javaVersion,Java/11-LTS
+mantaVersion,manta/1.6.0-${toolChain_min}
+multiQCVersion,multiqc/1.7-${toolChain_min}-Python-3.7.4-bare
+ngsUtilsVersion,ngs-utils/19.03.3-${toolChain_min}
+perlPlusVersion,PerlPlus/5.30.0-${toolChain_min}-v19.08.1
 picardJar,picard.jar
-sambambaTool,sambamba_${sambambaVer}
-vepDBVersion,90
-vepAssemblyVersion,GRCh37
-multiQCVersion,multiqc/1.7-${toolChain}-Python-3.7.4-bare
+picardVersion,picard/2.20.5-Java-11-LTS
+pigzVersion,pigz/2.4-${toolChain_min}
+python2Version,Python/2.7.16-${toolChain_min}-bare
+python3Version,Python/3.7.4-${toolChain_min}-bare
+rVersion,R/3.6.1-${toolChain_max}-bare
+sambambaVersion,sambamba/0.7.0
+samtoolsVersion,SAMtools/1.9-${toolChain_min}
+seqTkVersion,seqtk/1.3-${toolChain_min}
+snpEffVersion,snpEff/4.3t-Java-11-LTS
+vcfAnnoVersion,vcfanno/v0.3.2
+### MISSING, BUT NOT USED BY EXOME PIPELINE CURRENTLY:
+### xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain} ###
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -252,7 +246,6 @@ gavinToCADDgz,${sampleNameID}.GAVIN.toCadd.tsv.gz
 gavinFromCADDgz,${sampleNameID}.GAVIN.fromCadd.tsv.gz
 gavinOutputFinalMerged,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.vcf
 gavinOutputFinalMergedRLV,${sampleNameID}.GAVIN.rlv.vcf
-vepDataDir,${dataDir}/Ensembl/VEP/${vepDBVersion}
 sampleVariantsMergedGavin,${sampleNameID}.variant.calls.GATK.vcf
 projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.VEP.vcf
 
@@ -408,7 +401,7 @@ manVarListMVL_LB_B,${manVarListDir}/MVL_2018-06-27_LB-B.bed
 manVarListMVL_VUS_LP_P,${manVarListDir}/MVL_2018-06-27_VUS-LP-P.bed
 manVarListVKGL_consensus_VUS_LP_P,${manVarListDir}/VKGL_consensus_2018-06-27_VUS-LP-P.bed
 
-vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.16
+vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain_max}-Python-2.7.16
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 
