@@ -8,10 +8,9 @@
 #string logsDir
 
 #string gatkVersion
-#string gatkJar
 #string indexFile
 
-#string	project
+#string project
 
 #string externalSampleID
 #string dedupBam
