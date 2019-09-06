@@ -11,7 +11,7 @@
 #string gatkVersion
 #string dedupBamMetrics
 #string hsMetricsNonAutosomalRegionChrX
-#string	project
+#string project
 #string logsDir 
 #string groupname
 
