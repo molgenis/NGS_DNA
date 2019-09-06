@@ -3,13 +3,11 @@
 #string tmpName
 
 
-#string picardVersion
 #string bamIndexStatsJar
 #string dedupBam
 #string dedupBamIdx
 #string tempDir
 #string capturingKit
-#string picardJar
 #string bamIndexStats
 #string project
 #string logsDir 
@@ -17,7 +15,7 @@
 #string intermediateDir
 #string gatkVersion
 
-#Load Picard module
+#Load GATK module.
 module load "${gatkVersion}"
 module list
 
@@ -25,7 +23,7 @@ makeTmpDir "${bamIndexStats}" "${intermediateDir}"
 tmpBamIndexStats="${MC_tmpFile}"
 
 
-#Run Picard BamIndexStats
+#Run BamIndexStats.
 gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" BamIndexStats \
 --INPUT="${dedupBam}" \
 --VALIDATION_STRINGENCY=LENIENT \
