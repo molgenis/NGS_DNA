@@ -11,7 +11,6 @@
 #string manVarListMVL_LB_B
 #string manVarListMVL_VUS_LP_P
 #string manVarListVKGL_consensus_VUS_LP_P
-#string gatkJar
 #string bedToolsVersion
 #string bcfToolsVersion
 #string gatkVersion
