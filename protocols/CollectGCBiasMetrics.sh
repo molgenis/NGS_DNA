@@ -2,7 +2,6 @@
 #string tmpName
 
 
-#string picardVersion
 #string gcBiasMetricsJar
 #string dedupBam
 #string dedupBamIdx
@@ -14,16 +13,15 @@
 #string ngsUtilsVersion
 #string capturingKit
 #string seqType
-#string picardJar
 #string insertSizeMetrics
 #string gcBiasMetrics
-#string	project
+#string project
 #string logsDir 
 #string groupname
 #string intermediateDir
 #string gatkVersion
 
-#Load Picard module
+#Load GATK module.
 module load "${gatkVersion}"
 module load "${rVersion}"
 module load "${ngsUtilsVersion}"
@@ -32,7 +30,7 @@ module list
 makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"
 tmpGcBiasMetrics="${MC_tmpFile}"
 
-#Run Picard GcBiasMetrics
+#Run GcBiasMetrics
 gatk --java-options "-XX:ParallelGCThreads=1 -Xmx3g" CollectGcBiasMetrics \
 --REFERENCE_SEQUENCE="${indexFile}" \
 --INPUT="${dedupBam}" \
