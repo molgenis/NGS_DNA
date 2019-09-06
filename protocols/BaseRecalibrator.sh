@@ -10,11 +10,9 @@
 #string groupname
 #string tmpDataDir
 #string gatkVersion
-#string gatkJar
 #string dbSnp
 #string sampleMergedBam
 #string sambambaVersion
-#string sambambaTool
 #string mergedBamRecalibratedTable
 
 module load "${gatkVersion}"
@@ -45,7 +43,7 @@ done
 makeTmpDir "${mergedBamRecalibratedTable}" "${intermediateDir}"
 tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
-"${sambambaTool}" index "${sampleMergedBam}"
+sambamba index "${sampleMergedBam}"
 
 gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
 --reference="${indexFile}" \
