@@ -23,7 +23,6 @@ set -o pipefail
 #string filePrefix
 #string alignedSortedBam
 #string gatkVersion
-#string cutadaptVersion
 
 makeTmpDir "${alignedSam}"
 tmpAlignedSam="${MC_tmpFile}"
