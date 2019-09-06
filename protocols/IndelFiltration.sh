@@ -3,7 +3,6 @@
 
 
 #string gatkVersion
-#string gatkJar
 #string tempDir
 #string intermediateDir
 #string indexFile

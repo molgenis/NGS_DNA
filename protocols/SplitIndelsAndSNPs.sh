@@ -7,7 +7,6 @@
 #string logsDir
 #string groupname
 #string gatkVersion
-#string gatkJar
 #string indexFile
 #string capturedIntervals
 #string projectVariantsMergedSortedGz

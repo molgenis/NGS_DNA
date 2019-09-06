@@ -3,7 +3,6 @@
 
 
 #string gatkVersion
-#string gatkJar
 #string htsLibVersion
 #string ngsUtilsVersion
 #string tempDir

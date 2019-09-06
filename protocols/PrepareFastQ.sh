@@ -12,7 +12,6 @@
 #string peEnd2BarcodePhiXFqGz
 
 #string intermediateDir
-#string cutadaptVersion
 #string project
 #string groupname
 #string tmpName

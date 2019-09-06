@@ -12,7 +12,6 @@
 #string groupname
 #string tmpDataDir
 #string snpEffVersion
-#string javaVersion
 
 makeTmpDir "${projectVariantCallsSnpEff_Annotated}"
 tmpProjectVariantCallsSnpEff_Annotated="${MC_tmpFile}"

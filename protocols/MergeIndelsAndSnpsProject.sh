@@ -5,7 +5,6 @@
 #string intermediateDir
 
 #string gatkVersion
-#string gatkJar
 
 #string project
 #string indexFileDictionary

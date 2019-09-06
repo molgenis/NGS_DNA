@@ -1,6 +1,5 @@
 #string tmpName
 #string gatkVersion
-#string gatkJar
 #string bcfToolsVersion
 #string barcode
 #string indexFile
@@ -12,7 +11,7 @@
 #string sampleFinalVcf
 
 #string intermediateDir
-#string	project
+#string project
 #string indexFileDictionary
 
 #Load GATK module

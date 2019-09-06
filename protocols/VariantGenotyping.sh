@@ -9,7 +9,6 @@
 #string projectJobsDir
 
 #string gatkVersion
-#string gatkJar
 
 #string indexFile
 #string capturedBatchBed

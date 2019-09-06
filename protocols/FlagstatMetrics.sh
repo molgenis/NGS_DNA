@@ -6,8 +6,7 @@
 #string dedupBam
 #string tmpDataDir
 #string sambambaVersion
-#string sambambaTool
-#string	project
+#string project
 #string logsDir 
 #string groupname
 #string flagstatMetrics
@@ -22,7 +21,7 @@ tmpFlagstatMetrics="${MC_tmpFile}"
 
 echo "starting to calculate flagstat metrics"
 #make metrics file
-"${sambambaTool}" \
+sambamba \
 flagstat \
 --nthreads=4 \
 "${dedupBam}" > "${tmpFlagstatMetrics}"
