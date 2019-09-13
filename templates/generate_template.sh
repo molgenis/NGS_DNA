@@ -16,6 +16,7 @@ Usage:
 	$(basename $0) OPTIONS
 Options:
 	-h   Show this help.
+	-p   projectname
 	-a   sampleType (DNA or RNA) (default=DNA)
 	-g   group (default=basename of ../../../ )
 	-f   filePrefix (default=basename of this directory)
@@ -30,9 +31,9 @@ EOH
 }
 
 
-while getopts "t:g:w:f:r:h" opt;
+while getopts "t:g:w:f:r:p:h" opt;
 do
-	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)workDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
+	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)workDir="${OPTARG}";; f)filePrefix="${OPTARG}";; p)project="${OPTARG}";; r)runID="${OPTARG}";;
 	esac
 done
 
@@ -41,6 +42,7 @@ if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; 
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
 if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
+if [[ -z "${project:-}" ]]; then project="${filePrefix}" ; fi ; echo "project=${project}"
 
 genScripts="${workDir}/generatedscripts/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
