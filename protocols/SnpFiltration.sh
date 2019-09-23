@@ -30,8 +30,8 @@ java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar "${EBROOT
 --variant "${sampleVariantsMergedSnpsVcf}" \
 --filterExpression "QD < 2.0" \
 --filterName "filterQD_lt2.0" \
---filterExpression "MQ < 40.0" \
---filterName "filterMQ_lt40.0" \
+--filterExpression "MQ < 25.0" \
+--filterName "filterMQ_lt25.0" \
 --filterExpression "SOR > 3.0" \
 --filterName "filterSOR_gt3.0" \
 --filterExpression "MQRankSum < -12.5" \
