@@ -8,7 +8,8 @@
 #string projectPrefix
 #string intermediateDir
 #list externalSampleID
-#string	project
+#string project
+#string projectFinalVcf
 
 #string ngsUtilsVersion
 
@@ -61,7 +62,7 @@ ALLSAMPLESINONE=$(echo ${AS%?})
 
 ####Transform VCF file into tabular file####
 "${vcf2Table}" \
--vcf "${projectPrefix}.final.vcf" \
+-vcf "${projectFinalVcf}" \
 -output "${tmpVariantsFinalProjectVcfTable}" \
 -filter "${filter}" \
 -sample "${ALLSAMPLESINONE}"

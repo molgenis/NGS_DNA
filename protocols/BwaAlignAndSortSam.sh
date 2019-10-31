@@ -22,9 +22,7 @@ set -o pipefail
 #string intermediateDir
 #string filePrefix
 #string alignedSortedBam
-#string picardVersion
-#string picardJar
-#string cutadaptVersion
+#string gatkVersion
 
 makeTmpDir "${alignedSam}"
 tmpAlignedSam="${MC_tmpFile}"
@@ -34,7 +32,7 @@ tmpAlignedSortedBam="${MC_tmpFile}"
 
 #Load module BWA
 module load "${bwaVersion}"
-module load "${picardVersion}"
+module load "${gatkVersion}"
 module list
 
 READGROUPLINE="@RG\tID:${filePrefix}\tPL:illumina\tLB:${externalSampleID}\tSM:${externalSampleID}"
@@ -56,11 +54,11 @@ then
 	"${fastq2}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
-        INPUT="${tmpAlignedSam}" \
-        OUTPUT="${tmpAlignedSortedBam}"  \
-        SORT_ORDER=coordinate \
-        CREATE_INDEX=true 
+	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
+        --INPUT="${tmpAlignedSam}" \
+        --OUTPUT="${tmpAlignedSortedBam}"  \
+        --SORT_ORDER coordinate \
+        --CREATE_INDEX=true
 
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
 	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
@@ -80,11 +78,11 @@ else
 	"${srBarcodeRecodedFqGz}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
-        INPUT="${tmpAlignedSam}" \
-        OUTPUT="${tmpAlignedSortedBam}"  \
-        SORT_ORDER=coordinate \
-        CREATE_INDEX=true
+	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
+        --INPUT="${tmpAlignedSam}" \
+        --OUTPUT="${tmpAlignedSortedBam}"  \
+        --SORT_ORDER coordinate \
+        --CREATE_INDEX=true
 
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
 	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"

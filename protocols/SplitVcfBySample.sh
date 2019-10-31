@@ -1,17 +1,18 @@
-#list externalSampleID
 #string tmpName
 #string gatkVersion
-#string gatkJar
 #string bcfToolsVersion
 #string barcode
 #string indexFile
 #string logsDir 
 #string groupname
-#string sampleVariantsMergedSnpsFilteredVcf
-#string sampleVariantsMergedIndelsFilteredVcf
+
+#string projectFinalVcf
+#string externalSampleID
 #string sampleFinalVcf
+
 #string intermediateDir
-#string	project
+#string project
+#string indexFileDictionary
 
 #Load GATK module
 module load "${gatkVersion}"
@@ -21,18 +22,15 @@ module list
 makeTmpDir "${sampleFinalVcf}"
 tmpSampleFinalVcf="${MC_tmpFile}"
 
-java -Xmx3g -jar "${EBROOTGATK}/${gatkJar}" \
--R "${indexFile}" \
--T CombineVariants \
---variant "${sampleVariantsMergedSnpsFilteredVcf}" \
---variant "${sampleVariantsMergedIndelsFilteredVcf}" \
---genotypemergeoption UNSORTED \
--o "${tmpSampleFinalVcf}"
-
+gatk --java-options "-Xmx3g" SelectVariants \
+--reference="${indexFile}" \
+--variant="${projectFinalVcf}" \
+--sample-name="${externalSampleID}" \
+--output="${tmpSampleFinalVcf}"
 
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
 
-bcftools annotate -h "${tmpSampleFinalVcf}.barcode.txt" "${tmpSampleFinalVcf}" > "${tmpSampleFinalVcf}.tmp"
+bcftools annotate -h "${tmpSampleFinalVcf}.barcode.txt" -O v -o "${tmpSampleFinalVcf}.tmp" "${tmpSampleFinalVcf}"
 
 echo "moving ${tmpSampleFinalVcf}.tmp to ${sampleFinalVcf}"
 mv "${tmpSampleFinalVcf}.tmp" "${sampleFinalVcf}"

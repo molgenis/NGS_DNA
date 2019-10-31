@@ -3,13 +3,10 @@
 
 
 #string gatkVersion
-#string gatkJar
 #string htsLibVersion
 #string ngsUtilsVersion
 #string tempDir
 #string intermediateDir
-#string projectVariantsMerged
-#string projectVariantsMergedSorted
 #string projectVariantsMergedSortedGz
 #list batchID
 #string projectPrefix
@@ -21,23 +18,15 @@
 #string sortVCFpl
 #string indexFile
 #string indexFileFastaIndex
+#string indexFileDictionary
 #string extension
 #string dataDir
 #string capturingKit
 
 
-#Load module GATK,tabix
+#Load module GATK.
 module load "${gatkVersion}"
-module load "${htsLibVersion}"
-module load "${ngsUtilsVersion}"
-
 module list
-
-makeTmpDir "${projectVariantsMerged}"
-tmpProjectVariantsMerged="${MC_tmpFile}"
-
-makeTmpDir "${projectVariantsMergedSorted}"
-tmpProjectVariantsMergedSorted="${MC_tmpFile}"
 
 makeTmpDir "${projectVariantsMergedSortedGz}"
 tmpProjectVariantsMergedSortedGz="${MC_tmpFile}"
@@ -57,26 +46,22 @@ array_contains () {
 }
 
 INPUTS=()
-
 for b in "${batchID[@]}"
 do
 	if [ -f "${projectPrefix}.batch-${b}.${extension}" ]
 	then
-		array_contains INPUTS "--variant ${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("--variant ${projectPrefix}.batch-${b}.${extension}")
+		array_contains INPUTS "--INPUT=${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("--INPUT=${projectPrefix}.batch-${b}.${extension}")
 	fi
 done
 
-java -Xmx5g -Djava.io.tmpdir="${tempDir}" -cp "${EBROOTGATK}/${gatkJar}" org.broadinstitute.gatk.tools.CatVariants \
--R "${indexFile}" \
+gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
 ${INPUTS[@]} \
--out "${tmpProjectVariantsMerged}"
+--OUTPUT="${tmpProjectVariantsMergedSortedGz}" \
+--SEQUENCE_DICTIONARY="${indexFileDictionary}"
 
-echo "sorting vcf"
-sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpProjectVariantsMerged}" -outputVcf "${tmpProjectVariantsMergedSorted}"
-
-bgzip -c "${tmpProjectVariantsMergedSorted}" > "${projectVariantsMergedSortedGz}"
-tabix -p vcf "${projectVariantsMergedSortedGz}"
+mv "${tmpProjectVariantsMergedSortedGz}" "${projectVariantsMergedSortedGz}"
+mv "${tmpProjectVariantsMergedSortedGz}.tbi" "${projectVariantsMergedSortedGz}.tbi"
+echo "moved ${tmpProjectVariantsMergedSortedGz} to ${projectVariantsMergedSortedGz}"
 
 ### make allChromosomes bedfile to use it later in CheckOutput script
 awk '{print $1}' "${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed" | uniq > "${intermediateDir}/allChromosomes.txt"
-

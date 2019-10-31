@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-#string gatkVersion
-#string gatkJar
 #string intermediateDir
 #string dedupBam
 #string project
@@ -17,7 +15,7 @@
 #string coveragePerTargetDir
 #string ngsUtilsVersion
 
-module load "${gatkVersion}"
+module load "GATK/3.7-Java-1.8.0_74"
 module load "${ngsUtilsVersion}"
 
 ### Per base bed files
@@ -40,7 +38,7 @@ then
 		perBase=$(basename "${i}")
 		perBaseDir=$(echo $(dirname "${i}")/${perBase}/human_g1k_v37/)
 		echo "perBaseDir: ${perBaseDir}"
-		java -Xmx7g -XX:ParallelGCThreads=1 -jar "${EBROOTGATK}/${gatkJar}" \
+		java -Xmx7g -XX:ParallelGCThreads=1 -jar /apps/software/GATK/3.7-Java-1.8.0_74/GenomeAnalysisTK.jar \
 		-R "${indexFile}" \
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perBase}.coveragePerBase" \
@@ -80,7 +78,7 @@ then
 		perTarget=$(basename "${i}")
 		perTargetDir=$(echo $(dirname "${i}")"/${perTarget}/human_g1k_v37/")
 
-		java -Xmx7g -XX:ParallelGCThreads=1 -jar "${EBROOTGATK}/${gatkJar}" \
+		java -Xmx7g -XX:ParallelGCThreads=1 -jar /apps/software/GATK/3.7-Java-1.8.0_74/GenomeAnalysisTK.jar \
 		-R "${indexFile}" \
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perTarget}.coveragePerTarget" \

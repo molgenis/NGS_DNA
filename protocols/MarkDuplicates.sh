@@ -8,16 +8,14 @@
 #string dedupBam
 #string dedupBamIdx
 #string tmpDataDir
-#string picardJar
 #string sambambaVersion
-#string sambambaTool
-#string	project
+#string project
 #string logsDir 
 #string groupname
 #string intermediateDir
 #string flagstatMetrics
 
-#Load Picard module
+#Load Sambamba module
 module load "${sambambaVersion}"
 module list
 
@@ -27,8 +25,8 @@ tmpDedupBam="${MC_tmpFile}"
 makeTmpDir "${dedupBamIdx}" "${intermediateDir}"
 tmpDedupBamIdx="${MC_tmpFile}"
 
-##Run picard, sort BAM file and create index on the fly
-"${sambambaTool}" markdup \
+##Run Sambamba, sort BAM file and create index on the fly
+sambamba markdup \
 --nthreads=4 \
 --overflow-list-size 1000000 \
 --hash-table-size 1000000 \
