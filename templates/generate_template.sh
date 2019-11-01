@@ -102,6 +102,7 @@ groupname=${group};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
 environment_parameters=${genScripts}/parameters_environment_converted.csv;\
 tmpdir_parameters=${genScripts}/parameters_tmpdir_converted.csv;\
+sampleSize=${sampleSize};\
 worksheet=${genScripts}/${filePrefix}.csv;\
 runid=${runID}" \
 -weave \
