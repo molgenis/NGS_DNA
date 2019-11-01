@@ -4,6 +4,7 @@ targetedInsertSize,200
 checkStage,module list
 
 ### Tool versions ####
+toolChain,foss-2018b
 bedToolsVersion,BEDTools/2.25.0-${toolChain}
 bwaVersion,BWA/0.7.15-${toolChain}
 computeVersion,Molgenis-Compute/v19.01.1-Java-11.0.2
