@@ -1,4 +1,11 @@
 #!/bin/bash
+if module list | grep -o -P 'NGS_DNA(.+)' 
+then
+	echo "DNA pipeline loaded, proceding"
+else
+	echo "No DNA Pipeline loaded, exiting"
+	exit 1
+fi
 
 module list
 

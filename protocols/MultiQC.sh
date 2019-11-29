@@ -25,8 +25,6 @@
 #string plink2Version
 #string plinkSeqVersion
 #string picardVersion
-#string python2Version
-#string python3Version
 #string rVersion
 #string sambambaVersion
 #string samtoolsVersion
@@ -77,8 +75,6 @@ echo -e "report_header_info:
     - '': '${plink2Version}'
     - '': '${plinkSeqVersion}'
     - '': '${picardVersion}'
-    - '': '${python2Version}'
-    - '': '${python3Version}'
     - '': '${rVersion}'
     - '': '${sambambaVersion}'
     - '': '${samtoolsVersion}'

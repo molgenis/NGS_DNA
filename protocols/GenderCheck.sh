@@ -32,9 +32,9 @@ else
 	#select only the mean target coverage of the whole genome file
 	awk '{
 		if ($0 ~ /^#/){}
-		else if ($40 == ""){}
-		else if ($40 == "MEAN_TARGET_COVERAGE"){}
-		else {print $40}
+		else if ($34 == ""){}
+		else if ($34 == "MEAN_TARGET_COVERAGE"){}
+		else {print $34}
 		}' "${dedupBamMetrics}.hs_metrics" >> "${checkSexMeanCoverage}"
 
 
@@ -55,9 +55,9 @@ else
 		#select only the mean target coverage of chromosome X
 		awk '{
 			if ($0 ~ /^#/){}
-			else if ($40 == ""){}
-			else if ($40 == "MEAN_TARGET_COVERAGE"){}
-			else {print $40}
+			else if ($34 == ""){}
+			else if ($34 == "MEAN_TARGET_COVERAGE"){}
+			else {print $34}
 			}' "${hsMetricsNonAutosomalRegionChrX}" >> "${checkSexMeanCoverage}"
 
 

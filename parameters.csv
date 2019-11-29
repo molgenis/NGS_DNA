@@ -12,7 +12,7 @@ vepDBVersion,90
 vepAssemblyVersion,GRCh37
 bcfToolsVersion,BCFtools/1.9-${toolChain_min}
 bedToolsVersion,BEDTools/2.28.0-${toolChain_min}
-bwaVersion,BWA/2.0pre1-${toolChain_max}
+bwaVersion,BWA/0.7.17-${toolChain_min}
 computeVersion,Molgenis-Compute/v19.01.1-Java-11-LTS
 caddVersion,CADD/v1.3
 convadingVersion,1.2.1-${toolChain_min}
@@ -402,7 +402,7 @@ manVarListMVL_LB_B,${manVarListDir}/MVL_2018-06-27_LB-B.bed
 manVarListMVL_VUS_LP_P,${manVarListDir}/MVL_2018-06-27_VUS-LP-P.bed
 manVarListVKGL_consensus_VUS_LP_P,${manVarListDir}/VKGL_consensus_2018-06-27_VUS-LP-P.bed
 
-vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11
+vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain_max}-Python-2.7.11
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 

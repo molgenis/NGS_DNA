@@ -8,7 +8,6 @@
 #string dedupBam
 #string mantaDir
 #string mantaVersion
-#string python2Version
 #string capturingKit
 #string capturedBed
 #string bedToolsVersion
@@ -20,7 +19,6 @@
 
 module load "${ngsversion}"
 module load "${mantaVersion}"
-module load "${python2Version}"
 module load "${htsLibVersion}"
 module load "${bedToolsVersion}"
 
