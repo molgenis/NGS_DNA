@@ -12,7 +12,7 @@
 #string checkSexMeanCoverage
 #string picardJar
 #string hsMetricsNonAutosomalRegionChrX
-#string	project
+^#string project
 #string logsDir 
 #string groupname
 #string picardVersion

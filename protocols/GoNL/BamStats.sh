@@ -2,7 +2,7 @@
 
 #string tmpName
 #string dedupBam
-#string	project
+^#string project
 #string tempDir
 #string logsDir
 #string groupname

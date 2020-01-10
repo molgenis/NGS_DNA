@@ -17,7 +17,7 @@
 #string picardJar
 #string insertSizeMetrics
 #string gcBiasMetrics
-#string	project
+^#string project
 #string logsDir 
 #string groupname
 #string intermediateDir

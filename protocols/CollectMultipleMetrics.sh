@@ -12,7 +12,7 @@
 #string tempDir
 #string seqType
 #string picardJar
-#string	project
+^#string project
 #string logsDir 
 #string groupname
 #string intermediateDir
