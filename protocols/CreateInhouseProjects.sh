@@ -175,11 +175,14 @@ then
 
 	echo "${barcodesGrepCommand}"
 
-	grep -E -v "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${projectJobsDir}/${project}.filteredRejected.csv"
-	grep -E "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${intermediateDir}/${project}.filteredBarcodes.csv"
-	cp "${sampleSheetCsv}" "${projectJobsDir}/${project}.original.csv"
-	sampleSheetCsv="${projectJobsDir}/${project}.filteredRejected.csv"
+	if grep -E "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${intermediateDir}/${project}.filteredBarcodes.csv"
+	then
+		grep -E -v "${barcodesGrepCommand}" "${sampleSheetCsv}" > "${projectJobsDir}/${project}.filteredRejected.csv"
+		cp "${sampleSheetCsv}" "${projectJobsDir}/${project}.original.csv"
+		sampleSheetCsv="${projectJobsDir}/${project}.filteredRejected.csv"
+	fi
 fi
+
 if [[ -f .compute.properties ]]
 then
 	rm .compute.properties
