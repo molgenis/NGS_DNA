@@ -28,7 +28,7 @@
 #string environment_parameters
 #string ngsversion
 #string ngsUtilsVersion
-
+#string sampleSize
 #string dataDir
 
 #string coveragePerBaseDir
@@ -258,6 +258,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
+sampleSize=${sampleSize};\
 groupname=${groupname};\
 runid=${runid}"
 
