@@ -6,6 +6,7 @@
 #string intermediateDir
 #string projectFinalVcf
 #string projectPrefix
+#string whichSex
 
 module load "${vcfPedVersion}"
 
@@ -52,7 +53,7 @@ then
 			while read line
 			do
 				printf "${line} "
-				if [ $(tail -1 "${intermediateDir}/${line}.chosenSex.txt") == "Female" ]
+				if [ $(tail -1 "${whichSex}") == "Female" ]
 				then
 					echo "Mother"
 				else

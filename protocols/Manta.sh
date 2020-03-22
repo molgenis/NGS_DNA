@@ -19,6 +19,7 @@
 
 module load "${ngsversion}"
 module load "${mantaVersion}"
+module load "${python2Version}"
 module load "${htsLibVersion}"
 module load "${bedToolsVersion}"
 

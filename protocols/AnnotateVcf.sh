@@ -13,6 +13,7 @@
 #string fromCADDMerged
 #string vcfAnnoConf
 #string caddVersion
+#string vepAssemblyVersion
 #string exacAnnotation
 #string gonlAnnotation
 #string gnomADGenomesAnnotation
@@ -48,10 +49,9 @@ then
 	bcftools norm -f "${indexFile}" -m -any "${projectBatchGenotypedVariantCalls}" | awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' | bgzip -c > "${toCADD}.gz"
 
 	echo "starting to get CADD annotations locally for ${toCADD}.gz"
-	score.sh "${toCADD}.gz" "${fromCADD}"
+	CADD.sh -g "${vepAssemblyVersion}" "${toCADD}.gz" "${fromCADD}"
 
-	echo "convert fromCADD tsv file to fromCADD vcf"
-	##convert tsv to vcf
+	echo "convert fromCADD vcf file to fromCADD vcf"
 	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc ${fromCADD}\
 	| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCADD}.vcf.gz"
 
