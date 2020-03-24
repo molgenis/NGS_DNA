@@ -248,8 +248,8 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
---header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
+--header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -w "${workflowpath}" \
 -b slurm \

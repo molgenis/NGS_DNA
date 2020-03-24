@@ -8,7 +8,6 @@
 #string dedupBam
 #string mantaDir
 #string mantaVersion
-#string python2Version
 #string capturingKit
 #string capturedBed
 #string bedToolsVersion
