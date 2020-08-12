@@ -121,4 +121,4 @@ bash "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-g \
 	-weave \
 	-runid "${runID}" \
-	-o "ngsversion=${ngsversion};groupname=${group};sampleSize=${sampleSize}"
+	-o "ngsversion=${ngsversion};sampleSize=${sampleSize};groupname=${group}"
