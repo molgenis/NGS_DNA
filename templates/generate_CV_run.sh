@@ -18,6 +18,7 @@ function showHelp() {
 		    -w   workdir (default=/groups/\${group}/\${tmpDirectory})
 		    -c   capturingKit
 		    -p   previous run (default=run01)
+		    -n   NGS_DNA software dir (default=/apps/software/NGS_DNA/3.5.5/)
 
 		===============================================================================================================
 	EOH
@@ -26,7 +27,7 @@ function showHelp() {
 }
 
 
-while getopts "t:g:w:f:r:c:v:p:h" opt;
+while getopts "t:g:w:f:r:c:v:p:n:h" opt;
 do
 	case $opt in
 		h) showHelp;;
@@ -37,6 +38,7 @@ do
 		# c) capturingKit="${OPTARG}";;
 		r) runID="${OPTARG}";; 
 		p) prevrunID="${OPTARG}";;
+		n) ngs_dna_dir="${OPTARG}";;
 	esac 
 done
 
@@ -48,6 +50,7 @@ if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}"; fi;
 if [[ -z "${filePrefix:-}" ]]; then filePrefix="$(basename "$(pwd)")"; fi; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="runCV"; fi; echo "runID=${runID}"
 if [[ -z "${prevrunID:-}" ]]; then prevrunID="run01"; fi; echo "prevrunID=${prevrunID}"
+if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="default"; fi; echo "ngs_dna_dir=${ngs_dna_dir}"
 
 
 # Setup directory variables.
@@ -100,19 +103,20 @@ module load NGS_DNA/3.5.5
 batching="_chr"
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
 
+if [[ "$ngs_dna_dir" == "default" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi
 
 bash "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "parameters_converted.csv" \
-	-p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
+	-p "${ngs_dna_dir}/batchIDList${batching}.csv" \
 	-p "${projectJobsDir}/${filePrefix}.csv" \
 	-p "parameters_environment_converted.csv" \
 	-p "parameters_group_converted.csv" \
 	-p "parameters_tmpdir_converted.csv" \
 	-rundir "${projectJobsDir}" \
-	--header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
-	--footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
-	--submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
-	-w "${EBROOTNGS_DNA}/workflow_cv.csv" \
+	--header "${ngs_dna_dir}/templates/slurm/header.ftl" \
+	--footer "${ngs_dna_dir}/templates/slurm/footer.ftl" \
+	--submit "${ngs_dna_dir}/templates/slurm/submit.ftl" \
+	-w "${ngs_dna_dir}/workflow_cv.csv" \
 	-b slurm \
 	-g \
 	-weave \
