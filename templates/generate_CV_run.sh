@@ -102,7 +102,7 @@ done
 module load NGS_DNA/3.5.5
 batching="_chr"
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
-
+sampleSize=$(wc -l < "${samplesheet_cv}")
 if [[ "$ngs_dna_dir" == "default" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi
 
 bash "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
@@ -121,4 +121,4 @@ bash "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-g \
 	-weave \
 	-runid "${runID}" \
-	-o "ngsversion=${ngsversion};groupname=${group};sampleSize=$(wc -l < "${samplesheet_cv}")"
+	-o "ngsversion=${ngsversion};groupname=${group};sampleSize=${sampleSize}"
