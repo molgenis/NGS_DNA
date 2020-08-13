@@ -29,10 +29,8 @@
 
 module load "${vcfAnnoVersion}"
 module load "${htsLibVersion}"
-module load "${caddVersion}"
 module load "${bcfToolsVersion}"
-module load "${htsLibVersion}"
-
+module load "${caddVersion}"
 
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
@@ -57,16 +55,14 @@ then
 	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc ${fromCADD}\
 	| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCADD}.vcf.gz"
 
-	# tabix -f -p vcf "${fromCADD}.vcf.gz"
-	bcftools index -t -f "${fromCADD}.vcf.gz"
+	tabix -f -p vcf "${fromCADD}.vcf.gz"
 	##merge the alternative alleles back in one vcf line
 	echo "merging the alternative alleles back in one vcf line .. "
 	bcftools norm -f "${indexFile}" -m +any "${fromCADD}.vcf.gz" > "${fromCADDMerged}"
 
 	echo "bgzipping + indexing ${fromCADDMerged}"
 	bgzip -c "${fromCADDMerged}" > "${fromCADDMerged}.gz"
-	# tabix -f -p vcf "${fromCADDMerged}.gz"
-	bcftools index -t -f "${fromCADDMerged}.gz"
+	tabix -f -p vcf "${fromCADDMerged}.gz"
 
 
 	## Prepare gnomAD config 
