@@ -31,6 +31,7 @@ module load "${vcfAnnoVersion}"
 module load "${htsLibVersion}"
 module load "${caddVersion}"
 module load "${bcfToolsVersion}"
+module load "${htsLibVersion}"
 
 
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
