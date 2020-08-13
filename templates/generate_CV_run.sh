@@ -49,6 +49,10 @@ if ! module list | grep -oP "NGS_DNA.+"; then
 fi
 
 
+# Load Molgenis Computer.
+ml Molgenis-Compute/v19.01.1-Java-11.0.2
+
+
 # Load python3 and add custom packages.
 # TODO: Need to do something about both Python3 and custom pacakges. Currently that's only PyYaml.
 module load Python/3.6.3-foss-2015b
