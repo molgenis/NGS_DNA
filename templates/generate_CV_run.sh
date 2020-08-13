@@ -57,6 +57,7 @@ if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="default"; fi; echo "ngs_dna_di
 genScripts="${workDir}/generatedscripts/${filePrefix}/"
 projectJobsDir="${workDir}/projects/${filePrefix}/${runID}/jobs/"
 projectResultsDir="${workDir}/projects/${filePrefix}/${runID}/results/"
+prev_ResultsDir="${projectResultsDir/$runID/$prevrunID}"
 intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
 
 
@@ -64,7 +65,7 @@ intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectResultsDir}"
 mkdir -p "${intermediateDir}"
-mkdir -p "${projectResultsDir}/qc/statistics/"
+# mkdir -p "${projectResultsDir}/qc/statistics/"
 mkdir -p "${projectResultsDir}/variants/cnv/"
 mkdir -p "${projectResultsDir}/variants/gVCF/"
 mkdir -p "${projectResultsDir}/variants/GAVIN/"
@@ -72,6 +73,8 @@ mkdir -p "${projectResultsDir}/general"
 # mkdir -p "${projectQcDir}"
 mkdir -p "${intermediateDir}/GeneNetwork/"
 # mkdir -p -m 2770 "${logsDir}/${project}/
+# Link to the previous run QC directory.
+ln -s "${prev_ResultsDir}/qc/" "${projectResultsDir}/"
 
 module load Pysam
 for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
@@ -89,11 +92,10 @@ cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
 # Make symbolic links.
-previous_gvcf_dir="${projectResultsDir/$runID/$prevrunID}/variants/gVCF/"
 gvcf_dir="${projectResultsDir}/variants/gVCF/"
 prometheus_gvcf_folder="/groups/umcg-atd/tmp03/projects/ContinuousValidation/runVVV_Prometheus_3.2_Tiger/results/variants/gVCF/"
 
-for gvcf in "${previous_gvcf_dir}/"*g.vcf*; do
+for gvcf in "${prev_ResultsDir}/variants/gVCF/"*.g.vcf*; do
 	ln -s "${gvcf}" "${gvcf_dir}"
 done
 
