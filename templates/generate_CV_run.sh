@@ -42,15 +42,29 @@ do
 	esac 
 done
 
+# Check if NGS_DNA is loaded.
+if ! module list | grep -oP "NGS_DNA.+"; then
+	echo "No NGS_DNA module loaded. Exiting."
+	exit 1
+fi
 
-# if [[ -z "${capturingKit:-}" ]]; then echo -e '\nERROR: Must specify an capturingKit\n'; showHelp; exit 1; fi
+
+# Load python3 and add custom packages.
+# TODO: Need to do something about both Python3 and custom pacakges. Currently that's only PyYaml.
+module load Python/3.6.3-foss-2015b
+for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
+	new_PYTHONPATH="${PYTHONPATH}:${x}"
+done
+
+
+# Assign command line variables or defaults.
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory="$(basename "$(cd ../../ && pwd)")"; fi; echo "tmpDirectory=${tmpDirectory}"
 if [[ -z "${group:-}" ]]; then group="$(basename "$(cd ../../../ && pwd)")"; fi; echo "group=${group}"
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}"; fi; echo "workDir=${workDir}"
 if [[ -z "${filePrefix:-}" ]]; then filePrefix="$(basename "$(pwd)")"; fi; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="runCV"; fi; echo "runID=${runID}"
 if [[ -z "${prevrunID:-}" ]]; then prevrunID="run01"; fi; echo "prevrunID=${prevrunID}"
-if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="default"; fi; echo "ngs_dna_dir=${ngs_dna_dir}"
+if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi; echo "ngs_dna_dir=${ngs_dna_dir}"
 
 
 # Setup directory variables.
@@ -65,26 +79,17 @@ intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectResultsDir}"
 mkdir -p "${intermediateDir}"
-# mkdir -p "${projectResultsDir}/qc/statistics/"
 mkdir -p "${projectResultsDir}/variants/cnv/"
 mkdir -p "${projectResultsDir}/variants/gVCF/"
 mkdir -p "${projectResultsDir}/variants/GAVIN/"
 mkdir -p "${projectResultsDir}/general"
-# mkdir -p "${projectQcDir}"
 mkdir -p "${intermediateDir}/GeneNetwork/"
-# mkdir -p -m 2770 "${logsDir}/${project}/
-# Link to the previous run QC directory.
-ln -s "${prev_ResultsDir}/qc/" "${projectResultsDir}/"
 
-module load Pysam
-for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
-	new_PYTHONPATH="${PYTHONPATH}:${x}"
-done
 
 # Create a new sample sheet with the hybrid sample added.
-prometheus_yaml="prometheus.sample_info.yaml"
+prometheus_yaml="${EBROOTNGS_DNA}/resources/prometheus.sample_info.yaml"
+altmap_yaml="${EBROOTNGS_DNA}/resources/alt_ss_field_mappings.yaml"
 samplesheet="${genScripts}/${filePrefix}.csv"
-altmap_yaml="alt_ss_field_mappings.yaml"
 samplesheet_cv="${genScripts}/${filePrefix}_CV.csv"
 
 PYTHONPATH=${new_PYTHONPATH}; python add_prometheus.py "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
@@ -92,7 +97,9 @@ cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
 # Make symbolic links.
+ln -s "${prev_ResultsDir}/qc/" "${projectResultsDir}/"
 gvcf_dir="${projectResultsDir}/variants/gVCF/"
+# TODO: This needs to be updated to point to somewhere more permanent.
 prometheus_gvcf_folder="/groups/umcg-atd/tmp03/projects/ContinuousValidation/runVVV_Prometheus_3.2_Tiger/results/variants/gVCF/"
 
 for gvcf in "${prev_ResultsDir}/variants/gVCF/"*.g.vcf*; do
@@ -105,12 +112,13 @@ done
 
 
 # Setup other parameters.
-module load NGS_DNA/3.5.5
 batching="_chr"
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
 sampleSize=$(( $(wc -l < externalSampleIDs.txt) + 1 ))
-if [[ "$ngs_dna_dir" == "default" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi
+# if [[ "$ngs_dna_dir" == "default" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi
 
+
+# Run Molgenis Compute.
 bash "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "parameters_converted.csv" \
 	-p "${ngs_dna_dir}/batchIDList${batching}.csv" \
