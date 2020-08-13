@@ -92,7 +92,7 @@ altmap_yaml="${EBROOTNGS_DNA}/resources/alt_ss_field_mappings.yaml"
 samplesheet="${genScripts}/${filePrefix}.csv"
 samplesheet_cv="${genScripts}/${filePrefix}_CV.csv"
 
-PYTHONPATH=${new_PYTHONPATH}; python "${EBROOTNGS_DNA}/scripts/add_prometheus.py "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
+PYTHONPATH=${new_PYTHONPATH}; python "${EBROOTNGS_DNA}/scripts/add_prometheus.py" "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
 cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
