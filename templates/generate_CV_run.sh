@@ -73,6 +73,10 @@ mkdir -p "${projectResultsDir}/general"
 mkdir -p "${intermediateDir}/GeneNetwork/"
 # mkdir -p -m 2770 "${logsDir}/${project}/
 
+module load Pysam
+for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
+	new_PYTHONPATH="${PYTHONPATH}:${x}"
+done
 
 # Create a new sample sheet with the hybrid sample added.
 prometheus_yaml="prometheus.sample_info.yaml"
@@ -80,7 +84,7 @@ samplesheet="${genScripts}/${filePrefix}.csv"
 altmap_yaml="alt_ss_field_mappings.yaml"
 samplesheet_cv="${genScripts}/${filePrefix}_CV.csv"
 
-python add_prometheus.py "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
+PYTHONPATH=${new_PYTHONPATH}; python add_prometheus.py "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
 cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
