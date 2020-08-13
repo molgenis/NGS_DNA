@@ -40,7 +40,7 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 module load "${gatkVersion}"
 module list
 
-numberofbatches=$((sampleSize / 200))
+numberofbatches=$(($sampleSize / 200))
 ALLGVCFs=()
 
 if [ "${sampleSize}" -gt 200 ]
