@@ -43,19 +43,19 @@ do
 done
 
 # Check if NGS_DNA is loaded.
-if ! module list | grep -oP "NGS_DNA.+"; then
-	echo "No NGS_DNA module loaded. Exiting."
-	exit 1
-fi
+#if ! module list | grep -oP "NGS_DNA.+"; then
+#	echo "No NGS_DNA module loaded. Exiting."
+#	exit 1
+#fi
 
 
 # Load Molgenis Computer.
-ml Molgenis-Compute/v19.01.1-Java-11.0.2
+#ml Molgenis-Compute/v19.01.1-Java-11.0.2
 
 
 # Load python3 and add custom packages.
 # TODO: Need to do something about both Python3 and custom pacakges. Currently that's only PyYaml.
-module load Python/3.6.3-foss-2015b
+module load Pysam
 for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
 	new_PYTHONPATH="${PYTHONPATH}:${x}"
 done
@@ -68,7 +68,7 @@ if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}"; fi;
 if [[ -z "${filePrefix:-}" ]]; then filePrefix="$(basename "$(pwd)")"; fi; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="runCV"; fi; echo "runID=${runID}"
 if [[ -z "${prevrunID:-}" ]]; then prevrunID="run01"; fi; echo "prevrunID=${prevrunID}"
-if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi; echo "ngs_dna_dir=${ngs_dna_dir}"
+if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="default"; fi; echo "ngs_dna_dir=${ngs_dna_dir}"
 
 
 # Setup directory variables.
@@ -91,12 +91,12 @@ mkdir -p "${intermediateDir}/GeneNetwork/"
 
 
 # Create a new sample sheet with the hybrid sample added.
-prometheus_yaml="${EBROOTNGS_DNA}/resources/prometheus.sample_info.yaml"
-altmap_yaml="${EBROOTNGS_DNA}/resources/alt_ss_field_mappings.yaml"
+prometheus_yaml="${ngs_dna_dir}/resources/prometheus.sample_info.yaml"
+altmap_yaml="${ngs_dna_dir}/resources/alt_ss_field_mappings.yaml"
 samplesheet="${genScripts}/${filePrefix}.csv"
 samplesheet_cv="${genScripts}/${filePrefix}_CV.csv"
 
-PYTHONPATH=${new_PYTHONPATH}; python "${EBROOTNGS_DNA}/scripts/add_prometheus.py" "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
+PYTHONPATH=${new_PYTHONPATH}; python "${ngs_dna_dir}/scripts/add_prometheus.py" "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
 cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
@@ -114,16 +114,19 @@ for gvcf in "${prometheus_gvcf_folder}/"*g.vcf*; do
 	ln -s "${gvcf}" "${gvcf_dir}"
 done
 
+ml NGS_DNA/3.5.5
 
 # Setup other parameters.
 batching="_chr"
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
 sampleSize=$(( $(wc -l < externalSampleIDs.txt) + 1 ))
-# if [[ "$ngs_dna_dir" == "default" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi
+if [[ "$ngs_dna_dir" == "default" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi
+
+echo "${group}"
 
 
 # Run Molgenis Compute.
-bash "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
+sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "parameters_converted.csv" \
 	-p "${ngs_dna_dir}/batchIDList${batching}.csv" \
 	-p "${projectJobsDir}/${filePrefix}.csv" \
@@ -139,4 +142,6 @@ bash "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-g \
 	-weave \
 	-runid "${runID}" \
-	-o "ngsversion=${ngsversion};sampleSize=${sampleSize};groupname=${group}"
+	-o "ngsversion=${ngsversion};\
+groupname=${group};\
+sampleSize=${sampleSize}"
