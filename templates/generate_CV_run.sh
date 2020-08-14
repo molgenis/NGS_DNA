@@ -49,8 +49,6 @@ done
 #fi
 
 
-# Load Molgenis Computer.
-#ml Molgenis-Compute/v19.01.1-Java-11.0.2
 
 
 # Load python3 and add custom packages.
@@ -68,7 +66,7 @@ if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}"; fi;
 if [[ -z "${filePrefix:-}" ]]; then filePrefix="$(basename "$(pwd)")"; fi; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="runCV"; fi; echo "runID=${runID}"
 if [[ -z "${prevrunID:-}" ]]; then prevrunID="run01"; fi; echo "prevrunID=${prevrunID}"
-if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="default"; fi; echo "ngs_dna_dir=${ngs_dna_dir}"
+if [[ -z "${ngs_dna_dir:-}" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi; echo "ngs_dna_dir=${ngs_dna_dir}"
 
 
 # Setup directory variables.
@@ -78,8 +76,8 @@ projectResultsDir="${workDir}/projects/${filePrefix}/${runID}/results/"
 prev_ResultsDir="${projectResultsDir/$runID/$prevrunID}"
 intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
 
-
 # Make project subdirectories.
+echo "Making project run directories."
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectResultsDir}"
 mkdir -p "${intermediateDir}"
@@ -91,6 +89,7 @@ mkdir -p "${intermediateDir}/GeneNetwork/"
 
 
 # Create a new sample sheet with the hybrid sample added.
+echo "Adding hybrid sample to samplesheet."
 prometheus_yaml="${ngs_dna_dir}/resources/prometheus.sample_info.yaml"
 altmap_yaml="${ngs_dna_dir}/resources/alt_ss_field_mappings.yaml"
 samplesheet="${genScripts}/${filePrefix}.csv"
@@ -101,6 +100,7 @@ cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
 # Make symbolic links.
+echo "Making symbolic links."
 ln -s "${prev_ResultsDir}/qc/" "${projectResultsDir}/"
 gvcf_dir="${projectResultsDir}/variants/gVCF/"
 # TODO: This needs to be updated to point to somewhere more permanent.
@@ -114,7 +114,7 @@ for gvcf in "${prometheus_gvcf_folder}/"*g.vcf*; do
 	ln -s "${gvcf}" "${gvcf_dir}"
 done
 
-ml NGS_DNA/3.5.5
+#ml NGS_DNA/3.5.5
 
 # Setup other parameters.
 batching="_chr"
@@ -126,6 +126,14 @@ echo "${group}"
 
 
 # Run Molgenis Compute.
+echo "Running Compute."
+
+# Load Molgenis Computer.
+echo "Loading Compute."
+ml Molgenis-Compute/v19.01.1-Java-11.0.2
+
+echo "$group"
+
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "parameters_converted.csv" \
 	-p "${ngs_dna_dir}/batchIDList${batching}.csv" \
@@ -142,6 +150,5 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-g \
 	-weave \
 	-runid "${runID}" \
-	-o "ngsversion=${ngsversion};\
-groupname=${group};\
-sampleSize=${sampleSize}"
+	-o "groupname="${group}";sampleSize="${sampleSize}";ngsversion="${ngsversion}""
+
