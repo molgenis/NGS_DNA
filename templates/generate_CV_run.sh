@@ -137,7 +137,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "parameters_environment_converted.csv" \
 	-p "parameters_group_converted.csv" \
 	-p "parameters_tmpdir_converted.csv" \
-	-p "resources_parameters.converted.csv" \
+	-p "scripts/resources_parameters.converted.csv" \
 	-rundir "${projectJobsDir}" \
 	--header "${ngs_dna_dir}/templates/slurm/header.ftl" \
 	--footer "${ngs_dna_dir}/templates/slurm/footer.ftl" \
