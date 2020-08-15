@@ -11,7 +11,7 @@ gender: Male
 # ID information:
 internal_sample_id: Prometheus
 external_sample_id: Prometheus
-gs_id: 
+gs_id:
 
 # Sample information:
 sample_type: DNA
@@ -19,7 +19,7 @@ sample_process_step_id:
 
 # Family information:
 father_sample_id: 20146039_9669583_DNA124598_568279_QXTR818_S07604514
-father_affected: 
+father_affected:
 mother_sample_id: 20146039_9669575_DNA124587_568277_QXTR818_S07604514
 mother_affected:
 
@@ -47,7 +47,7 @@ lanes: [1,2,3,4]
 
 # Add external_fastq paths after the dashes below. Add more
 # lines if needed. Be sure to leave a space after the dash.
-external_fastq_1: 
+external_fastq_1:
   -
   -
   -

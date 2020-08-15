@@ -36,10 +36,10 @@ do
 		w) workDir="${OPTARG}";;
 		f) filePrefix="${OPTARG}";;
 		# c) capturingKit="${OPTARG}";;
-		r) runID="${OPTARG}";; 
+		r) runID="${OPTARG}";;
 		p) prevrunID="${OPTARG}";;
 		n) ngs_dna_dir="${OPTARG}";;
-	esac 
+	esac
 done
 
 # Check if NGS_DNA is loaded.
