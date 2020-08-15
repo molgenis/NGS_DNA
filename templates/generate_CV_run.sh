@@ -51,7 +51,9 @@ fi
 
 # Load python3 and add custom packages.
 # TODO: Need to do something about both Python3 and custom pacakges. Currently that's only PyYaml.
-module load Python/3.6.3-foss-2015b
+# NOTE: Pysam is loaded here because the default Python module doesn't set the variable PYTHONPATH
+# for some reason. Could do a work around with an if [[ -z ]], but that feels messy.
+module load Pysam
 for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
 	new_PYTHONPATH="${PYTHONPATH}:${x}"
 done
@@ -121,6 +123,7 @@ sampleSize=$(( $(wc -l < externalSampleIDs.txt) + 1 ))
 
 
 # Load Molgenis Computer.
+# This can probably be removed if a normal NGS_DNA module is used that preloads it.
 echo "Loading Compute."
 ml Molgenis-Compute/v19.01.1-Java-11.0.2
 
