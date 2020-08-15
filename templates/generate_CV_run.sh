@@ -137,6 +137,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "parameters_environment_converted.csv" \
 	-p "parameters_group_converted.csv" \
 	-p "parameters_tmpdir_converted.csv" \
+	-p "resources_parameters.converted.csv" \
 	-rundir "${projectJobsDir}" \
 	--header "${ngs_dna_dir}/templates/slurm/header.ftl" \
 	--footer "${ngs_dna_dir}/templates/slurm/footer.ftl" \
@@ -146,4 +147,4 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-g \
 	-weave \
 	-runid "${runID}" \
-	-o "groupname="${group}";sampleSize="${sampleSize}";ngsversion="${ngsversion}""
+	-o "groupname=${group};sampleSize=${sampleSize};ngsversion=${ngsversion}"
