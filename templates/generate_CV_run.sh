@@ -91,12 +91,12 @@ mkdir -p "${intermediateDir}/GeneNetwork/"
 
 # Create a new sample sheet with the hybrid sample added.
 echo "Adding hybrid sample to samplesheet."
-prometheus_yaml="${ngs_dna_dir}/resources/prometheus.sample_info.yaml"
+hybrid_yaml="${ngs_dna_dir}/resources/hybrid_sample_info.yaml"
 altmap_yaml="${ngs_dna_dir}/resources/alt_ss_field_mappings.yaml"
 samplesheet="${genScripts}/${filePrefix}.csv"
 samplesheet_cv="${genScripts}/${filePrefix}_CV.csv"
 
-PYTHONPATH=${new_PYTHONPATH}; python "${ngs_dna_dir}/scripts/add_prometheus.py" "${prometheus_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
+PYTHONPATH=${new_PYTHONPATH}; python "${ngs_dna_dir}/scripts/add_hybrid.py" "${hybrid_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
 cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
@@ -105,13 +105,13 @@ echo "Making symbolic links."
 ln -s "${prev_ResultsDir}/qc/" "${projectResultsDir}/"
 gvcf_dir="${projectResultsDir}/variants/gVCF/"
 # TODO: This needs to be updated to point to somewhere more permanent.
-prometheus_gvcf_folder="/groups/umcg-atd/tmp03/projects/ContinuousValidation/runVVV_Prometheus_3.2_Tiger/results/variants/gVCF/"
+hybrid_gvcf_folder="/groups/umcg-atd/tmp03/projects/ContinuousValidation/runVVV_Prometheus_3.2_Tiger/results/variants/gVCF/"
 
 for gvcf in "${prev_ResultsDir}/variants/gVCF/"*.g.vcf*; do
 	ln -s "${gvcf}" "${gvcf_dir}"
 done
 
-for gvcf in "${prometheus_gvcf_folder}/"*g.vcf*; do
+for gvcf in "${hybrid_gvcf_folder}/"*g.vcf*; do
 	ln -s "${gvcf}" "${gvcf_dir}"
 done
 
