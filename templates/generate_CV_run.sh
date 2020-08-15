@@ -43,17 +43,15 @@ do
 done
 
 # Check if NGS_DNA is loaded.
-#if ! module list | grep -oP "NGS_DNA.+"; then
-#	echo "No NGS_DNA module loaded. Exiting."
-#	exit 1
-#fi
-
-
+if ! module list | grep -oP "NGS_DNA.+"; then
+	echo "No NGS_DNA module loaded. Exiting."
+	exit 1
+fi
 
 
 # Load python3 and add custom packages.
 # TODO: Need to do something about both Python3 and custom pacakges. Currently that's only PyYaml.
-module load Pysam
+module load Python/3.6.3-foss-2015b
 for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
 	new_PYTHONPATH="${PYTHONPATH}:${x}"
 done
@@ -75,6 +73,7 @@ projectJobsDir="${workDir}/projects/${filePrefix}/${runID}/jobs/"
 projectResultsDir="${workDir}/projects/${filePrefix}/${runID}/results/"
 prev_ResultsDir="${projectResultsDir/$runID/$prevrunID}"
 intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
+
 
 # Make project subdirectories.
 echo "Making project run directories."
@@ -114,26 +113,20 @@ for gvcf in "${prometheus_gvcf_folder}/"*g.vcf*; do
 	ln -s "${gvcf}" "${gvcf_dir}"
 done
 
-#ml NGS_DNA/3.5.5
 
 # Setup other parameters.
 batching="_chr"
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
 sampleSize=$(( $(wc -l < externalSampleIDs.txt) + 1 ))
-if [[ "$ngs_dna_dir" == "default" ]]; then ngs_dna_dir="${EBROOTNGS_DNA}"; fi
 
-echo "${group}"
-
-
-# Run Molgenis Compute.
-echo "Running Compute."
 
 # Load Molgenis Computer.
 echo "Loading Compute."
 ml Molgenis-Compute/v19.01.1-Java-11.0.2
 
-echo "$group"
 
+# Run Molgenis Compute.
+echo "Running Compute."
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-p "parameters_converted.csv" \
 	-p "${ngs_dna_dir}/batchIDList${batching}.csv" \
@@ -151,4 +144,3 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 	-weave \
 	-runid "${runID}" \
 	-o "groupname="${group}";sampleSize="${sampleSize}";ngsversion="${ngsversion}""
-
