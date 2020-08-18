@@ -15,7 +15,7 @@
 #string sequenomInfo
 #string gatkJar
 #string gatkVersion
-#string	project
+#string project
 #string logsDir 
 #string groupname
 #string ngsUtilsVersion

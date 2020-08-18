@@ -13,7 +13,7 @@
 #string capturedExomeIntervals
 #string capturingKit
 #string picardJar
-#string	project
+#string project
 #string logsDir 
 #string groupname
 #string intermediateDir
