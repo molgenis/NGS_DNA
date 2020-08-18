@@ -5,7 +5,7 @@
 
 #string logsDir 
 #string groupname
-#string" project
+#string project
 #string finalVcf
 #string intermediateDir
 

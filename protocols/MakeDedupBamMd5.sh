@@ -1,6 +1,6 @@
 #string tmpName
 #string dedupBam
-#string" project
+#string project
 #string logsDir 
 #string groupname
 #string intermediateDir

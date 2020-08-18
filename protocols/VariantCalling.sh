@@ -13,7 +13,7 @@
 #string sampleBatchVariantCallsIndex
 #string tmpDataDir
 #string externalSampleID
-#string" project
+#string project
 #string logsDir
 #string groupname
 #string dedupBam

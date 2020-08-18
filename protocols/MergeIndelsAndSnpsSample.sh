@@ -11,7 +11,7 @@
 #string sampleVariantsMergedIndelsFilteredVcf
 #string sampleFinalVcf
 #string intermediateDir
-#string" project
+#string project
 
 #Load GATK module
 module load "${gatkVersion}"
