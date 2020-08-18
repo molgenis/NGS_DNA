@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if module list | grep -o -P 'NGS_DNA(.+)' 
+then
+	echo "DNA pipeline loaded, proceding"
+else
+	echo "No DNA Pipeline loaded, exiting"
+        exit 1
+fi
+
 module list
 
 host=$(hostname -s)
@@ -102,6 +110,7 @@ groupname=${group};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
 environment_parameters=${genScripts}/parameters_environment_converted.csv;\
 tmpdir_parameters=${genScripts}/parameters_tmpdir_converted.csv;\
+sampleSize=${sampleSize};\
 worksheet=${genScripts}/${filePrefix}.csv;\
 runid=${runID}" \
 -weave \

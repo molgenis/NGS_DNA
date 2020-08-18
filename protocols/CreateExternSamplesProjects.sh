@@ -19,6 +19,7 @@
 #string group_parameters
 #string environment_parameters
 #string groupname
+#string sampleSize
 
 #string mainParameters
 #string worksheet
@@ -172,4 +173,5 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
+sampleSize=${sampleSize};\
 groupname=${groupname}"

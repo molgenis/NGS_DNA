@@ -25,6 +25,9 @@ bedfileRaw=$(basename "${capturingKit}")
 if [[ "${bedfileRaw}" =~ "QXT" ]]
 then
 	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,4)}')
+elif [[ "${bedfileRaw}" =~ "XT-HS" ]]
+then
+	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,6)}')
 elif [[ "${bedfileRaw}" =~ "XT" ]]
 then
 	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,3)}')

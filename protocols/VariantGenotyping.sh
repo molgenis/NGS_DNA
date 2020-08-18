@@ -17,6 +17,7 @@
 #string projectJobsDir
 #string logsDir
 #string groupname
+#string sampleSize
 
 #Function to check if array contains value
 array_contains () {
@@ -39,11 +40,10 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 module load "${gatkVersion}"
 module list
 
-SAMPLESIZE=$(cat "${projectJobsDir}/${project}.csv" | wc -l)
-numberofbatches=$(("${SAMPLESIZE}" / 200))
+numberofbatches=$(("${sampleSize}" / 200))
 ALLGVCFs=()
 
-if [ "${SAMPLESIZE}" -gt 200 ]
+if [ "${sampleSize}" -gt 200 ]
 then
 	for b in $(seq 0 "${numberofbatches}")
 	do
