@@ -1,5 +1,5 @@
 #string tmpName
-^#string project
+#string project
 #string logsDir 
 #string groupname
 #string projectResultsDir
