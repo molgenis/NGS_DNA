@@ -8,7 +8,7 @@
 #string projectPrefix
 #string intermediateDir
 #list externalSampleID
-^#string project
+#string" project
 
 #string ngsUtilsVersion
 

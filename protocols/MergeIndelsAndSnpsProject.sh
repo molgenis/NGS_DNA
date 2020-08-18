@@ -9,7 +9,7 @@
 #string logsDir 
 #string groupname
 #string intermediateDir
-^#string project
+#string" project
 
 #Function to check if array contains value
 array_contains () {

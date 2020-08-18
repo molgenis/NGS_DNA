@@ -7,7 +7,7 @@
 #string tmpDataDir
 #string sambambaVersion
 #string sambambaTool
-^#string project
+#string" project
 #string logsDir 
 #string groupname
 #string flagstatMetrics
