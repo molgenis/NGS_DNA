@@ -1,0 +1,74 @@
+# Hybrid Sample Info
+  # barcodeType,externalSampleID,sequencer,GAF_QC_Name,FatherAffected,MotherAffected,arrayFile,internalSampleID,prepKit,sampleType,flowcell,seqType,arrayID,labStatusPhase,run,sequencingStartDate,Gender,MotherSampleId,barcode,FirstPriority,lane,FatherSampleId,analysis,project,capturingKit,contact,hpoIDs
+  # AGI,Prometheus,NB501043,"Ty Medina",,,,Prometheus,"Agilent SureSelect",DNA,HNLN3BGXC,PE,,"Finished Successfully",0417,270792,Male,,TTCACGCA-AGGCTCTT,False,1,,diagnostiek,${filePrefix},Agilent\/QXTExoom_v3,"Ty Medina <t.d.medina@umcg.nl>",
+
+project:
+original_project: QXTR_818-Exoom_v3
+original_samplesheet: QXTR_818-Exoom_v3.csv
+
+gender: Male
+
+# ID information:
+internal_sample_id: Prometheus
+external_sample_id: Prometheus
+gs_id:
+
+# Sample information:
+sample_type: DNA
+sample_process_step_id:
+
+# Family information:
+father_sample_id: 20146039_9669583_DNA124598_568279_QXTR818_S07604514
+father_affected:
+mother_sample_id: 20146039_9669575_DNA124587_568277_QXTR818_S07604514
+mother_affected:
+
+# Sequencing information:
+prep_kit: Agilent SureSelect
+capturing_kit: Agilent/QXTExoom_v3
+seq_type: PE
+barcode_type: AGI
+barcode1: TTCACGCA
+barcode2: AGGCTCTT
+
+sequencer: NB501043
+flowcell: AHNLN3BGXC
+run: "0417"
+sequencing_start_date: "191025"
+
+# Sequencing lane information:
+lanes: [1,2,3,4]
+
+# Note that if external_fastq are specified, there must be equal
+# external_fastq_1 and _2 files, and there must be as many file
+# pairs as there are lanes e.g. If 4 lanes are specified, there
+# must be 4 external_fastq_1 and 4 external_fastq_2. Otherwise,
+# external_fastq_1 and _2 will be ignored and left empty.
+
+# Add external_fastq paths after the dashes below. Add more
+# lines if needed. Be sure to leave a space after the dash.
+external_fastq_1:
+  -
+  -
+  -
+  -
+external_fastq_2:
+  -
+  -
+  -
+  -
+
+#Array data:
+array_file:
+array_id:
+
+# Other:
+hpo_ids:
+
+# Internal information:
+gaf_qc_name: Tyler Medina
+contact: Tyler Medina
+contact_email: t.d.medina@umcg.nl
+analysis: diagnostiek
+lab_status_phase: Finished Successfully
+first_priority: False
