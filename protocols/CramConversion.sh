@@ -5,7 +5,7 @@
 #string dedupBamCramIdx
 #string dedupBamCramBam
 #string indexFile
-#string	project
+#string project
 #string logsDir
 #string groupname
 #string intermediateDir
