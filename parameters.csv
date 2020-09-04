@@ -198,6 +198,8 @@ sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
 #sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
 sampleBatchVariantCallsMaleNONPAR,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.male.NONPAR.variant.calls.g.vcf.gz
 sampleBatchVariantCallsMaleNONPARIndex,${sampleBatchVariantCallsMaleNONPAR}.tbi
+sampleMergedBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.merged.variant.calls.g.vcf.gz
+sampleGvcf2Bed,${projectResultsDir}/variants/gVCF/${externalSampleID}.gvcfto.bed
 
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
