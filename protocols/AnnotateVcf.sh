@@ -121,7 +121,7 @@ fi
 #ops=["self","self","self"]
 
 [[annotation]]
-file="${gnomADExomesAnnotation}/gnomad.exomes.r2.0.2.sites.normalized.vcf.gz"
+file="${gnomADExomesAnnotation}/gnomad.exomes.r2.1.1.sites.normalized.vcf.gz"
 fields=["Hom","Hemi", "AN","AF_POPMAX","segdup","AF_POPMAX"]
 names=["gnomAD_Hom","gnomAD_Hemi","gnomAD_AN","gnomAD_exome_AF_MAX","gnomAD_exome_RF_Filter","EXAC_AF"]
 ops=["self","self","first","self","self","self"]
