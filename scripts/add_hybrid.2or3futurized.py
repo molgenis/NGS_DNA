@@ -10,7 +10,6 @@ and then futurized to run on Python3.
 from __future__ import with_statement
 from __future__ import absolute_import
 from __future__ import print_function
-from builtins import str
 from io import open
 
 # Make sure the correct PyYaml module is available for your Python version.
@@ -22,7 +21,7 @@ def read_sample_info(sample_yaml):
     with open(sample_yaml) as infile:
         sample = yaml.safe_load(infile)
 
-    if isinstance(sample[u"lanes"], str):
+    if not isinstance(sample[u"lanes"], list):
         sample[u"lanes"] = sample[u"lanes"].split(u",")
     sample[u"external_fastq_1"] = trim_external_fastq(sample[u"external_fastq_1"])
     sample[u"external_fastq_2"] = trim_external_fastq(sample[u"external_fastq_2"])
