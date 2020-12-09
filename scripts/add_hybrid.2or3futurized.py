@@ -5,6 +5,8 @@ using existing YAML files containing sample information.
 
 This script has been backported from add_hybrid.py to run on Python2.7+,
 and then futurized to run on Python3.
+
+WARNING: This script is still in beta.
 """
 
 from __future__ import with_statement
