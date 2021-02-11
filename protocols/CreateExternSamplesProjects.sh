@@ -54,13 +54,11 @@ mkdir -p "${projectRawTmpDataDir}"
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectLogsDir}"
 mkdir -p "${intermediateDir}"
-mkdir -p "${projectResultsDir}/alignment/"
+mkdir -p "${projectResultsDir}/"{alignment,general}
+mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female}
 mkdir -p "${projectResultsDir}/qc/statistics/"
-mkdir -p "${projectResultsDir}/variants/cnv/"
-mkdir -p "${projectResultsDir}/variants/gVCF/"
-mkdir -p "${projectResultsDir}/variants/GAVIN/"
+mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
 mkdir -p "${projectQcDir}"
-mkdir -p "${intermediateDir}/GeneNetwork/"
 mkdir -p -m 2770 "${logsDir}/${project}/"
 
 rocketPoint=$(pwd)
