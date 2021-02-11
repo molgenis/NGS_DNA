@@ -172,38 +172,6 @@ do
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
 	printf "."
 
-	if ls "${intermediateDir}/${sa}."*.coveragePerBase.txt 1> /dev/null 2>&1
-	then
-		for i in $(ls "${intermediateDir}/${sa}."*.coveragePerBase.txt )
-		do
-			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerBase/"
-			printf "."
-		done
-
-	else
-		echo "coveragePerBase skipped for sample: ${sa}"
-	fi
-
-	## copy the rejected samples (with less 90% of the targets with > 20x coverage)
-	if ls "${intermediateDir}/${sa}."*.rejected 1> /dev/null 2>&1
-	then
-		for i in $(ls "${intermediateDir}/${sa}."*.rejected) 
-		do
-			basename $i >> "${projectResultsDir}/coverage/rejectedSamples.txt"
-		done
-		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
-	fi
-	if ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt 1> /dev/null 2>&1
-        then
-		for i in $(ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt )
-		do
-			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerTarget/"
-			printf "."
-		done
-	else
-		echo "coveragePerTarget skipped for sample: ${sa}"
-	fi
-
 done
 printf " finished\n"
 

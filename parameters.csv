@@ -3,6 +3,18 @@ stage,module load
 targetedInsertSize,200
 checkStage,module list
 
+### References versions ###
+refExaCVersion,0.3
+refGonLVersion,release5_noContam_noChildren_with_AN_AC_GTC_stripped
+refGnomADExomesVersion,r2.1.1
+refGnomADGenomesVersion,r2.0.2
+refClinvarVersion,20180401
+gavinDataDir,${dataDir}/GAVIN/bundle_r1.2/
+gavinCGD,${gavinDataDir}/CGD_26jun2018.txt.gz
+gavinFDR,${gavinDataDir}/FDR_allGenes_r1.2.tsv
+gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.5.tsv
+gavinClinVar,${gavinDataDir}/clinvar.vkgl.patho.26june2018.vcf.gz (https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/)
+
 ### Tool versions ####
 bedToolsVersion,BEDTools/2.25.0-${toolChain}
 bwaVersion,BWA/0.7.15-${toolChain}
@@ -175,17 +187,15 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
-exacAnnotation,${dataDir}/ExAC/release0.3/ExAC.r0.3.sites.vep.vcf.gz
 caddAnnotation,${dataDir}/CADD/whole_genome_SNVs.tsv.gz
 caddAnnotationVcf,${dataDir}/CADD/whole_genome_SNVs.vcf.gz
 caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.gz
-gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
-gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/r2.0.2/
-gnomADExomesAnnotation,${dataDir}/gnomAD/2.1.1/vcf/exomes/
-clinvarAnnotation,${dataDir}/ClinVar/clinvar_20180401.vcf.gz
+gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/${refGnomADGenomesVersion}/
+gnomADExomesAnnotation,${dataDir}/gnomAD/${refGnomADExomesVersion}/vcf/exomes/
+gonlAnnotation,${dataDir}/gonl/${refGonLVersion}/
+clinvarAnnotation,${dataDir}/ClinVar/clinvar_${refClinvarVersion}.vcf.gz
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 wgsMetrics,${dedupBamMetrics}.wgs_metrics
-
 
 ### Protocols 18a 18b 18c and  (gVCF VariantCalling, VariantCombine, VariantGenotyping) ###
 dbSNP137Vcf,${dbSNPDir}/dbsnp_137.b37.vcf
@@ -235,10 +245,6 @@ gavinCGD,${gavinDataDir}/CGD_26jun2018.txt.gz
 gavinFDR,${gavinDataDir}/FDR_allGenes_r1.2.tsv
 gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.5.tsv
 gavinClinVar,${gavinDataDir}/clinvar.vkgl.patho.26june2018.vcf.gz
-#gavinClinVar,${gavinDataDir}/clinvar.patho.fix.11oct2016.vcf.gz
-#gavinCGD,${gavinDataDir}/CGD_11oct2016.txt.gz
-#gavinFDR,${gavinDataDir}/FDR_allGenes_r1.0.tsv
-#gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.3.tsv
 gavinOutputFirstPass,${sampleNameID}.GAVIN.RVCF.firstpass.vcf
 gavinOutputFinal,${sampleNameID}.GAVIN.RVCF.final.vcf
 gavinToCADD,${sampleNameID}.GAVIN.toCadd.tsv
@@ -404,3 +410,4 @@ vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 
+
