@@ -32,8 +32,8 @@ mkdir -p "${mantaDir}"
 makeTmpDir "${mantaDir}"
 tmpMantaDir="${MC_tmpFile}"
 
-bedfile=$(basename $capturingKit)
-SCRIPTNAME=${MC_jobScript}
+bedfile="$(basename "$capturingKit")"
+SCRIPTNAME="${MC_jobScript}"
 
 if [[ "${bedfile}" == *"wgs"* || "${bedfile}" == *"WGS"* ]]
 then
