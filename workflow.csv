@@ -21,8 +21,6 @@ s14_MakeDedupBamMd5,protocols/MakeDedupBamMd5.sh,s06_MarkDuplicates
 s15_CoverageCalculations,protocols/CoverageCalculations.sh,s06_MarkDuplicates
 s16a_VariantCalling,protocols/VariantCalling.sh,s09_GenderCheck;s05_BaseRecalibrator;dbSnp=dbSNP137Vcf
 s16b_GenotypeVariants,protocols/VariantGenotyping.sh,s16a_VariantCalling;dbSnp=dbSNP137Vcf
-s16c_CombineGVCFs,protocols/CombineGVCFs.sh,s16a_VariantCalling
-s16d_CalculateGVCFStatistics,protocols/CalculateGVCFStatistics.sh,s16c_CombineGVCFs
 s17_AnnotateVcf,protocols/AnnotateVcf.sh,s16b_GenotypeVariants
 s18_SnpEff,protocols/SnpEff.sh,s17_AnnotateVcf
 s19_MergeBatches,protocols/MergeBatches.sh,s18_SnpEff;extension=annotatedSnpEffExtension
