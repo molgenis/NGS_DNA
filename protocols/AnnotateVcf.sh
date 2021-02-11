@@ -13,7 +13,6 @@
 #string fromCADDMerged
 #string vcfAnnoConf
 #string caddVersion
-#string exacAnnotation
 #string gonlAnnotation
 #string gnomADGenomesAnnotation
 #string gnomADExomesAnnotation
@@ -113,12 +112,6 @@ HERE
 fi
 	## write first part of conf file
 	cat >> "${vcfAnnoConf}" << HERE
-
-#[[annotation]]
-#file="${exacAnnotation}"
-#fields=["AF","AC_Het","AC_Hom"]
-#names=["EXAC_AF","EXAC_AC_HET","EXAC_AC_HOM"]
-#ops=["self","self","self"]
 
 [[annotation]]
 file="${gnomADExomesAnnotation}/gnomad.exomes.r2.1.1.sites.normalized.vcf.gz"
