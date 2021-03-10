@@ -227,6 +227,3 @@ fi
 echo "finished: $(date +%FT%T%z)" >> ${logsDir}/${project}/${runNumber}.pipeline.totalRuntime
 rm -f "${logsDir}/${project}/${runNumber}.pipeline.failed"
 echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
-
-
-touch pipeline.finished
