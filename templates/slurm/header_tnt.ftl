@@ -71,7 +71,7 @@ function errorExitAndCleanUp() {
 	if curl -s -f -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
 	then
 		CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-		TOKEN=${CURLRESPONSE:10:32}
+		TOKEN=$(echo "${CURLRESPONSE}" | awk 'BEGIN {FS=":"} $1 ~ /token/ {print $2}' | awk 'BEGIN {FS="\""}{print $2}')
 
 		if curl -s -f -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
 		then
@@ -145,7 +145,7 @@ touch ${MC_jobScript}.started
 if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
 then
 	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-	TOKEN=${CURLRESPONSE:10:32}
+	TOKEN=$(echo "${CURLRESPONSE}" | awk 'BEGIN {FS=":"} $1 ~ /token/ {print $2}' | awk 'BEGIN {FS="\""}{print $2}')
 
 	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
 	then
