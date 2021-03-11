@@ -81,7 +81,7 @@ function errorExitAndCleanUp() {
 				echo "cannot set Error status"
 			fi
 		else
-			
+			echo "FATAL: CURLRESPONSE"
 		fi
 	fi
 <#noparse>
@@ -148,15 +148,17 @@ trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 touch ${MC_jobScript}.started
 if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
 then
-	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-	TOKEN=$(echo "${CURLRESPONSE}" | awk 'BEGIN {FS=":"} $1 ~ /token/ {print $2}' | awk 'BEGIN {FS="\""}{print $2}')
-
-	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
+	if CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
 	then
-		echo "set"
-	else
-		echo "not set"
-	fi
+		TOKEN=$(echo "${CURLRESPONSE}" | awk 'BEGIN {FS=":"} $1 ~ /token/ {print $2}' | awk 'BEGIN {FS="\""}{print $2}')
+
+		if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
+		then
+			echo "set"
+		else
+			echo "not set"
+		fi
+fi
 fi
 #
 # When dealing with timing / synchronization issues of large parallel file systems,
