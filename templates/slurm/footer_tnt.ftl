@@ -22,8 +22,7 @@ then
 			echo "not set"
 		fi
 	else
-		echo "FATAL: ${CURLRESPONSE}."
-		exit 1
+		echo "FATAL: CURLRESPONSE"
 	fi
 fi
 <#noparse>
