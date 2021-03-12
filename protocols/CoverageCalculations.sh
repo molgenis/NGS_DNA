@@ -70,7 +70,7 @@ then
 		grep -v "NC_001422.1" "${sampleNameID}.${perBase}.coveragePerBase.txt" > "${sampleNameID}.${perBase}.coveragePerBase.txt.tmp"
 		mv "${sampleNameID}.${perBase}.coveragePerBase.txt.tmp" "${sampleNameID}.${perBase}.coveragePerBase.txt"
 		echo "phiX is removed for ${sampleNameID}.${perBase} perBase" 
-		rsync -a "${sampleNameID}.${perTarget}.coveragePerBase.txt" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}" 
+		rsync -a "${sampleNameID}.${perBase}.coveragePerBase.txt" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}" 
 
 	done
 else
