@@ -17,6 +17,7 @@
 #string coveragePerTargetDir
 #string ngsUtilsVersion
 #string Gender
+#string projectResultsDir
 
 module load "${gatkVersion}"
 module load "${ngsUtilsVersion}"
