@@ -132,7 +132,6 @@ then
 				percentage=$(echo $((count*100/totalcount)))
 				if [ ${percentage%%.*} -gt 10 ]
 				then
-					${sampleNameID}
 					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
 					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
 				else
