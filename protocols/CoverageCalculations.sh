@@ -17,7 +17,6 @@
 #string coveragePerTargetDir
 #string ngsUtilsVersion
 #string Gender
-#string projectResultsDir
 
 module load "${gatkVersion}"
 module load "${ngsUtilsVersion}"
@@ -133,8 +132,9 @@ then
 				percentage=$(echo $((count*100/totalcount)))
 				if [ ${percentage%%.*} -gt 10 ]
 				then
+					${sampleNameID}
 					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
-					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" >> "${projectResultsDir}/coverage/${sampleNameID}.rejected"
+					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
 				else
 					rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}"
 				fi
