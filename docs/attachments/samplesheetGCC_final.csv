@@ -1,0 +1,30 @@
+﻿header,uitleg,voorbeeld,Verplicht gevuld door Darwin?,,
+,,,inhouse,GS geprepped,In House prep naar GS
+externalSampleID,FamilyNr_umcgNummer_DNANummer_Onderzoeksnummer_andereIDs_anderIDs,20185419_8859816_DNA127006_576529_GS1_3183841,X,X,X
+project,project,GS_1A-Exoom_v3,X,X,X
+sequencer,naam van de sequencer,NB501043,X, , 
+sequencingStartDate,datum wanneer sequencer is aan gegaan (yymmdd),200124,X, , 
+run,run sequencer,0123,X,,
+flowcell,flowcell sequencer,ACCCTGSASXX,X,,
+lane,laan,2,X,,
+seqType,PE (Paired End) of SR (Single Read),PE,X,X,X
+prepKit,XTHS/QXT/XT,XTHS,X,X,X
+capturingKit,Agilent\/$NAAMVANCAPTURINGKIT,Agilent\/Exoom_v3,X,X,X
+analysis,diagnostiek,diagnostiek,X,X,X
+barcode1,barcode1,ACTGACTG,X,X,X
+barcode2,barcode2 (alleen verplicht bij dubbel gebarcodeerde samples),GATCGATC,X,X,X
+barcode,"Bij dual barcode aan elkaar gescheiden met koppelteken.
+Bij enkele barcodes gewoon dezelfde waarde als barcode1.",ACTGACTG-GATCGATC,X,X,X
+barcodeType,barcodeType,AGI,X,X,X
+Gender,geslacht (in geval niet bekend=> Unknown),Male,,,
+sampleType,DNA/RNA,DNA,X,X,X
+sampleProcessStepID,identifier om bij genomescan gepreppede DNA's te kunnen matchen,796653,X,X,X
+FirstPriority,prioriteit (TRUE/FALSE),True,X,,
+FatherAffected,TRUE/FALSE,False,,,
+MotherAffected,TRUE/FALSE,True,,,
+FatherSampleID,externalSampleID van de vader,20181111_222223_DNA654321_12345_GS1_111233,,,
+MotherSampleID,externalSampleID van de moeder,20181111_222222_DNA123456_12345_GS1_111111,,,
+,,,,,
+,,,,,
+,,,,,
+"Bij niet verplichte velden graag een lege kolom, zodat we altijd de dezelfde kolommen in de samplesheet hebben. In het geval van GenomeScan data zijn een aantal van de lege velden wel ""verplicht"" voor de analyse pijplijn, maar worden later ingevuld door GCC op basis van wat we terugkrijgen van GenomeScan",,,,,

@@ -49,7 +49,7 @@ HOST=$(hostname -s)
 arrayUniqueBarcodes=()
 if ls "${permanentDataDir}/logs/"*.mailinglist 1>/dev/null 2>&1
 then
-	rsync --verbose --links --no-perms --times --group --no-owner --devices --specials --checksum \
+	rsync --verbose --links --no-perms --times --group --no-owner --devices --specials \
 		"${permanentDataDir}/logs/"*.mailinglist \
 		"${tmpDataDir}/logs/"
 fi
@@ -98,12 +98,12 @@ do
 	then
 		if [[ "${barcode[samplenumber]}" == 'None' ]]
 		then
-			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}.fq.gz"* \
 				"${TMPDATADIR}/"
 		else
 			array_contains arrayUniqueBarcodes "${barcode[samplenumber]}-L${lane[samplenumber]}" || arrayUniqueBarcodes+=("${barcode[samplenumber]}-L${lane[samplenumber]}") 
-			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz"* \
 				"${TMPDATADIR}/"
 		fi
@@ -111,10 +111,10 @@ do
 	then
 		if [[ "${barcode[samplenumber]}" == 'None' ]]
 		then
-			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz"* \
 				"${TMPDATADIR}/"
-			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+			rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials \
 				"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz"* \
 				"${TMPDATADIR}/"
 		else
@@ -122,11 +122,11 @@ do
 			if [ "${rejected}" == "false" ]
 			then
 				array_contains arrayUniqueBarcodes "${barcode[samplenumber]}-L${lane[samplenumber]}" "true" || arrayUniqueBarcodes+=("${barcode[samplenumber]}-L${lane[samplenumber]}") 
-				rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials \
 					"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz"* \
 					"${TMPDATADIR}/"
 
-				rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials --checksum \
+				rsync --verbose --recursive --links --no-perms --times --group --no-owner --devices --specials \
 					"${PRMDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz"* \
 					"${TMPDATADIR}/"
 			else

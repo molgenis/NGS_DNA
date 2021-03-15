@@ -1,29 +1,31 @@
+<#noparse>
 mydate_finished=$(date +"%Y-%m-%dT%H:%M:%S+0200")
 
-<#noparse>
-if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
+
+if CURLRESPONSE="$(curl -s -S -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" "https://${MOLGENISSERVER}/api/v1/login" 2>&1)" 
 then
-	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-	TOKEN=${CURLRESPONSE:10:32}
-
-	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "finished" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+	TOKEN=$(echo "${CURLRESPONSE}" | awk 'BEGIN {FS=":"} $1 ~ /token/ {print $2}' | awk 'BEGIN {FS="\""}{print $2}')
+	echo "INFO: login to T&T server ${MOLGENISSERVER} successful and retrieved token"
+	
+	if CURLRESPONSE="$(curl -s -S -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "finished" https://${MOLGENISSERVER}/api/v1/status_jobs/${MC_project}_${MC_jobName}/status 2>&1)"	
 	then
-		echo "set"
+		echo "INFO: T&T set status to 'finished'."
 	else
-		echo "not set"
+		echo "ERROR: ${CURLRESPONSE:-unknown error}."
 	fi
 
-	<#noparse>
+
 	sleep 1
-	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_finished}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/finished_date
+	if CURLRESPONSE="$(curl -s -S -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_finished}'" https://${MOLGENISSERVER}/api/v1/status_jobs/${MC_project}_${MC_jobName}/finished_date 2>&1)"
 	then
-	        echo "set"
+		echo "INFO: T&T set finished date to '${mydate_finished}'."
 	else
-        	echo "not set"
+		echo "ERROR: ${CURLRESPONSE:-unknown error}."
 	fi
+else
+	echo "ERROR: ${CURLRESPONSE:-unknown error}."
 fi
 
-<#noparse>
 
 if [ -d ${MC_tmpFolder:-} ]; then
 	echo -n "INFO: Removing MC_tmpFolder ${MC_tmpFolder} ..."
@@ -45,9 +47,9 @@ sync
 mv "${MC_jobScript}.started" "${MC_jobScript}.finished"
 
 
-</#noparse>
-step=$(echo "${taskId}" | awk -F'_' '{print $1"_"$2}')
 
+step=$(echo "${MC_jobName}" | awk -F'_' '{print $1"_"$2}')
+</#noparse>
 trap - EXIT
 exit 0
 

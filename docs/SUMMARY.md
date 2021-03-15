@@ -16,10 +16,18 @@
   - [Samplesheet](ngs-samplesheets.md)
 
 - Releases
-  - [latest_release_diagnostics](ngs-latestrelease.md)
+  - [latest](ngs-latestrelease.md)
+  - 4.0 (beta)
+	- [4.0.1 (pilot)](https://github.com/molgenis/NGS_DNA/releases/tag/4.0.1)
+	- [4.0.2 (GATK 4 pipeline)](https://github.com/molgenis/NGS_DNA/releases/tag/4.0.2)
   - 3.5
-    - [3.5.2 (Ragdoll)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.2)
-    - [3.5.1 (Quetzal)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.1)
+	- [3.5.7 (X-ray fish)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.7)
+	- [3.5.6 (Wildebeest)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.6)
+	- [3.5.5 (Uakari)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.5)
+	- [3.5.4 (Tiger)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.4)
+	- [3.5.3 (Scorpion)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.3)
+    - [3.5.2 (Rhino)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.2)
+	- [3.5.1 (Quetzal)](https://github.com/molgenis/NGS_DNA/releases/tag/3.5.1)
   - 3.4
     - [3.4.4 (Pelican)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.4)
     - [3.4.3 (Okapi)](https://github.com/molgenis/NGS_DNA/releases/tag/3.4.3)
