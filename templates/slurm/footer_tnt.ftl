@@ -13,9 +13,6 @@ then
 	else
 		echo "ERROR: ${CURLRESPONSE:-unknown error}."
 	fi
-
-
-	sleep 1
 	if CURLRESPONSE="$(curl -s -S -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_finished}'" https://${MOLGENISSERVER}/api/v1/status_jobs/${MC_project}_${MC_jobName}/finished_date 2>&1)"
 	then
 		echo "INFO: T&T set finished date to '${mydate_finished}'."
@@ -26,7 +23,9 @@ else
 	echo "ERROR: ${CURLRESPONSE:-unknown error}."
 fi
 
-
+#
+# Cleanup 
+#
 if [ -d ${MC_tmpFolder:-} ]; then
 	echo -n "INFO: Removing MC_tmpFolder ${MC_tmpFolder} ..."
 	rm -rf ${MC_tmpFolder}
@@ -44,11 +43,25 @@ printf '%s:\t%d seconds\t%d minutes\t%d hours\n' "${MC_jobScript}" "${tS}" "${tM
 #
 sync
 
+#
+# Signal success.
+#
 mv "${MC_jobScript}.started" "${MC_jobScript}.finished"
-
-
-
-step=$(echo "${MC_jobName}" | awk -F'_' '{print $1"_"$2}')
+if [[ "${lastStep:-false}" == 'true' && -n "${workflowControlFileBase:-}" ]]
+then
+	rm -f "${workflowControlFileBase}.failed"
+	printf 'finished: %s\n' "$(date +%FT%T%z)" >> "${workflowControlFileBase}.totalRuntime"
+	printf '%s\n' "Creating ${workflowControlFileBase}.finished ..."
+	#
+	# NO MORE LOGGING AFTER THIS LINE: finished == finished!
+	#
+	if [[ -f "${workflowControlFileBase}.started" ]]
+	then
+		mv "${workflowControlFileBase}".{started,finished}
+	else
+		touch "${workflowControlFileBase}.finished"
+	fi
+fi
 </#noparse>
 trap - EXIT
 exit 0

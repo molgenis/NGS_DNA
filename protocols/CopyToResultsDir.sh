@@ -29,16 +29,16 @@ umask 0007
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 # Make result directories
@@ -49,181 +49,155 @@ mkdir -p "${projectResultsDir}/bedfile/"
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
 do
-	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
+	array_contains UNIQUESAMPLES "${samples}" || UNIQUESAMPLES+=("${samples}")    # If bamFile does not exist in array add it
 done
 
 EXTERN=${#UNIQUESAMPLES[@]}
-
-# Copy project csv file and capturingKitFolder to project results directory
-printf "Copied project csv file to project results directory.."
+#
+# Project CSV file and capturingKitFolder.
+#
+printf 'Copying project csv file to results directory .'
 rsync -a "${projectJobsDir}/${project}.csv" "${projectResultsDir}"
+printf '.'
 rsync -a "${intervalListDir}" "${projectResultsDir}/bedfile/"
-
+printf '.'
 bedfileName=$(basename "${capturingKit}")
-ls -1 ${coveragePerBaseDir}/${bedfileName}/ > ${projectResultsDir}/coverage/CoveragePerBase/CovPerBase.txt
-ls -1 ${coveragePerTargetDir}/${bedfileName}/ > ${projectResultsDir}/coverage/CoveragePerTarget/CovPerTarget.txt
-
-printf ".. finished \n"
-
-##Copy GAVIN results
+ls -1 "${coveragePerBaseDir}/${bedfileName}/" > "${projectResultsDir}/coverage/CoveragePerBase/CovPerBase.txt"
+ls -1 "${coveragePerTargetDir}/${bedfileName}/" > "${projectResultsDir}/coverage/CoveragePerTarget/CovPerTarget.txt"
+printf '%s\n' '.. finished.'
+#
+# GAVIN VCFs.
+#
+printf 'Copying GAVIN results to results directory .'
 for sample in "${UNIQUESAMPLES[@]}"
 do
 	if [ -f "${intermediateDir}/${sample}.GAVIN.rlv.vcf" ]
 	then
 		rsync -a "${intermediateDir}/${sample}.GAVIN.rlv.vcf.gz" "${projectResultsDir}/variants/GAVIN/"
+		printf '.'
 	fi
 done
-
-count=1
-
-printf "Copying variants vcf and tables to results directory "
-# Copy variants vcf and tables to results directory
-rsync -a "${projectPrefix}.final.vcf.table" "${projectResultsDir}/variants/"
-printf "."
-rsync -a "${projectPrefix}.final.vcf.gz" "${projectResultsDir}/variants/"
-printf "."
-rsync -a "${projectPrefix}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
-printf "."
-
-
-echo "copy cnv results of Convading and XHMM and Manta"
-
+printf '%s\n' ' finished.'
+#
+# Regular VCF and table for complete project.
+#
+printf 'Copying variants vcf and tables to results directory .'
+rsync -a "${projectPrefix}.final.vcf."{table,gz,gz.tbi} "${projectResultsDir}/variants/"
+printf '.'
+printf '%s\n' ' finished.'
+#
+# CoNVaDING, XHMM and Manta results.
+#
+printf 'Copying CoNVaDING, XHMM and Manta results to results directory .'
 for sa in "${UNIQUESAMPLES[@]}"
 do
 	if [ -f "${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz" ]
 	then
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz" "${projectResultsDir}/variants/cnv/${sa}_candidateSV.vcf.gz"
+		printf '.'
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_candidateSV.vcf.gz.tbi"
-		printf "."
+		printf '.'
 	fi
-
 	if [ -f "${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz" ]
-        then
+	then
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz" "${projectResultsDir}/variants/cnv/${sa}_candidateSmallIndels.vcf.gz"
+		printf '.'
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_candidateSmallIndels.vcf.gz.tbi"
-		printf "."
+		printf '.'
 	fi
-
 	if [ -f "${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz" ]
-        then
+	then
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz" "${projectResultsDir}/variants/cnv/${sa}_diploidSV.vcf.gz"
+		printf '.'
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_diploidSV.vcf.gz.tbi"
-		printf "."
+		printf '.'
 	fi
-
-
 	if [ -f "${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz" ]
 	then
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz" "${projectResultsDir}/variants/cnv//${sa}_candidateSV_VEP.vcf.gz"
+		printf '.'
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_candidateSV_VEP.vcf.gz.tbi"
+		printf '.'
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP_summary.html" "${projectResultsDir}/variants/cnv/${sa}_candidateSV_VEP_summary.html"
-		printf "."
+		printf '.'
 	fi
-
-
-        if [ -f "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz" ]
-        then
-                rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz" "${projectResultsDir}/variants/cnv//${sa}_diploidSV_VEP.vcf.gz"
-                rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP.vcf.gz.tbi"
-                rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP_summary.html" "${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP_summary.html"
-                printf "."
-        fi
-
-
+	if [ -f "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz" ]
+	then
+		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz" "${projectResultsDir}/variants/cnv//${sa}_diploidSV_VEP.vcf.gz"
+		printf '.'
+		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP.vcf.gz.tbi"
+		printf '.'
+		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP_summary.html" "${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP_summary.html"
+		printf '.'
+	fi
 	if ls "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log 1> /dev/null 2>&1
-        then
-                echo "copying Convading data"
-                cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.totallist.txt "${projectResultsDir}/variants/cnv/"
-                cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.shortlist.txt "${projectResultsDir}/variants/cnv/"
-                cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.longlist.txt "${projectResultsDir}/variants/cnv/"
-                cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log "${projectResultsDir}/variants/cnv/"
-                cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log.sampleRatio "${projectResultsDir}/variants/cnv/${sa}.sampleRatio.txt"
-                cp "${intermediateDir}/Convading//CreateFinalList/${sa}/"*.shortlist.finallist.txt "${projectResultsDir}/variants/cnv/"
-        fi
-        if [ -f "${intermediateDir}/${sa}_step10.xcnv.final" ]
-        then
-
-                echo "copying XHMM results"
-                cp "${intermediateDir}/${sa}_step10.xcnv.final" "${projectResultsDir}/variants/cnv/"
-        fi
-
+	then
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.totallist.txt "${projectResultsDir}/variants/cnv/"
+		printf '.'
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.shortlist.txt "${projectResultsDir}/variants/cnv/"
+		printf '.'
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.longlist.txt "${projectResultsDir}/variants/cnv/"
+		printf '.'
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log "${projectResultsDir}/variants/cnv/"
+		printf '.'
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log.sampleRatio "${projectResultsDir}/variants/cnv/${sa}.sampleRatio.txt"
+		printf '.'
+		rsync -av "${intermediateDir}/Convading//CreateFinalList/${sa}/"*.shortlist.finallist.txt "${projectResultsDir}/variants/cnv/"
+		printf '.'
+	fi
+	if [ -f "${intermediateDir}/${sa}_step10.xcnv.final" ]
+	then
+		cp "${intermediateDir}/${sa}_step10.xcnv.final" "${projectResultsDir}/variants/cnv/"
+		printf '.'
+	fi
 	if [ -f "${intermediateDir}/${sa}.longlistplusplusFinal.txt" ]
 	then
-		echo "copying output decision tree to results/variants/cnv/"
-		rsync -a "${intermediateDir}/${sa}.longlistplusplusFinal.txt" "${projectResultsDir}/variants/cnv/"
+		rsync -av "${intermediateDir}/${sa}.longlistplusplusFinal.txt" "${projectResultsDir}/variants/cnv/"
+		printf '.'
 		capturedBedFile=$(grep "${capturingKit}" "${ControlsVersioning}" | awk '{FS=" "}{print $2}')
-                cp "${cxControlsDir}/${capturedBedFile}/Convading/targetQcList.txt" "${projectResultsDir}/variants/cnv/"
-
+		cp "${cxControlsDir}/${capturedBedFile}/Convading/targetQcList.txt" "${projectResultsDir}/variants/cnv/"
+		printf '.'
 	fi
-
-
 done
-printf " finished\n"
-
-#copy vcf file + coveragePerBase.txt + gender determination
-printf "Copying vcf files, gender determination, coverage per base and per target files "
+printf '%s\n' ' finished.'
+#
+# Regular VCFs and tables per sample.
+#
+printf 'Copying regular VCF and table files per sample .'
 for sa in "${UNIQUESAMPLES[@]}"
 do
 	rsync -a "${intermediateDir}/${sa}.final.vcf.table" "${projectResultsDir}/variants/"
-	printf "."
-
+	printf '.'
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz" "${projectResultsDir}/variants/"
-	printf "."
+	printf '.'
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
-	printf "."
-
+	printf '.'
 done
-printf " finished\n"
-
-
-# print README.txt files
-printf "Copying QC report to results directory "
-
-# Copy QC report to results directory
+printf '%s\n' ' finished.'
+#
+# QC report.
+#
+printf 'Copying QC report to results directory .'
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
-rsync -av "${intermediateDir}/multiqc_data" "${projectResultsDir}/"
-printf "."
-printf " finished\n"
+printf '.'
+rsync -a "${intermediateDir}/multiqc_data" "${projectResultsDir}/"
+printf '.'
+printf '%s\n' ' finished.'
 
-echo "Creating zip file"
-# Create zip file for all "small text" files
-CURRENT_DIR=$(pwd)
-cd "${projectResultsDir}"
-
-zip -gr "${projectResultsDir}/${project}.zip" variants/*.vcf*
-zip -gr "${projectResultsDir}/${project}.zip" variants/cnv
-zip -gr "${projectResultsDir}/${project}.zip" variants/GAVIN
-zip -gr "${projectResultsDir}/${project}.zip" qc
-zip -g "${projectResultsDir}/${project}.zip" "${project}.csv"
-zip -g "${projectResultsDir}/${project}.zip" "${project}_multiqc_report.html"
-
-echo "Zip file created: ${projectResultsDir}/${project}.zip "
-
-# Create md5sum for zip file
-
-md5sum "${project}.zip" > "${projectResultsDir}/${project}.zip.md5"
-echo "Made md5 file for ${projectResultsDir}/${project}.zip "
-
-cd "${CURRENT_DIR}"
-
-
+#
+# Removing phiX.recoded files.
+#
+#
+rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
+#
+# Define variables to log that we've reached the end.
+# The logging the this workflow has finished happens at the end of the footer_tnt.ftl
+# as something may still go wrong there, so creating a *.pipeline.finished file here would be premature.
+#
 if [ ! -d "${logsDir}/${project}/" ]
 then
 	mkdir -p "${logsDir}/${project}/"
 fi
-
-## removing phiX.recoded files
-rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
-
-echo "pipeline is finished"
-
-runNumber=$(basename $( dirname "${projectResultsDir}"))
-if [ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]
-then
-	mv "${logsDir}/${project}/${runNumber}.pipeline".{started,finished}
-else
-	touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
-fi
-echo "finished: $(date +%FT%T%z)" >> ${logsDir}/${project}/${runNumber}.pipeline.totalRuntime
-rm -f "${logsDir}/${project}/${runNumber}.pipeline.failed"
-echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
+runNumber=$(basename $(dirname "${projectResultsDir}"))
+lastStep='true'
+workflowControlFileBase="${logsDir}/${project}/${runNumber}.pipeline"
