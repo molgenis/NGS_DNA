@@ -49,7 +49,7 @@ mkdir -p "${projectResultsDir}/bedfile/"
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
 do
-	array_contains UNIQUESAMPLES "$samples" || UNIQUESAMPLES+=("$samples")    # If bamFile does not exist in array add it
+	array_contains UNIQUESAMPLES "${samples}" || UNIQUESAMPLES+=("${samples}")    # If bamFile does not exist in array add it
 done
 
 EXTERN=${#UNIQUESAMPLES[@]}
@@ -62,8 +62,8 @@ printf '.'
 rsync -a "${intervalListDir}" "${projectResultsDir}/bedfile/"
 printf '.'
 bedfileName=$(basename "${capturingKit}")
-ls -1 ${coveragePerBaseDir}/${bedfileName}/ > ${projectResultsDir}/coverage/CoveragePerBase/CovPerBase.txt
-ls -1 ${coveragePerTargetDir}/${bedfileName}/ > ${projectResultsDir}/coverage/CoveragePerTarget/CovPerTarget.txt
+ls -1 "${coveragePerBaseDir}/${bedfileName}/" > "${projectResultsDir}/coverage/CoveragePerBase/CovPerBase.txt"
+ls -1 "${coveragePerTargetDir}/${bedfileName}/" > "${projectResultsDir}/coverage/CoveragePerTarget/CovPerTarget.txt"
 printf '%s\n' '.. finished.'
 #
 # GAVIN VCFs.
@@ -82,11 +82,7 @@ printf '%s\n' ' finished.'
 # Regular VCF and table for complete project.
 #
 printf 'Copying variants vcf and tables to results directory .'
-rsync -a "${projectPrefix}.final.vcf.table" "${projectResultsDir}/variants/"
-printf '.'
-rsync -a "${projectPrefix}.final.vcf.gz" "${projectResultsDir}/variants/"
-printf '.'
-rsync -a "${projectPrefix}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
+rsync -a "${projectPrefix}.final.vcf."{table,gz,gz.tbi} "${projectResultsDir}/variants/"
 printf '.'
 printf '%s\n' ' finished.'
 #
@@ -136,17 +132,17 @@ do
 	fi
 	if ls "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log 1> /dev/null 2>&1
 	then
-		cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.totallist.txt "${projectResultsDir}/variants/cnv/"
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.totallist.txt "${projectResultsDir}/variants/cnv/"
 		printf '.'
-		cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.shortlist.txt "${projectResultsDir}/variants/cnv/"
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.shortlist.txt "${projectResultsDir}/variants/cnv/"
 		printf '.'
-		cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.longlist.txt "${projectResultsDir}/variants/cnv/"
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.longlist.txt "${projectResultsDir}/variants/cnv/"
 		printf '.'
-		cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log "${projectResultsDir}/variants/cnv/"
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log "${projectResultsDir}/variants/cnv/"
 		printf '.'
-		cp "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log.sampleRatio "${projectResultsDir}/variants/cnv/${sa}.sampleRatio.txt"
+		rsync -av "${intermediateDir}/Convading//StartWithBestScore/${sa}/"*.only.best.score.log.sampleRatio "${projectResultsDir}/variants/cnv/${sa}.sampleRatio.txt"
 		printf '.'
-		cp "${intermediateDir}/Convading//CreateFinalList/${sa}/"*.shortlist.finallist.txt "${projectResultsDir}/variants/cnv/"
+		rsync -av "${intermediateDir}/Convading//CreateFinalList/${sa}/"*.shortlist.finallist.txt "${projectResultsDir}/variants/cnv/"
 		printf '.'
 	fi
 	if [ -f "${intermediateDir}/${sa}_step10.xcnv.final" ]
@@ -156,7 +152,7 @@ do
 	fi
 	if [ -f "${intermediateDir}/${sa}.longlistplusplusFinal.txt" ]
 	then
-		rsync -a "${intermediateDir}/${sa}.longlistplusplusFinal.txt" "${projectResultsDir}/variants/cnv/"
+		rsync -av "${intermediateDir}/${sa}.longlistplusplusFinal.txt" "${projectResultsDir}/variants/cnv/"
 		printf '.'
 		capturedBedFile=$(grep "${capturingKit}" "${ControlsVersioning}" | awk '{FS=" "}{print $2}')
 		cp "${cxControlsDir}/${capturedBedFile}/Convading/targetQcList.txt" "${projectResultsDir}/variants/cnv/"
@@ -187,20 +183,7 @@ printf '.'
 rsync -a "${intermediateDir}/multiqc_data" "${projectResultsDir}/"
 printf '.'
 printf '%s\n' ' finished.'
-#
-# Create zip file for all "small" files.
-#
-printf '%s' "Creating zip file ${projectResultsDir}/${project}.zip ... "
-CURRENT_DIR=$(pwd)
-cd "${projectResultsDir}"
-zip -gr "${projectResultsDir}/${project}.zip" variants/*.vcf*
-zip -gr "${projectResultsDir}/${project}.zip" variants/cnv
-zip -gr "${projectResultsDir}/${project}.zip" variants/GAVIN
-zip -gr "${projectResultsDir}/${project}.zip" qc
-zip -g "${projectResultsDir}/${project}.zip" "${project}.csv"
-zip -g "${projectResultsDir}/${project}.zip" "${project}_multiqc_report.html"
-md5sum "${project}.zip" > "${projectResultsDir}/${project}.zip.md5"
-printf '%s\n' ' finished.'
+
 #
 # Removing phiX.recoded files.
 #
