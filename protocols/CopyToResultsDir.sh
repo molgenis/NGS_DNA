@@ -194,7 +194,6 @@ rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
 # The logging the this workflow has finished happens at the end of the footer_tnt.ftl
 # as something may still go wrong there, so creating a *.pipeline.finished file here would be premature.
 #
-cd "${CURRENT_DIR}"
 if [ ! -d "${logsDir}/${project}/" ]
 then
 	mkdir -p "${logsDir}/${project}/"
