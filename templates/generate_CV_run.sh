@@ -49,15 +49,8 @@ if ! module list | grep -oP "NGS_DNA.+"; then
 fi
 
 
-# Load python3 and add custom packages.
-# TODO: Need to do something about both Python3 and custom pacakges. Currently that's only PyYaml.
-# NOTE: Pysam is loaded here because the default Python module doesn't set the variable PYTHONPATH
-# for some reason. Could do a work around with an if [[ -z ]], but that feels messy.
-module load Pysam
-for x in $(ls -d /groups/umcg-atd/tmp03/umcg-tmedina/repos/PyPackages/*); do
-	new_PYTHONPATH="${PYTHONPATH}:${x}"
-done
-
+# TODO: Python3 is no longer required, but PyYaml is not installed on diagnostic clusters.
+module load PythonPlus
 
 # Assign command line variables or defaults.
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory="$(basename "$(cd ../../ && pwd)")"; fi; echo "tmpDirectory=${tmpDirectory}"
@@ -96,7 +89,7 @@ altmap_yaml="${ngs_dna_dir}/resources/alt_ss_field_mappings.yaml"
 samplesheet="${genScripts}/${filePrefix}.csv"
 samplesheet_cv="${genScripts}/${filePrefix}_CV.csv"
 
-PYTHONPATH=${new_PYTHONPATH}; python "${ngs_dna_dir}/scripts/add_hybrid.py" "${hybrid_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
+python "${ngs_dna_dir}/scripts/add_hybrid.2or3futurized.py" "${hybrid_yaml}" "${samplesheet}" "${altmap_yaml}" "${samplesheet_cv}"
 cp "${samplesheet_cv}" "${projectJobsDir}/${filePrefix}.csv"
 
 
