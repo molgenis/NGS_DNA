@@ -115,9 +115,9 @@ fi
 
 [[annotation]]
 file="${gnomADExomesAnnotation}/gnomad.exomes.r2.1.1.sites.vcf.normalized.vcf.gz"
-fields=["Hom","Hemi", "AN","AF_POPMAX","segdup","AF_POPMAX"]
-names=["gnomAD_Hom","gnomAD_Hemi","gnomAD_AN","gnomAD_exome_AF_MAX","gnomAD_exome_RF_Filter","EXAC_AF"]
-ops=["self","self","first","self","self","self"]
+fields=["nhomalt", "AN","AF_popmax","segdup","AF_popmax"]
+names=["gnomAD_Hom","gnomAD_AN","gnomAD_exome_AF_MAX","gnomAD_exome_RF_Filter","EXAC_AF"]
+ops=["self","first","self","self","self"]
 
 [[annotation]]
 file="${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz"
