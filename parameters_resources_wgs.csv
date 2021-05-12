@@ -116,7 +116,7 @@ walltime_protocols_PrepareFastQ,05:59:00
 walltime_protocols_SnpEff,05:59:00
 walltime_protocols_SnpFiltration,05:59:00
 walltime_protocols_SplitIndelsAndSNPs,05:59:00
-walltime_protocols_VariantCalling,05:59:00
+walltime_protocols_VariantCalling,15:59:00
 walltime_protocols_VariantGenotyping,05:59:00
 walltime_protocols_VcfToTable,05:59:00
 walltime_protocols_XHMM,05:59:00
