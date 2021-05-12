@@ -128,22 +128,28 @@ then
 	echo "Bedfile does not exist! Exiting"
         exit 1
 fi
-if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	batching="_chr"
-        if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
-        then
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
-                exit 1
-        fi
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
+		exit 1
+	fi
+elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
+then
+	batching="_chr"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-        then
+	then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
-                exit 1
-        fi
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
+		exit 1
+	fi
 fi
 
 if [ -f ".compute.properties" ];

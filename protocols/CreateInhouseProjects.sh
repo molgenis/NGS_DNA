@@ -210,15 +210,15 @@ then
 elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
-        resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-        then
-                echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+	then
+		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
-                exit 1
-        fi
+		exit 1
+	fi
 fi
 
 if [ "${captKit}" == *"ONCO"* ]

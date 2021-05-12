@@ -71,7 +71,7 @@ printf '%s\n' '.. finished.'
 printf 'Copying GAVIN results to results directory .'
 for sample in "${UNIQUESAMPLES[@]}"
 do
-	if [ -f "${intermediateDir}/${sample}.GAVIN.rlv.vcf" ]
+	if [ -f "${intermediateDir}/${sample}.GAVIN.rlv.vcf.gz" ]
 	then
 		rsync -a "${intermediateDir}/${sample}.GAVIN.rlv.vcf.gz" "${projectResultsDir}/variants/GAVIN/"
 		printf '.'
