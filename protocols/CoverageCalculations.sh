@@ -135,7 +135,7 @@ then
 					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
 					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
 				else
-					rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/"
+					rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/"
 				fi
 			fi
 		fi
