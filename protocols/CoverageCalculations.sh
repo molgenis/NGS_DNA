@@ -133,11 +133,13 @@ then
 				if [ ${percentage%%.*} -gt 10 ]
 				then
 					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
-					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
+					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" >> "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/${externalSampleID}.rejected"
 				else
 					rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/"
 				fi
 			fi
+		else
+			rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/"
 		fi
 	done
 else
