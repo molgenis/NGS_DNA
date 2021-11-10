@@ -127,16 +127,18 @@ then
 			if [ $count == 0 ]
 			then
 				percentage=0
+
 			else
 				percentage=$(echo $((count*100/totalcount)))
 				if [ ${percentage%%.*} -gt 10 ]
 				then
-					echo "WARNING: ${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent"
-					echo "WARNING: ${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
+					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
+					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
 				fi
 			fi
 		fi
 		rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/"
+
 	done
 else
 	echo "There are no CoveragePerTarget calculations for this bedfile: ${bedfile}"

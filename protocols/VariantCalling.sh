@@ -76,7 +76,7 @@ then
 else
 	if [ "${genderCheck}" == "Female" ]
 	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
+		if [[ "${capturedBatchBed}" == *batch-[0-9]*chrY.bed || "${capturedBatchBed}" == *batch-chrY.bed ]]
 		then
 			echo -e "Female, chrY => ploidy=1\nbedfile=${femaleCapturedBatchBed}"
 			ploidy=1
@@ -87,7 +87,7 @@ else
 		fi
 	elif [[ "${genderCheck}" == "Male" ]]
 	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed || "${capturedBatchBed}" == *batch-Xnp.bed ]]
+		if [[ "${capturedBatchBed}" == *batch-[0-9]*chrY.bed || "${capturedBatchBed}" == *batch-chrY.bed || "${capturedBatchBed}" == *batch-chrXnp.bed ]]
 		then
 			ploidy=1
 			echo -e "Male, chrY or chrXNonPar ==> ploidy=1"

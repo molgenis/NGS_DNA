@@ -136,5 +136,5 @@ then
 
 else
 	echo "WGS sample, just copy"
-	cp "${mantaDir}/results/variants/"{candidateSV,candidateSmallIndels,diploidSV}".vcf.gz"{,.tbi} "${mantaDir}/results/variants/real/"
+	cp "${mantaDir}/results/variants/"{candidateSV,candidateSmallIndels,diploidSV}".vcf.gz."{,tbi} "${mantaDir}/results/variants/real/"
 fi

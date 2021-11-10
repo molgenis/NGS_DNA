@@ -28,7 +28,7 @@ else
 
 	cat "${indexFileDictionary}" > "${capturedIntervals_nonAutoChrX}"
 	lengthCap1=$(cat "${capturedIntervals_nonAutoChrX}" | wc -l)
-	awk '{if ($0 ~ /^X/){print $0}}' "${capturedIntervals}" >> "${capturedIntervals_nonAutoChrX}"
+	awk '{if ($0 ~ /^chrX/){print $0}}' "${capturedIntervals}" >> "${capturedIntervals_nonAutoChrX}"
 	lengthCap2=$(cat "${capturedIntervals_nonAutoChrX}" | wc -l)
 
 	if [ "${lengthCap1}" -ne "${lengthCap2}" ]
