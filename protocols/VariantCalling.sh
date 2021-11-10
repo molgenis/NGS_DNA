@@ -17,6 +17,7 @@
 #string groupname
 #string sampleMergedRecalibratedBam
 
+
 #Function to check if array contains value
 array_contains () {
     local array="$1[@]"

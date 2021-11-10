@@ -213,7 +213,7 @@ then
 elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
-        resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+        resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]

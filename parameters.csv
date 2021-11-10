@@ -68,12 +68,20 @@ projectRawTmpDataDir,${projectDir}/rawdata/ngs/
 projectRawArrayTmpDataDir,${projectDir}/rawdata/array/
 
 #### INDEX FILES #####
-indicesDir,${dataDir}/1000G/phase1
-indexFileID,human_g1k_v37
-indexFileIDPhiX,${indexFileID}_phiX
-indexFileFastaIndex,${indicesDir}/${indexFileIDPhiX}.fasta.fai
-indexFile,${indicesDir}/${indexFileIDPhiX}.fasta
-indexFileDictionary,${indicesDir}/${indexFileIDPhiX}.dict
+#indicesDir,${dataDir}/1000G/phase1
+#indexFileID,human_g1k_v37
+#indexFileIDPhiX,${indexFileID}_phiX
+#indexFileFastaIndex,${indicesDir}/${indexFileIDPhiX}.fasta.fai
+#indexFile,${indicesDir}/${indexFileIDPhiX}.fasta
+#indexFileDictionary,${indicesDir}/${indexFileIDPhiX}.dict
+
+#### INDEX FILES B38  ####
+indicesDir,${dataDir}/GRC/GCA_000001405.15/
+indexFile,${indicesDir}/GCA_000001405.15_GRCh38_full_plus_hs38d1_analysis_set.fna.gz
+indexFileID,b38
+indexFileFastaIndex,${indexFile}.fai
+indexFileDictionary,${indexFile}.dict
+
 
 #### Prefixes ####
 runPrefix,${sequencingStartDate}_${sequencer}_${run}_${flowcell}
@@ -86,8 +94,8 @@ intervalListDir,${dataDir}/${capturingKit}/${indexFileID}/
 captured,${intervalListDir}/${nameBed}
 capturedIntervals,${captured}.interval_list
 capturedBed,${captured}.bed
-capturedBatchBed,${captured}.batch-${batchID}.bed
-femaleCapturedBatchBed,${captured}.femaleY.bed
+capturedBatchBed,${captured}.batch-chr${batchID}.bed
+femaleCapturedBatchBed,${captured}.femalechrY.bed
 capturedIntervalsPerBase,${captured}.uniq.per_base.bed
 coveragePerBaseDir,${inhouseIntervalsDir}/Diagnostics/CoveragePerBase/
 coveragePerTargetDir,${inhouseIntervalsDir}/Diagnostics/CoveragePerTarget/
@@ -187,11 +195,13 @@ wgsMetrics,${dedupBamMetrics}.wgs_metrics
 
 
 ### Protocols 18a 18b 18c and  (gVCF VariantCalling, VariantCombine, VariantGenotyping) ###
+dbSNPVcf,${dbSNPDir}/GRCh38p7/All_20180418.fixed.vcf.gz
 dbSNP137Vcf,${dbSNPDir}/dbsnp_137.b37.vcf
 dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
-sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
+sampleMergedBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.merged.variant.calls.g.vcf.gz
+sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-chr${batchID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
 #sampleBatchVariantCallsFemale,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.female.variant.calls.g.vcf.gz
 #sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
@@ -199,8 +209,8 @@ sampleBatchVariantCallsMaleNONPAR,${projectResultsDir}/variants/gVCF/${externalS
 sampleBatchVariantCallsMaleNONPARIndex,${sampleBatchVariantCallsMaleNONPAR}.tbi
 
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
-projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
-projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
+projectBatchCombinedVariantCalls,${projectPrefix}.batch-chr${batchID}.variant.calls.combined.g.vcf.gz
+projectBatchGenotypedVariantCalls,${projectPrefix}.batch-chr${batchID}.variant.calls.genotyped.vcf
 vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
 vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
@@ -384,7 +394,6 @@ sampleConcordanceFile,${intermediateDir}/${externalSampleID}.ConcordanceFile.txt
 arrayTmpMap,${intermediateDir}/${externalSampleID}.concordance.tmp.map
 arrayMapFile,${intermediateDir}/${externalSampleID}.concordance.map
 familyList,${intermediateDir}/${externalSampleID}.familyList.txt
-arrayFileLocation,${inputData}/${arrayFile}
 
 mergedBamRecalibratedTable,${projectResultsDir}/alignment/${externalSampleID}.recalibrated.table
 

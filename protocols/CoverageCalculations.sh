@@ -15,7 +15,7 @@
 #string coveragePerTargetDir
 #string ngsUtilsVersion
 
-module load "GATK/3.7-Java-1.8.0_74"
+module load "GATK/3.8.1.0-Java-8-LTS"
 module load "${ngsUtilsVersion}"
 
 ### Per base bed files

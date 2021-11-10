@@ -130,15 +130,19 @@ then
 	echo "Bedfile does not exist! Exiting"
         exit 1
 fi
-if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 	batching="_chr"
         if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
         then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
                 exit 1
         fi
+elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
+then
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
+        batching="_chr"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
