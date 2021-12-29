@@ -7,43 +7,38 @@
 #string logsDir
 #string groupname
 #string gatkVersion
-#string gatkJar
 #string indexFile
 #string capturedIntervals
 #string projectVariantsMergedSortedGz
-#string sampleVariantsMergedSnpsVcf
-#string sampleVariantsMergedIndelsVcf
-#string externalSampleID
-
+#string projectVariantsSnpsOnlyVcf
+#string projectVariantsIndelsOnlyVcf
 
 module load "${gatkVersion}"
 
-makeTmpDir "${sampleVariantsMergedIndelsVcf}"
-tmpSampleVariantsMergedIndelsVcf="${MC_tmpFile}"
+makeTmpDir "${projectVariantsIndelsOnlyVcf}"
+tmpProjectVariantsIndelsOnlyVcf="${MC_tmpFile}"
 
-makeTmpDir "${sampleVariantsMergedSnpsVcf}"
-tmpSampleVariantsMergedSnpsVcf="${MC_tmpFile}"
+# Select indels only.
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
+--reference="${indexFile}" \
+--variant="${projectVariantsMergedSortedGz}" \
+--output="${tmpProjectVariantsIndelsOnlyVcf}" \
+--select-type-to-include=INDEL
 
-#select only Indels
-java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
--R "${indexFile}" \
--T SelectVariants \
---variant "${projectVariantsMergedSortedGz}" \
--o "${tmpSampleVariantsMergedIndelsVcf}" \
---selectTypeToInclude INDEL \
--sn "${externalSampleID}"
+mv "${tmpProjectVariantsIndelsOnlyVcf}" "${projectVariantsIndelsOnlyVcf}"
+echo "moved ${tmpProjectVariantsIndelsOnlyVcf} to ${projectVariantsIndelsOnlyVcf}"
 
-mv "${tmpSampleVariantsMergedIndelsVcf}" "${sampleVariantsMergedIndelsVcf}"
-echo "moved ${tmpSampleVariantsMergedIndelsVcf} to ${sampleVariantsMergedIndelsVcf}"
 
-#Select SNPs and MNPs
-java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
--R "${indexFile}" \
--T SelectVariants \
---variant "${projectVariantsMergedSortedGz}" \
--o "${tmpSampleVariantsMergedSnpsVcf}" \
---selectTypeToExclude INDEL \
--sn "${externalSampleID}"
 
-mv "${tmpSampleVariantsMergedSnpsVcf}" "${sampleVariantsMergedSnpsVcf}"
-echo "moved ${tmpSampleVariantsMergedSnpsVcf} to ${sampleVariantsMergedSnpsVcf}"
+makeTmpDir "${projectVariantsSnpsOnlyVcf}"
+tmpProjectVariantsSnpsOnlyVcf="${MC_tmpFile}"
+
+# Select non-indels only.
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
+--reference="${indexFile}" \
+--variant="${projectVariantsMergedSortedGz}" \
+--output="${tmpProjectVariantsSnpsOnlyVcf}" \
+--select-type-to-exclude=INDEL
+
+mv "${tmpProjectVariantsSnpsOnlyVcf}" "${projectVariantsSnpsOnlyVcf}"
+echo "moved ${tmpProjectVariantsSnpsOnlyVcf} to ${projectVariantsSnpsOnlyVcf}"

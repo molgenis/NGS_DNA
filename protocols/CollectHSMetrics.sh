@@ -1,9 +1,6 @@
 #Parameter mapping
 #string tmpName
 
-
-#string picardVersion
-#string hsMetricsJar
 #string hsMetrics
 #string dedupBam
 #string dedupBamIdx
@@ -12,15 +9,14 @@
 #string capturedIntervals
 #string capturedExomeIntervals
 #string capturingKit
-#string picardJar
 #string project
 #string logsDir 
 #string groupname
 #string intermediateDir
+#string gatkVersion
 
-#Load Picard module
-
-module load "${picardVersion}"
+#Load GATK module
+module load "${gatkVersion}"
 
 makeTmpDir "${hsMetrics}" "${intermediateDir}"
 tmpHsMetrics="${MC_tmpFile}"
@@ -28,21 +24,27 @@ tmpHsMetrics="${MC_tmpFile}"
 #Run Picard HsMetrics if capturingKit was used
 if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
 then
-	java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${hsMetricsJar}" \
-	INPUT="${dedupBam}" \
-	OUTPUT="${tmpHsMetrics}" \
-	BAIT_INTERVALS="${capturedExomeIntervals}" \
-	TARGET_INTERVALS="${capturedExomeIntervals}" \
-	VALIDATION_STRINGENCY=LENIENT \
-	TMP_DIR="${tempDir}"
+	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
+	--INPUT="${dedupBam}" \
+	--OUTPUT="${tmpHsMetrics}" \
+	--BAIT_INTERVALS="${capturedExomeIntervals}" \
+	--TARGET_INTERVALS="${capturedExomeIntervals}" \
+	--VALIDATION_STRINGENCY=LENIENT \
+	--CLIP_OVERLAPPING_READS=false \
+	--MINIMUM_MAPPING_QUALITY=1 \
+	--MINIMUM_BASE_QUALITY=0 \
+	--TMP_DIR="${tempDir}"
 else
-	java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${hsMetricsJar}" \
-	INPUT="${dedupBam}" \
-	OUTPUT="${tmpHsMetrics}" \
-	BAIT_INTERVALS="${capturedIntervals}" \
-	TARGET_INTERVALS="${capturedIntervals}" \
-	VALIDATION_STRINGENCY=LENIENT \
-	TMP_DIR="${tempDir}"
+	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
+	--INPUT="${dedupBam}" \
+	--OUTPUT="${tmpHsMetrics}" \
+	--BAIT_INTERVALS="${capturedIntervals}" \
+	--TARGET_INTERVALS="${capturedIntervals}" \
+	--VALIDATION_STRINGENCY=LENIENT \
+	--CLIP_OVERLAPPING_READS=false \
+	--MINIMUM_MAPPING_QUALITY=1 \
+	--MINIMUM_BASE_QUALITY=0 \
+	--TMP_DIR="${tempDir}"
 fi
 
 mv "${tmpHsMetrics}" "${hsMetrics}"

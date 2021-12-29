@@ -12,7 +12,6 @@
 #string computeVersion
 #string caddVersion
 #string convadingVersion
-#string cutadaptVersion
 #string fastqcVersion
 #string gatkVersion
 #string gavinPlusVersion
@@ -26,14 +25,12 @@
 #string plink2Version
 #string plinkSeqVersion
 #string picardVersion
-#string pythonVersion
 #string rVersion
 #string sambambaVersion
 #string samtoolsVersion
 #string seqTkVersion
 #string snpEffVersion
 #string htsLibVersion
-#string tabixVersion
 #string vcfAnnoVersion
 #string vepVersion
 #string verifyBamIDVersion
@@ -66,7 +63,6 @@ echo -e "report_header_info:
     - '': '${computeVersion}'
     - '': '${caddVersion}'
     - '': '${convadingVersion}'
-    - '': '${cutadaptVersion}'
     - '': '${fastqcVersion}'
     - '': '${gatkVersion}'
     - '': '${gavinPlusVersion}'
@@ -79,14 +75,12 @@ echo -e "report_header_info:
     - '': '${plink2Version}'
     - '': '${plinkSeqVersion}'
     - '': '${picardVersion}'
-    - '': '${pythonVersion}'
     - '': '${rVersion}'
     - '': '${sambambaVersion}'
     - '': '${samtoolsVersion}'
     - '': '${seqTkVersion}'
     - '': '${snpEffVersion}'
     - '': '${htsLibVersion}'
-    - '': '${tabixVersion}'
     - '': '${vepVersion}'
     - '': '${vcfAnnoVersion}'
     - '': '${verifyBamIDVersion}'

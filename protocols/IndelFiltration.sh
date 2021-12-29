@@ -3,12 +3,13 @@
 
 
 #string gatkVersion
-#string gatkJar
 #string tempDir
 #string intermediateDir
 #string indexFile
-#string sampleVariantsMergedIndelsVcf
-#string sampleVariantsMergedIndelsFilteredVcf
+
+#string projectVariantsIndelsOnlyVcf
+#string projectVariantsIndelsOnlyFilteredVcf
+
 #string tmpDataDir
 #string project
 #string logsDir
@@ -18,22 +19,20 @@
 #Load GATK module
 module load "${gatkVersion}"
 
-makeTmpDir "${sampleVariantsMergedIndelsFilteredVcf}"
-tmpSampleVariantsMergedIndelsFilteredVcf="${MC_tmpFile}"
+makeTmpDir "${projectVariantsIndelsOnlyFilteredVcf}"
+tmpProjectVariantsIndelsOnlyFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called Indels on
+gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
+--reference="${indexFile}" \
+--output="${tmpProjectVariantsIndelsOnlyFilteredVcf}" \
+--variant="${projectVariantsIndelsOnlyVcf}" \
+--filter-name="filterQD" \
+--filter-expression="QD < 2.0" \
+--filter-name="filterSOR_gt10.0" \
+--filter-expression="SOR > 10.0" \
+--filter-name="filterReadPosRankSum" \
+--filter-expression="ReadPosRankSum < -20.0"
 
-java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar "${EBROOTGATK}/${gatkJar}" \
--T VariantFiltration \
--R "${indexFile}" \
--o "${tmpSampleVariantsMergedIndelsFilteredVcf}" \
---variant "${sampleVariantsMergedIndelsVcf}" \
---filterExpression "QD < 2.0" \
---filterName "filterQD" \
---filterExpression "SOR > 10.0" \
---filterName "filterSOR_gt10.0" \
---filterExpression "ReadPosRankSum < -20.0" \
---filterName "filterReadPosRankSum"
-
-mv "${tmpSampleVariantsMergedIndelsFilteredVcf}" "${sampleVariantsMergedIndelsFilteredVcf}"
-echo " moved ${tmpSampleVariantsMergedIndelsFilteredVcf} ${sampleVariantsMergedIndelsFilteredVcf}"
+mv "${tmpProjectVariantsIndelsOnlyFilteredVcf}" "${projectVariantsIndelsOnlyFilteredVcf}"
+echo " moved ${tmpProjectVariantsIndelsOnlyFilteredVcf} ${projectVariantsIndelsOnlyFilteredVcf}"

@@ -3,61 +3,45 @@ stage,module load
 targetedInsertSize,200
 checkStage,module list
 
-### References versions ###
-refExaCVersion,0.3
-refGonLVersion,release5_noContam_noChildren_with_AN_AC_GTC_stripped
-refGnomADExomesVersion,2.1.1
-refGnomADGenomesVersion,r2.0.2
-refClinvarVersion,20180401
-gavinDataDir,${dataDir}/GAVIN/bundle_r1.2/
-gavinCGD,${gavinDataDir}/CGD_26jun2018.txt.gz
-gavinFDR,${gavinDataDir}/FDR_allGenes_r1.2.tsv
-gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.5.tsv
-gavinClinVar,${gavinDataDir}/clinvar.vkgl.patho.26june2018.vcf.gz (https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/)
-
 ### Tool versions ####
-bedToolsVersion,BEDTools/2.25.0-${toolChain}
-bwaVersion,BWA/0.7.15-${toolChain}
-computeVersion,Molgenis-Compute/v19.01.1-Java-11.0.2
-caddVersion,CADD/v1.3
-convadingVersion,CoNVaDING/1.1.6
-cutadaptVersion,cutadapt/1.13-${toolChain}-Python-2.7.10
-fastqcVersion,FastQC/0.11.5-Java-1.8.0_74
-gatkVersion,GATK/3.7-Java-1.8.0_74
-gavinPlusVersion,gavin-plus/1.5.0-Java-1.8.0_74
-hashdeepVersion,hashdeep/4.4-foss-2015b
-iolibVersion,io_lib/1.14.9-${toolChain}
-javaVersion,Java/1.8.0_74
-mantaVersion,manta/1.2.1-${toolChain}
-ngsUtilsVersion,ngs-utils/18.06.2
-perlPlusVersion,PerlPlus/5.22.0-${toolChain}-v17.08.1
-plink1Version,PLINK/1.07-x86_64
-plink2Version,plink/1.9-${toolChain}
-plinkSeqVersion,plinkseq/x86_64-0.10
-picardVersion,picard/2.9.0-Java-1.8.0_74
-pigzVersion,pigz/2.3.1-${toolChain}
-pythonVersion,Python/2.7.10-${toolChain}
-rVersion,R/3.3.3-${toolChain}-bare
-sambambaVersion,sambamba/${sambambaVer}-${toolChain}
-sambambaVer,v0.6.6
-samtoolsVersion,SAMtools/1.2-${toolChain}
-seqTkVersion,seqtk/1.2-${toolChain}
-snpEffVersion,snpEff/4.3t-Java-1.8.0_74
-htsLibVersion,HTSlib/1.3.2-${toolChain}
-vcfAnnoVersion,vcfanno/v0.3.1
-bcfToolsVersion,BCFtools/1.6-${toolChain}
-tabixVersion,tabix/0.2.6-${toolChain}
-vepVersion,VEP/90.5
-verifyBamIDVersion,verifyBamID/1.1.3-${toolChain}
-xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain}
 hpoVersion,90
-gatkJar,GenomeAnalysisTK.jar
+gatkJar,gatk-package-4.1.2.0-local.jar
 gavinPlusJar,gavin-plus-1.5.0-RELEASE.jar
 picardJar,picard.jar
-sambambaTool,sambamba_${sambambaVer}
-vepDBVersion,90
+vepDBVersion,92
 vepAssemblyVersion,GRCh37
-multiQCVersion,multiqc/1.6-${toolChain}-Python-2.7.11
+bcfToolsVersion,BCFtools/1.9-${toolChain_min}
+bedToolsVersion,BEDTools/2.28.0-${toolChain_min}
+bwaVersion,BWA/0.7.17-${toolChain_min}
+computeVersion,Molgenis-Compute/v19.01.1-Java-11-LTS
+caddVersion,CADD/v1.4-foss-2018b
+convadingVersion,1.2.1-${toolChain_min}
+cutadaptVersion,cutadapt/1.13-${toolChain_max}-Python-2.7.10
+fastqcVersion,FastQC/0.11.8-Java-11-LTS
+gatkVersion,GATK/4.1.3.0-Java-8-LTS
+gavinPlusVersion,gavin-plus/1.5.0-Java-11-LTS
+hashdeepVersion,hashdeep/4.4-foss-2015b
+htsLibVersion,HTSlib/1.9-${toolChain_min}
+iolibVersion,io_lib/1.14.11-${toolChain_min}
+javaVersion,Java/11-LTS
+mantaVersion,manta/1.6.0-${toolChain_min}
+multiQCVersion,multiqc/1.7-${toolChain_min}-Python-3.7.4-bare
+ngsUtilsVersion,ngs-utils/19.03.3-${toolChain_min}
+perlPlusVersion,PerlPlus/5.30.0-${toolChain_min}-v19.08.1
+plink1Version,PLINK/1.07-x86_64
+plink2Version,plink/1.9-beta6-20190617
+plinkSeqVersion,plinkseq/x86_64-0.10
+picardVersion,picard/2.20.5-Java-11-LTS
+pigzVersion,pigz/2.4-${toolChain_min}
+rVersion,R/3.6.1-${toolChain_max}-bare
+sambambaVersion,sambamba/0.7.0
+samtoolsVersion,SAMtools/1.9-${toolChain_min}
+seqTkVersion,seqtk/1.3-${toolChain_min}
+snpEffVersion,snpEff/4.3t-Java-11-LTS
+vcfAnnoVersion,vcfanno/v0.3.2
+vepVersion,VEP/90.5
+verifyBamIDVersion,verifyBamID/1.1.3-${toolChain_min}
+xhmmVersion,xhmm/2016-01-04-cc14e528d909-${toolChain_max}
 
 ##### GENERAL DIRECTORIES #####
 dataDir,${appsDir}/data/
@@ -69,10 +53,10 @@ inhouseIntervalsDir,${dataDir}/UMCG/
 inputData,${tmpDataDir}/inputData/
 hpoDir,${dataDir}/HPO/
 sequenomDir,${dataDir}/Sequenom/
-tmpDataDir,${workDir}/${tmpName}/
+tmpDataDir,${groupDir}/${tmpName}/
 tempDir,${tmpDataDir}/temp/
 tmpDirectory,${tmpDataDir}/tmp/
-permanentDataDir,${workDir}/${prmName}
+permanentDataDir,${groupDir}/${prmName}
 logsDir,${tmpDataDir}/logs
 
 ##### RAW DATA FILES/DIRS ####
@@ -90,6 +74,14 @@ indexFileIDPhiX,${indexFileID}_phiX
 indexFileFastaIndex,${indicesDir}/${indexFileIDPhiX}.fasta.fai
 indexFile,${indicesDir}/${indexFileIDPhiX}.fasta
 indexFileDictionary,${indicesDir}/${indexFileIDPhiX}.dict
+
+#### INDEX FILES B38  ####
+#indicesDir,${dataDir}/GRC/GCA_000001405.15/
+#indexFile,${indicesDir}/GCA_000001405.15_GRCh38_full_plus_hs38d1_analysis_set.fna.gz
+#indexFileID,b38
+#indexFileFastaIndex,${indexFile}.fai
+#indexFileDictionary,${indexFile}.dict
+
 
 #### Prefixes ####
 runPrefix,${sequencingStartDate}_${sequencer}_${run}_${flowcell}
@@ -132,7 +124,7 @@ srBarcodeFqGz,${rawFile}.${rawFileExt}
 srBarcodeTrimmedFq,${intermediateDir}/${filePrefix}_${barcode}.trimmed.fq
 bwaAlignCores,8
 humanPhiXdir,${dataDir}/inSilico/humanPhiX
-simulatedPhiXVariants,${humanPhiXdir}/InSilicoData.chrNC_001422.1.variant.calls.vcf
+simulatedPhiXVariants,${humanPhiXdir}/InSilicoData.NC_001422.1.variant.calls.vcf
 inSilicoConcordanceFile,${intermediateDir}/inSilicoConcordance.txt
 rawFileExt,fq.gz
 phiXPrefix,171027_WGSIM_0000_ZZZZZZZZ
@@ -151,6 +143,9 @@ alignedSortedBamIdx,${fileWithIndexId}.sorted.bam.bai
 sampleMergedBam,${sampleNameID}.merged.bam
 sampleMergedBai,${sampleNameID}.merged.bai
 sampleMergedBamIdx,${sampleNameID}.merged.bam.bai
+sampleMergedRecalibratedBam,${sampleNameID}.merged.recalibrated.bam
+sampleMergedRecalibratedBai,${sampleNameID}.merged.recalibrated.bai
+sampleMergedRecalibratedBamIdx,${sampleNameID}.merged.recalibrated.bam.bai
 dedupBam,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam
 dedupBamIdx,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.bai
 dedupBamMetrics,${projectResultsDir}/qc/statistics/${externalSampleID}.merged.dedup.bam
@@ -187,29 +182,30 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
+exacAnnotation,${dataDir}/ExAC/release0.3/ExAC.r0.3.sites.vep.vcf.gz
 caddAnnotation,${dataDir}/CADD/whole_genome_SNVs.tsv.gz
 caddAnnotationVcf,${dataDir}/CADD/whole_genome_SNVs.vcf.gz
 caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.gz
-gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/${refGnomADGenomesVersion}/
-gnomADExomesAnnotation,${dataDir}/gnomAD/${refGnomADExomesVersion}/
-gonlAnnotation,${dataDir}/gonl/${refGonLVersion}/
-clinvarAnnotation,${dataDir}/ClinVar/clinvar_${refClinvarVersion}.vcf.gz
+gonlAnnotation,${dataDir}/gonl/release5_noContam_noChildren_with_AN_AC_GTC_stripped/
+gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/r2.0.2/
+gnomADExomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/exomes/
+clinvarAnnotation,${dataDir}/ClinVar/clinvar_20180401.vcf.gz
 mantaDir,${intermediateDir}/Manta/${externalSampleID}/
 wgsMetrics,${dedupBamMetrics}.wgs_metrics
 
+
 ### Protocols 18a 18b 18c and  (gVCF VariantCalling, VariantCombine, VariantGenotyping) ###
+dbSNPVcf,${dbSNPDir}/GRCh38p7/All_20180418.fixed.vcf.gz
 dbSNP137Vcf,${dbSNPDir}/dbsnp_137.b37.vcf
 dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
 sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
-#sampleBatchVariantCallsFemale,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.female.variant.calls.g.vcf.gz
+#sampleBatchVariantCallsFemale,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.X.female.variant.calls.g.vcf.gz
 #sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
-sampleBatchVariantCallsMaleNONPAR,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.male.NONPAR.variant.calls.g.vcf.gz
+sampleBatchVariantCallsMaleNONPAR,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.X.male.NONPAR.variant.calls.g.vcf.gz
 sampleBatchVariantCallsMaleNONPARIndex,${sampleBatchVariantCallsMaleNONPAR}.tbi
-sampleMergedBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.merged.variant.calls.g.vcf.gz
-sampleGvcf2Bed,${projectResultsDir}/variants/gVCF/${externalSampleID}.gvcfto.bed
 
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
@@ -219,8 +215,8 @@ vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
 vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
-toCADD,${projectPrefix}.batch-${batchID}.toCadd.tsv
-fromCADD,${projectPrefix}.batch-${batchID}.fromCadd.tsv.gz
+toCADD,${projectPrefix}.batch-${batchID}.toCadd.vcf
+fromCADD,${projectPrefix}.batch-${batchID}.fromCadd.vcf.gz
 fromCADDMerged,${projectPrefix}.batch-${batchID}.fromCadd.merged.vcf
 
 
@@ -234,6 +230,8 @@ projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batc
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
 sampleVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
 sampleVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
+projectVariantsIndelsOnlyVcf,${projectPrefix}.annotated.indels.vcf
+projectVariantsSnpsOnlyVcf,${projectPrefix}.annotated.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsMergedIdx,${projectPrefix}.variant.calls.GATK.vcf.idx
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
@@ -245,6 +243,10 @@ gavinCGD,${gavinDataDir}/CGD_26jun2018.txt.gz
 gavinFDR,${gavinDataDir}/FDR_allGenes_r1.2.tsv
 gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.5.tsv
 gavinClinVar,${gavinDataDir}/clinvar.vkgl.patho.26june2018.vcf.gz
+#gavinClinVar,${gavinDataDir}/clinvar.patho.fix.11oct2016.vcf.gz
+#gavinCGD,${gavinDataDir}/CGD_11oct2016.txt.gz
+#gavinFDR,${gavinDataDir}/FDR_allGenes_r1.0.tsv
+#gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.3.tsv
 gavinOutputFirstPass,${sampleNameID}.GAVIN.RVCF.firstpass.vcf
 gavinOutputFinal,${sampleNameID}.GAVIN.RVCF.final.vcf
 gavinToCADD,${sampleNameID}.GAVIN.toCadd.tsv
@@ -260,6 +262,8 @@ projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls
 ### 25, 26
 sampleVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
 sampleVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
+projectVariantsIndelsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.indels.vcf
+projectVariantsSnpsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.snps.vcf
 sampleFinalVcf,${intermediateDir}/${externalSampleID}.final.vcf
 projectFinalVcf,${projectPrefix}.final.vcf
 
@@ -406,8 +410,7 @@ manVarListMVL_LB_B,${manVarListDir}/MVL_2018-06-27_LB-B.bed
 manVarListMVL_VUS_LP_P,${manVarListDir}/MVL_2018-06-27_VUS-LP-P.bed
 manVarListVKGL_consensus_VUS_LP_P,${manVarListDir}/VKGL_consensus_2018-06-27_VUS-LP-P.bed
 
-vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11
+vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain_max}-Python-2.7.16
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 
-
