@@ -16,10 +16,8 @@
 #list flowcell
 #list externalFastQ_1
 #list externalFastQ_2
-#string group_parameters
 #string environment_parameters
 #string groupname
-#string sampleSize
 
 #string mainParameters
 #string worksheet
@@ -34,6 +32,7 @@
 #list lane
 #string ngsUtilsVersion
 
+#string groupDir
 #string dataDir
 #string coveragePerBaseDir
 #string coveragePerTargetDir
@@ -54,11 +53,14 @@ mkdir -p "${projectRawTmpDataDir}"
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectLogsDir}"
 mkdir -p "${intermediateDir}"
-mkdir -p "${projectResultsDir}/"{alignment,general}
-mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female}
+mkdir -p "${projectResultsDir}/alignment/"
 mkdir -p "${projectResultsDir}/qc/statistics/"
-mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
+mkdir -p "${projectResultsDir}/variants/cnv/"
+mkdir -p "${projectResultsDir}/variants/gVCF/"
+mkdir -p "${projectResultsDir}/variants/GAVIN/"
+mkdir -p "${projectResultsDir}/general"
 mkdir -p "${projectQcDir}"
+mkdir -p "${intermediateDir}/GeneNetwork/"
 mkdir -p -m 2770 "${logsDir}/${project}/"
 
 rocketPoint=$(pwd)
@@ -130,26 +132,24 @@ then
 fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 	batching="_chr"
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
-	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
-	then
+        if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+        then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
-		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
-		exit 1
-	fi
+                exit 1
+        fi
 elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
 then
-	batching="_chr"
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
+        batching="_chr"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-	then
+        then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
-		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
-		exit 1
-	fi
+                exit 1
+        fi
 fi
 
 if [ -f ".compute.properties" ];
@@ -164,18 +164,17 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${projectJobsDir}/${project}.csv" \
 -p "${environment_parameters}" \
--p "${group_parameters}" \
 -p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 -w "${workflowpath}" \
---header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
+--header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -b slurm \
 -g -weave \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
+groupDir=${groupDir};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
-sampleSize=${sampleSize};\
 groupname=${groupname}"

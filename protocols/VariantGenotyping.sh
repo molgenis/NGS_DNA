@@ -1,23 +1,23 @@
 #Parameter mapping
+#string groupname
 #string tmpName
-
-
-#string gatkVersion
-#string gatkJar
+#string tmpDataDir
 #string tempDir
 #string intermediateDir
+#string logsDir
+#string project
+#string projectJobsDir
+
+#string gatkVersion
+
 #string indexFile
 #string capturedBatchBed
 #string dbSnp
-#string projectBatchGenotypedVariantCalls
-#string project
+
 #string projectBatchCombinedVariantCalls
 #list sampleBatchVariantCalls
-#string tmpDataDir
-#string projectJobsDir
-#string logsDir
-#string groupname
-#string sampleSize
+#string projectBatchGenotypedVariantCalls
+
 
 #Function to check if array contains value
 array_contains () {
@@ -33,50 +33,58 @@ array_contains () {
     return "${in}"
 }
 
-makeTmpDir "${projectBatchGenotypedVariantCalls}"
-tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
-
-#Load GATK module
+#Load GATK module.
 module load "${gatkVersion}"
 module list
 
-numberofbatches=$((sampleSize / 200))
+makeTmpDir "${projectBatchCombinedVariantCalls}"
+tmpProjectBatchCombinedVariantCalls="${MC_tmpFile}"
+
+makeTmpDir "${projectBatchGenotypedVariantCalls}"
+tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
+
+SAMPLESIZE=$(cat "${projectJobsDir}/${project}.csv" | wc -l)
+numberofbatches=$(("${SAMPLESIZE}" / 200))
 ALLGVCFs=()
 
-if [ "${sampleSize}" -gt 200 ]
+if [ "${SAMPLESIZE}" -gt 200 ]
 then
-	for b in $(seq 0 "${numberofbatches}")
-	do
-		if [ -f "${projectBatchCombinedVariantCalls}".$b ]
-		then
-			ALLGVCFs+=(--variant "${projectBatchCombinedVariantCalls}"."${b}")
-		fi
-	done
+    for b in $(seq 0 "${numberofbatches}")
+    do
+        if [ -f "${projectBatchCombinedVariantCalls}.${b}" ]
+        then
+            ALLGVCFs+=("--variant=${projectBatchCombinedVariantCalls}.${b}")
+        fi
+    done
 else
-	for sbatch in "${sampleBatchVariantCalls[@]}"
+    for sbatch in "${sampleBatchVariantCalls[@]}"
         do
-		if [ -f "${sbatch}" ]
-		then
-			array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant $sbatch")
-		fi
+        if [ -f "${sbatch}" ]
+        then
+            array_contains ALLGVCFs "--variant=${sbatch}" || ALLGVCFs+=("--variant=$sbatch")
+        fi
         done
 fi 
+
 gvcfSize=${#ALLGVCFs[@]}
 if [ ${gvcfSize} -ne 0 ]
 then
-java -Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
-	"${EBROOTGATK}/${gatkJar}" \
-	-T GenotypeGVCFs \
-	-R "${indexFile}" \
-	-L "${capturedBatchBed}" \
-	--dbsnp "${dbSnp}" \
-	-o "${tmpProjectBatchGenotypedVariantCalls}" \
-	${ALLGVCFs[@]} 
+    gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" CombineGVCFs \
+        --reference="${indexFile}" \
+        "${ALLGVCFs[@]}" \
+        --output="${tmpProjectBatchCombinedVariantCalls}"
 
-	mv "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
-	echo "moved ${tmpProjectBatchGenotypedVariantCalls} to ${projectBatchGenotypedVariantCalls} "
+    gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
+        --reference="${indexFile}" \
+        --variant="${tmpProjectBatchCombinedVariantCalls}" \
+        --intervals="${capturedBatchBed}" \
+        --dbsnp="${dbSnp}" \
+        --output="${tmpProjectBatchGenotypedVariantCalls}"
+
+    mv "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
+    echo "moved ${tmpProjectBatchGenotypedVariantCalls} to ${projectBatchGenotypedVariantCalls} "
 else
-	echo ""
-	echo "there is nothing to genotype, skipped"
-	echo ""
+    echo ""
+    echo "there is nothing to genotype, skipped"
+    echo ""
 fi

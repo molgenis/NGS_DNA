@@ -31,16 +31,11 @@ else
 
 	#select only the mean target coverage of the whole genome file
 	awk '{
-if ($0 ~ /^#/){
-
-		}
-		else if ($23 == ""){
-		}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
-
-		}else{
-			print $23
-	}
-	}' "${dedupBamMetrics}.hs_metrics" >> "${checkSexMeanCoverage}"
+		if ($0 ~ /^#/){}
+		else if ($34 == ""){}
+		else if ($34 == "MEAN_TARGET_COVERAGE"){}
+		else {print $34}
+		}' "${dedupBamMetrics}.hs_metrics" >> "${checkSexMeanCoverage}"
 
 
 	avgCov=$(awk '{print $1}' "${checkSexMeanCoverage}")
@@ -59,16 +54,11 @@ if ($0 ~ /^#/){
 
 		#select only the mean target coverage of chromosome X
 		awk '{
-		if ($0 ~ /^#/){
-
-		}
-		else if ($23 == ""){
-			}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
-
-			}else{
-				print $23
-			}
-		}' "${hsMetricsNonAutosomalRegionChrX}" >> "${checkSexMeanCoverage}"
+			if ($0 ~ /^#/){}
+			else if ($34 == ""){}
+			else if ($34 == "MEAN_TARGET_COVERAGE"){}
+			else {print $34}
+			}' "${hsMetricsNonAutosomalRegionChrX}" >> "${checkSexMeanCoverage}"
 
 
 

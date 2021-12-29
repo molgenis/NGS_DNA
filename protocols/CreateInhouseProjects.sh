@@ -9,7 +9,6 @@
 #string projectResultsDir
 #string projectQcDir
 #string computeVersion
-#string group_parameters
 #string groupname
 #string runid
 #list sequencingStartDate
@@ -28,12 +27,13 @@
 #string environment_parameters
 #string ngsversion
 #string ngsUtilsVersion
-#string sampleSize
+
 #string dataDir
 
 #string coveragePerBaseDir
 #string coveragePerTargetDir
 
+#string groupDir
 #string project
 #string logsDir 
 
@@ -63,11 +63,14 @@ mkdir -p "${projectRawTmpDataDir}"
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectLogsDir}"
 mkdir -p "${intermediateDir}"
-mkdir -p "${projectResultsDir}/"{alignment,general}
-mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female,unknown}
+mkdir -p "${projectResultsDir}/alignment/"
 mkdir -p "${projectResultsDir}/qc/statistics/"
-mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
+mkdir -p "${projectResultsDir}/variants/cnv/"
+mkdir -p "${projectResultsDir}/variants/gVCF/"
+mkdir -p "${projectResultsDir}/variants/GAVIN/"
+mkdir -p "${projectResultsDir}/general"
 mkdir -p "${projectQcDir}"
+mkdir -p "${intermediateDir}/GeneNetwork/"
 mkdir -p -m 2770 "${logsDir}/${project}/"
 #
 # Create symlinks to the raw data required to analyse this project.
@@ -210,15 +213,15 @@ then
 elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
+        resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-	then
-		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+        then
+                echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
-		exit 1
-	fi
+                exit 1
+        fi
 fi
 
 if [ "${captKit}" == *"ONCO"* ]
@@ -241,12 +244,11 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
--p "${group_parameters}" \
 -p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
---header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
+--header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -w "${workflowpath}" \
 -b slurm \
@@ -255,7 +257,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
-sampleSize=${sampleSize};\
+groupDir=${groupDir};\
 groupname=${groupname};\
 runid=${runid}"
 

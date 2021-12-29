@@ -2,7 +2,6 @@
 #string tmpName
 
 
-#string picardVersion
 #string gcBiasMetricsJar
 #string dedupBam
 #string dedupBamIdx
@@ -14,16 +13,16 @@
 #string ngsUtilsVersion
 #string capturingKit
 #string seqType
-#string picardJar
 #string insertSizeMetrics
 #string gcBiasMetrics
 #string project
 #string logsDir 
 #string groupname
 #string intermediateDir
+#string gatkVersion
 
-#Load Picard module
-module load "${picardVersion}"
+#Load GATK module.
+module load "${gatkVersion}"
 module load "${rVersion}"
 module load "${ngsUtilsVersion}"
 module list
@@ -31,15 +30,15 @@ module list
 makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"
 tmpGcBiasMetrics="${MC_tmpFile}"
 
-#Run Picard GcBiasMetrics
-java -XX:ParallelGCThreads=1 -jar -Xmx3g "${EBROOTPICARD}/${picardJar}" "${gcBiasMetricsJar}" \
-R="${indexFile}" \
-I="${dedupBam}" \
-O="${tmpGcBiasMetrics}" \
-S="${tmpGcBiasMetrics}.summary_metrics.txt" \
-CHART="${tmpGcBiasMetrics}.pdf" \
-VALIDATION_STRINGENCY=STRICT \
-TMP_DIR="${tempDir}"
+#Run GcBiasMetrics
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx3g" CollectGcBiasMetrics \
+--REFERENCE_SEQUENCE="${indexFile}" \
+--INPUT="${dedupBam}" \
+--OUTPUT="${tmpGcBiasMetrics}" \
+--SUMMARY_OUTPUT="${tmpGcBiasMetrics}.summary_metrics.txt" \
+--CHART_OUTPUT="${tmpGcBiasMetrics}.pdf" \
+--VALIDATION_STRINGENCY=STRICT \
+--TMP_DIR="${tempDir}"
 
 echo -e "\nGcBiasMetrics finished succesfull. Moving temp files to final.\n\n"
 mv "${tmpGcBiasMetrics}" "${gcBiasMetrics}"

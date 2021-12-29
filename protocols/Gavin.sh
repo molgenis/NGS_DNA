@@ -7,8 +7,6 @@
 #string project
 #string logsDir
 #string groupname
-#string snpEffVersion
-#string javaVersion
 #string indexFile
 
 #string gavinClinVar

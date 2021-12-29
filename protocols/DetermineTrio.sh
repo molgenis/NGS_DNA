@@ -4,11 +4,13 @@
 #string logsDir 
 #string groupname
 #string intermediateDir
+#string projectFinalVcf
 #string projectPrefix
+#string whichSex
 
 module load "${vcfPedVersion}"
 
-inputVcfFile="${projectPrefix}.final.vcf"
+inputVcfFile="${projectFinalVcf}"
 
 vcfped "${inputVcfFile}" -o "${projectPrefix}"
 
@@ -51,7 +53,7 @@ then
 			while read line
 			do
 				printf "${line} "
-				if [ $(tail -1 "${intermediateDir}/${line}.chosenSex.txt") == "Female" ]
+				if [ $(tail -1 "${whichSex}") == "Female" ]
 				then
 					echo "Mother"
 				else

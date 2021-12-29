@@ -2,7 +2,6 @@
 #string tmpName
 
 
-#string samtoolsVersion
 #string sampleMergedBam
 #string sampleMergedBai
 #string sampleMergedBamIdx
@@ -14,7 +13,6 @@
 #string groupname
 #string intermediateDir
 #string sambambaVersion
-#string sambambaTool
 
 #Function to check if array contains value
 array_contains () {
@@ -59,7 +57,7 @@ then
 
 	#indexing because there is no index file coming out of the sorting step
 	printf "indexing..."
-	"${sambambaTool}" index \
+	sambamba index \
 	"${sampleMergedBam}" \
 	${inputMergeBamIdx[0]}
 
@@ -71,9 +69,9 @@ then
 	echo "nothing to merge because there is only one sample"
 
 else
-	"${sambambaTool}" merge \
+	sambamba merge \
 	"${tmpSampleMergedBam}" \
-	${INPUTS[@]}
+	"${INPUTS[@]}"
 
 	mv "${tmpSampleMergedBam}" "${sampleMergedBam}"
 	echo "moved ${tmpSampleMergedBam} ${sampleMergedBam}"

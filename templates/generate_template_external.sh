@@ -1,14 +1,7 @@
 #!/bin/bash
-if module list | grep -o -P 'NGS_DNA(.+)' 
-then
-	echo "DNA pipeline loaded, proceding"
-else
-	echo "No DNA Pipeline loaded, exiting"
-	exit 1
-fi
 
+module load NGS_DNA
 module list
-
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
 
@@ -28,7 +21,7 @@ Options:
 	-f   filePrefix (default=basename of this directory)
 	-r   runID (default=run01)
 	-t   tmpDirectory (default=basename of ../../ )
-	-w   groupDir (default=/groups/\${group}/)
+	-w   workdir (default=/groups/\${group}/\${tmpDirectory})
 
 ===============================================================================================================
 EOH
@@ -39,17 +32,17 @@ EOH
 
 while getopts "t:g:w:f:r:h" opt;
 do
-	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)groupDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
+	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)workDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
 	esac
 done
 
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
 if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
-if [[ -z "${groupDir:-}" ]]; then groupDir="/groups/${group}/" ; fi ; echo "groupDir=${groupDir}"
+if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
 if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
-genScripts="${groupDir}/${tmpDirectory}/generatedscripts/${filePrefix}/"
+genScripts="${workDir}/generatedscripts/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
 
 #
@@ -64,7 +57,7 @@ fi
 ## adding columns if they are not present in the samplesheet
 for i in "Gender" "MotherSampleId" "FatherSampleId" "MotherAffected" "FatherAffected" "FirstPriority"
 do
-	python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}"
+	python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}" 
 done
 
 ## get only uniq lines and removing txt.tmp file
@@ -80,11 +73,22 @@ sampleSize=$(cat externalSampleIDs.txt |  wc -l) ; echo "Samplesize is ${sampleS
 
 if [ $sampleSize -gt 199 ];then	workflow=${EBROOTNGS_DNA}/workflow_samplesize_bigger_than_200.csv ; else workflow=${EBROOTNGS_DNA}/workflow.csv ;fi
 
+IFS="${SAMPLESHEET_SEP}" _sampleSheetColumnNames=($(head -1 "${_sampleSheet}"))
+for (( _offset = 0 ; _offset < ${#_sampleSheetColumnNames[@]:-0} ; _offset++ ))
+do
+	_sampleSheetColumnOffsets["${_sampleSheetColumnNames[${_offset}]}"]="${_offset}"
+done
+pipeline=""
+if [[ ! -z "${_sampleSheetColumnOffsets['pipeline']+isset}" ]]; then
+		_projectFieldIndex=$((${_sampleSheetColumnOffsets['pipeline']} + 1))
+		IFS=$'\n' pipeline=($(tail -n +2 "${_sampleSheet}" | cut -d "${SAMPLESHEET_SEP}" -f "${_projectFieldIndex}" | sort | uniq ))
+fi
+
 ### Converting parameters to compute parameters
-echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv
+echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/parameters_converted.csv"
-#perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/parameters_group_converted.csv"
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/parameters_group_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/${environmentParameters}.csv" > "${genScripts}/parameters_environment_converted.csv"
 
 ## has to be set, otherwise it will crash due to parameters which are not set, this variable will be updated in the next step
@@ -94,6 +98,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${genScripts}/parameters_converted.csv" \
 -p "${genScripts}/parameters_tmpdir_converted.csv" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
+-p "${genScripts}/parameters_group_converted.csv" \
 -p "${genScripts}/parameters_environment_converted.csv" \
 -p "${genScripts}/${filePrefix}.csv" \
 -w "${EBROOTNGS_DNA}/create_external_samples_ngs_projects_workflow.csv" \
@@ -101,12 +106,12 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 --runid "${runID}" \
 -o workflowpath="${workflow};\
 outputdir=scripts/jobs;mainParameters=${genScripts}/parameters_converted.csv;\
+group_parameters=${genScripts}/parameters_group_converted.csv;\
 groupname=${group};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
 environment_parameters=${genScripts}/parameters_environment_converted.csv;\
 tmpdir_parameters=${genScripts}/parameters_tmpdir_converted.csv;\
 worksheet=${genScripts}/${filePrefix}.csv;\
-groupDir=${groupDir};\
 runid=${runID}" \
 -weave \
 --generate

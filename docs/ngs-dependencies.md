@@ -1,4 +1,4 @@
-### NGS_DNA-3.6.0 pipeline dependencies
+### NGS_DNA-3.5.2 pipeline dependencies
 ```
 ('BWA', '0.7.15', '', ('foss', '2015b')),
 ('BEDTools', '2.25.0', '', ('foss', '2015b')),
