@@ -19,7 +19,7 @@ convadingVersion,1.2.1-${toolChain_min}
 cutadaptVersion,cutadapt/1.13-${toolChain_max}-Python-2.7.10
 fastqcVersion,FastQC/0.11.9-Java-8-LTS
 gatkVersion,GATK/4.2.4.1-Java-8-LTS
-gavinPlusVersion,gavin-plus/1.5.0-Java-8-LTS
+gavinPlusVersion,gavin-plus/1.5.0-Java-11-LTS
 hashdeepVersion,hashdeep/4.4-foss-2015b
 htsLibVersion,HTSlib/1.14-${toolChain_min}
 iolibVersion,io_lib/1.14.11-${toolChain_min}
