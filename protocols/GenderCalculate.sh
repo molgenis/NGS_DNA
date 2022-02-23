@@ -18,7 +18,7 @@
 
 module load "${picardVersion}"
 
-if [[ "${capturedIntervals}" == *"ONCO_v"* || "${capturedIntervals}" == *"wgs"* ]]
+if [[ "${capturedIntervals}" == *"ONCO_v"* || "${capturedIntervals}" == *"wgs"* || "${capturedIntervals}" == *"Targeted_v"*]]
 then
 	touch "${dedupBamMetrics}.noChrX"
 else
