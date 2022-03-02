@@ -27,11 +27,13 @@
 #string environment_parameters
 #string ngsversion
 #string ngsUtilsVersion
+#string python2Version
 
 #string dataDir
 
 #string coveragePerBaseDir
 #string coveragePerTargetDir
+
 
 #string groupDir
 #string project
@@ -40,7 +42,7 @@
 umask 0007
 module load "${ngsUtilsVersion}"
 module load "${ngsversion}"
-
+module load "${python2Version}"
 array_contains () {
     local array="$1[@]"
     local seeking="${2}"
@@ -141,7 +143,7 @@ done
 #
 # Create subset of samples for this project.
 #
-extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
+cp "${worksheet}" "${projectJobsDir}/${project}.csv"
 sampleSheetCsv="${projectJobsDir}/${project}.csv"
 perl -pi -e 's/\r(?!\n)//g' "${sampleSheetCsv}"
 barcodesGrepCommand=""

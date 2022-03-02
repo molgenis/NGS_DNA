@@ -20,22 +20,13 @@
 #string mantaVersion
 #string multiQCVersion
 #string ngsUtilsVersion
-#string perlPlusVersion
-#string plink1Version
-#string plink2Version
-#string plinkSeqVersion
 #string picardVersion
-#string rVersion
 #string sambambaVersion
 #string samtoolsVersion
 #string seqTkVersion
 #string snpEffVersion
 #string htsLibVersion
 #string vcfAnnoVersion
-#string vepVersion
-#string verifyBamIDVersion
-#string xhmmVersion
-#string hpoVersion
 #string projectResultsDir
 #string ngsversion
 #string capturingKit
@@ -70,22 +61,13 @@ echo -e "report_header_info:
     - '': '${javaVersion}'
     - '': '${mantaVersion}'
     - '': '${ngsUtilsVersion}'
-    - '': '${perlPlusVersion}'
-    - '': '${plink1Version}'
-    - '': '${plink2Version}'
-    - '': '${plinkSeqVersion}'
     - '': '${picardVersion}'
-    - '': '${rVersion}'
     - '': '${sambambaVersion}'
     - '': '${samtoolsVersion}'
     - '': '${seqTkVersion}'
     - '': '${snpEffVersion}'
     - '': '${htsLibVersion}'
-    - '': '${vepVersion}'
     - '': '${vcfAnnoVersion}'
-    - '': '${verifyBamIDVersion}'
-    - '': '${xhmmVersion}'
-    - '': '${hpoVersion}'
     - '': '${multiQCVersion}'
     - '' : ''
     - pipeline description : ''

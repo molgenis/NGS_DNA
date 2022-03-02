@@ -23,10 +23,10 @@ makeTmpDir "${sampleFinalVcf}"
 tmpSampleFinalVcf="${MC_tmpFile}"
 
 gatk --java-options "-Xmx3g" SelectVariants \
---reference="${indexFile}" \
---variant="${projectFinalVcf}" \
---sample-name="${externalSampleID}" \
---output="${tmpSampleFinalVcf}"
+-R "${indexFile}" \
+-V "${projectFinalVcf}" \
+-sn "${externalSampleID}" \
+-O "${tmpSampleFinalVcf}"
 
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
 

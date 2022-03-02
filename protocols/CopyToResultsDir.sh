@@ -76,10 +76,8 @@ done
 
 count=1
 
-printf "Copying variants vcf and tables to results directory "
+printf "Copying variants vcf to results directory "
 # Copy variants vcf and tables to results directory
-rsync -a "${projectPrefix}.final.vcf.table" "${projectResultsDir}/variants/"
-printf "."
 rsync -a "${projectPrefix}.final.vcf.gz" "${projectResultsDir}/variants/"
 printf "."
 rsync -a "${projectPrefix}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
@@ -164,8 +162,6 @@ printf " finished\n"
 printf "Copying vcf files, gender determination, coverage per base and per target files "
 for sa in "${UNIQUESAMPLES[@]}"
 do
-	rsync -a "${intermediateDir}/${sa}.final.vcf.table" "${projectResultsDir}/variants/"
-	printf "."
 
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz" "${projectResultsDir}/variants/"
 	printf "."
@@ -216,28 +212,6 @@ rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDi
 rsync -av "${intermediateDir}/multiqc_data" "${projectResultsDir}/"
 printf "."
 printf " finished\n"
-
-echo "Creating zip file"
-# Create zip file for all "small text" files
-CURRENT_DIR=$(pwd)
-cd "${projectResultsDir}"
-
-zip -gr "${projectResultsDir}/${project}.zip" variants/*.vcf*
-zip -gr "${projectResultsDir}/${project}.zip" variants/cnv
-zip -gr "${projectResultsDir}/${project}.zip" variants/GAVIN
-zip -gr "${projectResultsDir}/${project}.zip" qc
-zip -g "${projectResultsDir}/${project}.zip" "${project}.csv"
-zip -g "${projectResultsDir}/${project}.zip" "${project}_multiqc_report.html"
-
-echo "Zip file created: ${projectResultsDir}/${project}.zip "
-
-# Create md5sum for zip file
-
-md5sum "${project}.zip" > "${projectResultsDir}/${project}.zip.md5"
-echo "Made md5 file for ${projectResultsDir}/${project}.zip "
-
-cd "${CURRENT_DIR}"
-
 
 if [ ! -d "${logsDir}/${project}/" ]
 then

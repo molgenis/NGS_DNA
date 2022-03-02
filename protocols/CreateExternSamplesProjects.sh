@@ -31,6 +31,7 @@
 #list barcode
 #list lane
 #string ngsUtilsVersion
+#string python2Version
 
 #string groupDir
 #string dataDir
@@ -43,6 +44,7 @@ set -u
 umask 0007
 module load "${ngsUtilsVersion}"
 module load "${ngsversion}"
+module load "${python2Version}"
 
 module list
 #
@@ -113,8 +115,7 @@ echo $(pwd)
 #
 # Create subset of samples for this project.
 #
-
-extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
+cp "${worksheet}" "${projectJobsDir}/${project}.csv"
 
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.

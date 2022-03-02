@@ -8,7 +8,7 @@ for row in reader:
         for (k,v) in row.items():
                 if "capturingKit" in row:
                         if k == "capturingKit":
-			        if count == 0:
-        	                        print v
-		                        count+=1
+                            if count == 0:
+                                print v
+                                count+=1
 

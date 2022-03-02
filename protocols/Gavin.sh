@@ -28,7 +28,8 @@
 
 #string gavinPlusVersion
 #string gavinPlusJar
-#string ngsUtilsVersion
+#string picardVersion
+#string indexFileDictionary
 
 makeTmpDir "${gavinOutputFinal}"
 tmpGavinOutputFinal="${MC_tmpFile}"
@@ -36,7 +37,7 @@ tmpGavinOutputFinal="${MC_tmpFile}"
 module load "${htsLibVersion}"
 module load "${gavinPlusVersion}"
 module load "${bcfToolsVersion}"
-module load "${ngsUtilsVersion}"
+module load "${picardVersion}"
 
 touch "${intermediateDir}/emptyFile.tsv"
 
@@ -57,10 +58,15 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 -s \
 -q BOTH
 
-echo "Gavin finished, now sorting the vcf"
+#echo "Gavin finished, now sorting the vcf"
+java -jar ${EBROOTPICARD}/picard.jar SortVcf \
+-I ${tmpGavinOutputFinal} \
+-SD "${indexFileDictionary}" \
+-O ${gavinOutputFinalMergedRLV}
 
-sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
-perl -pi -e 's|RLV=|;RLV=|' ${gavinOutputFinalMergedRLV}
+
+#sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
+perl -pi -e 's|RLV=|;RLV=|'  ${gavinOutputFinalMergedRLV}
 
 printf "bgzipping ${gavinOutputFinalMergedRLV}"
 bgzip -c "${gavinOutputFinalMergedRLV}" > "${gavinOutputFinalMergedRLV}.gz"

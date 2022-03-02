@@ -56,7 +56,7 @@ then
 fi
 
 bams=($(printf '%s\n' "${sampleMergedRecalibratedBam[@]}" | sort -u ))
-inputs=$(printf -- '--input=%s ' $(printf '%s\n' "${bams[@]}"))
+inputs=$(printf -- '--input %s ' $(printf '%s\n' "${bams[@]}"))
 
 genderCheck=""
 
@@ -86,24 +86,24 @@ else
 		fi
 	elif [[ "${genderCheck}" == "Male" ]]
 	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed || "${capturedBatchBed}" == *batch-Xnp.bed ]]
+		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
 		then
 			ploidy=1
-			echo -e "Male, chrY or chrXNonPar ==> ploidy=1"
+			echo -e "Male, chrY ==> ploidy=1"
 		else
 			ploidy=2
-			echo -e "Male, autosomal or chrXPar ==> ploidy=2"
+			echo -e "Male, autosomal  ==> ploidy=2"
 		fi
 	fi
 
 	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
-	--reference="${indexFile}" \
+	-R "${indexFile}" \
 	${inputs} \
-	--dbsnp="${dbSnp}" \
-	--output="${tmpSampleBatchVariantCalls}" \
-	--intervals="${myBed}" \
-	--emit-ref-confidence=GVCF \
-	--sample-ploidy="${ploidy}"
+	-D "${dbSnp}" \
+	-O "${tmpSampleBatchVariantCalls}" \
+	-L "${myBed}" \
+	-ERC GVCF \
+	-ploidy "${ploidy}"
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]

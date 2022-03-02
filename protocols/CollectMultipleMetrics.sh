@@ -11,6 +11,7 @@
 #string collectBamMetricsPrefix
 #string tempDir
 #string seqType
+#string rVersion
 #string picardJar
 #string project
 #string logsDir 
@@ -19,21 +20,21 @@
 
 #Load Picard module
 module load "${picardVersion}"
-
+module load "${rVersion}"
 makeTmpDir "${collectBamMetricsPrefix}" "${intermediateDir}"
 tmpCollectBamMetricsPrefix="${MC_tmpFile}"
 
 #Run Picard CollectAlignmentSummaryMetrics, CollectInsertSizeMetrics, CollectGcBiasMetrics, QualityScoreDistribution and MeanQualityByCycle
 java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${collectMultipleMetricsJar}" \
-I="${dedupBam}" \
-R="${indexFile}" \
-O="${tmpCollectBamMetricsPrefix}" \
-PROGRAM=CollectAlignmentSummaryMetrics \
-PROGRAM=CollectInsertSizeMetrics \
-PROGRAM=QualityScoreDistribution \
-PROGRAM=MeanQualityByCycle \
-VALIDATION_STRINGENCY=LENIENT \
-TMP_DIR="${tempDir}"
+-I "${dedupBam}" \
+-R "${indexFile}" \
+-O "${tmpCollectBamMetricsPrefix}" \
+--PROGRAM CollectAlignmentSummaryMetrics \
+--PROGRAM CollectInsertSizeMetrics \
+--PROGRAM QualityScoreDistribution \
+--PROGRAM MeanQualityByCycle \
+--VALIDATION_STRINGENCY LENIENT \
+--TMP_DIR "${tempDir}"
 
 echo -e "\nCollectBamMetrics finished succesfull. Moving temp files to final.\n\n"
 mv "${tmpCollectBamMetricsPrefix}.alignment_summary_metrics" "${dedupBamMetrics}.alignment_summary_metrics"
