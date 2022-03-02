@@ -20,7 +20,7 @@ gatkVersion,GATK/4.2.4.1-${javaSuffix}
 gatkJar,gatk-package-4.2.4.2-local.jar
 gavinPlusJar,gavin-plus-1.5.0-RELEASE.jar
 gavinPlusVersion,gavin-plus/1.5.0-${javaSuffix}
-gVCF2BEDVersion,gVCF2BED/1.0.0-GCCcore-7.3.0
+gVCF2BEDVersion,gVCF2BED/1.0.0-${toolChain_min}
 refGnomADExomesVersion,2.1.1
 refGnomADGenomesVersion,r2.0.2
 hashdeepVersion,hashdeep/4.4-${toolChain_max}
@@ -34,7 +34,7 @@ picardVersion,picard/2.26.10-${javaSuffix}
 picardJar,picard.jar
 pigzVersion,pigz/2.7-${toolChain_max}
 python2Version,Python/2.7.16-${toolChain_min}
-pythonVersion,Python/3.10.2-GCCcore-7.3.0-bare
+pythonVersion,Python/3.10.2-${toolChain_min}-bare
 rVersion,R/4.0.3-${toolChain_max}
 sambambaVersion,sambamba/0.7.0
 samtoolsVersion,SAMtools/1.14-${toolChain_max}
