@@ -21,6 +21,7 @@
 #string multiQCVersion
 #string ngsUtilsVersion
 #string picardVersion
+#string rVersion
 #string sambambaVersion
 #string samtoolsVersion
 #string seqTkVersion
@@ -62,6 +63,7 @@ echo -e "report_header_info:
     - '': '${mantaVersion}'
     - '': '${ngsUtilsVersion}'
     - '': '${picardVersion}'
+    - '': '${rVersion}'
     - '': '${sambambaVersion}'
     - '': '${samtoolsVersion}'
     - '': '${seqTkVersion}'

@@ -25,6 +25,7 @@
 #string cgdDataDir
 #string cgdFile
 #string intermediateDir
+#string vcfAnnoExecutable
 
 module load "${vcfAnnoVersion}"
 module load "${htsLibVersion}"
