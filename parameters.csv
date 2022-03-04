@@ -31,7 +31,6 @@ multiQCVersion,multiqc/1.11-${toolChain_max}
 ngsUtilsVersion,ngs-utils/22.01.1
 perlPlusVersion,PerlPlus/5.30.0-${toolChain_min}-v19.08.1
 picardVersion,picard/2.26.10-${javaSuffix}
-picardJar,picard.jar
 pigzVersion,pigz/2.7-${toolChain_max}
 python2Version,Python/2.7.16-${toolChain_min}
 pythonVersion,Python/3.10.2-${toolChain_min}-bare
