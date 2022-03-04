@@ -17,8 +17,8 @@ caddVersion,CADD/v1.3-${toolChain_max}
 convadingVersion,1.2.1-${toolChain_min}
 fastqcVersion,FastQC/0.11.9-${javaSuffix}
 gatkVersion,GATK/4.2.4.1-${javaSuffix}
-gatkJar,gatk-package-4.2.4.2-local.jar
-gavinPlusJar,gavin-plus-1.5.0-RELEASE.jar
+gatkJar,gatk-package-local.jar
+gavinPlusJar,gavin-plus-RELEASE.jar
 gavinPlusVersion,gavin-plus/1.5.0-${javaSuffix}
 gVCF2BEDVersion,gVCF2BED/1.0.0-${toolChain_min}
 refGnomADExomesVersion,2.1.1

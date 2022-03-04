@@ -17,15 +17,15 @@
 #Function to check if array contains value
 array_contains () {
 	local array="$1[@]"
-	local seeking=$2
+	local seeking="${2}"
 	local in=1
 	for element in "${!array-}"; do
-		if [[ "$element" == "$seeking" ]]; then
+		if [[ "${element}" == "${seeking}" ]]; then
 			in=0
 			break
 		fi
 	done
-	return $in
+	return "${in}"
 }
 
 makeTmpDir "${sampleMergedBam}"
@@ -46,8 +46,8 @@ INPUTBAIS=()
 
 for bamFile in "${inputMergeBam[@]}"
 do
-	array_contains INPUTS "${bamFile}" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
-	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${bamFile}" || INPUTS+=("${bamFile}")    # If bamFile does not exist in array add it
+	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("${bamFile}")    # If bamFile does not exist in array add it
 done
 
 if [ ${#INPUTS[@]} == 1 ]

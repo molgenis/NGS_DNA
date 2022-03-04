@@ -12,7 +12,6 @@
 #string tempDir
 #string seqType
 #string rVersion
-#string picardJar
 #string project
 #string logsDir 
 #string groupname
@@ -25,7 +24,7 @@ makeTmpDir "${collectBamMetricsPrefix}" "${intermediateDir}"
 tmpCollectBamMetricsPrefix="${MC_tmpFile}"
 
 #Run Picard CollectAlignmentSummaryMetrics, CollectInsertSizeMetrics, CollectGcBiasMetrics, QualityScoreDistribution and MeanQualityByCycle
-java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${collectMultipleMetricsJar}" \
+java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/picard.jar" "${collectMultipleMetricsJar}" \
 -I "${dedupBam}" \
 -R "${indexFile}" \
 -O "${tmpCollectBamMetricsPrefix}" \
