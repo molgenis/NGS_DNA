@@ -22,16 +22,17 @@ module list
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
-            in=0
-            break
-        fi
-    done
-    return $in
+	local _array
+	_array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!_array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 INPUTS=()
@@ -45,6 +46,7 @@ tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
 sambamba index "${sampleMergedBam}"
 
+# shellcheck disable=SC2068 #${INPUTS[@]} => gatk needs seperate strings, not one captured in quotes
 gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
 -R "${indexFile}" \
 ${INPUTS[@]} \

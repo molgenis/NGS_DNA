@@ -59,18 +59,18 @@ java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 -q BOTH
 
 #echo "Gavin finished, now sorting the vcf"
-java -jar ${EBROOTPICARD}/picard.jar SortVcf \
--I ${tmpGavinOutputFinal} \
+java -jar "${EBROOTPICARD}/picard.jar" SortVcf \
+-I "${tmpGavinOutputFinal}" \
 -SD "${indexFileDictionary}" \
--O ${gavinOutputFinalMergedRLV}
+-O "${gavinOutputFinalMergedRLV}"
 
 
 #sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
-perl -pi -e 's|RLV=|;RLV=|'  ${gavinOutputFinalMergedRLV}
+perl -pi -e 's|RLV=|;RLV=|'  "${gavinOutputFinalMergedRLV}"
 
-printf "bgzipping ${gavinOutputFinalMergedRLV}"
+printf '%s' "bgzipping ${gavinOutputFinalMergedRLV}"
 bgzip -c "${gavinOutputFinalMergedRLV}" > "${gavinOutputFinalMergedRLV}.gz"
-printf "..done\ntabix-ing ${gavinOutputFinalMergedRLV}.gz .."
+printf '%s' "..done\ntabix-ing ${gavinOutputFinalMergedRLV}.gz .."
 tabix -p vcf "${gavinOutputFinalMergedRLV}.gz"
 printf "..done\n"
 echo "done"

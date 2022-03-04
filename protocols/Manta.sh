@@ -36,7 +36,6 @@ SCRIPTNAME=${MC_jobScript}
 
 if [[ "${bedfile}" == *"wgs"* || "${bedfile}" == *"WGS"* ]]
 then
-
 	python "${EBROOTMANTA}/bin/configManta.py" \
 	--bam "${dedupBam}" \
 	--referenceFasta "${indexFile}" \
@@ -59,7 +58,7 @@ then
 	--bam "${dedupBam}" \
 	--referenceFasta "${indexFile}" \
 	--exome \
-	--config ${EBROOTNGS_DNA}/conf/configManta.py.ini \
+	--config "${EBROOTNGS_DNA}/conf/configManta.py.ini" \
 	--runDir "${tmpMantaDir}" 
 
 else
@@ -88,14 +87,14 @@ then
 	bedtools intersect -header -a "${mantaDir}/results/variants/candidateSmallIndels.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp"
 
 	if [ -f "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" ]
-        then
+	then
 		grep "^#" "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf"
 		grep -v "^#" "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/candidateSmallIndels.vcf"
 
 		bgzip -c "${mantaDir}/results/variants/real/candidateSmallIndels.vcf" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz"
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz .."
+		printf '%s' "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz .."
 		tabix -p vcf "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz"
-		printf "${mantaDir}/results/variants/real/candidateSmallIndels.vcf ..done\n"
+		printf '%s' "${mantaDir}/results/variants/real/candidateSmallIndels.vcf ..done\n"
 	else
 		echo "no candidateSmallIndels's left after filtering with the bedfile"
 		touch "${mantaDir}/results/variants/real/NO_candidateSmallIndels"
@@ -109,9 +108,9 @@ then
 		grep -v "^#" "${mantaDir}/results/variants/real/candidateSV.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/candidateSV.vcf"
 
 		bgzip -c "${mantaDir}/results/variants/real/candidateSV.vcf" > "${mantaDir}/results/variants/real/candidateSV.vcf.gz"
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
+		printf '%s' "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
 		tabix -p vcf "${mantaDir}/results/variants/real/candidateSV.vcf.gz"
-		printf "${mantaDir}/results/variants/real/candidateSV.vcf ..done\n"
+		printf '%s' "${mantaDir}/results/variants/real/candidateSV.vcf ..done\n"
 	else
 		echo "no candidateSV's left after filtering with the bedfile"
 		touch "${mantaDir}/results/variants/real/NO_candidateSV"
@@ -119,14 +118,14 @@ then
 
 	bedtools intersect -header -a "${mantaDir}/results/variants/diploidSV.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/diploidSV.vcf.tmp"
 	if [ -f "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" ]
-        then
+	then
 		grep "^#" "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" > "${mantaDir}/results/variants/real/diploidSV.vcf"
 		grep -v "^#" "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/diploidSV.vcf"
 
 		bgzip -c "${mantaDir}/results/variants/real/diploidSV.vcf" > "${mantaDir}/results/variants/real/diploidSV.vcf.gz"
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
+		printf '%s' "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
 		tabix -p vcf "${mantaDir}/results/variants/real/diploidSV.vcf.gz"
-		printf "${mantaDir}/results/variants/real/diploidSV.vcf ..done\n"
+		printf '%s' "${mantaDir}/results/variants/real/diploidSV.vcf ..done\n"
 	else
 		echo "no diploidSV's left after filtering with the bedfile"
 		touch "${mantaDir}/results/variants/real/NO_diploidSV"

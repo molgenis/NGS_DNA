@@ -26,25 +26,25 @@
 
 #Load module
 module load "${seqTkVersion}"
-module load ${pigzVersion}
+module load "${pigzVersion}"
 
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 INPUTS=()
 for sample in "${externalSampleID[@]}"
 do
-	array_contains INPUTS "$sample" || INPUTS+=("$sample")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${sample}" || INPUTS+=("${sample}")    # If bamFile does not exist in array add it
 done
 
 echo "starting with phiX part"
@@ -75,12 +75,11 @@ fi
 checkIlluminaEncoding() {
 	barcodeFqGz="${1}"
 	barcodeFinalFqGz="${2}"
-
-	lines=($(zcat "${barcodeFqGz}" | head -20000 | tail -192 | awk 'NR % 4 == 0'))
+	mapfile -t lines < <(zcat "${barcodeFqGz}" | head -20000 | tail -192 | awk 'NR % 4 == 0')
 	count=1
 	nodecision=0
 	numberoflines=0
-	for line in ${lines[@]}
+	for line in "${lines[@]}"
 	do
 		numberoflines=$(( numberoflines+1 ))
 		#check for illumina encoding 1.5
@@ -97,7 +96,7 @@ checkIlluminaEncoding() {
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
-				echo "LINE: " $line
+				echo "LINE: ${line}"
 				exit 1
 			fi
 			lastEncoding="${encoding}"
@@ -115,8 +114,8 @@ checkIlluminaEncoding() {
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
-				echo "LINE: " ${line}
-			exit 1
+				echo "LINE: ${line}"
+				exit 1
 			fi
 			lastEncoding="${encoding}"
 		elif [[ "${line}" =~ @ ]] || [[ "${line}" =~ [A-J] ]]
@@ -155,8 +154,8 @@ checkIlluminaEncoding() {
 #If paired-end do fastqc for both ends, else only for one
 if [ "${seqType}" == "PE" ]
 then
-        checkIlluminaEncoding "${peEnd1BarcodePhiXFqGz}" "${peEnd1BarcodePhiXRecodedFqGz}"
-        checkIlluminaEncoding "${peEnd2BarcodePhiXFqGz}" "${peEnd2BarcodePhiXRecodedFqGz}"
+	checkIlluminaEncoding "${peEnd1BarcodePhiXFqGz}" "${peEnd1BarcodePhiXRecodedFqGz}"
+	checkIlluminaEncoding "${peEnd2BarcodePhiXFqGz}" "${peEnd2BarcodePhiXRecodedFqGz}"
 elif [ "${seqType}" == "SR" ]
 then
 	checkIlluminaEncoding "${srBarcodeFqGz}" "${srBarcodeRecodedFqGz}"

@@ -44,7 +44,7 @@ INPUTDIR=$(pwd)
 if ls *.vcf 1> /dev/null 2>&1
 then
 	for i in $(ls *.vcf)
-        do
+	do
 		fileName=$(basename "${i}")
 		name=${fileName%%.*}
 
@@ -66,12 +66,12 @@ then
 		perl -pi -e 's|workflow_startFromVcf.csv|workflow_GavinStandAlone.csv|' "/groups/${groupname}/${tmpDirectory}/generatedscripts/Gavin_${name}/startFromVcf.sh"
 		cd "/groups/${groupname}/${tmpDirectory}/generatedscripts/Gavin_${name}/"
 
-		sh startFromVcf.sh -v ${fileName%.*}.stripped.vcf -c Exoom_v1
+		sh startFromVcf.sh -v "${fileName%.*}.stripped.vcf" -c Exoom_v1
 
 		cd "/groups/${groupname}/${tmpDirectory}/projects/Gavin_${name}/run01/jobs/"
 		sh submit.sh >> "${INPUTDIR}/${name}.run.logs"
 		cd "${INPUTDIR}"
 		echo "it will now be running in /groups/${groupname}/${tmpDirectory}/projects/Gavin_${name}/run01/jobs/" > ${i}.started
 		mv "${i}" processing/
-        done
+	done
 fi

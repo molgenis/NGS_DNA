@@ -54,6 +54,7 @@ do
 	fi
 done
 
+# shellcheck disable=SC2068 #${INPUTS[@]} => gatk needs seperate strings, not one captured in quotes
 gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
 ${INPUTS[@]} \
 -O "${tmpProjectVariantsMergedSortedGz}" \

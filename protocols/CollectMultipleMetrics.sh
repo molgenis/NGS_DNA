@@ -48,8 +48,6 @@ then
 	echo -e "\nDetected paired-end data, moving all files.\n\n"
 	mv "${tmpCollectBamMetricsPrefix}.insert_size_metrics" "${dedupBamMetrics}.insert_size_metrics"
 	mv "${tmpCollectBamMetricsPrefix}.insert_size_histogram.pdf" "${dedupBamMetrics}.insert_size_histogram.pdf"
-
 else
-    echo -e "\nDetected single read data, no *.insert_size_metrics files to be moved.\n\n"
-
+	echo -e "\nDetected single read data, no *.insert_size_metrics files to be moved.\n\n"
 fi

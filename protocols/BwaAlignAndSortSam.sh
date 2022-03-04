@@ -55,18 +55,13 @@ then
 	> "${tmpAlignedSam}" &
 
 	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
-        -I "${tmpAlignedSam}" \
-        -O "${tmpAlignedSortedBam}"  \
-        --SORT_ORDER coordinate \
-        --CREATE_INDEX true
+	-I "${tmpAlignedSam}" \
+	-O "${tmpAlignedSortedBam}"  \
+	--SORT_ORDER coordinate \
+	--CREATE_INDEX true
 
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
 	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
-
-#	echo "moving prepared FastQ to intermediateDir"
-#	mv "${fastq1}" "${intermediateDir}"
-#	mv "${fastq2}" "${intermediateDir}"
-
 
 else
 	#Run BWA for single-read
@@ -79,16 +74,12 @@ else
 	> "${tmpAlignedSam}" &
 
 	gatk --java-options "-Djava.io.tmpdir=${tempDir} -Xmx12G -XX:ParallelGCThreads=2" SortSam \
-        -I "${tmpAlignedSam}" \
-        -O "${tmpAlignedSortedBam}"  \
-        --SORT_ORDER coordinate \
-        --CREATE_INDEX true
+	-I "${tmpAlignedSam}" \
+	-O "${tmpAlignedSortedBam}"  \
+	--SORT_ORDER coordinate \
+	--CREATE_INDEX true
 
 	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
 	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
-
-#	echo "moving prepared FastQ to intermediateDir"
-#        mv "${srBarcodeRecodedFqGz}" "${intermediateDir}"
-
 fi
 

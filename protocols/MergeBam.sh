@@ -41,8 +41,6 @@ module list
 #This check needs to be performed because Compute generates duplicate values in array
 INPUTS=()
 INPUTBAMS=()
-INPUTBAI=()
-INPUTBAIS=()
 
 for bamFile in "${inputMergeBam[@]}"
 do
@@ -53,18 +51,17 @@ done
 if [ ${#INPUTS[@]} == 1 ]
 then
 
-	ln -sf $(basename ${inputMergeBam[0]}) "${sampleMergedBam}"
+	ln -sf "$(basename "${inputMergeBam[0]}")" "${sampleMergedBam}"
 
 	#indexing because there is no index file coming out of the sorting step
-	printf "indexing..."
+	printf '%s' "indexing..."
 	sambamba index \
 	"${sampleMergedBam}" \
-	${inputMergeBamIdx[0]}
+	"${inputMergeBamIdx[0]}"
 
-	printf "..finished\n"
+	printf '%s' "..finished\n"
 
-	echo "ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}"
-	ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}
+	ln -sf "$(basename "${inputMergeBamIdx[0]}")" "${sampleMergedBai}"
 
 	echo "nothing to merge because there is only one sample"
 

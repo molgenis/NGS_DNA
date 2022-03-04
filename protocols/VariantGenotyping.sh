@@ -21,16 +21,16 @@
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 #Load GATK module.
@@ -43,7 +43,7 @@ tmpProjectBatchCombinedVariantCalls="${MC_tmpFile}"
 makeTmpDir "${projectBatchGenotypedVariantCalls}"
 tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
-SAMPLESIZE=$(cat "${projectJobsDir}/${project}.csv" | wc -l)
+SAMPLESIZE=$(wc -l "${projectJobsDir}/${project}.csv" | awk '{print $1}')
 numberofbatches=$((${SAMPLESIZE} / 200))
 ALLGVCFs=()
 ALLGVCFsVariants=()
@@ -62,21 +62,20 @@ else
 	do
 		if [ -f "${sbatch}" ]
 		then
-
-			array_contains ALLGVCFsVariants "--variant ${sbatch}" || ALLGVCFsVariants+=("--variant $sbatch")
+			array_contains ALLGVCFsVariants "--variant ${sbatch}" || ALLGVCFsVariants+=("--variant ${sbatch}")
 			array_contains ALLGVCFs "${sbatch}" || ALLGVCFs+=("${sbatch}")
 		fi
 	done
 fi 
 skip="false"
 gvcfSize=${#ALLGVCFsVariants[@]}
-if [ ${gvcfSize} -eq 0 ]
+if [ "${gvcfSize}" -eq 0 ]
 then
 	echo ""
 	echo "there is nothing to genotype, skipped"
 	echo ""
 	skip="true"
-elif [ ${gvcfSize} -gt 1 ]
+elif [ "${gvcfSize}" -gt 1 ]
 then
 	gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" CombineGVCFs \
 	-R "${indexFile}" \

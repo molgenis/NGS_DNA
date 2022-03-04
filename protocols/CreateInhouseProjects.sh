@@ -43,18 +43,18 @@ umask 0007
 module load "${ngsUtilsVersion}"
 module load "${ngsversion}"
 module load "${python2Version}"
+
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    rejected="false"
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-		rejected="true"
-                continue
-        fi
-    done
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 #
@@ -73,7 +73,9 @@ mkdir -p "${projectResultsDir}/variants/GAVIN/"
 mkdir -p "${projectResultsDir}/general"
 mkdir -p "${projectQcDir}"
 mkdir -p "${intermediateDir}/GeneNetwork/"
+# shellcheck disable=SC2174
 mkdir -p -m 2770 "${logsDir}/${project}/"
+
 #
 # Create symlinks to the raw data required to analyse this project.
 # Do this for each sequence file and it's accompanying MD5 checksum.
@@ -84,12 +86,13 @@ rocketPoint=$(pwd)
 if [ -f "rejectedBarcodes.txt" ]
 then
 	arrayRejected=()
-	while read line
+	while read -r line
 	do
 		arrayRejected+=("${line}")
 	done<"rejectedBarcodes.txt"
 fi
-cd "${projectRawTmpDataDir}"
+
+cd "${projectRawTmpDataDir}" || exit
 max_index=${#externalSampleID[@]}-1
 
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
@@ -122,20 +125,19 @@ do
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5"
 		else
 			array_contains arrayRejected "${barcode[samplenumber]}"
-                        if [ "${rejected}" == "false" ]
-                        then
-
-			ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" \
+			if [ "${rejected}" == "false" ]
+			then
+				ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" \
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz"
-			ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz" \
+				ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz" \
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz"
-			ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz.md5" \
+				ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz.md5" \
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz.md5"
-			ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5" \
+				ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5" \
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5"
 			else
 				echo -e "\n############ barcode: ${barcode[samplenumber]} IS REJECTED#######################\n"
-                        fi
+			fi
 		fi
 	fi
 done
@@ -153,21 +155,21 @@ barcodesGrepCommand=""
 #
 
 
-cd "${rocketPoint}"
+cd "${rocketPoint}" || exit
 rm -f "${projectJobsDir}/${project}.filteredRejected.csv"
 rm -f "${intermediateDir}/${project}.filteredBarcodes.csv"
 
 if [ -f "rejectedBarcodes.txt" ]
 then
-	size=$(cat "rejectedBarcodes.txt" | wc -l)
+	size=$(wc -l "rejectedBarcodes.txt" | awk '{print $1}')
 	teller=1
 
-	while read line
+	while read -r line
 	do
 		if [[ "${teller}" -lt "${size}" ]]
 		then
 			barcodesGrepCommand+="${line}|"
-		elif [ "${teller}" == ${size} ]
+		elif [[ "${teller}" == "${size}" ]]
 		then
 			echo "last line"
 			barcodesGrepCommand+="${line}"
@@ -215,20 +217,20 @@ then
 elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
-        resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-        then
-                echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+	then
+			echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
-                exit 1
-        fi
+		exit 1
+	fi
 fi
 
-if [ "${captKit}" == *"ONCO"* ]
+if [[ "${captKit}" == *"ONCO"* ]]
 then
-	if [ ! -f "${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed"
+	if [[ ! -f "${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed" ]]
 	then
 		echo "cannot do concordance check later on since ${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed is missing! EXIT!"
 		exit 1

@@ -35,11 +35,7 @@ module load "${caddVersion}"
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
 
-makeTmpDir "${projectBatchGenotypedCGDAnnotatedVariantCalls}"
-tmpProjectBatchGenotypedCGDAnnotatedVariantCalls="${MC_tmpFile}"
-
 bedfile=$(basename "${capturingKit}")
-
 
 if [ -f "${projectBatchGenotypedVariantCalls}" ]
 then
@@ -53,7 +49,7 @@ then
 
 	echo "convert fromCADD tsv file to fromCADD vcf"
 	##convert tsv to vcf
-	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc ${fromCADD}\
+	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc "${fromCADD}"\
 	| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCADD}.vcf.gz"
 
 	tabix -f -p vcf "${fromCADD}.vcf.gz"
@@ -64,7 +60,6 @@ then
 	echo "bgzipping + indexing ${fromCADDMerged}"
 	bgzip -c "${fromCADDMerged}" > "${fromCADDMerged}.gz"
 	tabix -f -p vcf "${fromCADDMerged}.gz"
-
 
 	## Prepare gnomAD config 
 	rm -f "${vcfAnnoGnomadGenomesConf}"
@@ -84,9 +79,9 @@ then
 	else
 		for i in {1..22}
 		do
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" \
+			"\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" \
+			"\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		done
 	fi
 
@@ -146,7 +141,7 @@ fi
 cat > "${vcfAnnoCustomConfLua}" << HERE
 function calculate_gnomAD_AC(ind)
 if(ind[1] == 0) then return "0" end
-    return (ind[1] * 2)
+	return (ind[1] * 2)
 end
 --clinvar check if pathogenic is common variant in gnomAD
 CLINVAR_SIG = {}
@@ -171,31 +166,31 @@ function intotbl(ud)
 	return tbl
 end
 function clinvar_sig(vals)
-    local t = type(vals)
-    -- just a single-value
-    if(t == "string" or t == "number") and not contains(vals, "|") then
-        return CLINVAR_SIG[vals]
-    elseif t ~= "table" then
+	local t = type(vals)
+	-- just a single-value
+	if(t == "string" or t == "number") and not contains(vals, "|") then
+		return CLINVAR_SIG[vals]
+	elseif t ~= "table" then
 		if not contains(t, "userdata") then
 			vals = {vals}
 		else
 			vals = intotbl(vals)
 		end
-    end
-    local ret = {}
-    for i=1,#vals do
-        if not contains(vals[i], "|") then
-            ret[#ret+1] = CLINVAR_SIG[vals[i]]
-        else
-            local invals = vals[i]:split("|")
-            local inret = {}
-            for j=1,#invals do
-                inret[#inret+1] = CLINVAR_SIG[invals[j]]
-            end
-            ret[#ret+1] = join(inret, "|")
-        end
-    end
-    return join(ret, ",")
+	end
+	local ret = {}
+	for i=1,#vals do
+		if not contains(vals[i], "|") then
+			ret[#ret+1] = CLINVAR_SIG[vals[i]]
+		else
+			local invals = vals[i]:split("|")
+			local inret = {}
+			for j=1,#invals do
+				inret[#inret+1] = CLINVAR_SIG[invals[j]]
+			end
+			ret[#ret+1] = join(inret, "|")
+		end
+	end
+	return join(ret, ",")
 end
 join = table.concat
 HERE
@@ -213,7 +208,7 @@ HERE
 	${vcfAnnoExecutable} -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 
 	mv "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
-        echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
+	echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
 
 else
 	echo "${projectBatchGenotypedVariantCalls} does not exist, skipped"

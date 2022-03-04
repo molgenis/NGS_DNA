@@ -5,7 +5,7 @@
 #string intermediateDir
 
 #string gatkVersion
-
+#string htsLibVersion
 #string project
 #string indexFileDictionary
 #string projectVariantsSnpsOnlyFilteredVcf
@@ -14,6 +14,7 @@
 
 #Load GATK module
 module load "${gatkVersion}"
+module load "${htsLibVersion}"
 module list
 
 makeTmpDir "${projectFinalVcf}"
@@ -28,3 +29,6 @@ gatk --java-options "-Xmx3g" MergeVcfs \
 echo "moving ${tmpProjectFinalVcf} to ${projectFinalVcf}"
 mv "${tmpProjectFinalVcf}" "${projectFinalVcf}"
 
+echo "compressing ${projectFinalVcf}"
+bgzip -c "${projectFinalVcf}" > "${projectFinalVcf}.gz"
+tabix -p vcf "${projectFinalVcf}.gz"

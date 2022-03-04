@@ -24,15 +24,15 @@
 
 array_contains () {
 	local array="$1[@]"
-	local seeking=$2
+	local seeking="${2}"
 	local in=1
 	for element in "${!array-}"; do
-		if [[ "$element" == "$seeking" ]]; then
+		if [[ "${element}" == "${seeking}" ]]; then
 			in=0
 			break
 		fi
 	done
-	return $in
+	return "${in}"
 }
 
 module load "${gatkVersion}"
@@ -83,82 +83,90 @@ fi
 
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
-if [ -d "${coveragePerBaseDir}/${bedfile}" ]
+if [ -d "${coveragePerBaseDir}/${bedfile}/" ]
 then
-	for i in $(ls -d "${coveragePerBaseDir}/${bedfile}"/*)
-	do
-		perBase=$(basename "${i}")
-		perBaseDir=$(echo $(dirname "${i}")/${perBase}/human_g1k_v37/)
-		echo "perBaseDir: ${perBaseDir}"
+	mapfile -t bedfiles < <(find "${coveragePerBaseDir}/${bedfile}/"* )
+	if [[ "${#bedfiles[@]}" -eq '0' ]]
+	then
+		echo "There are no CoveragePerBase calculations for this bedfile"
+	else
+		for i in "${bedfiles[@]}"
+		do
+			perBase=$(basename "${i}")
+			perBaseDir="$(dirname "${i}")/${perBase}/human_g1k_v37/"
+			echo "perBaseDir: ${perBaseDir}"
 
-		outputFile="${intermediateDir}/${externalSampleID}.${perBase}.CoverageOutput.csv"
+			outputFile="${intermediateDir}/${externalSampleID}.${perBase}.CoverageOutput.csv"
 
-		gvcf2bed2.py \
-		-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
-		-O "${outputFile}" \
-		-b "${perBaseDir}/${perBase}.uniq.per_base.bed"
+			gvcf2bed2.py \
+				-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
+				-O "${outputFile}" \
+				-b "${perBaseDir}/${perBase}.uniq.per_base.bed"
 
-		awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
+			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
-		awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
 
-		echo "Raw output file is here: ${outputFile}"
-		echo "final statistics can be found here: ${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
-		echo "coveragePerTarget file can be found here: ${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			echo "Raw output file is here: ${outputFile}"
+			echo "final statistics can be found here: ${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
+			echo "coveragePerTarget file can be found here: ${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
 
-	done
+		done
+	fi
 else
 	echo "There are no CoveragePerBase calculations for this bedfile: ${bedfile}"
 
 fi
 ## Per target bed files
-if [ -d "${coveragePerTargetDir}/${bedfile}" ]
+if [ -d "${coveragePerTargetDir}/${bedfile}/" ]
 then
-	for i in $(ls -d "${coveragePerTargetDir}/${bedfile}"/*)
-	do
-		perTarget=$(basename "${i}")
-		perTargetDir=$(echo $(dirname "${i}")/${perTarget}/human_g1k_v37/)
-		echo "perTargetDir: ${perTargetDir}"
+	mapfile -t bedfiles < <(find "${coveragePerTargetDir}/${bedfile}/"* )
+	if [[ "${#bedfiles[@]}" -eq '0' ]]
+	then
+		echo "There are no CoveragePerTarget calculations for this bedfile"
+	else
+		for i in "${bedfiles[@]}"
+		do
+			perTarget=$(basename "${i}")
+			perTargetDir="$(dirname "${i}")/${perTarget}/human_g1k_v37/"
+			echo "perTargetDir: ${perTargetDir}"
 
-		outputFile="${intermediateDir}/${externalSampleID}.${perTarget}.CoverageOutput.csv"
+			outputFile="${intermediateDir}/${externalSampleID}.${perTarget}.CoverageOutput.csv"
 
-		gvcf2bed2.py \
-		-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
-		-O "${outputFile}" \
-		-b "${perTargetDir}/${perTarget}.bed"
+			gvcf2bed2.py \
+				-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
+				-O "${outputFile}" \
+				-b "${perTargetDir}/${perTarget}.bed"
 
-		awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
+			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
-		awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
+			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
 
-		echo "Raw output file is here: ${outputFile}"
-		echo "final statistics can be found here: ${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
-		echo "coveragePerTarget file can be found here: ${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
+			echo "Raw output file is here: ${outputFile}"
+			echo "final statistics can be found here: ${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
+			echo "coveragePerTarget file can be found here: ${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
 
-	
-
-		if [ "${perTarget}" ==  "${bedfile}" ]
-		then
-			totalcount=$(($(cat "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt" | wc -l)-1))
-			count=0
-			count=$(awk 'BEGIN{sum=0}{if($5 < 20){sum++}} END {print sum}' "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt")
-
-			if [ $count == 0 ]
+			if [[ "${perTarget}" ==  "${bedfile}" ]]
 			then
-				percentage=0
+				sizePerTarget=$(wc -l "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt" | awk '{print $1}')
+				totalcount=$((${sizePerTarget}-1))
+				count=0
+				count=$(awk 'BEGIN{sum=0}{if($5 < 20){sum++}} END {print sum}' "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt")
 
-			else
-				percentage=$(echo $((count*100/totalcount)))
-				if [ ${percentage%%.*} -gt 10 ]
+				if [[ "${count}" -eq '0' ]]
 				then
-					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
-					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" > "${intermediateDir}/${externalSampleID}.rejected"
+					percentage=0
+				else
+					percentage=$((count*100/totalcount))
+					if [ "${percentage%%.*}" -gt 10 ]
+					then
+						echo "${sampleNameID}: percentage ${percentage} (${count}/${totalcount}) is more than 10 procent, skipped"
+						echo "${sampleNameID}: percentage ${percentage} (${count}/${totalcount}) is more than 10 procent, skipped" > "${intermediateDir}/${externalSampleID}.rejected"
+					fi
 				fi
 			fi
-		fi
-
-
-	done
+		done
+	fi
 else
 	echo "There are no CoveragePerTarget calculations for this bedfile: ${bedfile}"
 fi

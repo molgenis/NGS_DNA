@@ -21,31 +21,29 @@
 #string prmHost
 
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local barcodeLane="${3}"
-    local in=1
-    rejected="false"
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-		if [ "${barcodeLane}" == "true" ]
-		then
-			echo "barcode+Lane already exists!!"
-			exit 1
-		else
-			rejected="true"
-			continue
+	local array="$1[@]"
+	local seeking="${2}"
+	local barcodeLane="${3}"
+	local in=1
+	rejected="false"
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			if [ "${barcodeLane}" == "true" ]
+			then
+				echo "barcode+Lane already exists!!"
+				exit 1
+			else
+				rejected="true"
+				continue
+			fi
 		fi
-        fi
-    done
-    echo "${in}"
+	done
+	echo "${in}"
 }
 
 max_index=${#externalSampleID[@]}-1
 
-WHOAMI=$(whoami)
-HOST=$(hostname -s)
 arrayUniqueBarcodes=()
 if ls "${permanentDataDir}/logs/"*.mailinglist 1>/dev/null 2>&1
 then
@@ -69,29 +67,30 @@ do
 			rsync -av "${PRMDATADIR}/rejectedBarcodes.txt" "${TMPDATADIR}"
 			arrayRejected=()
 
-			while read line
+			while read -r line
 			do
 				arrayRejected+=("${line}")
-			done<${TMPDATADIR}/rejectedBarcodes.txt
+			done<"${TMPDATADIR}/rejectedBarcodes.txt"
 
-			cp ${TMPDATADIR}/rejectedBarcodes.txt .
+			cp "${TMPDATADIR}/rejectedBarcodes.txt" .
 
 		fi
 	else
 		PRMDATADIR="${prmHost}:${allRawNgsPrmDataDir}/${RUNNAME}"
-                if ssh "${prmHost}" "ls -R ${allRawNgsPrmDataDir}/${RUNNAME}/rejectedBarcodes.txt" 1>/dev/null 2>&1
-                then
+		# shellcheck disable=SC2029
+		if ssh "${prmHost}" "ls -R ${allRawNgsPrmDataDir}/${RUNNAME}/rejectedBarcodes.txt" 1>/dev/null 2>&1
+		then
 			rsync -av "${PRMDATADIR}/rejectedBarcodes.txt" "${TMPDATADIR}"
-                        arrayRejected=()
+			arrayRejected=()
 
-                        while read line
-                        do
-                                arrayRejected+=("${line}")
-                        done<"${TMPDATADIR}/rejectedBarcodes.txt"
+			while read -r line
+			do
+				arrayRejected+=("${line}")
+			done<"${TMPDATADIR}/rejectedBarcodes.txt"
 
-			cp ${TMPDATADIR}/rejectedBarcodes.txt .
+			cp "${TMPDATADIR}/rejectedBarcodes.txt" .
 
-                fi
+		fi
 	fi
 
 	if [[ "${seqType[samplenumber]}" == 'SR' ]]

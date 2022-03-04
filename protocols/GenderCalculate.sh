@@ -26,9 +26,9 @@ else
 	tmpHsMetricsNonAutosomalRegionChrX="${MC_tmpFile}"
 
 	cat "${indexFileDictionary}" > "${capturedIntervals_nonAutoChrX}"
-	lengthCap1=$(cat "${capturedIntervals_nonAutoChrX}" | wc -l)
+	lengthCap1=$(wc -l "${capturedIntervals_nonAutoChrX}" | awk '{print $1}')
 	awk '{if ($0 ~ /^X/){print $0}}' "${capturedIntervals}" >> "${capturedIntervals_nonAutoChrX}"
-	lengthCap2=$(cat "${capturedIntervals_nonAutoChrX}" | wc -l)
+	lengthCap2=$(wc -l "${capturedIntervals_nonAutoChrX}" | awk '{print $1}')
 
 	if [ "${lengthCap1}" -ne "${lengthCap2}" ]
 	then
