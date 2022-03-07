@@ -27,15 +27,16 @@ module list
 makeTmpDir "${sampleMergedRecalibratedBam}" "${intermediateDir}"
 tmpSampleMergedRecalibratedBam="${MC_tmpFile}"
 
-# Create the list of BAM files for input.
-bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
-inputs=$(printf -- '--input=%s ' $(printf '%s\n' "${bams[@]}"))
+# Create the list of BAM files for input
+mapfile -t bams < <(printf '%s\n' "${dedupBam[@]}" | sort -u )
+inputs=$(printf -- '--input %s ' "$(printf '%s\n' "${bams[@]}")")
 
+# shellcheck disable=SC2086 #${inputs} => gatk needs seperate strings, not one captured in quotes
 gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx9g" ApplyBQSR \
---reference="${indexFile}" \
+-R "${indexFile}" \
 ${inputs} \
---bqsr-recal-file="${mergedBamRecalibratedTable}" \
---output="${tmpSampleMergedRecalibratedBam}"
+--bqsr-recal-file "${mergedBamRecalibratedTable}" \
+-O "${tmpSampleMergedRecalibratedBam}"
 
 mv "${tmpSampleMergedRecalibratedBam}" "${sampleMergedRecalibratedBam}"
 mv "${tmpSampleMergedRecalibratedBam%.bam}.bai" "${sampleMergedRecalibratedBam%.bam}.bai"

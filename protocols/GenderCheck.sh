@@ -10,14 +10,11 @@
 #string Gender
 #string tempDir
 #string checkSexMeanCoverage
-#string picardJar
+
 #string hsMetricsNonAutosomalRegionChrX
 #string project
 #string logsDir 
 #string groupname
-#string picardVersion
-
-module load "${picardVersion}"
 
 if [ -f "${dedupBamMetrics}.noChrX" ]
 then
@@ -41,16 +38,16 @@ else
 	avgCov=$(awk '{print $1}' "${checkSexMeanCoverage}")
 
 	if [[ "${avgCov}" == .* ]]
-        then
-		printf "There is no autosomal region, a gender cannot be determined\n" > ${whichSex}
-                printf "Unknown\n" >> ${whichSex}
+	then
+		printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
+		printf "Unknown\n" >> "${whichSex}"
 
-        elif [[ "${avgCov}" < 1 ]]
-        then
+	elif [[ "${avgCov}" -lt '1' ]]
+	then
 		echo "${avgCov} of autosomes is lower than 1, skipped"
-                printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
-                printf "Unknown\n" >> "${whichSex}"
-        else
+		printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
+		printf "Unknown\n" >> "${whichSex}"
+	else
 
 		#select only the mean target coverage of chromosome X
 		awk '{
@@ -59,8 +56,6 @@ else
 			else if ($34 == "MEAN_TARGET_COVERAGE"){}
 			else {print $34}
 			}' "${hsMetricsNonAutosomalRegionChrX}" >> "${checkSexMeanCoverage}"
-
-
 
 		perl -pi -e 's/\n/\t/' "${checkSexMeanCoverage}"
 
@@ -73,7 +68,7 @@ else
 			}
 		}' "${checkSexMeanCoverage}")
 
-		echo "RESULT: $RESULT"
+		echo "RESULT: ${RESULT}"
 		echo "\$1 is the mean coverage of the autosomes"
 		echo "\$2 is the mean coverage of non autosomal chrX"
 		awk '{
@@ -116,18 +111,18 @@ then
 	then
 		if [ "${sex}" == "Unknown" ]
 		then
-			echo "calculated ($sex) was unknown, but in the samplesheet it was specified ($Gender), $whichSex file has been updated"
+			echo "calculated (${sex}) was unknown, but in the samplesheet it was specified (${Gender}), ${whichSex} file has been updated"
 			cp "${whichSex}" "${whichSex}.tmp"
 			rename chosenSex oldGender "${whichSex}"
-			echo "the calculation of the sex cannot be determined, file has been moved from chosenSex name to oldGender name" > ${whichSex} 
-			echo "$Gender" >> ${whichSex} 
+			echo "the calculation of the sex cannot be determined, file has been moved from chosenSex name to oldGender name" > "${whichSex}"
+			echo "${Gender}" >> "${whichSex}"
 		else
 			echo "In the samplesheet the gender was not specified (thus Unknown), but it has been calculated"
 		fi
 	else
 		echo "ALARM ALARM"
 		echo "ALARM, ALARM, the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!"
-		sampleName=$(basename ${dedupBamMetrics})
+		sampleName="$(basename "${dedupBamMetrics}")"
 		echo -e "ALARM!\nFor sample ${sampleName%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${runNumber}.pipeline.gendercheckfailed"
 	fi
 fi

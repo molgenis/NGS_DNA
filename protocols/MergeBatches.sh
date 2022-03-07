@@ -33,16 +33,16 @@ tmpProjectVariantsMergedSortedGz="${MC_tmpFile}"
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking=${2}
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 INPUTS=()
@@ -50,14 +50,15 @@ for b in "${batchID[@]}"
 do
 	if [ -f "${projectPrefix}.batch-${b}.${extension}" ]
 	then
-		array_contains INPUTS "--INPUT=${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("--INPUT=${projectPrefix}.batch-${b}.${extension}")
+		array_contains INPUTS "-I ${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("-I ${projectPrefix}.batch-${b}.${extension}")
 	fi
 done
 
+# shellcheck disable=SC2068 #${INPUTS[@]} => gatk needs seperate strings, not one captured in quotes
 gatk --java-options "-Xmx5g -Djava.io.tmpdir=${tempDir}" MergeVcfs \
 ${INPUTS[@]} \
---OUTPUT="${tmpProjectVariantsMergedSortedGz}" \
---SEQUENCE_DICTIONARY="${indexFileDictionary}"
+-O "${tmpProjectVariantsMergedSortedGz}" \
+--SEQUENCE_DICTIONARY "${indexFileDictionary}"
 
 mv "${tmpProjectVariantsMergedSortedGz}" "${projectVariantsMergedSortedGz}"
 mv "${tmpProjectVariantsMergedSortedGz}.tbi" "${projectVariantsMergedSortedGz}.tbi"

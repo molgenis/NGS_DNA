@@ -25,26 +25,26 @@ tmpHsMetrics="${MC_tmpFile}"
 if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
 then
 	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
-	--INPUT="${dedupBam}" \
-	--OUTPUT="${tmpHsMetrics}" \
-	--BAIT_INTERVALS="${capturedExomeIntervals}" \
-	--TARGET_INTERVALS="${capturedExomeIntervals}" \
-	--VALIDATION_STRINGENCY=LENIENT \
-	--CLIP_OVERLAPPING_READS=false \
-	--MINIMUM_MAPPING_QUALITY=1 \
-	--MINIMUM_BASE_QUALITY=0 \
-	--TMP_DIR="${tempDir}"
+	-I "${dedupBam}" \
+	-O "${tmpHsMetrics}" \
+	-BI "${capturedExomeIntervals}" \
+	-TI "${capturedExomeIntervals}" \
+	--VALIDATION_STRINGENCY LENIENT \
+	--CLIP_OVERLAPPING_READS false \
+	--MINIMUM_MAPPING_QUALITY 1 \
+	--MINIMUM_BASE_QUALITY 0 \
+	--TMP_DIR "${tempDir}"
 else
 	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
-	--INPUT="${dedupBam}" \
-	--OUTPUT="${tmpHsMetrics}" \
-	--BAIT_INTERVALS="${capturedIntervals}" \
-	--TARGET_INTERVALS="${capturedIntervals}" \
-	--VALIDATION_STRINGENCY=LENIENT \
-	--CLIP_OVERLAPPING_READS=false \
-	--MINIMUM_MAPPING_QUALITY=1 \
-	--MINIMUM_BASE_QUALITY=0 \
-	--TMP_DIR="${tempDir}"
+	-I "${dedupBam}" \
+	-O "${tmpHsMetrics}" \
+	-BI "${capturedIntervals}" \
+	-TI "${capturedIntervals}" \
+	--VALIDATION_STRINGENCY LENIENT \
+	--CLIP_OVERLAPPING_READS false \
+	--MINIMUM_MAPPING_QUALITY 1 \
+	--MINIMUM_BASE_QUALITY 0 \
+	--TMP_DIR "${tempDir}"
 fi
 
 mv "${tmpHsMetrics}" "${hsMetrics}"

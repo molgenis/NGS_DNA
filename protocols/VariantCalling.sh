@@ -20,16 +20,16 @@
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 #Load GATK module
@@ -46,17 +46,18 @@ bams=()
 INPUTS=()
 for sampleID in "${externalSampleID[@]}"
 do
-        array_contains INPUTS "${sampleID}" || INPUTS+=("$sampleID")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${sampleID}" || INPUTS+=("${sampleID}")    # If bamFile does not exist in array add it
 done
+
 baitBatchLength=""
 sex=$(less "${projectResultsDir}/general/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
+
 if [ -f "${capturedBatchBed}" ] 
 then
-	baitBatchLength=$(cat "${capturedBatchBed}" | wc -l)
+	baitBatchLength=$(wc -l "${capturedBatchBed}" | awk '{print $1}')
 fi
-
-bams=($(printf '%s\n' "${sampleMergedRecalibratedBam[@]}" | sort -u ))
-inputs=$(printf -- '--input=%s ' $(printf '%s\n' "${bams[@]}"))
+mapfile -t bams < <(printf '%s\n' "${sampleMergedRecalibratedBam[@]}" | sort -u)
+inputs=$(printf -- '--input %s ' "$(printf '%s\n' "${bams[@]}")")
 
 genderCheck=""
 
@@ -73,44 +74,34 @@ if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"
 else
-	if [ "${genderCheck}" == "Female" ]
+	if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
 	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
+		if [ "${genderCheck}" == "Female" ]
 		then
-			echo -e "Female, chrY => ploidy=1\nbedfile=${femaleCapturedBatchBed}"
-			ploidy=1
+			echo "female, Y"
 			myBed="${femaleCapturedBatchBed}"
-		else
-			echo -e "Female, autosomal or chrX ==> ploidy=2"
-			ploidy=2
+		else			
+			echo "male, Y"
 		fi
-	elif [[ "${genderCheck}" == "Male" ]]
-	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed || "${capturedBatchBed}" == *batch-Xnp.bed ]]
-		then
-			ploidy=1
-			echo -e "Male, chrY or chrXNonPar ==> ploidy=1"
-		else
-			ploidy=2
-			echo -e "Male, autosomal or chrXPar ==> ploidy=2"
-		fi
+	else
+		ploidy=2
+		echo -e "autosomal  ==> ploidy=2"
 	fi
-
+# shellcheck disable=SC2086 #${inputs} => gatk needs seperate strings, not one captured in quotes
 	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
-	--reference="${indexFile}" \
+	-R "${indexFile}" \
 	${inputs} \
-	--dbsnp="${dbSnp}" \
-	--output="${tmpSampleBatchVariantCalls}" \
-	--intervals="${myBed}" \
-	--emit-ref-confidence=GVCF \
-	--sample-ploidy="${ploidy}"
+	-D "${dbSnp}" \
+	-O "${tmpSampleBatchVariantCalls}" \
+	-L "${myBed}" \
+	-ERC GVCF \
+	-ploidy "${ploidy}"
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
 		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
 		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
-
 	else
 		echo "ERROR: output file is missing"
 		exit 1

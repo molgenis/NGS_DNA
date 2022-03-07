@@ -22,9 +22,6 @@ tmpDedupBamCram="${MC_tmpFile}"
 makeTmpDir "${dedupBamCramIdx}" "${intermediateDir}"
 tmpDedupBamCramIdx="${MC_tmpFile}"
 
-makeTmpDir "${dedupBamCramBam}" "${intermediateDir}"
-tmpDedupBamCramBam="${MC_tmpFile}"
-
 echo "Starting scramble BAM to CRAM conversion"
 
 scramble \
@@ -38,11 +35,13 @@ scramble \
 "${tmpDedupBamCram}"
 
 echo "conversion completed, now indexing the cramfile"
-cd "${MC_tmpFolder}"
+cd "${MC_tmpFolder}" || exit
 samtools index "${tmpDedupBamCram}"
 echo "indexing completed, now starting to make a checksum"
-md5sum $(basename "${tmpDedupBamCram}") > $(basename "${tmpDedupBamCram}").md5
-cd -
+
+md5sum "$(basename "${tmpDedupBamCram}")" > "$(basename "${tmpDedupBamCram}").md5"
+
+cd - || exit
 echo "moving ${tmpDedupBamCram} to ${dedupBamCram}"
 mv "${tmpDedupBamCram}" "${dedupBamCram}"
 

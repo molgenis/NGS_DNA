@@ -16,16 +16,16 @@
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
-            in=0
-            break
-        fi
-    done
-    return $in
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 makeTmpDir "${sampleMergedBam}"
@@ -41,30 +41,27 @@ module list
 #This check needs to be performed because Compute generates duplicate values in array
 INPUTS=()
 INPUTBAMS=()
-INPUTBAI=()
-INPUTBAIS=()
 
 for bamFile in "${inputMergeBam[@]}"
 do
-	array_contains INPUTS "${bamFile}" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
-	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${bamFile}" || INPUTS+=("${bamFile}")    # If bamFile does not exist in array add it
+	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("${bamFile}")    # If bamFile does not exist in array add it
 done
 
 if [ ${#INPUTS[@]} == 1 ]
 then
 
-	ln -sf $(basename ${inputMergeBam[0]}) "${sampleMergedBam}"
+	ln -sf "$(basename "${inputMergeBam[0]}")" "${sampleMergedBam}"
 
 	#indexing because there is no index file coming out of the sorting step
-	printf "indexing..."
+	printf '%s' "indexing..."
 	sambamba index \
 	"${sampleMergedBam}" \
-	${inputMergeBamIdx[0]}
+	"${inputMergeBamIdx[0]}"
 
-	printf "..finished\n"
+	printf '%s' "..finished\n"
 
-	echo "ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}"
-	ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}
+	ln -sf "$(basename "${inputMergeBamIdx[0]}")" "${sampleMergedBai}"
 
 	echo "nothing to merge because there is only one sample"
 

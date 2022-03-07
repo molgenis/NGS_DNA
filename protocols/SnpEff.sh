@@ -24,7 +24,7 @@ then
 	#
 	##
 	###Annotate with SnpEff
-        ##
+	##
 	#
 	#Run snpEff
 	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx3g -jar \

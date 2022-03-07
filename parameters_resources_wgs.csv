@@ -85,7 +85,7 @@ walltime_protocols_ApplyBaseRecalibration,02:30:00
 walltime_protocols_AnnotateVcf,05:59:00
 walltime_protocols_Autotest,05:59:00
 walltime_protocols_BaseRecalibrator,15:59:00
-walltime_protocols_BwaAlignAndSortSam,56:59:00
+walltime_protocols_BwaAlignAndSortSam,76:59:00
 walltime_protocols_CartegeniaFiltering,05:59:00
 walltime_protocols_CartegeniaTree,05:59:00
 walltime_protocols_CollectBamIndexMetrics,05:59:00
@@ -108,8 +108,8 @@ walltime_protocols_GenderCheck,00:30:00
 walltime_protocols_InSilicoConcordance,00:20:00
 walltime_protocols_IndelFiltration,05:59:00
 walltime_protocols_MakeDedupBamMd5,01:00:00
-walltime_protocols_Manta,25:59:00
-walltime_protocols_MarkDuplicates,25:59:00
+walltime_protocols_Manta,23:59:00
+walltime_protocols_MarkDuplicates,23:59:00
 walltime_protocols_MergeBam,05:59:00
 walltime_protocols_MergeBatches,25:59:00
 walltime_protocols_MergeIndelsAndSnpsProject,05:59:00

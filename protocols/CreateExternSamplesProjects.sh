@@ -31,6 +31,7 @@
 #list barcode
 #list lane
 #string ngsUtilsVersion
+#string python2Version
 
 #string groupDir
 #string dataDir
@@ -43,6 +44,7 @@ set -u
 umask 0007
 module load "${ngsUtilsVersion}"
 module load "${ngsversion}"
+module load "${python2Version}"
 
 module list
 #
@@ -61,6 +63,7 @@ mkdir -p "${projectResultsDir}/variants/GAVIN/"
 mkdir -p "${projectResultsDir}/general"
 mkdir -p "${projectQcDir}"
 mkdir -p "${intermediateDir}/GeneNetwork/"
+# shellcheck disable=SC2174
 mkdir -p -m 2770 "${logsDir}/${project}/"
 
 rocketPoint=$(pwd)
@@ -73,8 +76,6 @@ cd "${projectRawTmpDataDir}"
 # For each sequence file (could be multiple per sample):
 #
 
-
-n_elements=${externalSampleID[@]}
 max_index=${#externalSampleID[@]}-1
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
@@ -105,16 +106,12 @@ do
 	fi
 done
 
-cd "${rocketPoint}"
-
-echo "before splitting"
-echo $(pwd)
+cd "${rocketPoint}" || exit
 
 #
 # Create subset of samples for this project.
 #
-
-extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
+cp "${worksheet}" "${projectJobsDir}/${project}.csv"
 
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
@@ -128,33 +125,33 @@ captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
 	echo "Bedfile does not exist! Exiting"
-        exit 1
+	exit 1
 fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	batching="_chr"
-        if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
-        then
+	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
-                exit 1
-        fi
+		exit 1
+	fi
 elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
-        batching="_chr"
+	batching="_chr"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-        then
+	then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
-                exit 1
-        fi
+		exit 1
+	fi
 fi
 
 if [ -f ".compute.properties" ];
 then
-     rm "../.compute.properties"
+	rm "../.compute.properties"
 fi
 
 module load "${computeVersion}"

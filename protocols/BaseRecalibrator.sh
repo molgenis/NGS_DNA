@@ -22,22 +22,23 @@ module list
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "$element" == "$seeking" ]]; then
-            in=0
-            break
-        fi
-    done
-    return $in
+	local _array
+	_array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!_array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 INPUTS=()
 for bamFile in "${sampleMergedBam[@]}"
 do
-	array_contains INPUTS "--input=${bamFile}" || INPUTS+=("--input=${bamFile}")    # If bamFile does not exist in array add it
+	array_contains INPUTS "-I ${bamFile}" || INPUTS+=("-I ${bamFile}")    # If bamFile does not exist in array add it
 done
 
 makeTmpDir "${mergedBamRecalibratedTable}" "${intermediateDir}"
@@ -45,11 +46,12 @@ tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
 sambamba index "${sampleMergedBam}"
 
+# shellcheck disable=SC2068 #${INPUTS[@]} => gatk needs seperate strings, not one captured in quotes
 gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
---reference="${indexFile}" \
+-R "${indexFile}" \
 ${INPUTS[@]} \
---known-sites="${dbSnp}" \
---output="${tmpMergedBamRecalibratedTable}"
+--known-sites "${dbSnp}" \
+-O "${tmpMergedBamRecalibratedTable}"
 
 mv "${tmpMergedBamRecalibratedTable}" "${mergedBamRecalibratedTable}"
 echo "moved ${tmpMergedBamRecalibratedTable}  ${mergedBamRecalibratedTable}"

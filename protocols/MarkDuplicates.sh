@@ -41,9 +41,9 @@ mv "${tmpDedupBamIdx}" "${dedupBamIdx}"
 echo "mv ${tmpDedupBamIdx} ${dedupBamIdx}"
 
 echo "making symlinks of the bams in the results folder to ${intermediateDir} for later use"
-cd "${intermediateDir}" 
+cd "${intermediateDir}" || exit
 
-ln -sf "${dedupBam}"
-ln -sf "${dedupBamIdx}"
+ln -sf "${dedupBam}" .
+ln -sf "${dedupBamIdx}" .
 
-cd -
+cd - || exit

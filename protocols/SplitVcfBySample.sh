@@ -1,6 +1,7 @@
 #string tmpName
 #string gatkVersion
 #string bcfToolsVersion
+#string htsLibVersion
 #string barcode
 #string indexFile
 #string logsDir 
@@ -17,16 +18,17 @@
 #Load GATK module
 module load "${gatkVersion}"
 module load "${bcfToolsVersion}"
+module load "${htsLibVersion}"
 module list
 
 makeTmpDir "${sampleFinalVcf}"
 tmpSampleFinalVcf="${MC_tmpFile}"
 
 gatk --java-options "-Xmx3g" SelectVariants \
---reference="${indexFile}" \
---variant="${projectFinalVcf}" \
---sample-name="${externalSampleID}" \
---output="${tmpSampleFinalVcf}"
+-R "${indexFile}" \
+-V "${projectFinalVcf}" \
+-sn "${externalSampleID}" \
+-O "${tmpSampleFinalVcf}"
 
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
 
@@ -34,3 +36,8 @@ bcftools annotate -h "${tmpSampleFinalVcf}.barcode.txt" -O v -o "${tmpSampleFina
 
 echo "moving ${tmpSampleFinalVcf}.tmp to ${sampleFinalVcf}"
 mv "${tmpSampleFinalVcf}.tmp" "${sampleFinalVcf}"
+
+echo "compressing ${sampleFinalVcf}"
+bgzip -c "${sampleFinalVcf}" > "${sampleFinalVcf}.gz"
+tabix -p vcf "${sampleFinalVcf}.gz"
+
