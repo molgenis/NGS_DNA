@@ -68,33 +68,22 @@ else
 	genderCheck="Male"
 fi
 
-ploidy=""
+ploidy='2'
 myBed="${capturedBatchBed}"
 if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"
 else
-	if [ "${genderCheck}" == "Female" ]
+	if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
 	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
+		if [ "${genderCheck}" == "Female" ]
 		then
-			echo -e "Female, chrY => ploidy=1\nbedfile=${femaleCapturedBatchBed}"
-			ploidy=1
+			echo "female, Y"
 			myBed="${femaleCapturedBatchBed}"
 		else
-			echo -e "Female, autosomal or chrX ==> ploidy=2"
-			ploidy=2
+			echo "male, Y"
 		fi
-	elif [[ "${genderCheck}" == "Male" ]]
-	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed || "${capturedBatchBed}" == *batch-Xnp.bed ]]
-		then
-			ploidy=1
-			echo -e "Male, chrY or chrXNonPar ==> ploidy=1"
-		else
-			ploidy=2
-			echo -e "Male, autosomal or chrXPar ==> ploidy=2"
-		fi
+		ploidy=1	
 	fi
 
 	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx7g -jar \
