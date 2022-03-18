@@ -91,7 +91,7 @@ then
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perTarget}.coveragePerTarget" \
 		-I "${dedupBam}" \
-                -mmq 20 \
+		-mmq 20 \
 		--omitDepthOutputAtEachBase \
 		-L "${perTargetDir}/${perTarget}.interval_list"
 
