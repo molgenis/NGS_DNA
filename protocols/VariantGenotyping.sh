@@ -15,7 +15,7 @@
 #string dbSnp
 
 #string projectBatchCombinedVariantCalls
-#list sampleBatchVariantCalls
+#list variantCalls
 #string projectBatchGenotypedVariantCalls
 
 
@@ -58,7 +58,7 @@ then
 		fi
 	done
 else
-	for sbatch in "${sampleBatchVariantCalls[@]}"
+	for sbatch in "${variantCalls[@]}"
 	do
 		if [ -f "${sbatch}" ]
 		then

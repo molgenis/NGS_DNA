@@ -1,0 +1,3 @@
+step,protocol,dependencies
+CheckRawDataOnTmp,protocols/CheckRawDataOnTmp.sh,
+CreateInhouseProjects,protocols/CreateInhouseProjects.sh,

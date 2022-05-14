@@ -1,6 +1,6 @@
 step,protocol,dependencies
 s01_PrepareVcf,protocols/PrepareVcf.sh,
-s02_AnnotateVcf,protocols/AnnotateVcf.sh,s01_PrepareVcf
+s02_AnnotateVcf,protocols/AnnotateVcf.sh,s01_PrepareVcf;batchGenotypedVariantCalls=projectBatchGenotypedVariantCalls
 s03_SnpEff,protocols/SnpEff.sh,s02_AnnotateVcf
 s04_MergeBatches,protocols/MergeBatches.sh,s03_SnpEff;extension=annotatedSnpEffExtension
 s05_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s04_MergeBatches
