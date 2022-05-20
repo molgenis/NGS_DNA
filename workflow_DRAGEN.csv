@@ -1,12 +1,15 @@
 step,protocol,dependencies
 s01a_PrepareDragenData,protocols/PrepareDragenData.sh,
+s02_Genotyping,protocols/VariantGenotyping.sh,s01a_PrepareDragenData;variantCalls=sampleVariantCalls
+s03_AnnotateVcf,protocols/AnnotateVcf.sh,s02_Genotyping
+
 s01b_CramConversion,protocols/CramConversion.sh,
 s01c_Flagstat,protocols/FlagstatMetrics.sh,
 s02a_CollectMultipleMetrics,protocols/CollectMultipleMetrics.sh,
 s02b_CollectHSMetrics,protocols/CollectHSMetrics.sh,
 s02c_CollectBamIndexMetrics,protocols/CollectBamIndexMetrics.sh,
 s02d_CollectGCBiasMetrics,protocols/CollectGCBiasMetrics.sh,
-s03_AnnotateVcf,protocols/AnnotateVcf.sh,s01a_PrepareVcf;batchGenotypedVariantCalls=sampleBatchGenotypedVariantCalls
+
 s04_SnpEff,protocols/SnpEff.sh,s03_AnnotateVcf
 s05_MergeBatches,protocols/MergeBatches.sh,s04_SnpEff;extension=annotatedSnpEffExtension
 s06_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s05_MergeBatches
