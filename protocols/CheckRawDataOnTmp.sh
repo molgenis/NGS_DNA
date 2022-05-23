@@ -159,6 +159,9 @@ do
 	fi
 done
 
+
+	
+
 if [[ "${allRawDataAvailable}" == 'true' ]]
 then
 	echo "rawdata already available"
@@ -169,6 +172,8 @@ then
 		touch "${logsDir}/${project}/${project}.data.finished"
 	fi
 else
+	rm -f "${logsDir}/${project}/${project}.data.finished"
 	echo "all Data is not yet available, exiting"
+	trap - EXIT
 	exit 0
 fi
