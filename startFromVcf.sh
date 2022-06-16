@@ -17,7 +17,6 @@ Usage:
 	$(basename $0) OPTIONS
 Options:
 	-h   Show this help.
-	-a   sampleType (DNA or RNA) (default=DNA)
 	-g   group (default=basename of ../../../ )
 	-f   filePrefix (default=basename of this directory)
 	-r   runID (default=run01)
