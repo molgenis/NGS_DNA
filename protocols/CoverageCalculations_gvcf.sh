@@ -71,7 +71,7 @@ else
 	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" ]]
 	then
 		gatk GatherVcfs \
-		"${INPUTS[*]}" \
+		${INPUTS[@]} \
 		--OUTPUT "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
 	fi
 	
