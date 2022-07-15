@@ -47,14 +47,16 @@ module load "${python2Version}"
 array_contains () {
 	local array="$1[@]"
 	local seeking="${2}"
-	local in=1
+#	local in=1
+	rejected="false"
 	for element in "${!array-}"; do
 		if [[ "${element}" == "${seeking}" ]]; then
 			in=0
+			rejected="true"
 			break
 		fi
 	done
-	return "${in}"
+#	return "${in}"
 }
 
 #

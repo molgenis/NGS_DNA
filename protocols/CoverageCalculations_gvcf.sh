@@ -56,7 +56,7 @@ ml ngs-utils
 INPUTS=()
 for batch in "${batchID[@]}"
 do
-	
+
 	gVCF="${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batch}.variant.calls.g.vcf.gz"
 	if [[ -f "${gVCF}" ]]
 	then

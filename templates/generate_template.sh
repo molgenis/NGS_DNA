@@ -96,9 +96,13 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${genScripts}/parameters_environment_converted.csv" \
 -p "${genScripts}/${filePrefix}.csv" \
--w "${EBROOTNGS_DNA}/create_external_samples_ngs_projects_workflow.csv" \
+-w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
 --runid "${runID}" \
+-b slurm \
+--header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
+--footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
+--submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -o workflowpath="${workflow};\
 outputdir=scripts/jobs;mainParameters=${genScripts}/parameters_converted.csv;\
 groupname=${group};\

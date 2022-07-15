@@ -83,6 +83,7 @@ else
 		else			
 			echo "male, Y"
 		fi
+		ploidy=1
 	else
 		ploidy=2
 		echo -e "autosomal  ==> ploidy=2"

@@ -27,7 +27,7 @@ hashdeepVersion,hashdeep/4.4-${toolChain_max}
 htsLibVersion,HTSlib/1.14-${toolChain_max}
 iolibVersion,io_lib/1.14.11-${toolChain_min}
 mantaVersion,manta/1.6.0-${toolChain_min}
-multiQCVersion,multiqc/1.11-${toolChain_max}
+multiQCVersion,multiqc/1.12-${toolChain_max}
 ngsUtilsVersion,ngs-utils/22.01.1
 perlPlusVersion,PerlPlus/5.30.0-${toolChain_min}-v19.08.1
 picardVersion,picard/2.26.10-${javaSuffix}
@@ -176,7 +176,7 @@ gcBiasMetricsJar,CollectGcBiasMetrics
 insertSizeMetrics,${dedupBamMetrics}.insert_size_metrics
 hsMetricsJar,CalculateHsMetrics
 hsMetrics,${dedupBamMetrics}.hs_metrics
-hsMetricsNonAutosomalRegionChrX,${dedupBamMetrics}.nonAutosomalRegionChrX_hs_metrics
+hsMetricsNonAutosomalRegionChrX,${intermediateDir}/${externalSampleID}.nonAutosomalRegionChrX_hs_metrics
 recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
