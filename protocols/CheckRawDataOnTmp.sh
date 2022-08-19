@@ -175,5 +175,5 @@ else
 	rm -f "${logsDir}/${project}/${project}.data.finished"
 	echo "all Data is not yet available, exiting"
 	trap - EXIT
-	exit 0
+	exit 1
 fi
