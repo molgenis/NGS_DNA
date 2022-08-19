@@ -1,5 +1,5 @@
 #!/bin/bash
-if module -t list NGS_DNA
+if module -t list NGS_DNA | grep NGS_DNA
 then
 	echo "DNA pipeline loaded, proceding"
 else
