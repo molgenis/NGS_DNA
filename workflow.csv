@@ -17,7 +17,7 @@ s11_Manta,protocols/Manta.sh,s06_MarkDuplicates
 s12_CramConversion,protocols/CramConversion.sh,s06_MarkDuplicates
 s13_MakeDedupBamMd5,protocols/MakeDedupBamMd5.sh,s06_MarkDuplicates
 s14a_VariantCalling,protocols/VariantCalling.sh,s09_GenderCheck;s06b_ApplyBaseRecalibration;dbSnp=dbSNP137Vcf
-s14b_GenotypeVariants,protocols/VariantGenotyping.sh,s14a_VariantCalling;dbSnp=dbSNP137Vcf
+s14b_GenotypeVariants,protocols/VariantGenotyping.sh,s14a_VariantCalling;dbSnp=dbSNP137Vcf;variantCalls=SampleBatchVariantCalls
 s15_CoverageCalculationsGvcf,protocols/CoverageCalculations_gvcf.sh,s14b_GenotypeVariants
 s16_AnnotateVcf,protocols/AnnotateVcf.sh,s14b_GenotypeVariants
 s18_SnpEff,protocols/SnpEff.sh,s16_AnnotateVcf

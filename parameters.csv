@@ -200,12 +200,12 @@ dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
 sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
+sampleVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
 #sampleBatchVariantCallsFemale,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.X.female.variant.calls.g.vcf.gz
 #sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
 sampleBatchVariantCallsMaleNONPAR,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.X.male.NONPAR.variant.calls.g.vcf.gz
 sampleBatchVariantCallsMaleNONPARIndex,${sampleBatchVariantCallsMaleNONPAR}.tbi
-
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
@@ -413,3 +413,7 @@ vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain_max}-Python-2.7.16
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 
+
+##DRAGEN
+dragenInputVcfFiles,${dragenFolder}/vcf/${sampleProcessStepID}
+sampleBatchGenotypedVariantCalls,${externalSampleID}.batch-${batchID}.variant.calls.genotyped.vcf
