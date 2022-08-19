@@ -1,5 +1,5 @@
 #!/bin/bash
-if module list | grep -o -P 'NGS_DNA(.+)' 
+if module -t list NGS_DNA
 then
 	echo "DNA pipeline loaded, proceding"
 else
@@ -90,7 +90,7 @@ perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_D
 ## has to be set, otherwise it will crash due to parameters which are not set, this variable will be updated in the next step
 batching="_small"
 
-ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
+ngsversion=$(module -t list NGS_DNA)
 projectJobsDir="${workDir}/projects/${filePrefix}/${runID}/jobs/"
 projectResultsDir="${workDir}/projects/${filePrefix}/${runID}/results/"
 intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
