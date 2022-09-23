@@ -1,0 +1,7 @@
+queue,wh-vcompute
+prmName,prm07
+prmHost,wh-helper.hpc.rug.nl
+root,/
+appsDir,${root}/apps/
+toolChain_max,foss-2018b
+toolChain_min,GCCcore-7.3.0

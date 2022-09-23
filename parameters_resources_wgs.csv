@@ -30,6 +30,7 @@ mem_protocols_MergeBatches,25gb
 mem_protocols_MergeIndelsAndSnpsSample,4gb
 mem_protocols_MergeIndelsAndSnpsProject,4gb
 mem_protocols_MultiQC,5gb
+mem_protocols_PrepareDragenData,7gb
 mem_protocols_PrepareFastQ,1gb
 mem_protocols_SnpEff,4gb
 mem_protocols_SnpFiltration,5gb

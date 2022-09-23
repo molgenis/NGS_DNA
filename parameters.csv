@@ -69,10 +69,10 @@ inhouseIntervalsDir,${dataDir}/UMCG/
 inputData,${tmpDataDir}/inputData/
 hpoDir,${dataDir}/HPO/
 sequenomDir,${dataDir}/Sequenom/
-tmpDataDir,${workDir}/${tmpName}/
+tmpDataDir,${groupDir}/${tmpName}/
 tempDir,${tmpDataDir}/temp/
 tmpDirectory,${tmpDataDir}/tmp/
-permanentDataDir,${workDir}/${prmName}
+permanentDataDir,${groupDir}/${prmName}
 logsDir,${tmpDataDir}/logs
 
 ##### RAW DATA FILES/DIRS ####
@@ -138,6 +138,7 @@ rawFileExt,fq.gz
 phiXPrefix,171027_WGSIM_0000_ZZZZZZZZ
 phiXEnd1Gz,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L1_1.${rawFileExt}
 phiXEnd2Gz,${humanPhiXdir}/${phiXPrefix}/${phiXPrefix}_L1_2.${rawFileExt}
+chainHg19to1000GFile,/apps/data/GRC/Hg19toHumanG1kV37.chain
 
 ### Protocols 5, 6, 7, 8 and 9 (SamToBam, SortBam, MergeBam, MarkDuplicates) ###
 samToBamJar,SamFormatConverter
@@ -203,6 +204,7 @@ dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
 sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
+sampleVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
 #sampleBatchVariantCallsFemale,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.female.variant.calls.g.vcf.gz
 #sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
@@ -410,4 +412,3 @@ vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 
-

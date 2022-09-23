@@ -11,16 +11,17 @@
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return $in
+	local _array
+	_array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!_array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 #Load Tabix module
@@ -28,9 +29,9 @@ module load "${htsLibVersion}"
 module list
 
 INPUTS=()
-for SampleID in "${finalVcf}"
+for SampleID in "${externalSampleID}"
 do
-        array_contains INPUTS "$SampleID" || INPUTS+=("$SampleID")    # If bamFile does not exist in array add it
+	array_contains INPUTS "$SampleID" || INPUTS+=("$SampleID")    # If bamFile does not exist in array add it
 done
 
 for i in ${INPUTS[@]}

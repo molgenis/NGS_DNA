@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string intermediateDir
 #string project
 #string logsDir
@@ -13,8 +11,7 @@
 #string projectVariantsMergedSortedGz
 #string sampleVariantsMergedSnpsVcf
 #string sampleVariantsMergedIndelsVcf
-#string externalSampleID
-
+#string sampleID
 
 module load "${gatkVersion}"
 
@@ -31,7 +28,7 @@ java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 --variant "${projectVariantsMergedSortedGz}" \
 -o "${tmpSampleVariantsMergedIndelsVcf}" \
 --selectTypeToInclude INDEL \
--sn "${externalSampleID}"
+-sn "${sampleID}"
 
 mv "${tmpSampleVariantsMergedIndelsVcf}" "${sampleVariantsMergedIndelsVcf}"
 echo "moved ${tmpSampleVariantsMergedIndelsVcf} to ${sampleVariantsMergedIndelsVcf}"
@@ -43,7 +40,7 @@ java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 --variant "${projectVariantsMergedSortedGz}" \
 -o "${tmpSampleVariantsMergedSnpsVcf}" \
 --selectTypeToExclude INDEL \
--sn "${externalSampleID}"
+-sn "${sampleID}"
 
 mv "${tmpSampleVariantsMergedSnpsVcf}" "${sampleVariantsMergedSnpsVcf}"
 echo "moved ${tmpSampleVariantsMergedSnpsVcf} to ${sampleVariantsMergedSnpsVcf}"
