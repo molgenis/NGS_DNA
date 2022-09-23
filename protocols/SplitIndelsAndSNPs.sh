@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string intermediateDir
 #string project
 #string logsDir

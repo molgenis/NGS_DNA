@@ -4,19 +4,14 @@
 #string project
 #string groupname
 #string tmpName
-
 #string sampleProcessStepID
-
-
 #string bcfToolsVersion
 #string htsLibVersion
-
 #string externalSampleID
 #string gavinOutputFinalMergedRLV
 
-module load ${bcfToolsVersion}
-module load ${htsLibVersion}
-
+module load "${bcfToolsVersion}"
+module load "${htsLibVersion}"
 
 ##new prefix will be externalSampleID + sampleProcessStepIDwith new sample identifier --> familyname+umcgnumber
 newGVCFSampleIdentifier=$(echo "${externalSampleID}" | awk 'BEGIN {FS="_"}{print $1"_"$2}')

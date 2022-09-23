@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -21,16 +19,16 @@
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 makeTmpDir "${projectBatchGenotypedVariantCalls}"

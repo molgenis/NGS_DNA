@@ -16,9 +16,8 @@
 #string chainHg19to1000GFile
 #list batchID
 
-
-module load ${bcfToolsVersion}
-module load ${htsLibVersion}
+module load "${bcfToolsVersion}"
+module load "${htsLibVersion}"
 
 ## copy gVCF files first
 combinedIdentifier=$(ls -d "${tmpDirectory}/${gsBatch}/Analysis/"*"-${sampleProcessStepID}")

@@ -6,18 +6,13 @@
 #string intermediateDir
 #string projectResultsDir
 #string logsDir
-
 #string gatkVersion
 #string indexFile
-
 #string project
-
 #string externalSampleID
 #string dedupBam
-
 #string mergedBamRecalibratedTable
 #string sampleMergedRecalibratedBam
-
 
 #Load GATK module.
 module load "${gatkVersion}"

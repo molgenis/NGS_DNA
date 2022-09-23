@@ -6,11 +6,9 @@
 #string indexFile
 #string logsDir 
 #string groupname
-
 #string projectFinalVcf
 #string externalSampleID
 #string sampleFinalVcf
-
 #string intermediateDir
 #string project
 #string indexFileDictionary

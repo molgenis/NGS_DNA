@@ -6,12 +6,9 @@
 #string indexFile
 #string logsDir 
 #string groupname
-
-
 #string externalSampleID
 #string intermediateDir
 #string project
-
 #string indexFileDictionary
 
 #Load GATK module
