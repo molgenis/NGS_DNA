@@ -1,6 +1,6 @@
 #Parameter mapping
 #string logsDir
-#string tmpDataDir
+#string tmpDirectory
 #string seqType
 #string intermediateDir
 #string project
@@ -9,7 +9,7 @@
 #string externalSampleID
 #string projectPrefix
 #string sampleProcessStepID
-#string inputFolderDragenData
+#string gsBatch
 #string projectResultsDir
 #string bcfToolsVersion
 #string htsLibVersion
@@ -21,8 +21,10 @@ module load ${bcfToolsVersion}
 module load ${htsLibVersion}
 
 ## copy gVCF files first
-combinedIdentifier=$(ls -1 "${gsBatch}/*-${sampleProcessStepID}")
-rsync -av "${tmpDataDir}/${gsBatch}/${combinedIdentifier}/${combinedIdentifier}.hard-filtered.gvcf.gz"* "${intermediateDir}"
+combinedIdentifier=$(ls -d "${tmpDirectory}/${gsBatch}/Analysis/"*"-${sampleProcessStepID}")
+combinedIdentifier=$(basename "${combinedIdentifier}")
+echo  "${combinedIdentifier}" "${intermediateDir}/${sampleProcessStepID}.txt"
+rsync -av "${tmpDirectory}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.hard-filtered.gvcf.gz"* "${intermediateDir}"
 
 ## rename gVCF files
 rename "${combinedIdentifier}" "${externalSampleID}" "${intermediateDir}/${combinedIdentifier}.hard-filtered.gvcf.gz"*

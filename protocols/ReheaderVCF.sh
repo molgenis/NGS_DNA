@@ -20,7 +20,9 @@ module load ${htsLibVersion}
 
 ##new prefix will be externalSampleID + sampleProcessStepIDwith new sample identifier --> familyname+umcgnumber
 newGVCFSampleIdentifier=$(echo "${externalSampleID}" | awk 'BEGIN {FS="_"}{print $1"_"$2}')
-echo -e "${sampleProcessStepID} ${newGVCFSampleIdentifier}" > "${intermediateDir}/${externalSampleID}.newVCFHeader.txt"
+oldIdentifier=$(cat ${intermediateDir}/${sampleProcessStepID}.txt)
+echo -e "old:${oldIdentifier}, new:${newGVCFSampleIdentifier}"
+echo -e "${oldIdentifier} ${newGVCFSampleIdentifier}" > "${intermediateDir}/${externalSampleID}.newVCFHeader.txt"
 
 bcftools reheader -s "${intermediateDir}/${externalSampleID}.newVCFHeader.txt" "${gavinOutputFinalMergedRLV}.gz" -o "${gavinOutputFinalMergedRLV}.gz.tmp"
 mv "${gavinOutputFinalMergedRLV}.gz.tmp" "${gavinOutputFinalMergedRLV}.gz"

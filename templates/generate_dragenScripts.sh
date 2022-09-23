@@ -104,13 +104,16 @@ projectResultsDir="${workDir}/projects/${filePrefix}/${runID}/results/"
 intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
 projectLogsDir="${workDir}/logs/${filePrefix}/"
 
+mkdir -p "${intermediateDir}"
+mkdir -p "${projectJobsDir}"
+mkdir -p "${projectLogsDir}"
 mkdir -p "${projectResultsDir}/"{alignment,general}
 mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female,unknown}
 mkdir -p "${projectResultsDir}/qc/statistics/"
 mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
 mkdir -p -m 2770 "${logsDir}/${project}/"
 
-cp "${samplesheet}" ${projectJobsDir}/${filePrefix}.csv
+cp "${samplesheet}" "${projectJobsDir}/${filePrefix}.csv"
 
 ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh \
 -p "parameters_converted.csv" \
