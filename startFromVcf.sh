@@ -2,7 +2,6 @@
 
 set -e
 set -u
-module load NGS_DNA/3.5.2
 module list
 host=$(hostname -s)
 environmentParameters="parameters_${host}"
@@ -18,7 +17,6 @@ Usage:
 	$(basename $0) OPTIONS
 Options:
 	-h   Show this help.
-	-a   sampleType (DNA or RNA) (default=DNA)
 	-g   group (default=basename of ../../../ )
 	-f   filePrefix (default=basename of this directory)
 	-r   runID (default=run01)
