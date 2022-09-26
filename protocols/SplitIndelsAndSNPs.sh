@@ -20,6 +20,9 @@ tmpSampleVariantsMergedIndelsVcf="${MC_tmpFile}"
 
 makeTmpDir "${sampleVariantsMergedSnpsVcf}"
 tmpSampleVariantsMergedSnpsVcf="${MC_tmpFile}"
+ 
+realSampleID="$(cat "${intermediateDir}/${sampleID}.txt")"
+realSampleID=$(basename "${realSampleID}")
 
 #select only Indels
 java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
@@ -28,7 +31,7 @@ java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 --variant "${projectVariantsMergedSortedGz}" \
 -o "${tmpSampleVariantsMergedIndelsVcf}" \
 --selectTypeToInclude INDEL \
--sn "${sampleID}"
+-sn "${realSampleID}"
 
 mv "${tmpSampleVariantsMergedIndelsVcf}" "${sampleVariantsMergedIndelsVcf}"
 echo "moved ${tmpSampleVariantsMergedIndelsVcf} to ${sampleVariantsMergedIndelsVcf}"
@@ -40,7 +43,7 @@ java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
 --variant "${projectVariantsMergedSortedGz}" \
 -o "${tmpSampleVariantsMergedSnpsVcf}" \
 --selectTypeToExclude INDEL \
--sn "${sampleID}"
+-sn "${realSampleID}"
 
 mv "${tmpSampleVariantsMergedSnpsVcf}" "${sampleVariantsMergedSnpsVcf}"
 echo "moved ${tmpSampleVariantsMergedSnpsVcf} to ${sampleVariantsMergedSnpsVcf}"

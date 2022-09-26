@@ -1,7 +1,7 @@
 #Parameter mapping
 #string tmpName
-
-
+#string externalSampleID
+#string sampleProcessStepID
 #string sampleMergedBam
 #string sampleMergedBamIdx
 #string tempDir
@@ -26,6 +26,8 @@ tmpDedupBam="${MC_tmpFile}"
 
 makeTmpDir "${dedupBamIdx}" "${intermediateDir}"
 tmpDedupBamIdx="${MC_tmpFile}"
+
+echo  "${externalSampleID}" > "${intermediateDir}/${sampleProcessStepID}.txt"
 
 ##Run picard, sort BAM file and create index on the fly
 "${sambambaTool}" markdup \
