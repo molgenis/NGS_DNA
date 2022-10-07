@@ -33,7 +33,6 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 for extId in "${sampleBatchGenotypedVariantCalls[@]}"
 do
-	
 	array_contains INPUTS "--variant ${sampleId}" || INPUTS+=("--variant ${sampleId}") 	# If bamFile does not exist in array add it
 done
 

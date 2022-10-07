@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string picardVersion
 #string hsMetricsJar
 #string hsMetrics
@@ -12,7 +10,6 @@
 #string capturedIntervals
 #string capturedExomeIntervals
 #string capturingKit
-#string picardJar
 #string project
 #string logsDir 
 #string groupname
@@ -28,7 +25,7 @@ tmpHsMetrics="${MC_tmpFile}"
 #Run Picard HsMetrics if capturingKit was used
 if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
 then
-	java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${hsMetricsJar}" \
+	java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/picard.jar" "${hsMetricsJar}" \
 	INPUT="${dedupBam}" \
 	OUTPUT="${tmpHsMetrics}" \
 	BAIT_INTERVALS="${capturedExomeIntervals}" \
@@ -36,7 +33,7 @@ then
 	VALIDATION_STRINGENCY=LENIENT \
 	TMP_DIR="${tempDir}"
 else
-	java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${hsMetricsJar}" \
+	java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/picard.jar" "${hsMetricsJar}" \
 	INPUT="${dedupBam}" \
 	OUTPUT="${tmpHsMetrics}" \
 	BAIT_INTERVALS="${capturedIntervals}" \
@@ -45,6 +42,5 @@ else
 	TMP_DIR="${tempDir}"
 fi
 
-mv "${tmpHsMetrics}" "${hsMetrics}"
-echo "moved ${tmpHsMetrics} to ${hsMetrics}"
+mv -v "${tmpHsMetrics}" "${hsMetrics}"
 

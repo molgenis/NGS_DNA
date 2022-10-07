@@ -40,7 +40,7 @@ htsLibVersion,HTSlib/1.14-${toolChain_max}
 iolibVersion,io_lib/1.14.11-${toolChain_min}
 mantaVersion,manta/1.6.0-${toolChain_min}
 multiQCVersion,multiqc/1.11-${toolChain_max}
-ngsUtilsVersion,ngs-utils/22.01.1
+ngsUtilsVersion,ngs-utils/22.10.1
 perlPlusVersion,PerlPlus/5.30.0-${toolChain_min}-v19.08.1
 picardVersion,picard/2.26.10-${javaSuffix}
 pigzVersion,pigz/2.7-${toolChain_max}
@@ -67,11 +67,9 @@ sequenomDir,${dataDir}/Sequenom/
 tmpDataDir,${groupDir}/${tmpName}/
 tempDir,${tmpDataDir}/temp/
 tmpDirectory,${tmpDataDir}/tmp/
-permanentDataDir,${groupDir}/${prmName}
 logsDir,${tmpDataDir}/logs
 
 ##### RAW DATA FILES/DIRS ####
-allRawNgsPrmDataDir,${permanentDataDir}/rawdata/ngs
 allRawNgsTmpDataDir,${tmpDataDir}/rawdata/ngs/
 allRawArrayTmpDataDir,${tmpDataDir}/rawdata/array/
 rawFile,${projectRawTmpDataDir}/${filePrefix}_${barcode}
@@ -297,7 +295,9 @@ familyList,${intermediateDir}/${externalSampleID}.familyList.txt
 mergedBamRecalibratedTable,${projectResultsDir}/alignment/${externalSampleID}.recalibrated.table
 
 
-vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain}-Python-2.7.11
+vcfPedVersion,VCFped/20180527_d1bbdf5-${toolChain_max}-Python-2.7.16
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
-cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz 
+cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz
+sampleMergedRecalibratedBam,${sampleNameID}.merged.recalibrated.bam
+sampleMergedRecalibratedBamIdx,${sampleNameID}.merged.recalibrated.bam.bai

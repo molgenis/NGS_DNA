@@ -15,7 +15,6 @@
 #string projectJobsDir
 #string logsDir
 #string groupname
-#string sampleSize
 
 #Function to check if array contains value
 array_contains () {
@@ -38,29 +37,18 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 module load "${gatkVersion}"
 module list
 
-numberofbatches=$((sampleSize / 200))
+
 ALLGVCFs=()
 
-if [ "${sampleSize}" -gt 200 ]
-then
-	for b in $(seq 0 "${numberofbatches}")
-	do
-		if [ -f "${projectBatchCombinedVariantCalls}".$b ]
-		then
-			ALLGVCFs+=(--variant "${projectBatchCombinedVariantCalls}"."${b}")
-		fi
-	done
-else
-	for sbatch in "${variantCalls[@]}"
-        do
-		if [ -f "${sbatch}" ]
-		then
-			array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant $sbatch")
-		fi
-        done
-fi 
-gvcfSize=${#ALLGVCFs[@]}
-if [ ${gvcfSize} -ne 0 ]
+for sbatch in "${variantCalls[@]}"
+do
+	if [ -f "${sbatch}" ]
+	then
+		array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant ${sbatch}")
+	fi
+done
+ 
+if [ "${#ALLGVCFs[@]}" -ne 0 ]
 then
 java -Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
 	"${EBROOTGATK}/${gatkJar}" \
@@ -71,8 +59,7 @@ java -Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
 	-o "${tmpProjectBatchGenotypedVariantCalls}" \
 	${ALLGVCFs[@]} 
 
-	mv "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
-	echo "moved ${tmpProjectBatchGenotypedVariantCalls} to ${projectBatchGenotypedVariantCalls} "
+	mv -v "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
 else
 	echo ""
 	echo "there is nothing to genotype, skipped"

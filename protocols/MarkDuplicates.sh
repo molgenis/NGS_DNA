@@ -8,9 +8,7 @@
 #string dedupBam
 #string dedupBamIdx
 #string tmpDataDir
-#string picardJar
 #string sambambaVersion
-#string sambambaTool
 #string project
 #string logsDir 
 #string groupname
@@ -30,7 +28,7 @@ tmpDedupBamIdx="${MC_tmpFile}"
 echo  "${externalSampleID}" > "${intermediateDir}/${sampleProcessStepID}.txt"
 
 ##Run picard, sort BAM file and create index on the fly
-"${sambambaTool}" markdup \
+sambamba markdup \
 --nthreads=4 \
 --overflow-list-size 1000000 \
 --hash-table-size 1000000 \
@@ -39,10 +37,8 @@ echo  "${externalSampleID}" > "${intermediateDir}/${sampleProcessStepID}.txt"
 "${sampleMergedBam}" "${tmpDedupBam}"
 
 echo -e "\nMarkDuplicates finished succesfull. Moving temp files to final.\n\n"
-mv "${tmpDedupBam}" "${dedupBam}"
-echo "moved ${tmpDedupBam} ${dedupBam}"
-mv "${tmpDedupBamIdx}" "${dedupBamIdx}"
-echo "mv ${tmpDedupBamIdx} ${dedupBamIdx}"
+mv -v "${tmpDedupBam}" "${dedupBam}"
+mv -v "${tmpDedupBamIdx}" "${dedupBamIdx}"
 
 echo "making symlinks of the bams in the results folder to ${intermediateDir} for later use"
 cd "${intermediateDir}" 

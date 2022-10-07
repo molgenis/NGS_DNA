@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -13,7 +11,6 @@
 #string project
 #string logsDir
 #string groupname
-
 
 #Load GATK module
 module load "${gatkVersion}"
@@ -35,5 +32,4 @@ java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar "${EBROOT
 --filterExpression "ReadPosRankSum < -20.0" \
 --filterName "filterReadPosRankSum"
 
-mv "${tmpSampleVariantsMergedIndelsFilteredVcf}" "${sampleVariantsMergedIndelsFilteredVcf}"
-echo " moved ${tmpSampleVariantsMergedIndelsFilteredVcf} ${sampleVariantsMergedIndelsFilteredVcf}"
+mv -v "${tmpSampleVariantsMergedIndelsFilteredVcf}" "${sampleVariantsMergedIndelsFilteredVcf}"

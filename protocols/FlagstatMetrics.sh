@@ -1,12 +1,9 @@
 #Parameter mapping
 #string tmpName
-
-
 #string tempDir
 #string dedupBam
 #string tmpDataDir
 #string sambambaVersion
-#string sambambaTool
 #string project
 #string logsDir 
 #string groupname
@@ -22,14 +19,11 @@ tmpFlagstatMetrics="${MC_tmpFile}"
 
 echo "starting to calculate flagstat metrics"
 #make metrics file
-"${sambambaTool}" \
+sambamba \
 flagstat \
 --nthreads=4 \
 "${dedupBam}" > "${tmpFlagstatMetrics}"
 
 echo -e "\nFlagstatMetrics calculated. Moving temp files to final.\n\n"
 
-mv "${tmpFlagstatMetrics}" "${flagstatMetrics}"
-
-echo "moved ${tmpFlagstatMetrics} ${flagstatMetrics}"
-
+mv -v "${tmpFlagstatMetrics}" "${flagstatMetrics}"

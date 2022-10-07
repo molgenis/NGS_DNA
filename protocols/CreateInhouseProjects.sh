@@ -10,6 +10,7 @@
 #string projectQcDir
 #string computeVersion
 #string groupname
+#string groupDir
 #string runid
 #list sequencingStartDate
 #list sequencer
@@ -27,7 +28,6 @@
 #string environment_parameters
 #string ngsversion
 #string ngsUtilsVersion
-#string sampleSize
 #string dataDir
 
 #string coveragePerBaseDir
@@ -41,17 +41,17 @@ module load "${ngsUtilsVersion}"
 module load "${ngsversion}"
 
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    rejected="false"
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-		rejected="true"
-                continue
-        fi
-    done
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	rejected="false"
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			rejected="true"
+			continue
+		fi
+	done
 }
 
 #
@@ -116,8 +116,8 @@ do
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5"
 		else
 			array_contains arrayRejected "${barcode[samplenumber]}"
-                        if [ "${rejected}" == "false" ]
-                        then
+			if [ "${rejected}" == "false" ]
+			then
 
 			ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" \
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz"
@@ -129,7 +129,7 @@ do
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5"
 			else
 				echo -e "\n############ barcode: ${barcode[samplenumber]} IS REJECTED#######################\n"
-                        fi
+			fi
 		fi
 	fi
 done
@@ -137,17 +137,16 @@ done
 #
 # Create subset of samples for this project.
 #
-extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
+cp "${worksheet}" "${projectJobsDir}/${project}.csv"
 sampleSheetCsv="${projectJobsDir}/${project}.csv"
 perl -pi -e 's/\r(?!\n)//g' "${sampleSheetCsv}"
 barcodesGrepCommand=""
-
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
 #
 
 
-cd "${rocketPoint}"
+cd "${rocketPoint}" 
 rm -f "${projectJobsDir}/${project}.filteredRejected.csv"
 rm -f "${intermediateDir}/${project}.filteredBarcodes.csv"
 
@@ -240,7 +239,6 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
--p "${group_parameters}" \
 -p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
@@ -254,7 +252,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
-sampleSize=${sampleSize};\
+groupDir=${groupDir};\
 groupname=${groupname};\
 runid=${runid}"
 

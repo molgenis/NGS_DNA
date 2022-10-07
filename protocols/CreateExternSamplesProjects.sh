@@ -154,7 +154,7 @@ fi
 
 if [ -f ".compute.properties" ];
 then
-     rm "../.compute.properties"
+	rm "../.compute.properties"
 fi
 
 module load "${computeVersion}"

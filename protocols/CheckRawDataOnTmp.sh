@@ -13,7 +13,6 @@
 #string project
 #string logsDir 
 #string groupname
-#string permanentDataDir
 #string intermediateDir
 #list barcode
 #list lane

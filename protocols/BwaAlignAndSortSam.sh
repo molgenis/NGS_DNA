@@ -3,8 +3,6 @@ set -o pipefail
 #Parameter mapping
 #string tmpName
 #string tempDir
-
-
 #string seqType
 #string bwaVersion
 #string indexFile
@@ -23,8 +21,6 @@ set -o pipefail
 #string filePrefix
 #string alignedSortedBam
 #string picardVersion
-#string picardJar
-#string cutadaptVersion
 
 makeTmpDir "${alignedSam}"
 tmpAlignedSam="${MC_tmpFile}"
@@ -56,19 +52,13 @@ then
 	"${fastq2}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
-        INPUT="${tmpAlignedSam}" \
-        OUTPUT="${tmpAlignedSortedBam}"  \
-        SORT_ORDER=coordinate \
-        CREATE_INDEX=true 
+	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/picard.jar" SortSam \
+	INPUT="${tmpAlignedSam}" \
+	OUTPUT="${tmpAlignedSortedBam}"  \
+	SORT_ORDER=coordinate \
+	CREATE_INDEX=true 
 
-	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
-	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
-
-#	echo "moving prepared FastQ to intermediateDir"
-#	mv "${fastq1}" "${intermediateDir}"
-#	mv "${fastq2}" "${intermediateDir}"
-
+	mv -v "${tmpAlignedSortedBam}" "${alignedSortedBam}"
 
 else
 	#Run BWA for single-read
@@ -80,17 +70,13 @@ else
 	"${srBarcodeRecodedFqGz}" \
 	> "${tmpAlignedSam}" &
 
-	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/${picardJar}" SortSam \
-        INPUT="${tmpAlignedSam}" \
-        OUTPUT="${tmpAlignedSortedBam}"  \
-        SORT_ORDER=coordinate \
-        CREATE_INDEX=true
+	java -Djava.io.tmpdir="${tempDir}" -Xmx12G -XX:ParallelGCThreads=2 -jar "${EBROOTPICARD}/picard.jar" SortSam \
+	INPUT="${tmpAlignedSam}" \
+	OUTPUT="${tmpAlignedSortedBam}"  \
+	SORT_ORDER=coordinate \
+	CREATE_INDEX=true
 
-	echo "moving ${tmpAlignedSortedBam} ${alignedSortedBam}"
-	mv "${tmpAlignedSortedBam}" "${alignedSortedBam}"
-
-#	echo "moving prepared FastQ to intermediateDir"
-#        mv "${srBarcodeRecodedFqGz}" "${intermediateDir}"
+	mv -v "${tmpAlignedSortedBam}" "${alignedSortedBam}"
 
 fi
 

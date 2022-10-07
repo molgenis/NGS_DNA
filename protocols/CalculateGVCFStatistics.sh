@@ -50,7 +50,4 @@ python "${EBROOTNGS_DNA}/scripts/gvcf2bed.py" \
 -l INFO 
 exit 0
 
-
-echo "moving ${tmpSampleGvcf2Bed} to ${sampleGvcf2Bed}"
-
-mv "${tmpSampleGvcf2Bed}" "${sampleGvcf2Bed}"
+mv -v "${tmpSampleGvcf2Bed}" "${sampleGvcf2Bed}"
