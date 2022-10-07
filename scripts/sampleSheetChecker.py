@@ -3,9 +3,10 @@ import csv
 
 reader = csv.DictReader(open(sys.argv[1], "rb"), delimiter=",")
 project=open("project.txt.tmp","w")
+build=open("build.txt.tmp","w")
+capturingKit=open("capturingKit.txt.tmp","w")
 sampleType=open("sampleType.txt.tmp","w")
 externalSampleID=open("externalSampleIDs.txt.tmp","w")
-capturingKit=open("capturingKit.txt.tmp","w")
 
 count=0
 for row in reader:
@@ -28,8 +29,9 @@ for row in reader:
 			print "no hpo id's"
 			out.write(','.join(row.keys())+",hpoIDs"+'\n')
 			out.write(','.join(row.values())+","+'\n')
-                        count+=1
+			count+=1
 			hpoID="no"
 	elif hpoID == "no":
 		out.write(','.join(row.values())+","+'\n')
 			
+
