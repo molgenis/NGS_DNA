@@ -20,7 +20,7 @@
 #string gVCF2BEDVersion
 #string htsLibVersion
 #string externalSampleID
-#list batchID
+#string variantCalls
 
 array_contains () {
 	local array="$1[@]"
@@ -53,33 +53,33 @@ else
 fi
 ml ngs-utils
 
-INPUTS=()
-for batch in "${batchID[@]}"
-do
-	
-	gVCF="${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batch}.variant.calls.g.vcf.gz"
-	if [[ -f "${gVCF}" ]]
-	then
-		array_contains INPUTS "-I ${gVCF}" || INPUTS+=("-I ${gVCF}")
-	fi
-done
-
-if [[ "${#INPUTS[@]:-0}" -eq '0' ]]
-then
-	echo "There are no gVCF files"
-else
-	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" ]]
-	then
-		gatk GatherVcfs \
-		"${INPUTS[*]}" \
-		--OUTPUT "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
-	fi
-	
-	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz.tbi" ]]
-	then
-		tabix -p vcf "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
-	fi
-fi
+# INPUTS=()
+# for batch in "${batchID[@]}"
+# do
+#
+# 	gVCF="${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batch}.variant.calls.g.vcf.gz"
+# 	if [[ -f "${gVCF}" ]]
+# 	then
+# 		array_contains INPUTS "-I ${gVCF}" || INPUTS+=("-I ${gVCF}")
+# 	fi
+# done
+#
+# if [[ "${#INPUTS[@]:-0}" -eq '0' ]]
+# then
+# 	echo "There are no gVCF files"
+# else
+# 	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" ]]
+# 	then
+# 		gatk GatherVcfs \
+# 		"${INPUTS[*]}" \
+# 		--OUTPUT "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
+# 	fi
+#
+# 	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz.tbi" ]]
+# 	then
+# 		tabix -p vcf "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
+# 	fi
+# fi
 
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
@@ -99,7 +99,7 @@ then
 			outputFile="${intermediateDir}/${externalSampleID}.${perBase}.CoverageOutput.csv"
 
 			gvcf2bed2.py \
-				-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
+				-I "${variantCalls}" \
 				-O "${outputFile}" \
 				-b "${perBaseDir}/${perBase}.uniq.per_base.bed"
 

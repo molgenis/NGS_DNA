@@ -23,6 +23,7 @@ module load "${htsLibVersion}"
 combinedIdentifier=$(ls -d "${tmpDirectory}/${gsBatch}/Analysis/"*"-${sampleProcessStepID}")
 combinedIdentifier=$(basename "${combinedIdentifier}")
 echo  "${combinedIdentifier}" > "${intermediateDir}/${sampleProcessStepID}.txt"
+
 rsync -av "${tmpDirectory}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.hard-filtered.gvcf.gz"* "${intermediateDir}"
 
 ## rename gVCF files
