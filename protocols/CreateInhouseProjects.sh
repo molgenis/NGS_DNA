@@ -9,7 +9,6 @@
 #string projectResultsDir
 #string projectQcDir
 #string computeVersion
-#string group_parameters
 #string groupname
 #string runid
 #list sequencingStartDate

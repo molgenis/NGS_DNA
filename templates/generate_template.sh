@@ -30,7 +30,7 @@ Options:
 	-f   filePrefix (default=basename of this directory)
 	-r   runID (default=run01)
 	-t   tmpDirectory (default=basename of ../../ )
-	-w   workdir (default=/groups/\${group}/\${tmpDirectory})
+	-w   workDir (default=/groups/\${group}/\${tmpDirectory})
 
 ===============================================================================================================
 EOH
@@ -59,6 +59,10 @@ samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
 ## Checking for genderColumn
 #
+# load PythonPlus/2x version
+python2Version=$(module list | grep -o -P 'PythonPlus/2.(.+)')
+ml "${python2Version}"
+
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
 if [ -f "${samplesheet}.temp" ]
 then
@@ -97,7 +101,6 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${genScripts}/parameters_converted.csv" \
 -p "${genScripts}/parameters_tmpdir_converted.csv" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
--p "${genScripts}/parameters_group_converted.csv" \
 -p "${genScripts}/parameters_environment_converted.csv" \
 -p "${genScripts}/${filePrefix}.csv" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
@@ -105,8 +108,8 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 --runid "${runID}" \
 -o workflowpath="${workflow};\
 outputdir=scripts/jobs;mainParameters=${genScripts}/parameters_converted.csv;\
-group_parameters=${genScripts}/parameters_group_converted.csv;\
 groupname=${group};\
+workDir=${workDir};\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\
 environment_parameters=${genScripts}/parameters_environment_converted.csv;\
 tmpdir_parameters=${genScripts}/parameters_tmpdir_converted.csv;\

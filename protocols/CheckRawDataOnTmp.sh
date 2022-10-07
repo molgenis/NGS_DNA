@@ -1,6 +1,5 @@
 #string tmpName
 #string allRawNgsTmpDataDir
-#string allRawNgsPrmDataDir
 #list seqType
 #list sequencingStartDate
 #list sequencer
