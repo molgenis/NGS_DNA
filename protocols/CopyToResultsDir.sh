@@ -131,6 +131,7 @@ do
 	printf '.'
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
 	printf '.'
+	
 	mapfile -t coveragePerBaseFiles < <(find ${intermediateDir} -name "${sa}*.coveragePerBase.txt")
 	if [[ "${#coveragePerBaseFiles[@]}" -eq '0' ]]
 	then
@@ -158,6 +159,7 @@ do
 		done
 		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
+	
 	mapfile -t coveragePerTargetFiles < <(find ${intermediateDir} -name "${sa}*.coveragePerTarget.txt")
 	if [[ "${#coveragePerTargetFiles[@]}" -eq '0' ]]
 	then
@@ -169,8 +171,6 @@ do
 			rsync -a "${coveragePerTargetFile}" "${projectResultsDir}/coverage/CoveragePerTarget/"
 			printf '.'
 		done
-	else
-		echo "coveragePerTarget skipped for sample: ${sa}"
 	fi
 
 done
