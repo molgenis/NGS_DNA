@@ -29,7 +29,6 @@ java -Xmx3g -jar "${EBROOTGATK}/${gatkJar}" \
 --genotypemergeoption UNSORTED \
 -o "${tmpSampleFinalVcf}"
 
-
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
 
 bcftools annotate -h "${tmpSampleFinalVcf}.barcode.txt" "${tmpSampleFinalVcf}" > "${tmpSampleFinalVcf}.tmp"

@@ -33,6 +33,5 @@ ${inputs} \
 --bqsr-recal-file "${mergedBamRecalibratedTable}" \
 -O "${tmpSampleMergedRecalibratedBam}"
 
-mv "${tmpSampleMergedRecalibratedBam}" "${sampleMergedRecalibratedBam}"
-mv "${tmpSampleMergedRecalibratedBam%.bam}.bai" "${sampleMergedRecalibratedBam%.bam}.bai"
-echo "moved ${tmpSampleMergedRecalibratedBam}  ${sampleMergedRecalibratedBam}"
+mv -v "${tmpSampleMergedRecalibratedBam}" "${sampleMergedRecalibratedBam}"
+mv -v "${tmpSampleMergedRecalibratedBam%.bam}.bai" "${sampleMergedRecalibratedBam%.bam}.bai"

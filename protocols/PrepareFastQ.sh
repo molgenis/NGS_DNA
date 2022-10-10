@@ -12,7 +12,6 @@
 #string peEnd2BarcodePhiXFqGz
 
 #string intermediateDir
-#string cutadaptVersion
 #string project
 #string groupname
 #string tmpName
@@ -30,32 +29,32 @@ module load "${seqTkVersion}"
 module load ${pigzVersion}
 
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 INPUTS=()
 for sample in "${externalSampleID[@]}"
 do
-	array_contains INPUTS "$sample" || INPUTS+=("$sample")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${sample}" || INPUTS+=("${sample}")
 done
 
 echo "starting with phiX part"
 # Spike phiX only once
-if [ "${seqType}" == "PE" ]
+if [[ "${seqType}" == "PE" ]]
 then
 	samp=$(zcat "${peEnd1BarcodeFqGz}" | tail -n10)
 	phiX=$(zcat "${phiXEnd1Gz}" | tail -n10)
 
-	if [ "${samp}" = "${phiX}" ]
+	if [[ "${samp}" = "${phiX}" ]]
 	then
 		echo "Skip this step! PhiX was already spiked in!"
 		exit 0
@@ -94,7 +93,7 @@ checkIlluminaEncoding() {
 				count=$(( count+1 ))
 			fi
 
-			if ! [ "${encoding}" == "${lastEncoding}" ]
+			if ! [[ "${encoding}" == "${lastEncoding}" ]]
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
@@ -112,7 +111,7 @@ checkIlluminaEncoding() {
 				lastEncoding="${encoding}"
 				count=$(( count+1 ))
 			fi
-			if ! [ "${encoding}" == "${lastEncoding}" ]
+			if ! [[ "${encoding}" == "${lastEncoding}" ]]
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
@@ -127,13 +126,13 @@ checkIlluminaEncoding() {
 			echo "The encoding is not matching to anything, check FastQ documentation (count=${count})"
 		fi
 	done
-	if [ "${nodecision}" == "${numberoflines}" ]
+	if [[ "${nodecision}" == "${numberoflines}" ]]
 	then
 		echo "Within all the lines, no decision was made about the encoding, all the encoding is between A and J. This is then probably an 1.9 encoding sample, so 1.9 is set as encoding"
 		encoding="1.9"
 	fi
 
-	if [ "${encoding}" == "1.9" ]
+	if [[ "${encoding}" == "1.9" ]]
 	then
 		echo "encoding is Illumina 1.8 - Sanger / Illumina 1.9"
 		echo "Only move ${barcodeFqGz} to ${barcodeFinalFqGz}"
@@ -154,11 +153,11 @@ checkIlluminaEncoding() {
 #check illumina encoding using function checkIlluminaEncoding()
 
 #If paired-end do fastqc for both ends, else only for one
-if [ "${seqType}" == "PE" ]
+if [[ "${seqType}" == "PE" ]]
 then
-        checkIlluminaEncoding "${peEnd1BarcodePhiXFqGz}" "${peEnd1BarcodePhiXRecodedFqGz}"
-        checkIlluminaEncoding "${peEnd2BarcodePhiXFqGz}" "${peEnd2BarcodePhiXRecodedFqGz}"
-elif [ "${seqType}" == "SR" ]
+	checkIlluminaEncoding "${peEnd1BarcodePhiXFqGz}" "${peEnd1BarcodePhiXRecodedFqGz}"
+	checkIlluminaEncoding "${peEnd2BarcodePhiXFqGz}" "${peEnd2BarcodePhiXRecodedFqGz}"
+elif [[ "${seqType}" == "SR" ]]
 then
 	checkIlluminaEncoding "${srBarcodeFqGz}" "${srBarcodeRecodedFqGz}"
 else

@@ -102,8 +102,8 @@ else
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
-		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
-		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
+		mv -v "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
+		mv -v "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
 
 	else
 		echo "ERROR: output file is missing"

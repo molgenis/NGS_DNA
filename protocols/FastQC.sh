@@ -28,11 +28,11 @@ then
 	"${fastq2}" \
 	-o "${tmpOutputFolderFastQC}"
 	echo -e "\nFastQC finished succesfull. Moving temp files to final.\n\n"
-	mv "${tmpOutputFolderFastQC}"/* "${outputFolderFastQC}"
+	mv -v "${tmpOutputFolderFastQC}"/* "${outputFolderFastQC}"
 else
 	fastqc "${srBarcodeFqGz}" \
 	-o "${tmpOutputFolderFastQC}"
 	echo -e "\nFastQC finished succesfull. Moving temp files to final.\n\n"
-	mv "${tmpOutputFolderFastQC}"/* "${outputFolderFastQC}"
+	mv -v "${tmpOutputFolderFastQC}"/* "${outputFolderFastQC}"
 
 fi

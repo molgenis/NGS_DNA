@@ -1,6 +1,5 @@
 #string tmpName
 #string allRawNgsTmpDataDir
-#string allRawNgsPrmDataDir
 #list seqType
 #list sequencingStartDate
 #list sequencer
@@ -14,7 +13,6 @@
 #string project
 #string logsDir 
 #string groupname
-#string permanentDataDir
 #string intermediateDir
 #list barcode
 #list lane

@@ -8,7 +8,6 @@
 #string whichSex
 #string tempDir
 #string checkSexMeanCoverage
-#string picardJar
 #string picardVersion
 #string dedupBamMetrics
 #string hsMetricsNonAutosomalRegionChrX
@@ -31,18 +30,17 @@ else
 	awk '{if ($0 ~ /^X/){print $0}}' "${capturedIntervals}" >> "${capturedIntervals_nonAutoChrX}"
 	lengthCap2=$(cat "${capturedIntervals_nonAutoChrX}" | wc -l)
 
-	if [ "${lengthCap1}" -ne "${lengthCap2}" ]
+	if [[ "${lengthCap1}" -ne "${lengthCap2}" ]]
 	then
 		#Calculate coverage chromosome X
-		java -jar -XX:ParallelGCThreads=2 -Xmx2g "${EBROOTPICARD}/${picardJar}" CalculateHsMetrics \
+		java -jar -XX:ParallelGCThreads=2 -Xmx2g "${EBROOTPICARD}/picard.jar" CalculateHsMetrics \
 		INPUT="${dedupBam}" \
 		TARGET_INTERVALS="${capturedIntervals_nonAutoChrX}" \
 		BAIT_INTERVALS="${capturedIntervals_nonAutoChrX}" \
 		TMP_DIR="${tempDir}" \
 		OUTPUT="${tmpHsMetricsNonAutosomalRegionChrX}"
 
-		mv "${tmpHsMetricsNonAutosomalRegionChrX}" "${hsMetricsNonAutosomalRegionChrX}"
-		echo "mv ${tmpHsMetricsNonAutosomalRegionChrX} ${hsMetricsNonAutosomalRegionChrX}"
+		mv -v "${tmpHsMetricsNonAutosomalRegionChrX}" "${hsMetricsNonAutosomalRegionChrX}"
 	else
 		touch "${dedupBamMetrics}.noChrX"
 	fi

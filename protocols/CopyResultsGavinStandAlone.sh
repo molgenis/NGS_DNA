@@ -15,5 +15,5 @@ echo "copied ${intermediateDir}/*.GAVIN.rlv.vcf ${tmpDataDir}/GavinStandAlone/ou
 
 name=$(basename "${inputVcf}")
 choppedOfName=${name%.stripped.vcf}.vcf
-mv "${tmpDataDir}/GavinStandAlone/input/${choppedOfName}".{started,finished}
-mv "${tmpDataDir}/GavinStandAlone/input/processing/${choppedOfName}" "${tmpDataDir}/GavinStandAlone/input/done/"
+mv -v "${tmpDataDir}/GavinStandAlone/input/${choppedOfName}".{started,finished}
+mv -v "${tmpDataDir}/GavinStandAlone/input/processing/${choppedOfName}" "${tmpDataDir}/GavinStandAlone/input/done/"

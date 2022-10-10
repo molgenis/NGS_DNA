@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string picardVersion
 #string collectMultipleMetricsJar
 #string dedupBam
@@ -11,7 +9,6 @@
 #string collectBamMetricsPrefix
 #string tempDir
 #string seqType
-#string picardJar
 #string project
 #string logsDir 
 #string groupname
@@ -24,7 +21,7 @@ makeTmpDir "${collectBamMetricsPrefix}" "${intermediateDir}"
 tmpCollectBamMetricsPrefix="${MC_tmpFile}"
 
 #Run Picard CollectAlignmentSummaryMetrics, CollectInsertSizeMetrics, CollectGcBiasMetrics, QualityScoreDistribution and MeanQualityByCycle
-java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/${picardJar}" "${collectMultipleMetricsJar}" \
+java -jar -Xmx3g -XX:ParallelGCThreads=1 "${EBROOTPICARD}/picard.jar" "${collectMultipleMetricsJar}" \
 I="${dedupBam}" \
 R="${indexFile}" \
 O="${tmpCollectBamMetricsPrefix}" \
@@ -46,10 +43,9 @@ mv "${tmpCollectBamMetricsPrefix}.quality_by_cycle.pdf" "${dedupBamMetrics}.qual
 if [ "${seqType}" == "PE" ]
 then
 	echo -e "\nDetected paired-end data, moving all files.\n\n"
-	mv "${tmpCollectBamMetricsPrefix}.insert_size_metrics" "${dedupBamMetrics}.insert_size_metrics"
-	mv "${tmpCollectBamMetricsPrefix}.insert_size_histogram.pdf" "${dedupBamMetrics}.insert_size_histogram.pdf"
+	mv -v "${tmpCollectBamMetricsPrefix}.insert_size_metrics" "${dedupBamMetrics}.insert_size_metrics"
+	mv -v "${tmpCollectBamMetricsPrefix}.insert_size_histogram.pdf" "${dedupBamMetrics}.insert_size_histogram.pdf"
 
 else
-    echo -e "\nDetected single read data, no *.insert_size_metrics files to be moved.\n\n"
-
+	echo -e "\nDetected single read data, no *.insert_size_metrics files to be moved.\n\n"
 fi

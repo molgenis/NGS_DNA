@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string picardVersion
 #string gcBiasMetricsJar
 #string dedupBam
@@ -14,7 +12,6 @@
 #string ngsUtilsVersion
 #string capturingKit
 #string seqType
-#string picardJar
 #string insertSizeMetrics
 #string gcBiasMetrics
 #string project
@@ -32,7 +29,7 @@ makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"
 tmpGcBiasMetrics="${MC_tmpFile}"
 
 #Run Picard GcBiasMetrics
-java -XX:ParallelGCThreads=1 -jar -Xmx3g "${EBROOTPICARD}/${picardJar}" "${gcBiasMetricsJar}" \
+java -XX:ParallelGCThreads=1 -jar -Xmx3g "${EBROOTPICARD}/picard.jar" "${gcBiasMetricsJar}" \
 R="${indexFile}" \
 I="${dedupBam}" \
 O="${tmpGcBiasMetrics}" \
@@ -42,9 +39,6 @@ VALIDATION_STRINGENCY=STRICT \
 TMP_DIR="${tempDir}"
 
 echo -e "\nGcBiasMetrics finished succesfull. Moving temp files to final.\n\n"
-mv "${tmpGcBiasMetrics}" "${gcBiasMetrics}"
-mv "${tmpGcBiasMetrics}.pdf" "${gcBiasMetrics}.pdf"
+mv -v "${tmpGcBiasMetrics}" "${gcBiasMetrics}"
+mv -v "${tmpGcBiasMetrics}.pdf" "${gcBiasMetrics}.pdf"
 
-"${recreateInsertSizePdfR}" \
---insertSizeMetrics "${insertSizeMetrics}" \
---pdf "${insertSizeMetrics}.pdf"
