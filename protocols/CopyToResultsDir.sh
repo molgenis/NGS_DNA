@@ -131,33 +131,42 @@ do
 	printf '.'
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
 	printf '.'
-
-	if ls "${intermediateDir}/${sa}."*.coveragePerBase.txt 1> /dev/null 2>&1
+	mapfile -t coveragePerBaseFiles < <(find ${intermediateDir} -name "${sa}*.coveragePerBase.txt")
+	if [[ "${#coveragePerBaseFiles[@]}" -eq '0' ]]
 	then
-		for i in "${intermediateDir}/${sa}."*.coveragePerBase.txt
+		echo "there are no coveragePerBase files for sample: ${sa}"
+		continue
+	else
+		for coveragePerBaseFile in "${coveragePerBaseFiles[@]}"
 		do
-			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerBase/"
+			rsync -a "${coveragePerBaseFile}" "${projectResultsDir}/coverage/CoveragePerBase/"
 			printf '.'
 		done
-
-	else
-		echo "coveragePerBase skipped for sample: ${sa}"
 	fi
+	
 
 	## copy the rejected samples (with less 90% of the targets with > 20x coverage)
-	if ls "${intermediateDir}/${sa}."*.rejected 1> /dev/null 2>&1
+	mapfile -t rejectedSamples < <(find ${intermediateDir} -name "${sa}*.rejected")
+	if [[ "${#rejectedSamples[@]}" -eq '0' ]]
 	then
-		for i in "${intermediateDir}/${sa}."*.rejected
+		echo "there are no .rejected files for sample: ${sa}"
+		continue
+	else
+		for rejectedSample in "${rejectedSamples[@]}"
 		do
-			basename "${i}" >> "${projectResultsDir}/coverage/rejectedSamples.txt"
+			basename "${rejectedSample}" >> "${projectResultsDir}/coverage/rejectedSamples.txt"
 		done
 		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
-	if ls "${intermediateDir}/${sa}."*.coveragePerTarget.txt 1> /dev/null 2>&1
+	mapfile -t coveragePerTargetFiles < <(find ${intermediateDir} -name "${sa}*.coveragePerTarget.txt")
+	if [[ "${#coveragePerTargetFiles[@]}" -eq '0' ]]
 	then
-		for i in "${intermediateDir}/${sa}."*.coveragePerTarget.txt
+		echo "there are no coveragePerTarget files for sample: ${sa}"
+		continue
+	else
+		for coveragePerTargetFile in "${coveragePerTargetFiles[@]}"
 		do
-			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerTarget/"
+			rsync -a "${coveragePerTargetFile}" "${projectResultsDir}/coverage/CoveragePerTarget/"
 			printf '.'
 		done
 	else

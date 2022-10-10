@@ -1,4 +1,3 @@
-queue,cf-vcompute
 root,/
 appsDir,${root}/apps/
 toolChain_max,foss-2018b
