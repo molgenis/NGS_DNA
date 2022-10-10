@@ -12,7 +12,7 @@
 #Function to check if array contains value
 array_contains () {
 	local array="$1[@]"
-	local seeking=${2}
+	local seeking="${2}"
 	local in=1
 	for element in "${!array-}"; do
 		if [[ "${element}" == "${seeking}" ]]; then

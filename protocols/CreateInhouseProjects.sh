@@ -146,7 +146,7 @@ barcodesGrepCommand=""
 #
 
 
-cd "${rocketPoint}" 
+cd "${rocketPoint}"
 rm -f "${projectJobsDir}/${project}.filteredRejected.csv"
 rm -f "${intermediateDir}/${project}.filteredBarcodes.csv"
 
@@ -166,7 +166,7 @@ then
 			barcodesGrepCommand+="${line}"
 		fi
 		teller=$((teller+1))
-	done<rejectedBarcodes.txt
+	done<"rejectedBarcodes.txt"
 
 	echo "${barcodesGrepCommand}"
 
@@ -178,9 +178,9 @@ then
 	fi
 fi
 
-if [[ -f .compute.properties ]]
+if [[ -f '.compute.properties' ]]
 then
-	rm .compute.properties
+	rm '.compute.properties'
 fi
 
 batching="_small"
@@ -190,14 +190,14 @@ captKit=$(echo "${capturingKitProject}" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
-	echo "Bedfile does not exist! Exiting"
+	echo 'Bedfile does not exist! Exiting'
 	echo "ls ${dataDir}/${capturingKitProject}"
 	exit 1
 fi
 
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
-	batching="_chr"
+	batching='_chr'
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
 	then
@@ -239,7 +239,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
--p "resources_parameters.converted.csv" \
+-p 'resources_parameters.converted.csv' \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 --header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
