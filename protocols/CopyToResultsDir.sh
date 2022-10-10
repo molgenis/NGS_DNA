@@ -72,9 +72,9 @@ done
 printf "Copying variants vcf to results directory "
 # Copy variants vcf and tables to results directory
 rsync -a "${projectPrefix}.final.vcf.gz" "${projectResultsDir}/variants/"
-printf "."
+printf '.'
 rsync -a "${projectPrefix}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
-printf "."
+printf '.'
 
 
 echo "copy cnv results of Convading and XHMM and Manta"
@@ -85,21 +85,21 @@ do
 	then
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz" "${projectResultsDir}/variants/cnv/${sa}_candidateSV.vcf.gz"
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_candidateSV.vcf.gz.tbi"
-		printf "."
+		printf '.'
 	fi
 
 	if [ -f "${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz" ]
 	then
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz" "${projectResultsDir}/variants/cnv/${sa}_candidateSmallIndels.vcf.gz"
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSmallIndels.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_candidateSmallIndels.vcf.gz.tbi"
-		printf "."
+		printf '.'
 	fi
 
 	if [ -f "${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz" ]
 	then
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz" "${projectResultsDir}/variants/cnv/${sa}_diploidSV.vcf.gz"
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_diploidSV.vcf.gz.tbi"
-		printf "."
+		printf '.'
 	fi
 
 
@@ -108,7 +108,7 @@ do
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz" "${projectResultsDir}/variants/cnv//${sa}_candidateSV_VEP.vcf.gz"
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_candidateSV_VEP.vcf.gz.tbi"
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/candidateSV_VEP_summary.html" "${projectResultsDir}/variants/cnv/${sa}_candidateSV_VEP_summary.html"
-		printf "."
+		printf '.'
 	fi
 
 
@@ -117,7 +117,7 @@ do
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz" "${projectResultsDir}/variants/cnv//${sa}_diploidSV_VEP.vcf.gz"
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP.vcf.gz.tbi" "${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP.vcf.gz.tbi"
 		rsync -a "${intermediateDir}/Manta/${sa}/results/variants/diploidSV_VEP_summary.html" "${projectResultsDir}/variants/cnv/${sa}_diploidSV_VEP_summary.html"
-		printf "."
+		printf '.'
 	fi
 done
 printf '%s' " finished\n"
@@ -128,16 +128,16 @@ for sa in "${UNIQUESAMPLES[@]}"
 do
 
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz" "${projectResultsDir}/variants/"
-	printf "."
+	printf '.'
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
-	printf "."
+	printf '.'
 
 	if ls "${intermediateDir}/${sa}."*.coveragePerBase.txt 1> /dev/null 2>&1
 	then
 		for i in "${intermediateDir}/${sa}."*.coveragePerBase.txt
 		do
 			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerBase/"
-			printf "."
+			printf '.'
 		done
 
 	else
@@ -158,7 +158,7 @@ do
 		for i in "${intermediateDir}/${sa}."*.coveragePerTarget.txt
 		do
 			rsync -a "${i}" "${projectResultsDir}/coverage/CoveragePerTarget/"
-			printf "."
+			printf '.'
 		done
 	else
 		echo "coveragePerTarget skipped for sample: ${sa}"
@@ -174,7 +174,7 @@ printf "Copying QC report to results directory "
 # Copy QC report to results directory
 rsync -a "${intermediateDir}/${project}_multiqc_report.html" "${projectResultsDir}"
 rsync -av "${intermediateDir}/multiqc_data" "${projectResultsDir}/"
-printf "."
+printf '.'
 printf " finished\n"
 
 if [ ! -d "${logsDir}/${project}/" ]

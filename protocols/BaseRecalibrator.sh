@@ -35,8 +35,8 @@ array_contains () {
 
 for bamFile in "${sampleMergedBam[@]}"
 do
-	array_contains INPUTS "$bamFile" || INPUTS+=("-I $bamFile")    # If bamFile does not exist in array add it
-	array_contains INPUTBAMS "$bamFile" || INPUTBAMS+=("-I $bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${bamFile}" || INPUTS+=("-I ${bamFile}")    # If bamFile does not exist in array add it
+	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("-I ${bamFile}")    # If bamFile does not exist in array add it
 done
 
 makeTmpDir "${mergedBamRecalibratedTable}" "${intermediateDir}"
