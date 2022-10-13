@@ -19,7 +19,6 @@
 #string mantaVersion
 #string multiQCVersion
 #string ngsUtilsVersion
-#string picardVersion
 #string rVersion
 #string sambambaVersion
 #string samtoolsVersion
@@ -65,7 +64,6 @@ echo -e "report_header_info:
 	 - '': '${javaVersion}'
 	 - '': '${mantaVersion}'
 	 - '': '${ngsUtilsVersion}'
-	 - '': '${picardVersion}'
 	 - '': '${rVersion}'
 	 - '': '${sambambaVersion}'
 	 - '': '${samtoolsVersion}'

@@ -1,21 +1,20 @@
+#string gatkVersion
 #string tmpName
 #string dedupBam
 #string capturedIntervals
 #string capturedIntervals_nonAutoChrX
 #string indexFileDictionary
-#string sampleNameID
 #string intermediateDir
 #string whichSex
 #string tempDir
 #string checkSexMeanCoverage
-#string picardVersion
 #string dedupBamMetrics
 #string hsMetricsNonAutosomalRegionChrX
 #string project
 #string logsDir 
 #string groupname
 
-module load "${picardVersion}"
+module load "${gatkVersion}"
 
 if [[ "${capturedIntervals}" == *"ONCO_v"* || "${capturedIntervals}" == *"wgs"* || "${capturedIntervals}" == *"Targeted_v"* ]]
 then
@@ -33,7 +32,7 @@ else
 	if [[ "${lengthCap1}" -ne "${lengthCap2}" ]]
 	then
 		#Calculate coverage chromosome X
-		java -jar -XX:ParallelGCThreads=2 -Xmx2g "${EBROOTPICARD}/picard.jar" CalculateHsMetrics \
+		gatk --java-options "-XX:ParallelGCThreads=2 -Xmx2g" CollectHsMetrics \
 		INPUT="${dedupBam}" \
 		TARGET_INTERVALS="${capturedIntervals_nonAutoChrX}" \
 		BAIT_INTERVALS="${capturedIntervals_nonAutoChrX}" \
