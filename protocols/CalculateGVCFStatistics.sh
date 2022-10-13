@@ -37,7 +37,7 @@ module load "${gatkVersion}"
 module load "${ngsversion}"
 module list
 
-# Create string with input BAM files for Picard
+# Create string with input BAM files for gatk
 # This check needs to be performed because Compute generates duplicate values in array
 
 # THIS IS STILL BETA, needs an update once it (if it ever) is used

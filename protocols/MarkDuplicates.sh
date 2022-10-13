@@ -15,7 +15,7 @@
 #string intermediateDir
 #string flagstatMetrics
 
-#Load Picard module
+#Load sambamba module
 module load "${sambambaVersion}"
 module list
 

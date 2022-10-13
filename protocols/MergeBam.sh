@@ -36,7 +36,6 @@ tmpSampleMergedBamIdx="${MC_tmpFile}"
 module load "${sambambaVersion}"
 module list
 
-#Create string with input BAM files for Picard
 #This check needs to be performed because Compute generates duplicate values in array
 INPUTS=()
 INPUTBAMS=()
