@@ -1,7 +1,6 @@
 #Parameter mapping
 #string tmpName
 #string gatkVersion
-#string gatkJar
 #string tempDir
 #string intermediateDir
 #string indexFile
@@ -21,11 +20,10 @@ tmpSampleVariantsMergedSnpsFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called SNPs on
 
-java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar "${EBROOTGATK}/${gatkJar}" \
--T VariantFiltration \
+gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
 -R "${indexFile}" \
--o "${tmpSampleVariantsMergedSnpsFilteredVcf}" \
---variant "${sampleVariantsMergedSnpsVcf}" \
+-O "${tmpSampleVariantsMergedSnpsFilteredVcf}" \
+-V "${sampleVariantsMergedSnpsVcf}" \
 --filterExpression "QD < 2.0" \
 --filterName "filterQD_lt2.0" \
 --filterExpression "MQ < 25.0" \

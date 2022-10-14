@@ -5,7 +5,6 @@
 #string logsDir
 #string groupname
 #string gatkVersion
-#string gatkJar
 #string indexFile
 #string capturedIntervals
 #string projectVariantsMergedSortedGz
@@ -25,23 +24,21 @@ realSampleID="$(cat "${intermediateDir}/${sampleID}.txt")"
 realSampleID=$(basename "${realSampleID}")
 
 #select only Indels
-java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 -R "${indexFile}" \
--T SelectVariants \
---variant "${projectVariantsMergedSortedGz}" \
--o "${tmpSampleVariantsMergedIndelsVcf}" \
---selectTypeToInclude INDEL \
+-V "${projectVariantsMergedSortedGz}" \
+-O "${tmpProjectVariantsIndelsOnlyVcf}" \
+--select-type-to-include INDEL \
 -sn "${realSampleID}"
 
 mv -v "${tmpSampleVariantsMergedIndelsVcf}" "${sampleVariantsMergedIndelsVcf}"
 
 #Select SNPs and MNPs
-java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 -R "${indexFile}" \
--T SelectVariants \
---variant "${projectVariantsMergedSortedGz}" \
--o "${tmpSampleVariantsMergedSnpsVcf}" \
---selectTypeToExclude INDEL \
+-V "${projectVariantsMergedSortedGz}" \
+-O "${tmpProjectVariantsSnpsOnlyVcf}" \
+--select-type-to-exclude INDEL \
 -sn "${realSampleID}"
 
 mv -v "${tmpSampleVariantsMergedSnpsVcf}" "${sampleVariantsMergedSnpsVcf}"

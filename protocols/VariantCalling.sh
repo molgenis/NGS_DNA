@@ -2,7 +2,6 @@
 #string tmpName
 #string projectResultsDir
 #string gatkVersion
-#string gatkJar
 #string tempDir
 #string intermediateDir
 #string indexFile
@@ -70,7 +69,7 @@ fi
 
 ploidy='2'
 myBed="${capturedBatchBed}"
-if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
+if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq '0' ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"
 else
@@ -85,18 +84,14 @@ else
 		fi
 		ploidy=1	
 	fi
-
-	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx7g -jar \
-	"${EBROOTGATK}/${gatkJar}" \
-	-T HaplotypeCaller \
+	# shellcheck disable=SC2086 #${inputs} => gatk needs seperate strings, not one captured in quotes
+	gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx7g" HaplotypeCaller \
 	-R "${indexFile}" \
 	${inputs} \
-	-newQual \
-	--BQSR "${mergedBamRecalibratedTable}" \
-	--dbsnp "${dbSnp}" \
-	-o "${tmpSampleBatchVariantCalls}" \
+	-D "${dbSnp}" \
+	-O "${tmpSampleBatchVariantCalls}" \
 	-L "${myBed}" \
-	--emitRefConfidence GVCF \
+	-ERC GVCF \
 	-ploidy "${ploidy}"
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"

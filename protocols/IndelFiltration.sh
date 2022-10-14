@@ -1,16 +1,13 @@
 #Parameter mapping
 #string tmpName
 #string gatkVersion
-#string gatkJar
 #string tempDir
 #string intermediateDir
 #string indexFile
 #string sampleVariantsMergedIndelsVcf
 #string sampleVariantsMergedIndelsFilteredVcf
-#string tmpDataDir
 #string project
 #string logsDir
-#string groupname
 
 #Load GATK module
 module load "${gatkVersion}"
@@ -20,11 +17,10 @@ tmpSampleVariantsMergedIndelsFilteredVcf="${MC_tmpFile}"
 
 #Run GATK VariantFiltration to filter called Indels on
 
-java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar "${EBROOTGATK}/${gatkJar}" \
--T VariantFiltration \
+gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx4g" VariantFiltration \
 -R "${indexFile}" \
--o "${tmpSampleVariantsMergedIndelsFilteredVcf}" \
---variant "${sampleVariantsMergedIndelsVcf}" \
+-O "${tmpSampleVariantsMergedIndelsFilteredVcf}" \
+-V "${sampleVariantsMergedIndelsVcf}" \
 --filterExpression "QD < 2.0" \
 --filterName "filterQD" \
 --filterExpression "SOR > 10.0" \

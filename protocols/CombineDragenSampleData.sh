@@ -1,17 +1,14 @@
 #Parameter mapping
 #string logsDir
 #string tmpDirectory
-#string seqType
 #string intermediateDir
 #string project
 #string groupname
 #string tmpName
-#string projectResultsDir
 #string tempDir
-#string gatkJar
 #list sampleBatchGenotypedVariantCalls
 #string projectBatchGenotypedVariantCalls
-
+#string indexFileDictionary
 
 module load "${gatkVersion}"
 
@@ -33,15 +30,13 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 for extId in "${sampleBatchGenotypedVariantCalls[@]}"
 do
-	array_contains INPUTS "--variant ${sampleId}" || INPUTS+=("--variant ${sampleId}") 	# If bamFile does not exist in array add it
+	array_contains INPUTS "-I ${sampleId}" || INPUTS+=("-I ${sampleId}") 	# If bamFile does not exist in array add it
 done
-
-java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx7g -jar \
-"${EBROOTGATK}/${gatkJar}" \
--T CombineVariants \
--R "${indexFile}" \
+# shellcheck disable=SC2086 #${INPUTS} => gatk needs seperate strings, not one captured in quotes
+gatk --java-options "-Xmx7g" MergeVcfs \
 ${INPUTS[@]} \
-"${tmpProjectBatchGenotypedVariantCalls}"
+-D "${indexFileDictionary}" \
+-O "${tmpProjectBatchGenotypedVariantCalls}"
 
 mv -v "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
 

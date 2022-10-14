@@ -33,4 +33,3 @@ mv "${tmpProjectFinalVcf}" "${projectFinalVcf}"
 echo "compressing ${projectFinalVcf}"
 bgzip -c "${projectFinalVcf}" > "${projectFinalVcf}.gz"
 tabix -p vcf "${projectFinalVcf}.gz"
-
