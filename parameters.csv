@@ -66,7 +66,7 @@ hpoDir,${dataDir}/HPO/
 sequenomDir,${dataDir}/Sequenom/
 tmpDataDir,${groupDir}/${tmpName}/
 tempDir,${tmpDataDir}/temp/
-tmpDirectory,${tmpDataDir}/tmp/
+tmpDirectory,${tmpDataDir}/tmp/NGS_DNA/
 logsDir,${tmpDataDir}/logs
 
 ##### RAW DATA FILES/DIRS ####
@@ -104,7 +104,7 @@ capturedExomeIntervals,${dataDir}/UMCG/All_Exon_v1/${indexFileID}/${nameBed}.int
 capturedExomeBed,${dataDir}/UMCG/All_Exon_v1/${indexFileID}/${nameBed}.bed
 
 #### Projects ####
-projectDir,${tmpDataDir}/projects/${project}/${runid}
+projectDir,${tmpDataDir}projects/NGS_DNA/${project}/${runid}
 intermediateDir,${tmpDirectory}/${project}/${runid}/
 projectPrefix,${intermediateDir}/${project}
 projectJobsDir,${projectDir}/jobs/
