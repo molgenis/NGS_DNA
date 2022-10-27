@@ -1,6 +1,7 @@
 #Parameter mapping
 #string tmpName
 #string gatkVersion
+#string rVersion
 #string indexFile
 #string tempDir
 #string gcBiasMetrics
@@ -8,9 +9,11 @@
 #string logsDir 
 #string groupname
 #string intermediateDir
+#string dedupBam
 
 #Load gatk module
 module load "${gatkVersion}"
+module load "${rVersion}"
 module list
 
 makeTmpDir "${gcBiasMetrics}" "${intermediateDir}"

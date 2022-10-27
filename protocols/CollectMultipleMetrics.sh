@@ -1,12 +1,14 @@
 #Parameter mapping
 #string tmpName
 #string gatkVersion
+#string rVersion
 #string collectMultipleMetricsJar
 #string dedupBam
 #string dedupBamMetrics
 #string indexFile
 #string collectBamMetricsPrefix
 #string tempDir
+#string seqType
 #string project
 #string logsDir 
 #string groupname
@@ -14,6 +16,7 @@
 
 #Load gatk module
 module load "${gatkVersion}"
+module load "${rVersion}"
 
 makeTmpDir "${collectBamMetricsPrefix}" "${intermediateDir}"
 tmpCollectBamMetricsPrefix="${MC_tmpFile}"
