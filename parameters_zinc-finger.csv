@@ -1,6 +1,5 @@
-queue,ll
-prmName,prm03
-prmHost,boxy.hpc.rug.nl
+prmName,prm05
+prmHost,coenzyme.umcg.nl
 root,/
 appsDir,${root}/apps/
 toolChain,foss-2015b

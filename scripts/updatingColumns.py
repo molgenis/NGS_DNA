@@ -8,11 +8,11 @@ updatedSamplesheet=sys.argv[1]+'.tmp'
 teller=0
 columnBool='false'
 with open(updatedSamplesheet, 'w') as out:
-        for row in reader:
+	for row in reader:
 		if columnBool == 'true':
 			break
 		else:
-                        if columnName in row.keys():
+			if columnName in row.keys():
 				print columnName + " is already there, skipped"
 				columnBool='true'
 				copyfile(sys.argv[1], updatedSamplesheet)	

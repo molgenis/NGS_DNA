@@ -13,7 +13,6 @@
 #string fromCADDMerged
 #string vcfAnnoConf
 #string caddVersion
-#string exacAnnotation
 #string gonlAnnotation
 #string gnomADGenomesAnnotation
 #string gnomADExomesAnnotation
@@ -114,17 +113,11 @@ fi
 	## write first part of conf file
 	cat >> "${vcfAnnoConf}" << HERE
 
-#[[annotation]]
-#file="${exacAnnotation}"
-#fields=["AF","AC_Het","AC_Hom"]
-#names=["EXAC_AF","EXAC_AC_HET","EXAC_AC_HOM"]
-#ops=["self","self","self"]
-
 [[annotation]]
-file="${gnomADExomesAnnotation}/gnomad.exomes.r2.0.2.sites.normalized.vcf.gz"
-fields=["Hom","Hemi", "AN","AF_POPMAX","segdup","AF_POPMAX"]
-names=["gnomAD_Hom","gnomAD_Hemi","gnomAD_AN","gnomAD_exome_AF_MAX","gnomAD_exome_RF_Filter","EXAC_AF"]
-ops=["self","self","first","self","self","self"]
+file="${gnomADExomesAnnotation}/gnomad.exomes.r2.1.1.sites.vcf.normalized.vcf.gz"
+fields=["nhomalt", "AN","AF_popmax","segdup","AF_popmax"]
+names=["gnomAD_Hom","gnomAD_AN","gnomAD_exome_AF_MAX","gnomAD_exome_RF_Filter","EXAC_AF"]
+ops=["self","first","self","self","self"]
 
 [[annotation]]
 file="${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz"
@@ -243,8 +236,7 @@ HERE
 	echo "starting to annotate with vcfanno"
 	vcfanno_linux64 -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 
-	mv "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
-        echo "mv ${tmpProjectBatchGenotypedAnnotatedVariantCalls} ${projectBatchGenotypedAnnotatedVariantCalls}" 
+	mv -v "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
 
 else
 	echo "${projectBatchGenotypedVariantCalls} does not exist, skipped"

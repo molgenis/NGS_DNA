@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -39,5 +37,4 @@ java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx4g -jar "${EBROOT
 --filterExpression "ReadPosRankSum < -8.0" \
 --filterName "filterReadPosRankSum_lt-8.0"
 
-mv "${tmpSampleVariantsMergedSnpsFilteredVcf}" "${sampleVariantsMergedSnpsFilteredVcf}"
-echo "moved ${tmpSampleVariantsMergedSnpsFilteredVcf} ${sampleVariantsMergedSnpsFilteredVcf}"
+mv -v "${tmpSampleVariantsMergedSnpsFilteredVcf}" "${sampleVariantsMergedSnpsFilteredVcf}"

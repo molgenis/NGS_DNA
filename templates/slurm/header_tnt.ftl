@@ -29,6 +29,8 @@ fi
 declare MC_jobScript="${taskId}.sh"
 declare MC_jobScriptSTDERR="${taskId}.err"
 declare MC_jobScriptSTDOUT="${taskId}.out"
+declare MC_jobName="${taskId}"
+declare MC_project="${project}"
 
 #
 # File to indicate failure of a complete workflow in
@@ -37,7 +39,13 @@ declare MC_jobScriptSTDOUT="${taskId}.out"
 logsDirectory="${logsDir}/${project}/"
 mydate_start=$(date +"%Y-%m-%dT%H:%M:%S+0200")
 export mydate_start
-
+#
+###
+#####
+####### no more freemarker from here ################
+#####
+###
+#
 <#noparse>
 runName=$(basename $(cd ../ && pwd ))
 MC_failedFile="${logsDirectory}/${runName}.pipeline.failed"
@@ -60,7 +68,7 @@ function errorExitAndCleanUp() {
 	local exitStatus=${3:-$?}
 	local executionHost=${SLURMD_NODENAME:-$(hostname)}
 	local errorMessage="FATAL: Trapped ${signal} signal in ${MC_jobScript} running on ${executionHost}. Exit status code was ${exitStatus}."
-	if [ $signal == 'ERR' ]; then
+	if [ "${signal}" == 'ERR' ]; then
 		local errorMessage="FATAL: Trapped ${signal} signal on line ${problematicLine} in ${MC_jobScript} running on ${executionHost}. Exit status code was ${exitStatus}."
 	fi
 	local errorMessage=${4:-"${errorMessage}"} # Optionally use custom error message as third argument.
@@ -68,19 +76,19 @@ function errorExitAndCleanUp() {
 	echo "${errorMessage}"
 	echo "${MC_doubleSeperatorLine}"                > ${MC_failedFile}
 	echo "${errorMessage}"                         >> ${MC_failedFile}
-	if curl -s -f -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
+	if CURLRESPONSE="$(curl -s -S -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login 2>&1)"
 	then
-		CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-		TOKEN=${CURLRESPONSE:10:32}
-
-		if curl -s -f -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/status
+		TOKEN=$(echo "${CURLRESPONSE}" | awk 'BEGIN {FS=":"} $1 ~ /token/ {print $2}' | awk 'BEGIN {FS="\""}{print $2}')
+		if CURLRESPONSE="$(curl -s -S -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "Error" "https://${MOLGENISSERVER}/api/v1/status_jobs/${MC_project}_${MC_jobName}/status" 2>&1)"
 		then
-			echo "have set Error status"
+			echo "INFO: T&T set status to 'Error'."
 		else
-			echo "cannot set Error status"
+			echo "ERROR: ${CURLRESPONSE:-unknown error}."
 		fi
+	else
+		echo "ERROR: ${CURLRESPONSE:-unknown error}."
 	fi
-<#noparse>
+
 	if [ -f "${MC_jobScriptSTDERR}" ]; then
 		echo "${MC_singleSeperatorLine}"           >> ${MC_failedFile}
 		printf "${format}" "${MC_jobScriptSTDERR}" >> ${MC_failedFile}
@@ -142,20 +150,23 @@ trap 'errorExitAndCleanUp EXIT NA $?' EXIT
 trap 'errorExitAndCleanUp ERR  $LINENO $?' ERR
 
 touch ${MC_jobScript}.started
-if curl -f -s -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login
+if CURLRESPONSE="$(curl -s -S -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" "https://${MOLGENISSERVER}/api/v1/login" 2>&1)"
 then
-	CURLRESPONSE=$(curl -H "Content-Type: application/json" -X POST -d "{"username"="${USERNAME}", "password"="${PASSWORD}"}" https://${MOLGENISSERVER}/api/v1/login)
-	TOKEN=${CURLRESPONSE:10:32}
+	TOKEN=$(echo "${CURLRESPONSE}" | awk 'BEGIN {FS=":"} $1 ~ /token/ {print $2}' | awk 'BEGIN {FS="\""}{print $2}')
+	echo "INFO: login to T&T server ${MOLGENISSERVER} successful and retrieved token"
 
-	if curl -f -s -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/</#noparse>${project}_${taskId}/started_date
-	then
-		echo "set"
-	else
-		echo "not set"
-	fi
+		if CURLRESPONSE="$(curl -s -S -H "Content-Type:application/json" -H "x-molgenis-token:${TOKEN}" -X PUT -d "'${mydate_start}'" https://${MOLGENISSERVER}/api/v1/status_jobs/${MC_project}_${MC_jobName}/started_date 2>&1)"
+		then
+			echo "INFO: T&T set finished date to '${mydate_start}'."
+		else
+			echo "ERROR: ${CURLRESPONSE:-unknown error}."
+		fi
+else
+	echo "ERROR: ${CURLRESPONSE:-unknown error}."
 fi
 #
 # When dealing with timing / synchronization issues of large parallel file systems,
 # you can uncomment the sleep statement below to allow for flushing of IO buffers/caches.
 #
 #sleep 10
+</#noparse>

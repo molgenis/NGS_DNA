@@ -4,7 +4,7 @@ import csv
 reader = csv.DictReader(open(sys.argv[1], "rb"), delimiter=",")
 project=open("project.txt.tmp","w")
 build=open("build.txt.tmp","w")
-species=open("species.txt.tmp","w")
+capturingKit=open("capturingKit.txt.tmp","w")
 sampleType=open("sampleType.txt.tmp","w")
 externalSampleID=open("externalSampleIDs.txt.tmp","w")
 
@@ -14,12 +14,9 @@ for row in reader:
 		if "project" in row:
 			if k == "project":
 				project.write(v+'\n')
-		if "build" in row:
-			if k == "build":
-				build.write(v+'\n')
-		if "species" in row:
-			if k == "species":
-				species.write(v+'\n')
+		if "capturingKit" in row:
+			if k == "capturingKit":
+				capturingKit.write(v+'\n')
 		if "sampleType" in row:
 			if k == "sampleType":
 				sampleType.write(v+'\n')
@@ -32,8 +29,9 @@ for row in reader:
 			print "no hpo id's"
 			out.write(','.join(row.keys())+",hpoIDs"+'\n')
 			out.write(','.join(row.values())+","+'\n')
-                        count+=1
+			count+=1
 			hpoID="no"
 	elif hpoID == "no":
 		out.write(','.join(row.values())+","+'\n')
 			
+

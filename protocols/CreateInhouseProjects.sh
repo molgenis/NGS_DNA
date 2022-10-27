@@ -9,8 +9,8 @@
 #string projectResultsDir
 #string projectQcDir
 #string computeVersion
-#string group_parameters
 #string groupname
+#string groupDir
 #string runid
 #list sequencingStartDate
 #list sequencer
@@ -28,7 +28,6 @@
 #string environment_parameters
 #string ngsversion
 #string ngsUtilsVersion
-
 #string dataDir
 
 #string coveragePerBaseDir
@@ -42,17 +41,17 @@ module load "${ngsUtilsVersion}"
 module load "${ngsversion}"
 
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    rejected="false"
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-		rejected="true"
-                continue
-        fi
-    done
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	rejected="false"
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			rejected="true"
+			continue
+		fi
+	done
 }
 
 #
@@ -63,14 +62,11 @@ mkdir -p "${projectRawTmpDataDir}"
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectLogsDir}"
 mkdir -p "${intermediateDir}"
-mkdir -p "${projectResultsDir}/alignment/"
+mkdir -p "${projectResultsDir}/"{alignment,general}
+mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female,unknown}
 mkdir -p "${projectResultsDir}/qc/statistics/"
-mkdir -p "${projectResultsDir}/variants/cnv/"
-mkdir -p "${projectResultsDir}/variants/gVCF/"
-mkdir -p "${projectResultsDir}/variants/GAVIN/"
-mkdir -p "${projectResultsDir}/general"
+mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
 mkdir -p "${projectQcDir}"
-mkdir -p "${intermediateDir}/GeneNetwork/"
 mkdir -p -m 2770 "${logsDir}/${project}/"
 #
 # Create symlinks to the raw data required to analyse this project.
@@ -120,8 +116,8 @@ do
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5"
 		else
 			array_contains arrayRejected "${barcode[samplenumber]}"
-                        if [ "${rejected}" == "false" ]
-                        then
+			if [ "${rejected}" == "false" ]
+			then
 
 			ln -sf "../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" \
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz"
@@ -133,7 +129,7 @@ do
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5"
 			else
 				echo -e "\n############ barcode: ${barcode[samplenumber]} IS REJECTED#######################\n"
-                        fi
+			fi
 		fi
 	fi
 done
@@ -141,11 +137,10 @@ done
 #
 # Create subset of samples for this project.
 #
-extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
+cp "${worksheet}" "${projectJobsDir}/${project}.csv"
 sampleSheetCsv="${projectJobsDir}/${project}.csv"
 perl -pi -e 's/\r(?!\n)//g' "${sampleSheetCsv}"
 barcodesGrepCommand=""
-
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
 #
@@ -171,7 +166,7 @@ then
 			barcodesGrepCommand+="${line}"
 		fi
 		teller=$((teller+1))
-	done<rejectedBarcodes.txt
+	done<"rejectedBarcodes.txt"
 
 	echo "${barcodesGrepCommand}"
 
@@ -183,9 +178,9 @@ then
 	fi
 fi
 
-if [[ -f .compute.properties ]]
+if [[ -f '.compute.properties' ]]
 then
-	rm .compute.properties
+	rm '.compute.properties'
 fi
 
 batching="_small"
@@ -195,14 +190,14 @@ captKit=$(echo "${capturingKitProject}" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
-	echo "Bedfile does not exist! Exiting"
+	echo 'Bedfile does not exist! Exiting'
 	echo "ls ${dataDir}/${capturingKitProject}"
 	exit 1
 fi
 
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
-	batching="_chr"
+	batching='_chr'
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
 	then
@@ -213,15 +208,15 @@ then
 elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
 then
 	batching="_chr"
-        resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-        then
-                echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
+	then
+		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
-                exit 1
-        fi
+		exit 1
+	fi
 fi
 
 if [ "${captKit}" == *"ONCO"* ]
@@ -244,8 +239,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
 -p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
--p "${group_parameters}" \
--p "resources_parameters.converted.csv" \
+-p 'resources_parameters.converted.csv' \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
 --header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
@@ -258,6 +252,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
+groupDir=${groupDir};\
 groupname=${groupname};\
 runid=${runid}"
 

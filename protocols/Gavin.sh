@@ -41,8 +41,8 @@ module load "${bcfToolsVersion}"
 module load "${ngsUtilsVersion}"
 
 touch "${intermediateDir}/emptyFile.tsv"
-
-bcftools norm -f "${indexFile}" -m -any "${sampleFinalVcf}" > "${sampleFinalVcf}.splitPerAllele.vcf"
+bcftools annotate -x 'FORMAT/AF,FORMAT/F1R2,FORMAT/F2R1,FORMAT/GP' "${sampleFinalVcf}" > "${sampleFinalVcf}.tmp"
+bcftools norm -f "${indexFile}" -m -any "${sampleFinalVcf}.tmp" > "${sampleFinalVcf}.splitPerAllele.vcf"
 
 java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
 -i "${sampleFinalVcf}.splitPerAllele.vcf" \

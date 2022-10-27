@@ -8,7 +8,7 @@
 #string projectPrefix
 #string intermediateDir
 #list externalSampleID
-#string	project
+#string project
 
 #string ngsUtilsVersion
 
@@ -20,22 +20,22 @@ module list
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking=${2}
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 INPUTS=()
 for sampleID in "${externalSampleID[@]}"
 do
-        array_contains INPUTS "${sampleID}" || INPUTS+=("${sampleID}")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${sampleID}" || INPUTS+=("${sampleID}")    # If bamFile does not exist in array add it
 done
 
 filter="AC,AF,AN,DP,FS,MQ,MQRankSum,QD,CADD,CADD_SCALED,gnomAD_exome_AF,CGD_AgeGroup,CGD_Condition,CGD_Inheritance,CGD_Manfest_cat,CGD_invent_cat,gnomAD_genome_AF_MAX,ANN,Samples"
@@ -53,8 +53,7 @@ do
 	-filter "${filter}" \
 	-sample "${externalID}"
 
-	mv "${tmpVcfTable}" "${vcfTable}"
-	echo "mv ${tmpVcfTable} ${vcfTable}"
+	mv -v "${tmpVcfTable}" "${vcfTable}"
 done
 
 ALLSAMPLESINONE=$(echo ${AS%?})
@@ -66,5 +65,4 @@ ALLSAMPLESINONE=$(echo ${AS%?})
 -filter "${filter}" \
 -sample "${ALLSAMPLESINONE}"
 
-mv "${tmpVariantsFinalProjectVcfTable}" "${variantsFinalProjectVcfTable}"
-echo "moved ${tmpVariantsFinalProjectVcfTable} ${variantsFinalProjectVcfTable}"
+mv -v "${tmpVariantsFinalProjectVcfTable}" "${variantsFinalProjectVcfTable}"

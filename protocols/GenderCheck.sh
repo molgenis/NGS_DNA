@@ -10,14 +10,10 @@
 #string Gender
 #string tempDir
 #string checkSexMeanCoverage
-#string picardJar
 #string hsMetricsNonAutosomalRegionChrX
-#string	project
+#string project
 #string logsDir 
 #string groupname
-#string picardVersion
-
-module load "${picardVersion}"
 
 if [ -f "${dedupBamMetrics}.noChrX" ]
 then
@@ -46,16 +42,16 @@ if ($0 ~ /^#/){
 	avgCov=$(awk '{print $1}' "${checkSexMeanCoverage}")
 
 	if [[ "${avgCov}" == .* ]]
-        then
+	then
 		printf "There is no autosomal region, a gender cannot be determined\n" > ${whichSex}
-                printf "Unknown\n" >> ${whichSex}
+		printf "Unknown\n" >> ${whichSex}
 
-        elif [[ "${avgCov}" < 1 ]]
-        then
+	elif [[ "${avgCov}" < 1 ]]
+	then
 		echo "${avgCov} of autosomes is lower than 1, skipped"
-                printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
-                printf "Unknown\n" >> "${whichSex}"
-        else
+		printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
+		printf "Unknown\n" >> "${whichSex}"
+	else
 
 		#select only the mean target coverage of chromosome X
 		awk '{
@@ -141,5 +137,4 @@ then
 		echo -e "ALARM!\nFor sample ${sampleName%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${runNumber}.pipeline.gendercheckfailed"
 	fi
 fi
-echo "moving ${whichSex} to ${projectResultsDir}/general/"
-mv "${whichSex}" "${projectResultsDir}/general/"
+mv -v "${whichSex}" "${projectResultsDir}/general/"

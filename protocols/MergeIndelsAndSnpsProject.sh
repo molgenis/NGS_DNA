@@ -3,26 +3,24 @@
 #string gatkVersion
 #string gatkJar
 #string indexFile
-
-
 #string projectPrefix
 #string logsDir 
 #string groupname
 #string intermediateDir
-#string	project
+#string project
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 #Load GATK module
@@ -32,7 +30,7 @@ module list
 INPUTS=()
 for externalID in "${externalSampleID[@]}"
 do
-        array_contains INPUTS "--variant ${intermediateDir}/${externalID}.final.vcf" || INPUTS+=("--variant ${intermediateDir}/${externalID}.final.vcf")    # If bamFile does not exist in array add it
+	array_contains INPUTS "--variant ${intermediateDir}/${externalID}.final.vcf" || INPUTS+=("--variant ${intermediateDir}/${externalID}.final.vcf")
 done
 
 #merge all samples into one big vcf

@@ -13,7 +13,7 @@
 #string sampleBatchVariantCallsIndex
 #string tmpDataDir
 #string externalSampleID
-#string	project
+#string project
 #string logsDir
 #string groupname
 #string dedupBam
@@ -21,16 +21,16 @@
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking=$2
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 #Load GATK module
@@ -47,7 +47,7 @@ bams=()
 INPUTS=()
 for sampleID in "${externalSampleID[@]}"
 do
-        array_contains INPUTS "${sampleID}" || INPUTS+=("$sampleID")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${sampleID}" || INPUTS+=("$sampleID")	# If bamFile does not exist in array add it
 done
 baitBatchLength=""
 sex=$(less "${projectResultsDir}/general/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
@@ -68,33 +68,22 @@ else
 	genderCheck="Male"
 fi
 
-ploidy=""
+ploidy='2'
 myBed="${capturedBatchBed}"
 if [[ ! -f "${capturedBatchBed}" ||  ${baitBatchLength} -eq 0 ]]
 then
 	echo "skipped ${capturedBatchBed}, because the batch is empty or does not exist"
 else
-	if [ "${genderCheck}" == "Female" ]
+	if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
 	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
+		if [ "${genderCheck}" == "Female" ]
 		then
-			echo -e "Female, chrY => ploidy=1\nbedfile=${femaleCapturedBatchBed}"
-			ploidy=1
+			echo "female, Y"
 			myBed="${femaleCapturedBatchBed}"
 		else
-			echo -e "Female, autosomal or chrX ==> ploidy=2"
-			ploidy=2
+			echo "male, Y"
 		fi
-	elif [[ "${genderCheck}" == "Male" ]]
-	then
-		if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed || "${capturedBatchBed}" == *batch-Xnp.bed ]]
-		then
-			ploidy=1
-			echo -e "Male, chrY or chrXNonPar ==> ploidy=1"
-		else
-			ploidy=2
-			echo -e "Male, autosomal or chrXPar ==> ploidy=2"
-		fi
+		ploidy=1	
 	fi
 
 	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx7g -jar \
@@ -113,8 +102,8 @@ else
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
 	if [ -f "${tmpSampleBatchVariantCalls}" ]
 	then
-		mv "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
-		mv "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
+		mv -v "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
+		mv -v "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
 
 	else
 		echo "ERROR: output file is missing"

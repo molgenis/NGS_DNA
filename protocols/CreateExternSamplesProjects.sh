@@ -19,6 +19,7 @@
 #string group_parameters
 #string environment_parameters
 #string groupname
+#string sampleSize
 
 #string mainParameters
 #string worksheet
@@ -53,13 +54,11 @@ mkdir -p "${projectRawTmpDataDir}"
 mkdir -p "${projectJobsDir}"
 mkdir -p "${projectLogsDir}"
 mkdir -p "${intermediateDir}"
-mkdir -p "${projectResultsDir}/alignment/"
+mkdir -p "${projectResultsDir}/"{alignment,general}
+mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female}
 mkdir -p "${projectResultsDir}/qc/statistics/"
-mkdir -p "${projectResultsDir}/variants/cnv/"
-mkdir -p "${projectResultsDir}/variants/gVCF/"
-mkdir -p "${projectResultsDir}/variants/GAVIN/"
+mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
 mkdir -p "${projectQcDir}"
-mkdir -p "${intermediateDir}/GeneNetwork/"
 mkdir -p -m 2770 "${logsDir}/${project}/"
 
 rocketPoint=$(pwd)
@@ -129,27 +128,33 @@ then
 	echo "Bedfile does not exist! Exiting"
         exit 1
 fi
-if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"wgs"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
-	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	batching="_chr"
-        if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
-        then
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
-                exit 1
-        fi
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
+		exit 1
+	fi
+elif [[ "${capturingKitProject,,}" == *"wgs"* ]]
+then
+	batching="_chr"
+	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
 	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
-        then
+	then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
-                exit 1
-        fi
+		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
+		exit 1
+	fi
 fi
 
 if [ -f ".compute.properties" ];
 then
-     rm "../.compute.properties"
+	rm "../.compute.properties"
 fi
 
 module load "${computeVersion}"
@@ -172,4 +177,5 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
+sampleSize=${sampleSize};\
 groupname=${groupname}"

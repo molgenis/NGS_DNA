@@ -16,4 +16,4 @@ with open(sys.argv[1]) as inf:
 #	print(i,my_dict[i])
 for k in my_dict:
 	data = my_dict[k]
-	print k+"^"+','.join(data)
+	print(k+"^"+','.join(data))

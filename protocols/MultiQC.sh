@@ -6,13 +6,11 @@
 #string logsDir
 #string groupname
 #string intermediateDir
-
 #string bedToolsVersion
 #string bwaVersion
 #string computeVersion
 #string caddVersion
 #string convadingVersion
-#string cutadaptVersion
 #string fastqcVersion
 #string gatkVersion
 #string gavinPlusVersion
@@ -21,27 +19,20 @@
 #string mantaVersion
 #string multiQCVersion
 #string ngsUtilsVersion
-#string perlPlusVersion
-#string plink1Version
-#string plink2Version
-#string plinkSeqVersion
-#string picardVersion
-#string pythonVersion
 #string rVersion
 #string sambambaVersion
 #string samtoolsVersion
 #string seqTkVersion
 #string snpEffVersion
 #string htsLibVersion
-#string tabixVersion
 #string vcfAnnoVersion
-#string vepVersion
-#string verifyBamIDVersion
-#string xhmmVersion
-#string hpoVersion
 #string projectResultsDir
 #string ngsversion
 #string capturingKit
+#string runDateInfoFile
+#list externalSampleID
+#list capturingKit
+#list sequencingStartDate
 
 
 #string runDateInfoFile
@@ -61,38 +52,26 @@ echo -e "report_header_info:
     - '' : ''
     - Used toolversions: ' '
     - '' : ''
-    - '': '${bedToolsVersion}'
-    - '': '${bwaVersion}'
-    - '': '${computeVersion}'
-    - '': '${caddVersion}'
-    - '': '${convadingVersion}'
-    - '': '${cutadaptVersion}'
-    - '': '${fastqcVersion}'
-    - '': '${gatkVersion}'
-    - '': '${gavinPlusVersion}'
-    - '': '${iolibVersion}'
-    - '': '${javaVersion}'
-    - '': '${mantaVersion}'
-    - '': '${ngsUtilsVersion}'
-    - '': '${perlPlusVersion}'
-    - '': '${plink1Version}'
-    - '': '${plink2Version}'
-    - '': '${plinkSeqVersion}'
-    - '': '${picardVersion}'
-    - '': '${pythonVersion}'
-    - '': '${rVersion}'
-    - '': '${sambambaVersion}'
-    - '': '${samtoolsVersion}'
-    - '': '${seqTkVersion}'
-    - '': '${snpEffVersion}'
-    - '': '${htsLibVersion}'
-    - '': '${tabixVersion}'
-    - '': '${vepVersion}'
-    - '': '${vcfAnnoVersion}'
-    - '': '${verifyBamIDVersion}'
-    - '': '${xhmmVersion}'
-    - '': '${hpoVersion}'
-    - '': '${multiQCVersion}'
+	 - '': '${bedToolsVersion}'
+	 - '': '${bwaVersion}'
+	 - '': '${computeVersion}'
+	 - '': '${caddVersion}'
+	 - '': '${convadingVersion}'
+	 - '': '${fastqcVersion}'
+	 - '': '${gatkVersion}'
+	 - '': '${gavinPlusVersion}'
+	 - '': '${iolibVersion}'
+	 - '': '${javaVersion}'
+	 - '': '${mantaVersion}'
+	 - '': '${ngsUtilsVersion}'
+	 - '': '${rVersion}'
+	 - '': '${sambambaVersion}'
+	 - '': '${samtoolsVersion}'
+	 - '': '${seqTkVersion}'
+	 - '': '${snpEffVersion}'
+	 - '': '${htsLibVersion}'
+	 - '': '${vcfAnnoVersion}'
+	 - '': '${multiQCVersion}'
     - '' : ''
     - pipeline description : ''
     - Manual : ''
@@ -143,8 +122,7 @@ cp "${projectResultsDir}/qc/statistics/"* "${multiQCdir}"
 
 multiqc -c "${intermediateDir}/${project}.multiqc_config.yaml" -f "${multiQCdir}" ${projectResultsDir}/qc/*_fastqc.zip -o "${intermediateDir}"
 
-mv "${intermediateDir}/multiqc_report.html" "${intermediateDir}/${project}_multiqc_report.html"
-echo "moved ${intermediateDir}/multiqc_report.html ${intermediateDir}/${project}_multiqc_report.html"
+mv -v "${intermediateDir}/multiqc_report.html" "${intermediateDir}/${project}_multiqc_report.html"
 
 #create ChronQC samplesheet
 echo -e "Sample,Run,Date" > ${runDateInfoFile}

@@ -11,7 +11,7 @@
 #string sampleVariantsMergedIndelsFilteredVcf
 #string sampleFinalVcf
 #string intermediateDir
-#string	project
+#string project
 
 #Load GATK module
 module load "${gatkVersion}"
@@ -28,7 +28,6 @@ java -Xmx3g -jar "${EBROOTGATK}/${gatkJar}" \
 --variant "${sampleVariantsMergedIndelsFilteredVcf}" \
 --genotypemergeoption UNSORTED \
 -o "${tmpSampleFinalVcf}"
-
 
 echo "##FastQ_Barcode=${barcode}" > "${tmpSampleFinalVcf}.barcode.txt"
 

@@ -1,7 +1,5 @@
 #Parameter mapping
 #string tmpName
-
-
 #string gatkVersion
 #string gatkJar
 #string tempDir
@@ -12,7 +10,7 @@
 #string projectBatchGenotypedVariantCalls
 #string project
 #string projectBatchCombinedVariantCalls
-#list sampleBatchVariantCalls
+#list variantCalls
 #string tmpDataDir
 #string projectJobsDir
 #string logsDir
@@ -20,16 +18,16 @@
 
 #Function to check if array contains value
 array_contains () {
-    local array="$1[@]"
-    local seeking="${2}"
-    local in=1
-    for element in "${!array-}"; do
-        if [[ "${element}" == "${seeking}" ]]; then
-            in=0
-            break
-        fi
-    done
-    return "${in}"
+	local array="$1[@]"
+	local seeking="${2}"
+	local in=1
+	for element in "${!array-}"; do
+		if [[ "${element}" == "${seeking}" ]]; then
+			in=0
+			break
+		fi
+	done
+	return "${in}"
 }
 
 makeTmpDir "${projectBatchGenotypedVariantCalls}"
@@ -39,30 +37,18 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 module load "${gatkVersion}"
 module list
 
-SAMPLESIZE=$(cat "${projectJobsDir}/${project}.csv" | wc -l)
-numberofbatches=$(("${SAMPLESIZE}" / 200))
+
 ALLGVCFs=()
 
-if [ "${SAMPLESIZE}" -gt 200 ]
-then
-	for b in $(seq 0 "${numberofbatches}")
-	do
-		if [ -f "${projectBatchCombinedVariantCalls}".$b ]
-		then
-			ALLGVCFs+=(--variant "${projectBatchCombinedVariantCalls}"."${b}")
-		fi
-	done
-else
-	for sbatch in "${sampleBatchVariantCalls[@]}"
-        do
-		if [ -f "${sbatch}" ]
-		then
-			array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant $sbatch")
-		fi
-        done
-fi 
-gvcfSize=${#ALLGVCFs[@]}
-if [ ${gvcfSize} -ne 0 ]
+for sbatch in "${variantCalls[@]}"
+do
+	if [ -f "${sbatch}" ]
+	then
+		array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant ${sbatch}")
+	fi
+done
+ 
+if [ "${#ALLGVCFs[@]}" -ne 0 ]
 then
 java -Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
 	"${EBROOTGATK}/${gatkJar}" \
@@ -73,8 +59,7 @@ java -Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
 	-o "${tmpProjectBatchGenotypedVariantCalls}" \
 	${ALLGVCFs[@]} 
 
-	mv "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
-	echo "moved ${tmpProjectBatchGenotypedVariantCalls} to ${projectBatchGenotypedVariantCalls} "
+	mv -v "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
 else
 	echo ""
 	echo "there is nothing to genotype, skipped"

@@ -16,6 +16,8 @@
 #string coveragePerBaseDir
 #string coveragePerTargetDir
 #string ngsUtilsVersion
+#string Gender
+#string projectResultsDir
 
 module load "${gatkVersion}"
 module load "${ngsUtilsVersion}"
@@ -25,6 +27,9 @@ bedfileRaw=$(basename "${capturingKit}")
 if [[ "${bedfileRaw}" =~ "QXT" ]]
 then
 	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,4)}')
+elif [[ "${bedfileRaw}" =~ "XT-HS" ]]
+then
+	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,6)}')
 elif [[ "${bedfileRaw}" =~ "XT" ]]
 then
 	bedfile=$(echo "${bedfileRaw}" | awk '{print substr($0,3)}')
@@ -66,6 +71,7 @@ then
 		grep -v "NC_001422.1" "${sampleNameID}.${perBase}.coveragePerBase.txt" > "${sampleNameID}.${perBase}.coveragePerBase.txt.tmp"
 		mv "${sampleNameID}.${perBase}.coveragePerBase.txt.tmp" "${sampleNameID}.${perBase}.coveragePerBase.txt"
 		echo "phiX is removed for ${sampleNameID}.${perBase} perBase" 
+		rsync -a "${sampleNameID}.${perBase}.coveragePerBase.txt" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/" 
 
 	done
 else
@@ -85,7 +91,7 @@ then
 		-T DepthOfCoverage \
 		-o "${sampleNameID}.${perTarget}.coveragePerTarget" \
 		-I "${dedupBam}" \
-                -mmq 20 \
+		-mmq 20 \
 		--omitDepthOutputAtEachBase \
 		-L "${perTargetDir}/${perTarget}.interval_list"
 
@@ -110,8 +116,8 @@ then
 		#Remove phiX
 		grep -v "NC_001422.1" "${sampleNameID}.${perTarget}.coveragePerTarget.txt" > "${sampleNameID}.${perTarget}.coveragePerTarget.txt.tmp"
 		mv "${sampleNameID}.${perTarget}.coveragePerTarget.txt.tmp" "${sampleNameID}.${perTarget}.coveragePerTarget.txt"
-		echo "phiX is removed for ${sampleNameID}.${perTarget} perTarget" 
-
+		echo "phiX is removed for ${sampleNameID}.${perTarget} perTarget"
+		
 		if [ "${perTarget}" ==  "${bedfile}" ]
 		then
 			totalcount=$(($(cat "${sampleNameID}.${perTarget}.coveragePerTarget.txt" | wc -l)-1))
@@ -121,18 +127,16 @@ then
 			if [ $count == 0 ]
 			then
 				percentage=0
-
 			else
 				percentage=$(echo $((count*100/totalcount)))
 				if [ ${percentage%%.*} -gt 10 ]
 				then
-					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped"
-					echo "${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent, skipped" > "${sampleNameID}.rejected"
+					echo "WARNING: ${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent"
+					echo "WARNING: ${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
 				fi
 			fi
 		fi
-
-
+		rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/"
 	done
 else
 	echo "There are no CoveragePerTarget calculations for this bedfile: ${bedfile}"
