@@ -33,6 +33,7 @@ makeTmpDir "${projectBatchGenotypedVariantCalls}"
 tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 #Load GATK module
+module purge
 module load "${gatkVersion}"
 module list
 
@@ -50,7 +51,7 @@ if [[ "${#ALLGVCFs[@]}" -ne '0' ]]
 then
 	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
 	-R "${indexFile}" \
-	-V "${tmpProjectBatchCombinedVariantCalls}" \
+	${ALLGVCFs[@]} \
 	-L "${capturedBatchBed}" \
 	-D "${dbSnp}" \
 	-O "${tmpProjectBatchGenotypedVariantCalls}"

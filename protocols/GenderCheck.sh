@@ -30,11 +30,11 @@ else
 if ($0 ~ /^#/){
 
 		}
-		else if ($23 == ""){
-		}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
+		else if ($34 == ""){
+		}else if ( $34 == "MEAN_TARGET_COVERAGE" ){
 
 		}else{
-			print $23
+			print $34
 	}
 	}' "${dedupBamMetrics}.hs_metrics" >> "${checkSexMeanCoverage}"
 

@@ -8,7 +8,7 @@
 #string dedupBam
 #string mantaDir
 #string mantaVersion
-#string pythonVersion
+#string python2Version
 #string capturingKit
 #string capturedBed
 #string bedToolsVersion
@@ -19,8 +19,10 @@
 #string ngsversion
 
 module load "${ngsversion}"
+cp ${EBROOTNGS_DNA}/conf/configManta.py.ini ${intermediateDir}/
+module purge
 module load "${mantaVersion}"
-module load "${pythonVersion}"
+module load "${python2Version}"
 module load "${htsLibVersion}"
 module load "${bedToolsVersion}"
 
@@ -57,21 +59,21 @@ then
 		exit 0
 	fi
 	python "${EBROOTMANTA}/bin/configManta.py" \
-        --bam "${dedupBam}" \
-        --referenceFasta "${indexFile}" \
-        --exome \
-	--config ${EBROOTNGS_DNA}/conf/configManta.py.ini \
-        --runDir "${tmpMantaDir}" 
+	--bam "${dedupBam}" \
+	--referenceFasta "${indexFile}" \
+	--exome \
+	--config ${intermediateDir}configManta.py.ini \
+	--runDir "${tmpMantaDir}" 
 
 else
 
 	echo "not WGS or Exome, skipping"
 	mv "${SCRIPTNAME}".{started,finished}
-        script=${SCRIPTNAME%.*}
-        touch "${script}.env"
-        chmod ugo+x "${script}.env"
+	script=${SCRIPTNAME%.*}
+	touch "${script}.env"
+	chmod ugo+x "${script}.env"
 	trap - EXIT
-        exit 0
+	exit 0
 
 fi
 
@@ -89,7 +91,7 @@ then
 	bedtools intersect -header -a "${mantaDir}/results/variants/candidateSmallIndels.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp"
 
 	if [ -f "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" ]
-        then
+	then
 		grep "^#" "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf"
 		grep -v "^#" "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/candidateSmallIndels.vcf"
 
@@ -120,7 +122,7 @@ then
 
 	bedtools intersect -header -a "${mantaDir}/results/variants/diploidSV.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/diploidSV.vcf.tmp"
 	if [ -f "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" ]
-        then
+	then
 		grep "^#" "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" > "${mantaDir}/results/variants/real/diploidSV.vcf"
 		grep -v "^#" "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/diploidSV.vcf"
 

@@ -1,19 +1,21 @@
 #list externalSampleID
 #string tmpName
 #string gatkVersion
+#string htsLibVersion
 #string bcfToolsVersion
 #string barcode
 #string indexFile
 #string logsDir 
 #string groupname
-#string sampleVariantsMergedSnpsFilteredVcf
-#string sampleVariantsMergedIndelsFilteredVcf
-#string sampleFinalVcf
+#string projectVariantsSnpsOnlyFilteredVcf
+#string projectVariantsIndelsOnlyFilteredVcf
+#string projectFinalVcf
 #string intermediateDir
 #string indexFileDictionary
 #string project
 
 #Load GATK module
+module purge
 module load "${gatkVersion}"
 module load "${htsLibVersion}"
 module list
