@@ -5,43 +5,35 @@
 #string logsDir
 #string groupname
 #string gatkVersion
-#string gatkJar
 #string indexFile
 #string capturedIntervals
 #string projectVariantsMergedSortedGz
-#string sampleVariantsMergedSnpsVcf
-#string sampleVariantsMergedIndelsVcf
-#string sampleID
+#string projectVariantsSnpsOnlyVcf
+#string projectVariantsIndelsOnlyVcf
 
+module purge
 module load "${gatkVersion}"
 
-makeTmpDir "${sampleVariantsMergedIndelsVcf}"
-tmpSampleVariantsMergedIndelsVcf="${MC_tmpFile}"
+makeTmpDir "${projectVariantsSnpsOnlyVcf}"
+tmpProjectVariantsSnpsOnlyVcf="${MC_tmpFile}"
 
-makeTmpDir "${sampleVariantsMergedSnpsVcf}"
-tmpSampleVariantsMergedSnpsVcf="${MC_tmpFile}"
- 
-realSampleID="$(cat "${intermediateDir}/${sampleID}.txt")"
-realSampleID=$(basename "${realSampleID}")
+makeTmpDir "${projectVariantsIndelsOnlyVcf}"
+tmpProjectVariantsIndelsOnlyVcf="${MC_tmpFile}"
 
 #select only Indels
-java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 -R "${indexFile}" \
--T SelectVariants \
---variant "${projectVariantsMergedSortedGz}" \
--o "${tmpSampleVariantsMergedIndelsVcf}" \
---selectTypeToInclude INDEL \
--sn "${realSampleID}"
+-V "${projectVariantsMergedSortedGz}" \
+-O "${tmpProjectVariantsIndelsOnlyVcf}" \
+--select-type-to-include INDEL
 
-mv -v "${tmpSampleVariantsMergedIndelsVcf}" "${sampleVariantsMergedIndelsVcf}"
+mv -v "${tmpProjectVariantsIndelsOnlyVcf}" "${projectVariantsIndelsOnlyVcf}"
 
 #Select SNPs and MNPs
-java -XX:ParallelGCThreads=1 -Xmx5g -jar "${EBROOTGATK}/${gatkJar}" \
+gatk --java-options "-XX:ParallelGCThreads=1 -Xmx5g" SelectVariants \
 -R "${indexFile}" \
--T SelectVariants \
---variant "${projectVariantsMergedSortedGz}" \
--o "${tmpSampleVariantsMergedSnpsVcf}" \
---selectTypeToExclude INDEL \
--sn "${realSampleID}"
+-V "${projectVariantsMergedSortedGz}" \
+-O "${tmpProjectVariantsSnpsOnlyVcf}" \
+--select-type-to-exclude INDEL 
 
-mv -v "${tmpSampleVariantsMergedSnpsVcf}" "${sampleVariantsMergedSnpsVcf}"
+mv -v "${tmpProjectVariantsSnpsOnlyVcf}" "${projectVariantsSnpsOnlyVcf}"

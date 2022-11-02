@@ -25,7 +25,7 @@ tmpDedupBam="${MC_tmpFile}"
 makeTmpDir "${dedupBamIdx}" "${intermediateDir}"
 tmpDedupBamIdx="${MC_tmpFile}"
 
-echo  "${externalSampleID}" > "${intermediateDir}/${sampleProcessStepID}.txt"
+echo  "${externalSampleID}" > "${intermediateDir}/${externalSampleID}.txt"
 
 ##Run picard, sort BAM file and create index on the fly
 sambamba markdup \

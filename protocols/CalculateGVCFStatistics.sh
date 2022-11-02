@@ -9,8 +9,6 @@
 #string projectResultsDir
 #string sampleGvcf2Bed
 #string sampleMergedBatchVariantCalls
-#string gatkVersion
-#string gatkJar
 #string indexFile
 #string ngsversion
 #string capturedBed
@@ -28,7 +26,6 @@ array_contains () {
 	done
 	return "${in}"
 }
-
 
 makeTmpDir "${sampleGvcf2Bed}" "${intermediateDir}"
 tmpSampleGvcf2Bed="${MC_tmpFile}"

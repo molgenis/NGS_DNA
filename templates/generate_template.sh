@@ -43,13 +43,13 @@ do
         esac
 done
 
-if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
-if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
+if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
+if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../../ && pwd )) ; fi ; echo "group=${group}"
 if [[ -z "${groupDir:-}" ]]; then groupDir="/groups/${group}/" ; fi ; echo "groupDir=${groupDir}"
 if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
-genScripts="${groupDir}/${tmpDirectory}/generatedscripts/${filePrefix}/"
+genScripts="${groupDir}/${tmpDirectory}/generatedscripts/NGS_DNA/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
 
 #

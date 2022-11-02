@@ -1,7 +1,6 @@
 #Parameter mapping
 #string tmpName
 #string gatkVersion
-#string gatkJar
 #string tempDir
 #string intermediateDir
 #string indexFile
@@ -34,9 +33,9 @@ makeTmpDir "${projectBatchGenotypedVariantCalls}"
 tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 #Load GATK module
+module purge
 module load "${gatkVersion}"
 module list
-
 
 ALLGVCFs=()
 
@@ -48,16 +47,14 @@ do
 	fi
 done
  
-if [ "${#ALLGVCFs[@]}" -ne 0 ]
+if [[ "${#ALLGVCFs[@]}" -ne '0' ]]
 then
-java -Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir="${tempDir}" -jar \
-	"${EBROOTGATK}/${gatkJar}" \
-	-T GenotypeGVCFs \
+	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
 	-R "${indexFile}" \
+	${ALLGVCFs[@]} \
 	-L "${capturedBatchBed}" \
-	--dbsnp "${dbSnp}" \
-	-o "${tmpProjectBatchGenotypedVariantCalls}" \
-	${ALLGVCFs[@]} 
+	-D "${dbSnp}" \
+	-O "${tmpProjectBatchGenotypedVariantCalls}"
 
 	mv -v "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
 else

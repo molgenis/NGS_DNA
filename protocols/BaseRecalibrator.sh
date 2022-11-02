@@ -8,7 +8,6 @@
 #string groupname
 #string tmpDataDir
 #string gatkVersion
-#string gatkJar
 #string dbSnp
 #string sampleMergedBam
 #string sambambaVersion
@@ -44,12 +43,11 @@ tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 
 sambamba index "${sampleMergedBam}"
 
-java -XX:ParallelGCThreads=7 -Djava.io.tmpdir="${tempDir}" -Xmx9g -jar "${EBROOTGATK}/${gatkJar}" \
-	-T BaseRecalibrator \
-	-R "${indexFile}" \
-	${INPUTS[@]} \
-	-nct 8 \
-	-knownSites "${dbSnp}" \
-	-o "${tmpMergedBamRecalibratedTable}"
+# shellcheck disable=SC2086 #${INPUTS} => gatk needs seperate strings, not one captured in quotes
+gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
+-R "${indexFile}" \
+${INPUTS[@]} \
+--known-sites "${dbSnp}" \
+-O "${tmpMergedBamRecalibratedTable}"
 
 mv -v "${tmpMergedBamRecalibratedTable}" "${mergedBamRecalibratedTable}"

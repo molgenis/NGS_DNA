@@ -22,30 +22,25 @@ module load "${htsLibVersion}"
 ## copy (g)VCF files first
 combinedIdentifier=$(ls -d "${tmpDirectory}/${gsBatch}/Analysis/"*"-${sampleProcessStepID}")
 combinedIdentifier=$(basename "${combinedIdentifier}")
-echo  "${combinedIdentifier}" > "${intermediateDir}/${sampleProcessStepID}.txt"
+echo  "${combinedIdentifier}" > "${intermediateDir}/${externalSampleID}.txt"
 rsync -av "${tmpDirectory}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.hard-filtered.vcf.gz"* "${intermediateDir}"
 rsync -av "${tmpDirectory}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.hard-filtered.gvcf.gz"* "${intermediateDir}"
 
 ## rename (g)VCF files
 rename "${combinedIdentifier}" "${externalSampleID}" "${intermediateDir}/${combinedIdentifier}.hard-filtered."*"vcf.gz"*
-
-
-## Replace chr names
-zcat "${intermediateDir}/${externalSampleID}.hard-filtered.vcf.gz" | perl -p -e 's|chr||' > "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf"
-zcat "${intermediateDir}/${externalSampleID}.hard-filtered.gvcf.gz" | perl -p -e 's|chr||' > "${intermediateDir}/${externalSampleID}.variant.calls.gvcf"
+rename "${combinedIdentifier}" "${externalSampleID}" "${intermediateDir}/${combinedIdentifier}.hard-filtered."*"vcf.gz"*
 
 for i in "${batchID[@]}"
 do
 	# splitting the data per chromosome, captured by the ${captured}.batch-${batchID}.bed"
 	echo "splitting the data per chromosome, captured by the ${captured}.batch-${i}.bed"
-	bedtools intersect -header -a "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf" -b "${captured}.batch-${i}.bed" > "${intermediateDir}/${externalSampleID}.batch-${i}.variant.calls.genotyped.vcf"
+	bedtools intersect -header -a "${intermediateDir}/${externalSampleID}.hard-filtered.vcf.gz" -b "${captured}.batch-${i}.bed" > "${intermediateDir}/${externalSampleID}.batch-${i}.variant.calls.genotyped.vcf"
 done
 
 bgzip -c -f "${intermediateDir}/${externalSampleID}.variant.calls.gvcf" > "${intermediateDir}/${externalSampleID}.variant.calls.g.vcf.gz"
 echo "start indexing ${intermediateDir}/${externalSampleID}.variant.calls.g.vcf.gz"
 tabix -p vcf "${intermediateDir}/${externalSampleID}.variant.calls.g.vcf.gz"
 rsync -av "${intermediateDir}/${externalSampleID}.variant.calls.g.vcf.gz"* "${projectResultsDir}/variants/gVCF/"
-
 
 # moving files to results folder
 mv -v "${tmpDirectory}/${gsBatch}/Analysis/${combinedIdentifier}/"*".bam"* "${projectResultsDir}/alignment/"

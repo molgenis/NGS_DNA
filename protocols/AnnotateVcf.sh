@@ -211,30 +211,16 @@ join = table.concat
 HERE
 
 cat >> "${vcfAnnoConf}" << HERE
-
 ## Calculating GoNL AF, gnomAD_HOM_AC
 [[postannotation]]
 fields=["GoNL_AC", "GoNL_AN"]
 name="GoNL_AF"
 op="div2"
 type="Float"
-
-[[postannotation]]
-fields=["gnomAD_Hom"]
-name="gnomAD_AN_Hom"
-op="lua:calculate_gnomAD_AC(gnomAD_Hom)"
-type="Integer"
-
-[[postannotation]]
-fields=["gnomAD_Hemi"]
-name="gnomAD_AN_Hemi"
-op="lua:calculate_gnomAD_AC(gnomAD_Hemi)"
-type="Integer"
-
 HERE
 
 	echo "starting to annotate with vcfanno"
-	vcfanno_linux64 -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
+	vcfanno -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 
 	mv -v "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
 

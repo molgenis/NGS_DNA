@@ -39,7 +39,7 @@ hashdeepVersion,hashdeep/4.4-${toolChain_max}
 htsLibVersion,HTSlib/1.14-${toolChain_max}
 iolibVersion,io_lib/1.14.11-${toolChain_min}
 mantaVersion,manta/1.6.0-${toolChain_min}
-multiQCVersion,multiqc/1.11-${toolChain_max}
+multiQCVersion,multiqc/1.12-${toolChain_max}
 ngsUtilsVersion,ngs-utils/22.10.1
 perlPlusVersion,PerlPlus/5.30.0-${toolChain_min}-v19.08.1
 picardVersion,picard/2.26.10-${javaSuffix}
@@ -66,7 +66,7 @@ hpoDir,${dataDir}/HPO/
 sequenomDir,${dataDir}/Sequenom/
 tmpDataDir,${groupDir}/${tmpName}/
 tempDir,${tmpDataDir}/temp/
-tmpDirectory,${tmpDataDir}/tmp/
+tmpDirectory,${tmpDataDir}/tmp/NGS_DNA/
 logsDir,${tmpDataDir}/logs
 
 ##### RAW DATA FILES/DIRS ####
@@ -104,7 +104,7 @@ capturedExomeIntervals,${dataDir}/UMCG/All_Exon_v1/${indexFileID}/${nameBed}.int
 capturedExomeBed,${dataDir}/UMCG/All_Exon_v1/${indexFileID}/${nameBed}.bed
 
 #### Projects ####
-projectDir,${tmpDataDir}/projects/${project}/${runid}
+projectDir,${tmpDataDir}projects/NGS_DNA/${project}/${runid}
 intermediateDir,${tmpDirectory}/${project}/${runid}/
 projectPrefix,${intermediateDir}/${project}
 projectJobsDir,${projectDir}/jobs/
@@ -231,6 +231,8 @@ projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-$
 sampleVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
 sampleVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
+projectVariantsIndelsOnlyVcf,${projectPrefix}.annotated.indels.vcf
+projectVariantsSnpsOnlyVcf,${projectPrefix}.annotated.snps.vcf
 projectVariantsMergedIdx,${projectPrefix}.variant.calls.GATK.vcf.idx
 projectVariantsMergedSorted,${projectPrefix}.variant.calls.GATK.sorted.vcf
 projectVariantsMergedSortedGz,${projectPrefix}.variant.calls.GATK.sorted.vcf.gz
@@ -256,6 +258,8 @@ projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls
 ### 25, 26
 sampleVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
 sampleVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
+projectVariantsIndelsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.indels.vcf
+projectVariantsSnpsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.snps.vcf
 sampleFinalVcf,${intermediateDir}/${externalSampleID}.final.vcf
 projectFinalVcf,${projectPrefix}.final.vcf
 
