@@ -21,3 +21,4 @@ Based on quality thresholds from the GATK "best practices"<sup>5</sup>, the SNPs
 4. McKenna A et al. (2010). The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data.<br/>
 5. Van der Auwera GA et al. (2013). From FastQ data to high confidence variant calls: the Genome Analysis Toolkit best practices pipeline.<br/>
 
+
