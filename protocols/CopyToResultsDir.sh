@@ -198,7 +198,11 @@ echo "pipeline is finished"
 
 runNumber=$(basename "$(dirname "${projectResultsDir}")")
 
-rm -f "${logsDir}/${project}/${runNumber}.pipeline.started"
+if [[ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]]
+then
+	mv "${logsDir}/${project}/${runNumber}.pipeline".{started,finished}
+fi
+
 touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
 
 echo "finished: $(date +%FT%T%z)" >> "${logsDir}/${project}/${runNumber}.pipeline.totalRuntime"
