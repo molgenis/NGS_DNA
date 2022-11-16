@@ -96,10 +96,6 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
 --runid "${runID}" \
--b slurm \
---header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
---submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -o workflowpath="${workflow};\
 outputdir=scripts/jobs;\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\

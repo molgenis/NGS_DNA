@@ -197,12 +197,10 @@ rm -f "${projectResultsDir}/rawdata/ngs/"*".phiX.recoded.fq.gz"
 echo "pipeline is finished"
 
 runNumber=$(basename "$(dirname "${projectResultsDir}")")
-if [ -f "${logsDir}/${project}/${runNumber}.pipeline.started" ]
-then
-	mv "${logsDir}/${project}/${runNumber}.pipeline".{started,finished}
-else
-	touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
-fi
+
+rm -f "${logsDir}/${project}/${runNumber}.pipeline.started"
+touch "${logsDir}/${project}/${runNumber}.pipeline.finished"
+
 echo "finished: $(date +%FT%T%z)" >> "${logsDir}/${project}/${runNumber}.pipeline.totalRuntime"
 rm -f "${logsDir}/${project}/${runNumber}.pipeline.failed"
 echo "${logsDir}/${project}/${runNumber}.pipeline.finished is created"
