@@ -11,7 +11,6 @@
 #string bwaVersion
 #string computeVersion
 #string caddVersion
-#string convadingVersion
 #string fastqcVersion
 #string gatkVersion
 #string gavinPlusVersion
@@ -55,7 +54,6 @@ echo -e "report_header_info:
 - '': '${bwaVersion}'
 - '': '${computeVersion}'
 - '': '${caddVersion}'
-- '': '${convadingVersion}'
 - '': '${fastqcVersion}'
 - '': '${gatkVersion}'
 - '': '${gavinPlusVersion}'
