@@ -25,7 +25,7 @@ bcfToolsVersion,BCFtools/1.14-${toolChain_min}
 bedToolsVersion,BEDTools/2.30.0-${toolChain_min}
 bwaVersion,BWA/0.7.18-139f68f-${toolChain_min}
 computeVersion,Molgenis-Compute/v19.01.1-${javaSuffix}
-caddVersion,CADD/v1.3-foss-2018b
+caddVersion,CADD/v1.4-foss-2018b
 fastqcVersion,FastQC/0.11.9-${javaSuffix}
 gatkVersion,GATK/4.2.4.1-${javaSuffix}
 gatkJar,gatk-package-local.jar
@@ -213,7 +213,7 @@ vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
 vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
-toCADD,${projectPrefix}.batch-${batchID}.toCadd.tsv
+toCADD,${projectPrefix}.batch-${batchID}.toCadd.vcf
 fromCADD,${projectPrefix}.batch-${batchID}.fromCadd.tsv.gz
 fromCADDMerged,${projectPrefix}.batch-${batchID}.fromCadd.merged.vcf
 

@@ -29,7 +29,7 @@
 module load "${vcfAnnoVersion}"
 module load "${htsLibVersion}"
 module load "${bcfToolsVersion}"
-module load "${caddVersion}"
+
 
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
@@ -44,10 +44,10 @@ then
 
 	echo "create file toCADD"
 	##create file toCADD (split alternative alleles per line)
-	bcftools norm -f "${indexFile}" -m -any "${projectBatchGenotypedVariantCalls}" | awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' | bgzip -c > "${toCADD}.gz"
-
+	bcftools norm --force -f "${indexFile}" -m -any "${projectBatchGenotypedVariantCalls}" | awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' | bgzip -c > "${toCADD}.gz"
+	module load "${caddVersion}"
 	echo "starting to get CADD annotations locally for ${toCADD}.gz"
-	score.sh "${toCADD}.gz" "${fromCADD}"
+	CADD.sh -g GRCh37 "${toCADD}.gz" -o "${fromCADD}"
 
 	echo "convert fromCADD tsv file to fromCADD vcf"
 	##convert tsv to vcf
@@ -57,7 +57,8 @@ then
 	tabix -f -p vcf "${fromCADD}.vcf.gz"
 	##merge the alternative alleles back in one vcf line
 	echo "merging the alternative alleles back in one vcf line .. "
-	bcftools norm -f "${indexFile}" -m +any "${fromCADD}.vcf.gz" > "${fromCADDMerged}"
+	module load "${bcfToolsVersion}"
+	bcftools norm --force -f "${indexFile}" -m +any "${fromCADD}.vcf.gz" > "${fromCADDMerged}"
 
 	echo "bgzipping + indexing ${fromCADDMerged}"
 	bgzip -c "${fromCADDMerged}" > "${fromCADDMerged}.gz"
