@@ -41,7 +41,7 @@ multiQCVersion,multiqc/1.12-${toolChain_min}
 ngsUtilsVersion,ngs-utils/22.10.1
 picardVersion,picard/2.26.10-${javaSuffix}
 pigzVersion,pigz/2.7-${toolChain_min}
-python2Version,Python/2.7.16-${toolChain_min}
+python2Version,Python/2.7.16-${toolChain_min}-bare
 pythonVersion,Python/3.10.4-${toolChain_min}-bare
 rVersion,R/4.2.1-${toolChain_max}-bare
 sambambaVersion,sambamba/0.7.0
