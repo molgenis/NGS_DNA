@@ -23,7 +23,7 @@ vepDBVersion,92
 vepAssemblyVersion,GRCh37
 bcfToolsVersion,BCFtools/1.14-${toolChain_min}
 bedToolsVersion,BEDTools/2.30.0-${toolChain_min}
-bwaVersion,BWA/0.7.18-139f68f-${toolChain_min}
+bwaVersion,BWA/0.7.17-20220923-139f68f-${toolChain_min}
 computeVersion,Molgenis-Compute/v19.01.1-${javaSuffix}
 caddVersion,CADD/v1.4-foss-2018b
 fastqcVersion,FastQC/0.11.9-${javaSuffix}
