@@ -16,7 +16,7 @@
 #list flowcell
 #list externalFastQ_1
 #list externalFastQ_2
-#string group_parameters
+#string groupDir
 #string environment_parameters
 #string groupname
 #string sampleSize
@@ -178,4 +178,5 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
 sampleSize=${sampleSize};\
+groupDir=${groupDir};\
 groupname=${groupname}"
