@@ -1,5 +1,5 @@
-externalSampleID,project,sequencer,sequencingStartDate,run,flowcell,lane,seqType,capturingKit,arrayFile,arrayID,barcode,Gender
-PlatinumSample_NA12878,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,1,PE,Agilent\/NGS_DNA_Test_v1,,,None,Female
-PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,2,PE,Agilent\/NGS_DNA_Test_v1,,,None,Male
-PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,3,PE,Agilent\/NGS_DNA_Test_v1,,,None,Male
-PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,4,PE,Agilent\/NGS_DNA_Test_v1,,,None,Male
+externalSampleID,project,sequencer,sequencingStartDate,run,flowcell,lane,seqType,capturingKit,arrayFile,arrayID,barcode,Gender,sampleProcessStepID
+PlatinumSample_NA12878,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,1,PE,Agilent\/NGS_DNA_Test_v1,,,None,Female,1
+PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,2,PE,Agilent\/NGS_DNA_Test_v1,,,None,Male,2
+PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,3,PE,Agilent\/NGS_DNA_Test_v1,,,None,Male,2
+PlatinumSample_NA12891,PlatinumSubsetInhouseSamples,TEST,MY,BAM,PROJECTInhouseSamples,4,PE,Agilent\/NGS_DNA_Test_v1,,,None,Male,2
