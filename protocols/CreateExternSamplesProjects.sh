@@ -111,7 +111,8 @@ echo $(pwd)
 # Create subset of samples for this project.
 #
 
-extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
+cp "${worksheet}" "${projectJobsDir}/${project}.csv"
+sampleSheetCsv="${projectJobsDir}/${project}.csv"
 
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
@@ -119,7 +120,7 @@ extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${pro
 
 batching="_small"
 
-capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
+capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||' )
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
