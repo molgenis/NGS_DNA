@@ -19,7 +19,6 @@
 #string groupDir
 #string environment_parameters
 #string groupname
-#string sampleSize
 
 #string mainParameters
 #string worksheet
