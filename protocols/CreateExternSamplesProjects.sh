@@ -126,7 +126,7 @@ captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
 	echo "Bedfile does not exist! Exiting"
-        exit 1
+	exit 1
 fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
@@ -162,9 +162,8 @@ perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesPa
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
--p "${projectJobsDir}/${project}.csv" \
+-p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
--p "${group_parameters}" \
 -p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
