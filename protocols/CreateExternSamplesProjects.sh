@@ -177,6 +177,5 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
-sampleSize=${sampleSize};\
 groupDir=${groupDir};\
 groupname=${groupname}"
