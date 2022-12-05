@@ -51,8 +51,6 @@ then
 else
 	echo "gvcfArray is empty for ${externalSampleID}"
 fi	
-echo " moving ${tmpSampleMergedBatchVariantCalls} to ${sampleMergedBatchVariantCalls}"
-mv "${tmpSampleMergedBatchVariantCalls}" "${sampleMergedBatchVariantCalls}"
 
-echo " moving ${tmpSampleMergedBatchVariantCalls}.tbi to ${sampleMergedBatchVariantCalls}.tbi"
-mv "${tmpSampleMergedBatchVariantCalls}.tbi" "${sampleMergedBatchVariantCalls}.tbi"
+mv -v "${tmpSampleMergedBatchVariantCalls}" "${sampleMergedBatchVariantCalls}"
+mv -v "${tmpSampleMergedBatchVariantCalls}.tbi" "${sampleMergedBatchVariantCalls}.tbi"
