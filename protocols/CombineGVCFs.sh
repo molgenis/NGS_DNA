@@ -40,14 +40,14 @@ gvcfArray=()
 
 for gvcf in "${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-"*".variant.calls.g.vcf.gz"
 do
-	array_contains gvcfArray "--variant=${gvcf}" || gvcfArray+=("--variant=${gvcf}")    # If bamFile does not exist in array add it
+	array_contains gvcfArray "--variant ${gvcf}" || gvcfArray+=("--variant ${gvcf}")
 done
 if [  ${#gvcfArray[@]} -ne 0 ]
 then
 	gatk CombineGVCFs \
-	--reference="${indexFile}" \
-	"${gvcfArray[@]}" \
-	--output="${tmpSampleMergedBatchVariantCalls}"
+	--reference "${indexFile}" \
+	${gvcfArray[@]} \
+	--output "${tmpSampleMergedBatchVariantCalls}"
 else
 	echo "gvcfArray is empty for ${externalSampleID}"
 fi	
