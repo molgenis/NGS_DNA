@@ -12,7 +12,6 @@
 #string gatkVersion
 #string gatkJar
 #string indexFile
-#list externalSampleID
 
 #Function to check if array contains value
 array_contains () {
@@ -38,12 +37,9 @@ module list
 #This check needs to be performed because Compute generates duplicate values in array
 gvcfArray=()
 
-for gvcf in "${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz"
-do
-	array_contains gvcfArray "--variant ${gvcf}" || gvcfArray+=("--variant ${gvcf}")
-done
+mapfile -t gvcfFiles < <(find ${projectResultsDir}/variants/gVCF/ -name *.batch-${batchID}.variant.calls.g.vcf.gz)
 
-if [  ${#gvcfArray[@]} -ne 0 ]
+if [[ ${#gvcfFiles[@]} -ne 0 ]]
 then
 	gatk CombineGVCFs \
 	--reference "${indexFile}" \
