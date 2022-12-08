@@ -197,8 +197,7 @@ dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
 sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 sampleVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
-#sampleBatchVariantCallsFemale,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.female.variant.calls.g.vcf.gz
-#sampleBatchVariantCallsFemaleIndex,${sampleBatchVariantCallsFemale}.tbi
+
 sampleBatchVariantCallsMaleNONPAR,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.chrX.male.NONPAR.variant.calls.g.vcf.gz
 sampleBatchVariantCallsMaleNONPARIndex,${sampleBatchVariantCallsMaleNONPAR}.tbi
 sampleMergedBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.merged.variant.calls.g.vcf.gz
@@ -208,6 +207,8 @@ sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.ba
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
 sampleBatchGenotypedVariantCalls,${intermediateDir}/${externalSampleID}.batch-${batchID}.variant.calls.genotyped.vcf
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
+
+
 vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
 vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt

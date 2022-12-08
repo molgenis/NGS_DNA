@@ -7,9 +7,8 @@
 #string capturedBatchBed
 #string dbSnp
 #string projectBatchGenotypedVariantCalls
-#string project
 #string projectBatchCombinedVariantCalls
-#string sampleMergedBatchVariantCalls
+#string project
 #string tmpDataDir
 #string projectJobsDir
 #string logsDir
@@ -39,11 +38,11 @@ module list
 
 ALLGVCFs=()
 
-if [[ -f ${sampleMergedBatchVariantCalls} ]]
+if [[ -f ${projectBatchCombinedVariantCalls} ]]
 then
 	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
 	-R "${indexFile}" \
-	--variant "${sampleMergedBatchVariantCalls}" \
+	--variant "${projectBatchCombinedVariantCalls}" \
 	-L "${capturedBatchBed}" \
 	-D "${dbSnp}" \
 	-O "${tmpProjectBatchGenotypedVariantCalls}"

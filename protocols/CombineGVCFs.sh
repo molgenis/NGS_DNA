@@ -7,12 +7,12 @@
 #string groupname
 #string intermediateDir
 #string projectResultsDir
-#string externalSampleID
-#string sampleMergedBatchVariantCalls
-#string capturedBed
+#string projectBatchCombinedVariantCalls
+#string batchID
 #string gatkVersion
 #string gatkJar
 #string indexFile
+#list externalSampleID
 
 #Function to check if array contains value
 array_contains () {
@@ -28,8 +28,8 @@ array_contains () {
 	return "${in}"
 }
 
-makeTmpDir "${sampleMergedBatchVariantCalls}" "${intermediateDir}"
-tmpSampleMergedBatchVariantCalls="${MC_tmpFile}"
+makeTmpDir "${projectBatchCombinedVariantCalls}" "${intermediateDir}"
+tmpProjectBatchCombinedVariantCalls="${MC_tmpFile}"
 
 module load "${gatkVersion}"
 module list
@@ -38,19 +38,20 @@ module list
 #This check needs to be performed because Compute generates duplicate values in array
 gvcfArray=()
 
-for gvcf in "${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-"*".variant.calls.g.vcf.gz"
+for gvcf in "${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz"
 do
 	array_contains gvcfArray "--variant ${gvcf}" || gvcfArray+=("--variant ${gvcf}")
 done
+
 if [  ${#gvcfArray[@]} -ne 0 ]
 then
 	gatk CombineGVCFs \
 	--reference "${indexFile}" \
 	${gvcfArray[@]} \
-	--output "${tmpSampleMergedBatchVariantCalls}"
+	--output "${tmpProjectBatchCombinedVariantCalls}"
 else
 	echo "gvcfArray is empty for ${externalSampleID}"
 fi	
 
-mv -v "${tmpSampleMergedBatchVariantCalls}" "${sampleMergedBatchVariantCalls}"
-mv -v "${tmpSampleMergedBatchVariantCalls}.tbi" "${sampleMergedBatchVariantCalls}.tbi"
+mv -v "${tmpProjectBatchCombinedVariantCalls}" "${projectBatchCombinedVariantCalls}"
+mv -v "${tmpProjectBatchCombinedVariantCalls}.tbi" "${projectBatchCombinedVariantCalls}.tbi"
