@@ -35,19 +35,26 @@ module list
 
 #Create string with input BAM files for Picard
 #This check needs to be performed because Compute generates duplicate values in array
-gvcfArray=()
 
 mapfile -t gvcfFiles < <(find ${projectResultsDir}/variants/gVCF/ -name *.batch-${batchID}.variant.calls.g.vcf.gz)
 
-if [[ ${#gvcfFiles[@]} -ne 0 ]]
+gvcfArray=()
+if [[ "${#gvcfFiles[@]}" -ne '0' ]]
 then
+	for sbatch in "${gvcfFiles[@]}"
+	do
+		array_contains gvcfArray "--variant ${sbatch}" || gvcfArray+=("--variant ${sbatch}")
+	done
+
 	gatk CombineGVCFs \
 	--reference "${indexFile}" \
 	${gvcfArray[@]} \
 	--output "${tmpProjectBatchCombinedVariantCalls}"
+	
+	mv -v "${tmpProjectBatchCombinedVariantCalls}" "${projectBatchCombinedVariantCalls}"
+	mv -v "${tmpProjectBatchCombinedVariantCalls}.tbi" "${projectBatchCombinedVariantCalls}.tbi"
+	
 else
-	echo "gvcfArray is empty for ${externalSampleID}"
+	echo "There are no gVCF files for batch ${batchID}"
 fi	
 
-mv -v "${tmpProjectBatchCombinedVariantCalls}" "${projectBatchCombinedVariantCalls}"
-mv -v "${tmpProjectBatchCombinedVariantCalls}.tbi" "${projectBatchCombinedVariantCalls}.tbi"
