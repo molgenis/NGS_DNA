@@ -7,27 +7,14 @@
 #string capturedBatchBed
 #string dbSnp
 #string projectBatchGenotypedVariantCalls
-#string project
 #string projectBatchCombinedVariantCalls
-#list variantCalls
+#string project
 #string tmpDataDir
 #string projectJobsDir
 #string logsDir
 #string groupname
 
 #Function to check if array contains value
-array_contains () {
-	local array="$1[@]"
-	local seeking="${2}"
-	local in=1
-	for element in "${!array-}"; do
-		if [[ "${element}" == "${seeking}" ]]; then
-			in=0
-			break
-		fi
-	done
-	return "${in}"
-}
 
 makeTmpDir "${projectBatchGenotypedVariantCalls}"
 tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
@@ -39,19 +26,11 @@ module list
 
 ALLGVCFs=()
 
-for sbatch in "${variantCalls[@]}"
-do
-	if [ -f "${sbatch}" ]
-	then
-		array_contains ALLGVCFs "--variant ${sbatch}" || ALLGVCFs+=("--variant ${sbatch}")
-	fi
-done
- 
-if [[ "${#ALLGVCFs[@]}" -ne '0' ]]
+if [[ -f ${projectBatchCombinedVariantCalls} ]]
 then
 	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
 	-R "${indexFile}" \
-	${ALLGVCFs[@]} \
+	--variant "${projectBatchCombinedVariantCalls}" \
 	-L "${capturedBatchBed}" \
 	-D "${dbSnp}" \
 	-O "${tmpProjectBatchGenotypedVariantCalls}"
