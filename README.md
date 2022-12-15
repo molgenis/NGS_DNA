@@ -1,4 +1,3 @@
-
 <h1> NGS_DNA pipeline </h1>
 
 <h2>Manual</h2>
