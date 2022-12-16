@@ -16,13 +16,13 @@ echo -e "Sample\tBatchName\ttotal_reads\tduplicate_reads\tunique_reads\tmean_ins
 
 for jsonFile in "${jsonFiles[@]}"
 do
-	seq_batch=$(less "${jsonFile}" | "${EBROOTJQ}/jq-linux64" '. | .sequencer.seq_batch ' | tr -d '"')
-	total_reads=$(less "${jsonFile}" | "${EBROOTJQ}/jq-linux64" '. | .mapping.total_reads')
-	duplicate_reads=$(less "${jsonFile}" | "${EBROOTJQ}/jq-linux64" '. | .mapping.duplicate_reads')
-	unique_reads=$(less "${jsonFile}" | "${EBROOTJQ}/jq-linux64" '. | .mapping.unique_reads')
-	mean_insertsize=$(less "${jsonFile}" | "${EBROOTJQ}/jq-linux64" '. | .insert.mean' )
-	frac_min_20x_coverage=$(less "${jsonFile}" | "${EBROOTJQ}/jq-linux64" '. | .coverage.roi1.frac_min_20x_coverage')
-	average_autosomal_coverage=$(less "${jsonFile}" | "${EBROOTJQ}/jq-linux64" '. | .coverage.roi1.average_autosomal_coverage')
+	seq_batch=$(cat "${jsonFile}" | "jq-linux64" '. | .sequencer.seq_batch ' | tr -d '"')
+	total_reads=$(cat "${jsonFile}" | "jq-linux64" '. | .mapping.total_reads')
+	duplicate_reads=$(cat "${jsonFile}" | "jq-linux64" '. | .mapping.duplicate_reads')
+	unique_reads=$(cat "${jsonFile}" | "jq-linux64" '. | .mapping.unique_reads')
+	mean_insertsize=$(cat "${jsonFile}" | "jq-linux64" '. | .insert.mean' )
+	frac_min_20x_coverage=$(cat "${jsonFile}" | "jq-linux64" '. | .coverage.roi1.frac_min_20x_coverage')
+	average_autosomal_coverage=$(cat "${jsonFile}" | "jq-linux64" '. | .coverage.roi1.average_autosomal_coverage')
 	sample_name=$(basename "${jsonFile}" | cut -f 1,2,3 -d "-" )
 	file_date=$(date -r "${jsonFile}" "+%d/%m/%Y")
 	
