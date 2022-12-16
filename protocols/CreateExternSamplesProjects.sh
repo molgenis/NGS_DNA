@@ -16,10 +16,9 @@
 #list flowcell
 #list externalFastQ_1
 #list externalFastQ_2
-#string group_parameters
+#string groupDir
 #string environment_parameters
 #string groupname
-#string sampleSize
 
 #string mainParameters
 #string worksheet
@@ -112,7 +111,8 @@ echo $(pwd)
 # Create subset of samples for this project.
 #
 
-extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${project}.csv" --c project --q "${project}"
+cp "${worksheet}" "${projectJobsDir}/${project}.csv"
+sampleSheetCsv="${projectJobsDir}/${project}.csv"
 
 #
 # Execute MOLGENIS/compute to create job scripts to analyse this project.
@@ -120,13 +120,13 @@ extract_samples_from_GAF_list.pl --i "${worksheet}" --o "${projectJobsDir}/${pro
 
 batching="_small"
 
-capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${projectJobsDir}/${project}.csv" | sed 's|\\||' )
+capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||' )
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
 if [ ! -d "${dataDir}/${capturingKitProject}" ]
 then
 	echo "Bedfile does not exist! Exiting"
-        exit 1
+	exit 1
 fi
 if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
 then
@@ -162,9 +162,8 @@ perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesPa
 
 sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" \
--p "${projectJobsDir}/${project}.csv" \
+-p "${sampleSheetCsv}" \
 -p "${environment_parameters}" \
--p "${group_parameters}" \
 -p "resources_parameters.converted.csv" \
 -p "${tmpdir_parameters}" \
 -rundir "${projectJobsDir}" \
@@ -177,5 +176,5 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" -p "${mainParameters}" \
 -runid "${runid}" \
 -o "ngsversion=${ngsversion};\
 batchIDList=${EBROOTNGS_DNA}/batchIDList${batching}.csv;\
-sampleSize=${sampleSize};\
+groupDir=${groupDir};\
 groupname=${groupname}"

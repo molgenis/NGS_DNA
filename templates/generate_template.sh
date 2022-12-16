@@ -50,7 +50,8 @@ if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
 genScripts="${groupDir}/${tmpDirectory}/generatedscripts/NGS_DNA/${filePrefix}/"
-samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
+samplesheet="${genScripts}/${filePrefix}.csv"
+mac2unix "${samplesheet}"
 
 #
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
@@ -95,10 +96,6 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
 --runid "${runID}" \
--b slurm \
---header "${EBROOTNGS_DNA}/templates/slurm/header_tnt.ftl" \
---footer "${EBROOTNGS_DNA}/templates/slurm/footer_tnt.ftl" \
---submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
 -o workflowpath="${workflow};\
 outputdir=scripts/jobs;\
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)');\

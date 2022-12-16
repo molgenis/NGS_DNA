@@ -64,7 +64,7 @@ then
 	echo "nothing to merge because there is only one sample"
 
 else
-	"${sambambaTool}" merge \
+	sambamba merge \
 	"${tmpSampleMergedBam}" \
 	${INPUTS[@]}
 

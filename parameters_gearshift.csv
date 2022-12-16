@@ -2,5 +2,5 @@ prmName,prm01
 prmHost,localhost
 root,/
 appsDir,${root}/apps/
-toolChain_max,foss-2018b
-toolChain_min,GCCcore-7.3.0
+toolChain_max,foss-2022a
+toolChain_min,GCCcore-11.3.0
