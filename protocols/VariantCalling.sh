@@ -46,17 +46,16 @@ bams=()
 INPUTS=()
 for sampleID in "${externalSampleID[@]}"
 do
-	array_contains INPUTS "${sampleID}" || INPUTS+=("$sampleID")	# If bamFile does not exist in array add it
+	array_contains INPUTS "${sampleID}" || INPUTS+=("${sampleID}")	# If bamFile does not exist in array add it
 done
 baitBatchLength=""
 sex=$(less "${projectResultsDir}/general/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
 if [ -f "${capturedBatchBed}" ] 
 then
-	baitBatchLength=$(cat "${capturedBatchBed}" | wc -l)
+	baitBatchLength=$(wc -l "${capturedBatchBed}")
 fi
-
-bams=($(printf '%s\n' "${dedupBam[@]}" | sort -u ))
-inputs=$(printf ' -I %s ' $(printf '%s\n' ${bams[@]}))
+mapfile -t bams < <(printf '%s\n' "${dedupBam[@]}" | sort -u)
+inputs=$(printf ' -I %s ' "$(printf '%s\n' "${bams[@]}")")
 
 genderCheck=""
 

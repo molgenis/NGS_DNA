@@ -58,6 +58,7 @@ mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female
 mkdir -p "${projectResultsDir}/qc/statistics/"
 mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
 mkdir -p "${projectQcDir}"
+#shellcheck disable=SC2174
 mkdir -p -m 2770 "${logsDir}/${project}/"
 
 rocketPoint=$(pwd)
@@ -70,8 +71,6 @@ cd "${projectRawTmpDataDir}"
 # For each sequence file (could be multiple per sample):
 #
 
-
-n_elements=${externalSampleID[@]}
 max_index=${#externalSampleID[@]}-1
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
@@ -105,7 +104,7 @@ done
 cd "${rocketPoint}"
 
 echo "before splitting"
-echo $(pwd)
+pwd
 
 #
 # Create subset of samples for this project.

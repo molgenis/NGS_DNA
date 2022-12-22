@@ -24,8 +24,6 @@ module purge
 module load "${gatkVersion}"
 module list
 
-ALLGVCFs=()
-
 if [[ -f ${projectBatchCombinedVariantCalls} ]]
 then
 	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \

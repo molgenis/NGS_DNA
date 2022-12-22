@@ -132,7 +132,7 @@ do
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
 	printf '.'
 	
-	mapfile -t coveragePerBaseFiles < <(find ${intermediateDir} -name "${sa}*.coveragePerBase.txt")
+	mapfile -t coveragePerBaseFiles < <(find "${intermediateDir}" -name "${sa}*.coveragePerBase.txt")
 	if [[ "${#coveragePerBaseFiles[@]}" -eq '0' ]]
 	then
 		echo "there are no coveragePerBase files for sample: ${sa}"
@@ -147,7 +147,7 @@ do
 	
 
 	## copy the rejected samples (with less 90% of the targets with > 20x coverage)
-	mapfile -t rejectedSamples < <(find ${intermediateDir} -name "${sa}*.rejected")
+	mapfile -t rejectedSamples < <(find "${intermediateDir}" -name "${sa}*.rejected")
 	if [[ "${#rejectedSamples[@]}" -eq '0' ]]
 	then
 		echo "there are no .rejected files for sample: ${sa}"
@@ -160,7 +160,7 @@ do
 		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
 	
-	mapfile -t coveragePerTargetFiles < <(find ${intermediateDir} -name "${sa}*.coveragePerTarget.txt")
+	mapfile -t coveragePerTargetFiles < <(find "${intermediateDir}" -name "${sa}*.coveragePerTarget.txt")
 	if [[ "${#coveragePerTargetFiles[@]}" -eq '0' ]]
 	then
 		echo "there are no coveragePerTarget files for sample: ${sa}"

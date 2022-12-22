@@ -69,6 +69,7 @@ then
 else
 	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" ]]
 	then
+		#shellcheck disable=SC2086
 		gatk GatherVcfs \
 		${INPUTS[*]} \
 		--OUTPUT "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"

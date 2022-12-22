@@ -5,7 +5,7 @@ then
 	echo "DNA pipeline loaded, proceding"
 else
 	echo "No DNA Pipeline loaded, exiting"
-        exit 1
+	exit 1
 fi
 
 module list

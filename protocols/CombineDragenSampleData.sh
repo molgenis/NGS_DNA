@@ -17,12 +17,12 @@ array_contains () {
 	local seeking=$2
 	local in=1
 	for element in "${!array-}"; do
-		if [[ "$element" == "$seeking" ]]; then
+		if [[ "${element}" == "${seeking}" ]]; then
 			in=0
 			break
 		fi
 	done
-	return $in
+	return "${in}"
 }
 
 makeTmpDir "${projectBatchGenotypedVariantCalls}"
@@ -30,9 +30,9 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 
 for extId in "${sampleBatchGenotypedVariantCalls[@]}"
 do
-	array_contains INPUTS "-I ${sampleId}" || INPUTS+=("-I ${sampleId}") 	# If bamFile does not exist in array add it
+	array_contains INPUTS "-I ${extId}" || INPUTS+=("-I ${extId}") 	# If bamFile does not exist in array add it
 done
-# shellcheck disable=SC2086 #${INPUTS} => gatk needs seperate strings, not one captured in quotes
+# shellcheck disable=SC2068 #${INPUTS} => gatk needs seperate strings, not one captured in quotes
 gatk --java-options "-Xmx7g" MergeVcfs \
 ${INPUTS[@]} \
 -D "${indexFileDictionary}" \

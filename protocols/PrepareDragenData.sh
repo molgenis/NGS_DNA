@@ -30,7 +30,7 @@ rsync -av "${tmpDirectory}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedI
 rename "${combinedIdentifier}" "${externalSampleID}" "${intermediateDir}/${combinedIdentifier}.hard-filtered.gvcf.gz"*
 
 ## add additional code to only replace chr names (column 1)
-zcat ${intermediateDir}/${externalSampleID}.hard-filtered.gvcf.gz | perl -p -e 's|chr||' > "${intermediateDir}/${externalSampleID}.variant.calls.g.vcf"
+zcat "${intermediateDir}/${externalSampleID}.hard-filtered.gvcf.gz" | perl -p -e 's|chr||' > "${intermediateDir}/${externalSampleID}.variant.calls.g.vcf"
 
 
 bcftools annotate -x 'FORMAT/AF,FORMAT/F1R2,FORMAT/F2R1,FORMAT/GP' "${intermediateDir}/${externalSampleID}.variant.calls.g.vcf" > "${intermediateDir}/${externalSampleID}.variant.calls.g.vcf.tmp"

@@ -32,7 +32,7 @@ FNR==NR{
         }
 }' "${intermediateDir}/InSilico.txt" "${projectVariantsMergedSortedGz}.vcf" > "${intermediateDir}/InSilicoConcordanceCheck.txt"
 
-count=$(cat "${intermediateDir}/InSilicoConcordanceCheck.txt" | wc -l)
+count=$(wc -l "${intermediateDir}/InSilicoConcordanceCheck.txt")
 
 if [[ "${count}" -ne 4 ]]
 then

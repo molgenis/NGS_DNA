@@ -34,9 +34,6 @@ module load "${bcfToolsVersion}"
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
 
-makeTmpDir "${projectBatchGenotypedCGDAnnotatedVariantCalls}"
-tmpProjectBatchGenotypedCGDAnnotatedVariantCalls="${MC_tmpFile}"
-
 bedfile=$(basename "${capturingKit}")
 
 if [ -f "${projectBatchGenotypedVariantCalls}" ]
@@ -51,7 +48,7 @@ then
 
 	echo "convert fromCADD tsv file to fromCADD vcf"
 	##convert tsv to vcf
-	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc ${fromCADD}\
+	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc "${fromCADD}"\
 	| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCADD}.vcf.gz"
 
 	tabix -f -p vcf "${fromCADD}.vcf.gz"
@@ -71,18 +68,21 @@ then
 	then
 		if [[ ${batchID} == *"X"* ]]
 		then
+			#shellcheck disable=SC2129
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chrX.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		elif [[ ${batchID} == *"Y"* || ${batchID} == *"NC_001422.1"* ||  ${batchID} == *"MT"* ]]
 		then
 			echo "chromosome Y/MT/NC_001422.1 is not in gnomAD, do nothing"
 		else
+			#shellcheck disable=SC2129
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${batchID}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		fi
 	else
 		for i in {1..22}
 		do
+			#shellcheck disable=SC2129
 			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"

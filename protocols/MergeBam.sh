@@ -42,34 +42,33 @@ INPUTBAMS=()
 
 for bamFile in "${inputMergeBam[@]}"
 do
-	array_contains INPUTS "${bamFile}" || INPUTS+=("$bamFile")    # If bamFile does not exist in array add it
-	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("$bamFile")    # If bamFile does not exist in array add it
+	array_contains INPUTS "${bamFile}" || INPUTS+=("${bamFile}")    # If bamFile does not exist in array add it
+	array_contains INPUTBAMS "${bamFile}" || INPUTBAMS+=("${bamFile}")    # If bamFile does not exist in array add it
 done
 
 if [[ "${#INPUTS[@]}" -eq '1' ]]
 then
-	ln -sf $(basename "${inputMergeBam[0]}") "${sampleMergedBam}"
+	ln -sf "$(basename "${inputMergeBam[0]}")" "${sampleMergedBam}"
 
 	#indexing because there is no index file coming out of the sorting step
 	printf "indexing..."
 	sambamba index \
 	"${sampleMergedBam}" \
-	${inputMergeBamIdx[0]}
+	"${inputMergeBamIdx[0]}"
 
 	printf "..finished\n"
 
-	echo "ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}"
-	ln -sf $(basename ${inputMergeBamIdx[0]}) ${sampleMergedBai}
+	echo "ln -sf basename ${inputMergeBamIdx[0]} ${sampleMergedBai}"
+	ln -sf "$(basename "${inputMergeBamIdx[0]}")" "${sampleMergedBai}"
 
 	echo "nothing to merge because there is only one sample"
 
 else
 	sambamba merge \
 	"${tmpSampleMergedBam}" \
-	${INPUTS[@]}
+	"${INPUTS[@]}"
 
 	mv -v "${tmpSampleMergedBam}" "${sampleMergedBam}"
 	mv -v "${tmpSampleMergedBamIdx}" "${sampleMergedBamIdx}"
 
 fi
-
