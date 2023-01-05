@@ -152,7 +152,7 @@ cat > "${vcfAnnoCustomConfLua}" << HERE
 
 function calculate_gnomAD_AC(ind)
 if(ind[1] == 0) then return "0" end
-    return (ind[1] * 2)
+	return (ind[1] * 2)
 end
 --clinvar check if pathogenic is common variant in gnomAD
 CLINVAR_SIG = {}
@@ -180,31 +180,32 @@ function intotbl(ud)
 end
 
 function clinvar_sig(vals)
-    local t = type(vals)
-    -- just a single-value
-    if(t == "string" or t == "number") and not contains(vals, "|") then
-        return CLINVAR_SIG[vals]
-    elseif t ~= "table" then
+	local t = type(vals)
+	-- just a single-value
+	if(t == "string" or t == "number") and not contains(vals, "|") then
+		return CLINVAR_SIG[vals]
+	elseif t ~= "table" then
 		if not contains(t, "userdata") then
 			vals = {vals}
 		else
 			vals = intotbl(vals)
 		end
-    end
-    local ret = {}
-    for i=1,#vals do
-        if not contains(vals[i], "|") then
-            ret[#ret+1] = CLINVAR_SIG[vals[i]]
-        else
-            local invals = vals[i]:split("|")
-            local inret = {}
-            for j=1,#invals do
-                inret[#inret+1] = CLINVAR_SIG[invals[j]]
-            end
-            ret[#ret+1] = join(inret, "|")
-        end
-    end
-    return join(ret, ",")
+	end
+	local ret = {}
+	for i=1,#vals do
+	if not contains(vals[i], "|") then
+		ret[#ret+1] = CLINVAR_SIG[vals[i]]
+	else
+		local invals = vals[i]:split("|")
+		local inret = {}
+
+		for j=1,#invals do
+			inret[#inret+1] = CLINVAR_SIG[invals[j]]
+		end
+		ret[#ret+1] = join(inret, "|")
+		end
+	end
+	return join(ret, ",")
 end
 
 join = table.concat
