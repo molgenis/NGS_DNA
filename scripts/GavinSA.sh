@@ -44,7 +44,7 @@ INPUTDIR=$(pwd)
 if ls *.vcf 1> /dev/null 2>&1
 then
 	for i in $(ls *.vcf)
-        do
+	do
 		fileName=$(basename "${i}")
 		name=${fileName%%.*}
 
@@ -73,5 +73,5 @@ then
 		cd "${INPUTDIR}"
 		echo "it will now be running in /groups/${groupname}/${tmpDirectory}/projects/Gavin_${name}/run01/jobs/" > ${i}.started
 		mv "${i}" processing/
-        done
+	done
 fi
