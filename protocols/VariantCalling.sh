@@ -52,7 +52,7 @@ baitBatchLength=""
 sex=$(less "${projectResultsDir}/general/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
 if [ -f "${capturedBatchBed}" ] 
 then
-	baitBatchLength=$(wc -l "${capturedBatchBed}")
+	baitBatchLength=$(wc -l "${capturedBatchBed}" | awk '{print $1}')
 fi
 mapfile -t bams < <(printf '%s\n' "${dedupBam[@]}" | sort -u)
 inputs=$(printf ' -I %s ' "$(printf '%s\n' "${bams[@]}")")
