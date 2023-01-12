@@ -1,3 +1,4 @@
+set -o pipefail
 #string tmpName
 #list seqType
 #string project

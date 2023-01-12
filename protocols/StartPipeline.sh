@@ -1,3 +1,4 @@
+set -o pipefail
 #string tmpName
 #list sequencingStartDate
 #list sequencer

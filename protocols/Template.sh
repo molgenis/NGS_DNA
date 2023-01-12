@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 ### Required parameters in the NGS_DNA pipeline (needed for logging)
 #string project

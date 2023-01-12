@@ -1,3 +1,4 @@
+set -o pipefail
 #string logsDir
 #string groupname
 #string project

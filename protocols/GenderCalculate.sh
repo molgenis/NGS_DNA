@@ -1,3 +1,4 @@
+set -o pipefail
 #string gatkVersion
 #string tmpName
 #string dedupBam

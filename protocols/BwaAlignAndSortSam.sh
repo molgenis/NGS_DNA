@@ -1,4 +1,5 @@
 set -o pipefail
+set -o pipefail
 
 #Parameter mapping
 #string gatkVersion
