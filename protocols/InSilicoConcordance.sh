@@ -33,7 +33,7 @@ FNR==NR{
 	}
 }' "${intermediateDir}/InSilico.txt" "${projectVariantsMergedSortedGz}.vcf" > "${intermediateDir}/InSilicoConcordanceCheck.txt"
 
-count=$(wc -l "${intermediateDir}/InSilicoConcordanceCheck.txt")
+count=$(wc -l "${intermediateDir}/InSilicoConcordanceCheck.txt" | awk '{print $1}')
 
 if [[ "${count}" -ne 4 ]]
 then
