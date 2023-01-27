@@ -58,7 +58,7 @@ mac2unix "${samplesheet}"
 ## Checking for genderColumn
 #
 # load PythonPlus/2x version
-ml "PythonPlus/2.7.16-foss-2018b-v21.08.1"
+ml PythonPlus
 
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
 if [ -f "${samplesheet}.temp" ]

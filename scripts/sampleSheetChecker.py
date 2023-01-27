@@ -26,7 +26,7 @@ for row in reader:
 	if count == 0:		
 		if not "hpoIDs" in row:
 			out=open(sys.argv[1]+'.temp',"w")
-			print "no hpo id's"
+			print("no hpo id's")
 			out.write(','.join(row.keys())+",hpoIDs"+'\n')
 			out.write(','.join(row.values())+","+'\n')
 			count+=1
