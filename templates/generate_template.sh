@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -eu
 if module list | grep -o -P 'NGS_DNA(.+)' 
 then
 	echo "DNA pipeline loaded, proceding"
@@ -58,8 +58,7 @@ mac2unix "${samplesheet}"
 ## Checking for genderColumn
 #
 # load PythonPlus/2x version
-python2Version=$(module list | grep -o -P 'PythonPlus/2.(.+)')
-ml "${python2Version}"
+ml "PythonPlus/2.7.16-foss-2018b-v21.08.1"
 
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
 if [ -f "${samplesheet}.temp" ]
