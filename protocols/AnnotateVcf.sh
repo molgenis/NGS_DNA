@@ -45,7 +45,7 @@ then
 	bcftools norm --force -f "${indexFile}" -m -any "${projectBatchGenotypedVariantCalls}" | awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' | bgzip -c > "${toCADD}.gz"
 	module load "${caddVersion}"
 	echo "starting to get CADD annotations locally for ${toCADD}.gz"
-	CADD.sh -g GRCh37 "${toCADD}.gz" -o "${fromCADD}"
+	CADD.sh -a -g GRCh37 "${toCADD}.gz" -o "${fromCADD}"
 
 	echo "convert fromCADD tsv file to fromCADD vcf"
 	##convert tsv to vcf
@@ -94,7 +94,7 @@ cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
 file="${caddAnnotationVcf}"
-fields=["phred", "raw"]
+columns=[4, 5]
 names=["CADD_SCALED","CADD"]
 ops=["self","self"]
 HERE
