@@ -1,7 +1,7 @@
 import sys
 import csv
 
-reader = csv.DictReader(open(sys.argv[1], "rb"), delimiter=",")
+reader = csv.DictReader(open(sys.argv[1]), delimiter=",")
 project=open("project.txt.tmp","w")
 build=open("build.txt.tmp","w")
 capturingKit=open("capturingKit.txt.tmp","w")

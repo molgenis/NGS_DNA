@@ -2,7 +2,7 @@ import sys
 import csv
 from shutil import copyfile
 
-reader = csv.DictReader(open(sys.argv[1], "rb"), delimiter=",")
+reader = csv.DictReader(open(sys.argv[1]), delimiter=",")
 columnName=sys.argv[2]
 updatedSamplesheet=sys.argv[1]+'.tmp'
 teller=0

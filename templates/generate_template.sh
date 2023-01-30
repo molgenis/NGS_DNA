@@ -57,8 +57,7 @@ mac2unix "${samplesheet}"
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
 ## Checking for genderColumn
 #
-# load PythonPlus/2x version
-ml PythonPlus
+
 
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
 if [ -f "${samplesheet}.temp" ]
