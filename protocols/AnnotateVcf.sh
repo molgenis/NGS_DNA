@@ -47,11 +47,11 @@ then
 	echo "starting to get CADD annotations locally for ${toCADD}.gz"
 	CADD.sh -g GRCh37 "${toCADD}.gz" -o "${fromCADD}"
 
-	tabix -f -p vcf "${fromCADD}.vcf.gz"
+	tabix -f -p vcf "${fromCADD}"
 	##merge the alternative alleles back in one vcf line
 	echo "merging the alternative alleles back in one vcf line .. "
 	module load "${bcfToolsVersion}"
-	bcftools norm --force -f "${indexFile}" -m +any "${fromCADD}.vcf.gz" > "${fromCADDMerged}"
+	bcftools norm --force -f "${indexFile}" -m +any "${fromCADD}" > "${fromCADDMerged}"
 
 	echo "bgzipping + indexing ${fromCADDMerged}"
 	bgzip -c "${fromCADDMerged}" > "${fromCADDMerged}.gz"
