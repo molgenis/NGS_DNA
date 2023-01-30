@@ -214,7 +214,7 @@ vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.t
 vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
 toCADD,${projectPrefix}.batch-${batchID}.toCadd.vcf
-fromCADD,${projectPrefix}.batch-${batchID}.fromCadd.tsv.gz
+fromCADD,${projectPrefix}.batch-${batchID}.fromCadd.vcf.gz
 fromCADDMerged,${projectPrefix}.batch-${batchID}.fromCadd.merged.vcf
 
 
