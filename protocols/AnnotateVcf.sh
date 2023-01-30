@@ -2,7 +2,7 @@ set -o pipefail
 #string logsDir
 #string groupname
 #string project
-#string caddAnnotationVcf
+#string caddAnnotation
 #string toCADD
 #string fromCADD
 #string projectBatchGenotypedVariantCalls
@@ -93,7 +93,7 @@ then
 cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
-file="${caddAnnotationVcf}"
+file="${caddAnnotation}"
 columns=[4, 5]
 names=["CADD_SCALED","CADD"]
 ops=["self","self"]
