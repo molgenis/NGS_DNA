@@ -196,7 +196,7 @@ then
 	exit 1
 fi
 
-if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject,,}" == *"NGS_DNA_Test_v1"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject}" == *"NGS_DNA_Test_v1"* ]]
 then
 	batching='_chr'
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
