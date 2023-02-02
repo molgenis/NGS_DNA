@@ -179,7 +179,7 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
-caddAnnotation,${dataDir}/CADD/prescored/GRCh37/incl_anno/whole_genome_SNVs_inclAnno.tsv.gz
+caddAnnotation,${dataDir}/CADD/prescored/GRCh37/incl_anno/whole_genome_SNVs.tsv.gz
 caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.gz
 gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/${refGnomADGenomesVersion}/
 gnomADExomesAnnotation,${dataDir}/gnomAD/${refGnomADExomesVersion}/

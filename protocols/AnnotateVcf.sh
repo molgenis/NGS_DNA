@@ -50,7 +50,7 @@ then
 	echo "convert fromCADD tsv file to fromCADD vcf"
 	##convert tsv to vcf
 	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc "${fromCADD}"\
-	| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$106 ;printf "phred=";printf "%0.1f\n",$107}}') | bgzip -c > "${fromCADD}.vcf.gz"
+	| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCADD}.vcf.gz"
 
 	tabix -f -p vcf "${fromCADD}.vcf.gz"
 	##merge the alternative alleles back in one vcf line
@@ -93,9 +93,9 @@ then
 cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
-file="${caddAnnotation}"
-columns=[106, 107]
-names=["CADD","CADD_SCALED"]
+file="${caddAnnotationVcf}"
+fields=["phred", "raw"]
+names=["CADD_SCALED","CADD"]
 ops=["self","self"]
 HERE
 
