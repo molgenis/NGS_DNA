@@ -86,7 +86,7 @@ mv "${tmpMantaDir}/"* "${mantaDir}/"
 mkdir -p "${mantaDir}/results/variants/real/"
 
 ### If a capturingkit is used then only limit the output to those regions 
-if [[ "${capturingKit}" != *"wgs"* ]]
+if [[ "${capturingKit}" != *"wgs"* && "${bedfile}" != *"NGS_DNA_Test"* ]]
 then
 	bedtools intersect -header -a "${mantaDir}/results/variants/candidateSmallIndels.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp"
 
