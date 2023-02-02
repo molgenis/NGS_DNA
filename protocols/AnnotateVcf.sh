@@ -93,7 +93,7 @@ then
 cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
-file="${caddAnnotationVcf}"
+file="${caddAnnotation}"
 fields=["phred", "raw"]
 names=["CADD_SCALED","CADD"]
 ops=["self","self"]
