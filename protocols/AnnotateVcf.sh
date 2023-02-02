@@ -94,8 +94,8 @@ cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
 file="${caddAnnotation}"
-fields=["phred", "raw"]
-names=["CADD_SCALED","CADD"]
+columns= [4, 5]
+names=["CADD","CADD_SCALED"]
 ops=["self","self"]
 HERE
 
