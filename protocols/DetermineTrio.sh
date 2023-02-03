@@ -11,7 +11,7 @@ module load "${vcfPedVersion}"
 
 inputVcfFile="${projectPrefix}.final.vcf"
 
-python vcfped "${inputVcfFile}" -o "${projectPrefix}"
+python "${EBROOTVCFPED}/bin/vcfped" "${inputVcfFile}" -o "${projectPrefix}"
 
 trioInformationPrefix="${intermediateDir}/trioInformation"
 
