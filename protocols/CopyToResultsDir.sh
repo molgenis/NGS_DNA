@@ -158,7 +158,7 @@ do
 		do
 			basename "${rejectedSample}" >> "${projectResultsDir}/coverage/rejectedSamples.txt"
 		done
-		cat "${intermediateDir}/${sa}."*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
+		cat "${intermediateDir}/${sa}"*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
 	
 	mapfile -t coveragePerTargetFiles < <(find "${intermediateDir}" -name "${sa}*.coveragePerTarget.txt")
