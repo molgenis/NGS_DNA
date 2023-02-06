@@ -107,7 +107,7 @@ then
 
 			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
-			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1+1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2+1,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
 			
 			grep -v "NC_001422.1" "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt.tmp"
 			echo "phiX is removed for ${externalSampleID}.${perBase} perBase" 
@@ -148,7 +148,7 @@ then
 
 			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
-			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1+1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
+			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2+1,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
 
 			grep -v "NC_001422.1" "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt.tmp"
 			echo "phiX is removed for ${externalSampleID}.${perTarget} perTarget" 
