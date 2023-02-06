@@ -53,7 +53,7 @@ else
 	else
 		module load "${caddVersion}"
 		echo "starting to get CADD annotations locally for ${toCADD}.gz"
-		CADD.sh -a -g GRCh37 -o "${fromCADD}" "${toCADD}.gz" 
+		CADD.sh -g GRCh37 -o "${fromCADD}" "${toCADD}.gz" 
 
 		echo "convert fromCADD tsv file to fromCADD vcf"
 		##convert tsv to vcf
