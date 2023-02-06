@@ -21,6 +21,7 @@ set -o pipefail
 #string gVCF2BEDVersion
 #string htsLibVersion
 #string externalSampleID
+#string Gender
 #list batchID
 
 array_contains () {
