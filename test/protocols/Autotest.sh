@@ -15,7 +15,7 @@ count=0
 for i in 'PlatinumSample_NA12891'
 do
 	diffCoveragePerTarget="false"
-	diff -q "${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt" "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" || diffCoveragePerTarget='true'
+	diff -q "${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt" "${projectResultsDir}/coverage/CoveragePerTarget/male/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" || diffCoveragePerTarget='true'
 	if [[ "${diffCoveragePerTarget}" == 'true' ]]
 	then
 		echo -e "there are differences in the CoveragePerTarget step between the test and the original output of ${i}\nplease fix the bug or update this test\ndiff -q ${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt"
@@ -30,10 +30,10 @@ done
 ### 4. Test GAVIN output
 for i in PlatinumSample_NA12878
 do
-	head -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
-	tail -50 "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" >> "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
+	head -50 "${projectResultsDir}/coverage/CoveragePerBase/female/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" > "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
+	tail -50 "${projectResultsDir}/coverage/CoveragePerBase/female/${i}.NGS_DNA_Test_v1.coveragePerBase.txt" >> "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
 	diffCoveragePerBase='false'
-	diff -q /home/umcg-molgenis/NGS_DNA/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt || diffCoveragePerBase="true"
+	diff -q "${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt" "${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt" || diffCoveragePerBase="true"
 	if [[ "${diffCoveragePerBase}" == 'true' ]]
 	then
 		echo -e "there are differences in the CoveragePerBase step between the test and the original output of ${i}\nplease fix the bug or update this test\ndiff ${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerBase.selection.txt"
@@ -53,9 +53,9 @@ do
 		echo 'Manta output is correct'
 	fi
 
-	if grep 'RLV_PRESENT=FALSE' "${intermediateDir}/${i}.GAVIN.rlv.vcf"
+	if zcat "${projectResultsDir}/${i}.GAVIN.rlv.vcf.gz" | grep 'RLV_PRESENT=FALSE'
 	then
-		echo "RLV_PRESENT=FALSE found in ${intermediateDir}/${i}.GAVIN.rlv.vcf"
+		echo "RLV_PRESENT=FALSE found in ${projectResultsDir}/variants/GAVIN/${i}.GAVIN.rlv.vcf.gz"
 	else
 		echo -e "there are differences in the Gavin output between the test and the original output of ${i} (it does NOT contain RLV_PRESENT=FALSE)\nplease fix the bug or update this test"
 		exit 1
@@ -65,10 +65,10 @@ done
 ## 5. Check if the regular vcf's are still the same
 for i in "${project}" 'PlatinumSample_NA12878' 'PlatinumSample_NA12891'
 do
-	mkdir -p "/home/umcg-molgenis/NGS_DNA/output_${project}/${i}"
+	mkdir -p "${homeFolder}/output_${project}/${i}"
 	${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 "${homeFolder}/${i}_True.final.vcf.gz" -2 "${projectResultsDir}/variants/${i}.final.vcf.gz" -o "${homeFolder}/output_${project}/${i}/"
 
-	if [[ -f "${homeFolder}/output_${project}/${i}/notInVcf1.txt" || -f "/home/umcg-molgenis/NGS_DNA/output_${project}/${i}/notInVcf2.txt" || -f "${homeFolder}/output_${project}/${i}/inconsistent.txt" ]]
+	if [[ -f "${homeFolder}/output_${project}/${i}/notInVcf1.txt" || -f "${homeFolder}/output_${project}/${i}/notInVcf2.txt" || -f "${homeFolder}/output_${project}/${i}/inconsistent.txt" ]]
 	then
 		echo -e "${i}: there are differences between the test and the original output\nplease fix the bug or update this test\nthe stats can be found here: ${homeFolder}/output_${project}/${i}/vcfStats.txt"
 		exit 1
