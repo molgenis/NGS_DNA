@@ -104,7 +104,7 @@ names=["CADD","CADD_SCALED"]
 ops=["self","self"]
 HERE
 
-if [[ "${size}" != '0' ]]
+if [[ "${sizeToCADD}" != '0' ]]
 then
 	length=$(zcat "${fromCADDMerged}.gz" | wc -l)
 
