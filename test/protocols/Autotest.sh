@@ -18,7 +18,7 @@ do
 	diff -q "${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt" "${projectResultsDir}/coverage/CoveragePerTarget/male/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt" || diffCoveragePerTarget='true'
 	if [[ "${diffCoveragePerTarget}" == 'true' ]]
 	then
-		echo -e "there are differences in the CoveragePerTarget step between the test and the original output of ${i}\nplease fix the bug or update this test\ndiff -q ${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt ${intermediateDir}/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt"
+		echo -e "there are differences in the CoveragePerTarget step between the test and the original output of ${i}\nplease fix the bug or update this test\ndiff -q ${homeFolder}/${i}.NGS_DNA_Test_v1.coveragePerTarget_True.txt ${projectResultsDir}/coverage/CoveragePerTarget/male/${i}.NGS_DNA_Test_v1.coveragePerTarget.txt"
 		exit 1
 	else
 		echo 'CoveragePerTarget is correct'
