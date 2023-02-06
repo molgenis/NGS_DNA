@@ -46,8 +46,8 @@ else
 	echo "create file toCADD"
 	##create file toCADD (split alternative alleles per line)
 	bcftools norm --force -f "${indexFile}" -m -any "${projectBatchGenotypedVariantCalls}" | awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' | bgzip -c > "${toCADD}.gz"
-	size=$(zcat "${toCADD}.gz" | wc -l)
-	if [[ "${size}" == '0' ]]
+	sizeToCADD=$(zcat "${toCADD}.gz" | wc -l)
+	if [[ "${sizeToCADD}" == '0' ]]
 	then
 		echo "nothing to CADD, skip"
 	else
@@ -73,21 +73,19 @@ else
 	fi
 	## Prepare gnomAD config 
 	rm -f "${vcfAnnoGnomadGenomesConf}"
-	if [[ "${bedfile}" == *"Exoom"* ]]
+	
+	if [[ ${batchID} == *"X"* ]]
 	then
-		if [[ ${batchID} == *"X"* ]]
-		then
-			#shellcheck disable=SC2129
-			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chrX.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-		elif [[ ${batchID} == *"Y"* || ${batchID} == *"NC_001422.1"* ||  ${batchID} == *"MT"* ]]
-		then
-			echo "chromosome Y/MT/NC_001422.1 is not in gnomAD, do nothing"
-		else
-			#shellcheck disable=SC2129
-			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${batchID}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-		fi
+		#shellcheck disable=SC2129
+		echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chrX.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+		echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
+	elif [[ ${batchID} == *"Y"* || ${batchID} == *"NC_001422.1"* ||  ${batchID} == *"MT"* ]]
+	then
+		echo "chromosome Y/MT/NC_001422.1 is not in gnomAD, do nothing"
+	elif [[ "${bedfile}" == *"Exoom"* ]]
+	then
+		echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${batchID}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+		echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 	else
 		for i in {1..22}
 		do
@@ -95,7 +93,6 @@ else
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		done
 		echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-		echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 	fi
 
 cat > "${vcfAnnoConf}" << HERE
