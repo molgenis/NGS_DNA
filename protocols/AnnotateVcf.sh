@@ -232,8 +232,8 @@ HERE
 
 	echo "starting to annotate with vcfanno"
 	vcfanno -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
-	perl -pi -e 's|CADD_SCALED,Number=1,Type=String|CADD_SCALED,Number=A,Type=Float' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
-	perl -pi -e 's|CADD,Number=1,Type=String|CADD,Number=A,Type=Float' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
+	perl -pi -e 's|CADD_SCALED,Number=1,Type=String|CADD_SCALED,Number=A,Type=Float|' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
+	perl -pi -e 's|CADD,Number=1,Type=String|CADD,Number=A,Type=Float|' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 	mv -v "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
 
 fi
