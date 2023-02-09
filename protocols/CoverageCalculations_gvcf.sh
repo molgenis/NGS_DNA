@@ -98,7 +98,7 @@ then
 			perBaseDir="$(dirname "${i}")/${perBase}/human_g1k_v37/"
 			echo "perBaseDir: ${perBaseDir}"
 
-			outputFile="${intermediateDir}/${externalSampleID}.${perBase}.CoverageOutput.csv"
+			outputFile="${intermediateDir}/${externalSampleID}.${perBase}.perBase.CoverageOutput.csv"
 
 			gvcf2bed2.py \
 				-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
@@ -107,7 +107,7 @@ then
 
 			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
-			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2+1,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tDescription\tMin Counts\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2+1,$4,$8,"CDS","1"}else{print "Index\tChr\tChr Position Start\tDescription\tMin Counts\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
 			
 			grep -v "NC_001422.1" "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt.tmp"
 			echo "phiX is removed for ${externalSampleID}.${perBase} perBase" 
@@ -139,7 +139,7 @@ then
 			perTargetDir="$(dirname "${i}")/${perTarget}/human_g1k_v37/"
 			echo "perTargetDir: ${perTargetDir}"
 
-			outputFile="${intermediateDir}/${externalSampleID}.${perTarget}.CoverageOutput.csv"
+			outputFile="${intermediateDir}/${externalSampleID}.${perTarget}.perTarget.CoverageOutput.csv"
 
 			gvcf2bed2.py \
 				-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
