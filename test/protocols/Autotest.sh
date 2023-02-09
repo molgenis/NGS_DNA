@@ -53,7 +53,7 @@ do
 		echo 'Manta output is correct'
 	fi
 
-	if zcat "${projectResultsDir}/${i}.GAVIN.rlv.vcf.gz" | grep 'RLV_PRESENT=FALSE'
+	if zcat "${projectResultsDir}/variants/GAVIN/${i}.GAVIN.rlv.vcf.gz" | grep -q 'RLV_PRESENT=FALSE'
 	then
 		echo "RLV_PRESENT=FALSE found in ${projectResultsDir}/variants/GAVIN/${i}.GAVIN.rlv.vcf.gz"
 	else
@@ -66,7 +66,7 @@ done
 for i in "${project}" 'PlatinumSample_NA12878' 'PlatinumSample_NA12891'
 do
 	mkdir -p "${homeFolder}/output_${project}/${i}"
-	${EBROOTNGSMINUTILS}/vcf-compare_2.0.sh -1 "${homeFolder}/${i}_True.final.vcf.gz" -2 "${projectResultsDir}/variants/${i}.final.vcf.gz" -o "${homeFolder}/output_${project}/${i}/"
+	vcf-compare_2.0.sh -1 "${homeFolder}/${i}_True.final.vcf.gz" -2 "${projectResultsDir}/variants/${i}.final.vcf.gz" -o "${homeFolder}/output_${project}/${i}/"
 
 	if [[ -f "${homeFolder}/output_${project}/${i}/notInVcf1.txt" || -f "${homeFolder}/output_${project}/${i}/notInVcf2.txt" || -f "${homeFolder}/output_${project}/${i}/inconsistent.txt" ]]
 	then
