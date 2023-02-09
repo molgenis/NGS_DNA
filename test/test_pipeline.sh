@@ -62,7 +62,7 @@ function preparePipeline(){
 		cd "${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"
 		perl -pi -e 's|ExternalSamples|InhouseSamples|g' "s01"*"_0.sh"
 		var=$(diff s01*_0.sh "${jobsFolder}/s01"*"_0.sh" | wc -l)
-		if [[ "${var}"-eq '0' ]]
+		if [[ "${var}" -eq '0' ]]
 		then
 			echo "ExternalSamples is correct"
 		else
