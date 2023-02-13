@@ -1,3 +1,4 @@
+set -o pipefail
 #list externalSampleID
 #string tmpName
 #string gatkVersion

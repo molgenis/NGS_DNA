@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string tmpName
 #string tempDir
@@ -36,7 +37,7 @@ module list
 #Create string with input BAM files for Picard
 #This check needs to be performed because Compute generates duplicate values in array
 
-mapfile -t gvcfFiles < <(find ${projectResultsDir}/variants/gVCF/ -name *.batch-${batchID}.variant.calls.g.vcf.gz)
+mapfile -t gvcfFiles < <(find "${projectResultsDir}/variants/gVCF/" -name "*.batch-${batchID}.variant.calls.g.vcf.gz")
 
 gvcfArray=()
 if [[ "${#gvcfFiles[@]}" -ne '0' ]]
@@ -46,6 +47,7 @@ then
 		array_contains gvcfArray "--variant ${sbatch}" || gvcfArray+=("--variant ${sbatch}")
 	done
 
+	#shellcheck disable=SC2068
 	gatk CombineGVCFs \
 	--reference "${indexFile}" \
 	${gvcfArray[@]} \

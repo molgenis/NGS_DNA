@@ -1,7 +1,7 @@
 import sys
 import csv
 
-reader = csv.DictReader(open(sys.argv[1], "rb"), delimiter=",")
+reader = csv.DictReader(open(sys.argv[1]), delimiter=",")
 project=open("project.txt.tmp","w")
 build=open("build.txt.tmp","w")
 capturingKit=open("capturingKit.txt.tmp","w")
@@ -26,7 +26,7 @@ for row in reader:
 	if count == 0:		
 		if not "hpoIDs" in row:
 			out=open(sys.argv[1]+'.temp',"w")
-			print "no hpo id's"
+			print("no hpo id's")
 			out.write(','.join(row.keys())+",hpoIDs"+'\n')
 			out.write(','.join(row.values())+","+'\n')
 			count+=1

@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string tmpName
 #string tempDir
@@ -39,7 +40,7 @@ module list
 
 # THIS IS STILL BETA, needs an update once it (if it ever) is used
 ml PythonPlus/3.7.4-foss-2018b-v20.02.1
-export PYTHONPATH='/groups/umcg-atd/tmp01/umcg-rkanninga/tools/lib/python3.7/site-packages/:$PYTHONPATH'
+export PYTHONPATH="/groups/umcg-atd/tmp01/umcg-rkanninga/tools/lib/python3.7/site-packages/:${PYTHONPATH}"
 echo "${PYTHONPATH}"
 
 python "${EBROOTNGS_DNA}/scripts/gvcf2bed.py" \

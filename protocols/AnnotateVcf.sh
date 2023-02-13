@@ -1,7 +1,8 @@
+set -o pipefail
 #string logsDir
 #string groupname
 #string project
-#string caddAnnotationVcf
+#string caddAnnotation
 #string toCADD
 #string fromCADD
 #string projectBatchGenotypedVariantCalls
@@ -34,74 +35,81 @@ module load "${bcfToolsVersion}"
 makeTmpDir "${projectBatchGenotypedAnnotatedVariantCalls}"
 tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
 
-makeTmpDir "${projectBatchGenotypedCGDAnnotatedVariantCalls}"
-tmpProjectBatchGenotypedCGDAnnotatedVariantCalls="${MC_tmpFile}"
-
 bedfile=$(basename "${capturingKit}")
 
-if [ -f "${projectBatchGenotypedVariantCalls}" ]
+if [ ! -f "${projectBatchGenotypedVariantCalls}" ]
 then
 
+	echo "${projectBatchGenotypedVariantCalls} does not exist, skipped"
+
+else
 	echo "create file toCADD"
 	##create file toCADD (split alternative alleles per line)
 	bcftools norm --force -f "${indexFile}" -m -any "${projectBatchGenotypedVariantCalls}" | awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' | bgzip -c > "${toCADD}.gz"
-	module load "${caddVersion}"
-	echo "starting to get CADD annotations locally for ${toCADD}.gz"
-	CADD.sh -g GRCh37 "${toCADD}.gz" -o "${fromCADD}"
+	sizeToCADD=$(zcat "${toCADD}.gz" | wc -l)
+	if [[ "${sizeToCADD}" == '0' ]]
+	then
+		echo "nothing to CADD, skip"
+	else
+		module load "${caddVersion}"
+		echo "starting to get CADD annotations locally for ${toCADD}.gz"
+		CADD.sh -g GRCh37 -o "${fromCADD}" "${toCADD}.gz" 
 
-	echo "convert fromCADD tsv file to fromCADD vcf"
-	##convert tsv to vcf
-	(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc ${fromCADD}\
-	| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCADD}.vcf.gz"
+		echo "convert fromCADD tsv file to fromCADD vcf"
+		##convert tsv to vcf
+		(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc "${fromCADD}"\
+			| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCADD}.vcf.gz"
 
-	tabix -f -p vcf "${fromCADD}.vcf.gz"
-	##merge the alternative alleles back in one vcf line
-	echo "merging the alternative alleles back in one vcf line .. "
-	module load "${bcfToolsVersion}"
-	bcftools norm --force -f "${indexFile}" -m +any "${fromCADD}.vcf.gz" > "${fromCADDMerged}"
+		tabix -f -p vcf "${fromCADD}.vcf.gz"
+		##merge the alternative alleles back in one vcf line
+		echo "merging the alternative alleles back in one vcf line .. "
+		module load "${bcfToolsVersion}"
+		bcftools norm --force -f "${indexFile}" -m +any "${fromCADD}.vcf.gz" > "${fromCADDMerged}"
 
-	echo "bgzipping + indexing ${fromCADDMerged}"
-	bgzip -c "${fromCADDMerged}" > "${fromCADDMerged}.gz"
-	tabix -f -p vcf "${fromCADDMerged}.gz"
+		echo "bgzipping + indexing ${fromCADDMerged}"
+		bgzip -c "${fromCADDMerged}" > "${fromCADDMerged}.gz"
+		tabix -f -p vcf "${fromCADDMerged}.gz"
 
-
+	fi
 	## Prepare gnomAD config 
 	rm -f "${vcfAnnoGnomadGenomesConf}"
-	if [[ "${bedfile}" == *"Exoom"* ]]
+	
+	if [[ ${batchID} == *"X"* ]]
 	then
-		if [[ ${batchID} == *"X"* ]]
-		then
-			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chrX.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-		elif [[ ${batchID} == *"Y"* || ${batchID} == *"NC_001422.1"* ||  ${batchID} == *"MT"* ]]
-		then
-			echo "chromosome Y/MT/NC_001422.1 is not in gnomAD, do nothing"
-		else
-			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${batchID}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-		fi
+		#shellcheck disable=SC2129
+		echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chrX.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+		echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
+	elif [[ ${batchID} == *"Y"* || ${batchID} == *"NC_001422.1"* ||  ${batchID} == *"MT"* ]]
+	then
+		echo "chromosome Y/MT/NC_001422.1 is not in gnomAD, do nothing"
+	elif [[ "${bedfile}" == *"Exoom"* ]]
+	then
+		echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${batchID}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
+		echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 	else
 		for i in {1..22}
 		do
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
-			echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrX.release4.gtc.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
+			#shellcheck disable=SC2129
 			echo -e "\n[[annotation]]\nfile=\"${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz\"\nfields=[\"AF_POPMAX\",\"segdup\"]\nnames=[\"gnomAD_genome_AF_MAX\",\"gnomAD_genome_RF_Filter\"]\nops=[\"self\",\"self\"]" >> "${vcfAnnoGnomadGenomesConf}"
 		done
+		echo -e "\n[[annotation]]\nfile=\"${gonlAnnotation}/gonl.chrCombined.snps_indels.r5.vcf.gz\"\nfields=[\"AC\",\"AN\"]\nnames=[\"GoNL_AC\",\"GoNL_AN\"]\nops=[\"self\",\"first\"]" >> "${vcfAnnoGnomadGenomesConf}"
 	fi
 
 cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
-file="${caddAnnotationVcf}"
-fields=["phred", "raw"]
-names=["CADD_SCALED","CADD"]
+file="${caddAnnotation}"
+columns= [4, 5]
+names=["CADD","CADD_SCALED"]
 ops=["self","self"]
 HERE
 
-length=$(zcat "${fromCADDMerged}.gz" | wc -l)
-
-if [ "${length}" -gt 8 ]
+if [[ "${sizeToCADD}" != '0' ]]
 then
+	length=$(zcat "${fromCADDMerged}.gz" | wc -l)
+
+	if [ "${length}" -gt 8 ]
+	then
 
 cat >> "${vcfAnnoConf}" << HERE
 [[annotation]]
@@ -110,6 +118,7 @@ fields=["phred", "raw"]
 names=["CADD_SCALED","CADD"]
 ops=["self","self"]
 HERE
+	fi
 fi
 	## write first part of conf file
 	cat >> "${vcfAnnoConf}" << HERE
@@ -223,9 +232,8 @@ HERE
 
 	echo "starting to annotate with vcfanno"
 	vcfanno -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
-
+	perl -pi -e 's|CADD_SCALED,Number=1,Type=String|CADD_SCALED,Number=A,Type=Float|' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
+	perl -pi -e 's|CADD,Number=1,Type=String|CADD,Number=A,Type=Float|' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 	mv -v "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
 
-else
-	echo "${projectBatchGenotypedVariantCalls} does not exist, skipped"
 fi

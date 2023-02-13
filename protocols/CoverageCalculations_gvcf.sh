@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string tmpName
 #string intermediateDir
@@ -20,6 +21,7 @@
 #string gVCF2BEDVersion
 #string htsLibVersion
 #string externalSampleID
+#string Gender
 #list batchID
 
 array_contains () {
@@ -69,6 +71,7 @@ then
 else
 	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" ]]
 	then
+		#shellcheck disable=SC2086
 		gatk GatherVcfs \
 		${INPUTS[*]} \
 		--OUTPUT "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
@@ -95,7 +98,7 @@ then
 			perBaseDir="$(dirname "${i}")/${perBase}/human_g1k_v37/"
 			echo "perBaseDir: ${perBaseDir}"
 
-			outputFile="${intermediateDir}/${externalSampleID}.${perBase}.CoverageOutput.csv"
+			outputFile="${intermediateDir}/${externalSampleID}.${perBase}.perBase.CoverageOutput.csv"
 
 			gvcf2bed2.py \
 				-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
@@ -104,11 +107,17 @@ then
 
 			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
-			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
-
-			echo "Raw output file is here: ${outputFile}"
-			echo "final statistics can be found here: ${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
-			echo "coveragePerTarget file can be found here: ${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2+1,$4,$8,"CDS","1"}else{print "Index\tChr\tChr Position Start\tDescription\tMin Counts\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			
+			grep -v "NC_001422.1" "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt.tmp"
+			echo "phiX is removed for ${externalSampleID}.${perBase} perBase" 
+			mv -v "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt.tmp" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			
+			echo "coveragePerTarget file can be found here: ${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			
+			rsync -v "${outputFile}" "${projectResultsDir}/coverage/CoveragePerBase/"
+			rsync -v "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt" "${projectResultsDir}/coverage/CoveragePerBase/"
+			echo -e "EXTRA OUTPUT GENERATED CAN BE FOUND HERE:\n${projectResultsDir}/coverage/CoveragePerBase/${externalSampleID}.${perBase}.CoverageOutput.csv\n${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
 		done
 	fi
@@ -130,7 +139,7 @@ then
 			perTargetDir="$(dirname "${i}")/${perTarget}/human_g1k_v37/"
 			echo "perTargetDir: ${perTargetDir}"
 
-			outputFile="${intermediateDir}/${externalSampleID}.${perTarget}.CoverageOutput.csv"
+			outputFile="${intermediateDir}/${externalSampleID}.${perTarget}.perTarget.CoverageOutput.csv"
 
 			gvcf2bed2.py \
 				-I "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
@@ -139,18 +148,24 @@ then
 
 			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
-			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
+			awk 'BEGIN{OFS="\t"}{if (NR>1){print (NR-1),$1,$2+1,$3,$8,$4,$12,"CDS","1"}else{print "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig"}}' "${outputFile}" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
 
-			echo "Raw output file is here: ${outputFile}"
-			echo "final statistics can be found here: ${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
-			echo "coveragePerTarget file can be found here: ${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
+			grep -v "NC_001422.1" "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt" > "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt.tmp"
+			echo "phiX is removed for ${externalSampleID}.${perTarget} perTarget" 
+			mv -v "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt.tmp" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
+			
+			echo "coveragePerTarget file can be found here: ${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/${externalSampleID}.${perTarget}.coveragePerTarget.txt"
+			
+			rsync -v "${outputFile}" "${projectResultsDir}/coverage/CoveragePerTarget/"
+			rsync -v "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt" "${projectResultsDir}/coverage/CoveragePerTarget/"
+			echo -e "EXTRA OUTPUT GENERATED CAN BE FOUND HERE:\n${projectResultsDir}/coverage/CoveragePerTarget/${externalSampleID}.${perTarget}.CoverageOutput.csv\n${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
 			if [[ "${perTarget}" ==  "${bedfile}" ]]
 			then
-				sizePerTarget=$(wc -l "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt" | awk '{print $1}')
+				sizePerTarget=$(wc -l "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/${externalSampleID}.${perTarget}.coveragePerTarget.txt" | awk '{print $1}')
 				totalcount=$((${sizePerTarget}-1))
 				count=0
-				count=$(awk 'BEGIN{sum=0}{if($5 < 20){sum++}} END {print sum}' "${intermediateDir}/${externalSampleID}.${perTarget}.coveragePerTarget.txt")
+				count=$(awk 'BEGIN{sum=0}{if($5 < 20){sum++}} END {print sum}' "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/${externalSampleID}.${perTarget}.coveragePerTarget.txt")
 
 				if [[ "${count}" -eq '0' ]]
 				then
@@ -160,7 +175,7 @@ then
 					if [ "${percentage%%.*}" -gt 10 ]
 					then
 						echo "${sampleNameID}: percentage ${percentage} (${count}/${totalcount}) is more than 10 procent, skipped"
-						echo "${sampleNameID}: percentage ${percentage} (${count}/${totalcount}) is more than 10 procent, skipped" > "${intermediateDir}/${externalSampleID}.rejected"
+						echo "${sampleNameID}: percentage ${percentage} (${count}/${totalcount}) is more than 10 procent, skipped" > "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/${externalSampleID}.rejected"
 					fi
 				fi
 			fi

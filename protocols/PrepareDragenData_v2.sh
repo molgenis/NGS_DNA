@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string logsDir
 #string tmpDirectory

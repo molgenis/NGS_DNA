@@ -1,3 +1,4 @@
+set -o pipefail
 #string tmpName
 #list seqType
 #string project
@@ -44,12 +45,10 @@ module load "${ngsversion}"
 array_contains () {
 	local array="$1[@]"
 	local seeking="${2}"
-	local in=1
 	rejected="false"
 	for element in "${!array-}"; do
 		if [[ "${element}" == "${seeking}" ]]; then
-			in=0
-			rejected="true"
+			rejected='true'
 			continue
 		fi
 	done
@@ -68,6 +67,7 @@ mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female
 mkdir -p "${projectResultsDir}/qc/statistics/"
 mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
 mkdir -p "${projectQcDir}"
+#shellcheck disable=SC2174
 mkdir -p -m 2770 "${logsDir}/${project}/"
 #
 # Create symlinks to the raw data required to analyse this project.
@@ -79,12 +79,12 @@ rocketPoint=$(pwd)
 if [ -f "rejectedBarcodes.txt" ]
 then
 	arrayRejected=()
-	while read line
+	while read -r line
 	do
 		arrayRejected+=("${line}")
 	done<"rejectedBarcodes.txt"
 fi
-cd "${projectRawTmpDataDir}"
+cd "${projectRawTmpDataDir}" || exit
 max_index=${#externalSampleID[@]}-1
 
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
@@ -147,27 +147,27 @@ barcodesGrepCommand=""
 #
 
 
-cd "${rocketPoint}"
+cd "${rocketPoint}" || exit
 rm -f "${projectJobsDir}/${project}.filteredRejected.csv"
 rm -f "${intermediateDir}/${project}.filteredBarcodes.csv"
 
 if [ -f "rejectedBarcodes.txt" ]
 then
-	size=$(cat "rejectedBarcodes.txt" | wc -l)
+	size=$(wc -l "rejectedBarcodes.txt" | awk '{print $1}')
 	teller=1
 
-	while read line
+	while read -r line
 	do
 		if [[ "${teller}" -lt "${size}" ]]
 		then
 			barcodesGrepCommand+="${line}|"
-		elif [ "${teller}" == ${size} ]
+		elif [[ "${teller}" == "${size}" ]]
 		then
 			echo "last line"
 			barcodesGrepCommand+="${line}"
 		fi
 		teller=$((teller+1))
-	done<"rejectedBarcodes.txt"
+	done<'rejectedBarcodes.txt'
 
 	echo "${barcodesGrepCommand}"
 
@@ -196,7 +196,7 @@ then
 	exit 1
 fi
 
-if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* ]]
+if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *"exome"* || "${capturingKitProject,,}" == *"all_exon_v1"* || "${capturingKitProject}" == *"NGS_DNA_Test_v1"* ]]
 then
 	batching='_chr'
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
@@ -220,9 +220,9 @@ else
 	fi
 fi
 
-if [ "${captKit}" == *"ONCO"* ]
+if [[ "${captKit}" == *"ONCO"* ]]
 then
-	if [ ! -f "${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed"
+	if [[ ! -f "${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed" ]]
 	then
 		echo "cannot do concordance check later on since ${dataDir}/${capturingKitProject}/human_g1k_v37/GSA_SNPS.bed is missing! EXIT!"
 		exit 1

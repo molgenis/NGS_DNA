@@ -1,11 +1,11 @@
 #!/bin/bash
-
+set -eu
 if module list | grep -o -P 'NGS_DNA(.+)' 
 then
 	echo "DNA pipeline loaded, proceding"
 else
 	echo "No DNA Pipeline loaded, exiting"
-        exit 1
+	exit 1
 fi
 
 module list
@@ -57,9 +57,7 @@ mac2unix "${samplesheet}"
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
 ## Checking for genderColumn
 #
-# load PythonPlus/2x version
-python2Version=$(module list | grep -o -P 'PythonPlus/2.(.+)')
-ml "${python2Version}"
+
 
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
 if [ -f "${samplesheet}.temp" ]

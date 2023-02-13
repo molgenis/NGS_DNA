@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string logsDir
 
@@ -26,7 +27,7 @@
 
 #Load module
 module load "${seqTkVersion}"
-module load ${pigzVersion}
+module load "${pigzVersion}"
 
 array_contains () {
 	local array="$1[@]"
@@ -76,11 +77,11 @@ checkIlluminaEncoding() {
 	barcodeFqGz="${1}"
 	barcodeFinalFqGz="${2}"
 
-	lines=($(zcat "${barcodeFqGz}" | head -20000 | tail -192 | awk 'NR % 4 == 0'))
+	mapfile -t lines< <(zcat "${barcodeFqGz}" | head -20000 | tail -192 | awk 'NR % 4 == 0')
 	count=1
 	nodecision=0
 	numberoflines=0
-	for line in ${lines[@]}
+	for line in "${lines[@]}"
 	do
 		numberoflines=$(( numberoflines+1 ))
 		#check for illumina encoding 1.5
@@ -97,7 +98,7 @@ checkIlluminaEncoding() {
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
-				echo "LINE: " $line
+				echo "LINE: ${line}"
 				exit 1
 			fi
 			lastEncoding="${encoding}"
@@ -115,7 +116,7 @@ checkIlluminaEncoding() {
 			then
 				echo "error, encoding not possible"
 				echo "${encoding} is not matching last encoding (${lastEncoding})"
-				echo "LINE: " ${line}
+				echo "LINE: ${line}"
 			exit 1
 			fi
 			lastEncoding="${encoding}"

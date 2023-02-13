@@ -2,7 +2,7 @@ import sys
 import csv
 from shutil import copyfile
 
-reader = csv.DictReader(open(sys.argv[1], "rb"), delimiter=",")
+reader = csv.DictReader(open(sys.argv[1]), delimiter=",")
 columnName=sys.argv[2]
 updatedSamplesheet=sys.argv[1]+'.tmp'
 teller=0
@@ -13,7 +13,7 @@ with open(updatedSamplesheet, 'w') as out:
 			break
 		else:
 			if columnName in row.keys():
-				print columnName + " is already there, skipped"
+				print(columnName + " is already there, skipped")
 				columnBool='true'
 				copyfile(sys.argv[1], updatedSamplesheet)	
 				break
@@ -23,7 +23,7 @@ with open(updatedSamplesheet, 'w') as out:
 					default="FALSE"
 				elif columnName == 'Gender':
 					default="Unknown"
-				print columnName
+				print(columnName)
 				if teller == 0:
 					out.write(','.join(row.keys())+","+columnName+'\n')
 					out.write(','.join(row.values())+","+default+'\n')

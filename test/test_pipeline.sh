@@ -49,20 +49,20 @@ function preparePipeline(){
 	perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
 	perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
 
-	for i in $(ls s*_Manta_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
+	for i in s*_Manta_1.sh; do touch "${i}.finished" ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
 
 	## "gender cannot be determined for Male NA12891"
-	for i in $(ls s*_GenderCheck_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
-	for i in $(ls s*_GenderCalculate_1.sh); do touch $i.finished ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
-	printf "This is a male\nMale\n" > ${tmpfolder}//tmp/NGS_DNA/${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt
+	for i in s*_GenderCheck_1.sh; do touch "${i}.finished" ; touch "${i%.*}.env"; chmod 755 "${i%.*}.env" ;done
+	for i in $(ls s*_GenderCalculate_1.sh); do touch "${i}.finished" ; touch "${i%.*}.env"; chmod 755 "${i%.*}.env" ;done
+	printf "This is a male\nMale\n" > "${tmpfolder}/tmp/NGS_DNA/${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt"
 	perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
 	perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
-	if [ "${_workflowType}" == "ExternalSamples" ]
+	if [[ "${_workflowType}" == "ExternalSamples" ]]
 	then
-		cd ${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/
-		perl -pi -e 's|ExternalSamples|InhouseSamples|g' s01*_0.sh
+		cd "${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"
+		perl -pi -e 's|ExternalSamples|InhouseSamples|g' "s01"*"_0.sh"
 		var=$(diff s01*_0.sh "${jobsFolder}/s01"*"_0.sh" | wc -l)
-		if [[ "${var}" == 0 ]]
+		if [[ "${var}" -eq '0' ]]
 		then
 			echo "ExternalSamples is correct"
 		else
@@ -71,7 +71,7 @@ function preparePipeline(){
 		fi
 	else
 
-		sh submit.sh
+		bash submit.sh
 	fi
 
 
@@ -80,21 +80,20 @@ function checkIfFinished(){
 	local _projectName="PlatinumSubset${1}"
 	count=0
 	minutes=0
-	while [ ! -f ${tmpfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished ]
+	while [[ ! -f "${tmpfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished" ]]
 	do
-
-		echo "${_projectName} is not finished in $minutes minutes, sleeping for 2 minutes"
+		echo "${_projectName} is not finished in ${minutes} minutes, sleeping for 2 minutes"
 		sleep 120
 		minutes=$((minutes+2))
 
 		count=$((count+2))
-		if [ $count -eq 60 ]
+		if [[ "${count}" -eq '60' ]]
 		then
 			echo "the test was not finished within 60 minutes, let's kill it"
 			echo -e "\n"
-			for i in $(ls ${tmpfolder}/projects/${_projectName}/run01/jobs/*.sh)
+			for i in "${tmpfolder}/projects/${_projectName}/run01/jobs/"*".sh"
 			do
-				if [ ! -f $i.finished ]
+				if [[ ! -f "${i}.finished" ]]
 				then
 					echo "$(basename $i) is not finished"
 				fi
@@ -102,12 +101,12 @@ function checkIfFinished(){
 			exit 1
 		fi
 	done
-	echo ""
-	echo "${_projectName} test succeeded!"
-	echo ""
+
+	echo -e "\n${_projectName} test succeeded!\n"
+
 }
-tmpdirectory="tmp01"
-groupName="umcg-atd"
+tmpdirectory='tmp01'
+groupName='umcg-atd'
 
 pipelinefolder="/groups/${groupName}/${tmpdirectory}/tmp/NGS_DNA/betaAutotest/"
 tmpfolder="/groups/${groupName}/${tmpdirectory}"
@@ -117,31 +116,31 @@ mkdir -p "${pipelinefolder}"
 
 cd "${pipelinefolder}"
 
-echo "pr number: $1"
+echo "pr number: ${1}"
 
-PULLREQUEST=$1
+PULLREQUEST="${1}"
 
-git clone https://github.com/molgenis/NGS_DNA.git
+git clone 'https://github.com/molgenis/NGS_DNA.git'
 cd NGS_DNA
-git fetch --tags --progress https://github.com/molgenis/NGS_DNA/ +refs/pull/*:refs/remotes/origin/pr/*
-COMMIT=$(git rev-parse refs/remotes/origin/pr/$PULLREQUEST/merge^{commit})
+git fetch --tags --progress 'https://github.com/molgenis/NGS_DNA/' +refs/pull/*:refs/remotes/origin/pr/*
+COMMIT=$(git rev-parse refs/remotes/origin/pr/${PULLREQUEST}/merge^{commit})
 echo "checkout commit: COMMIT"
-git checkout -f ${COMMIT}
+git checkout -f "${COMMIT}"
 
 mv * ../
 cd ..
-rm -rf NGS_DNA/
+rm -rf 'NGS_DNA'
 
 ### create testworkflow
-cp workflow.csv test_workflow.csv
-tail -1 workflow.csv | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> test_workflow.csv
+cp 'workflow.csv' 'test_workflow.csv'
+tail -1 'workflow.csv' | perl -p -e 's|,|\t|g' | awk '{print "Autotest,test/protocols/Autotest.sh,"$1}' >> 'test_workflow.csv'
 
-cp test/results/*_True.final.vcf.gz /home/umcg-molgenis/NGS_DNA/
-cp test/results/*_True.txt /home/umcg-molgenis/NGS_DNA/
-cp test/results/PlatinumSample_NA12878.Manta.diploidSV_True.vcf.gz /home/umcg-molgenis/NGS_DNA/
-cp test/results/PlatinumSample_NA12878.GAVIN.rlv.vcf /home/umcg-molgenis/NGS_DNA/
+rsync -v 'test/results/'*'_True.final.vcf.gz' '/home/umcg-molgenis/NGS_DNA/'
+rsync -v 'test/results/'*'_True.txt' '/home/umcg-molgenis/NGS_DNA/'
+rsync -v 'test/results/PlatinumSample_NA12878.Manta.diploidSV_True.vcf.gz' '/home/umcg-molgenis/NGS_DNA/'
+rsync -v 'test/results/PlatinumSample_NA12878.GAVIN.rlv.vcf.gz' '/home/umcg-molgenis/NGS_DNA/'
 
-preparePipeline "InhouseSamples"
-preparePipeline "ExternalSamples"
+preparePipeline 'InhouseSamples'
+preparePipeline 'ExternalSamples'
 
-checkIfFinished "InhouseSamples"
+checkIfFinished 'InhouseSamples'

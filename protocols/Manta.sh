@@ -1,3 +1,4 @@
+set -o pipefail
 #string tmpName
 #string project
 #string logsDir
@@ -19,7 +20,7 @@
 #string ngsversion
 
 module load "${ngsversion}"
-cp ${EBROOTNGS_DNA}/conf/configManta.py.ini ${intermediateDir}/
+cp "${EBROOTNGS_DNA}/conf/configManta.py.ini" "${intermediateDir}"
 module purge
 module load "${mantaVersion}"
 module load "${python2Version}"
@@ -34,12 +35,11 @@ mkdir -p "${mantaDir}"
 makeTmpDir "${mantaDir}"
 tmpMantaDir="${MC_tmpFile}"
 
-bedfile="$(basename "$capturingKit")"
+bedfile="$(basename "${capturingKit}")"
 SCRIPTNAME="${MC_jobScript}"
 
 if [[ "${bedfile}" == *"wgs"* || "${bedfile}" == *"WGS"* ]]
 then
-
 	python "${EBROOTMANTA}/bin/configManta.py" \
 	--bam "${dedupBam}" \
 	--referenceFasta "${indexFile}" \
@@ -48,7 +48,7 @@ elif [[ "${bedfile}" == *"Exon"* || "${bedfile}" == *"Exoom"*  || "${bedfile}" =
 then
 
 	## Exclude Manta_1 script when executing test project (PlatinumnSubset)
-	if [[ "${project}" == *"PlatinumSubset"* && ${SCRIPTNAME} == *Manta_1.sh* ]] 
+	if [[ "${project}" == *"PlatinumSubset"* && "${SCRIPTNAME}" == *Manta_1.sh* ]] 
 	then
 		echo "PlatinumSubset is executed, therefore this script will not run (need a fix in making PhiX reads, forward/reversed)"
 		mv "${SCRIPTNAME}".{started,finished}
@@ -62,7 +62,7 @@ then
 	--bam "${dedupBam}" \
 	--referenceFasta "${indexFile}" \
 	--exome \
-	--config ${intermediateDir}configManta.py.ini \
+	--config "${intermediateDir}configManta.py.ini" \
 	--runDir "${tmpMantaDir}" 
 
 else
@@ -86,7 +86,7 @@ mv "${tmpMantaDir}/"* "${mantaDir}/"
 mkdir -p "${mantaDir}/results/variants/real/"
 
 ### If a capturingkit is used then only limit the output to those regions 
-if [[ "${capturingKit}" != *"wgs"* ]]
+if [[ "${capturingKit}" != *"wgs"* && "${bedfile}" != *"NGS_DNA_Test"* ]]
 then
 	bedtools intersect -header -a "${mantaDir}/results/variants/candidateSmallIndels.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp"
 
@@ -96,9 +96,9 @@ then
 		grep -v "^#" "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/candidateSmallIndels.vcf"
 
 		bgzip -c "${mantaDir}/results/variants/real/candidateSmallIndels.vcf" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz"
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz .."
+		printf '%s' "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz .."
 		tabix -p vcf "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.gz"
-		printf "${mantaDir}/results/variants/real/candidateSmallIndels.vcf ..done\n"
+		printf '%s\n' "${mantaDir}/results/variants/real/candidateSmallIndels.vcf ..done"
 	else
 		echo "no candidateSmallIndels left after filtering with the bedfile"
 		touch "${mantaDir}/results/variants/real/NO_candidateSmallIndels"
@@ -112,9 +112,9 @@ then
 		grep -v "^#" "${mantaDir}/results/variants/real/candidateSV.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/candidateSV.vcf"
 
 		bgzip -c "${mantaDir}/results/variants/real/candidateSV.vcf" > "${mantaDir}/results/variants/real/candidateSV.vcf.gz"
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
+		printf '%s' "..done\ntabix-ing ${mantaDir}/results/variants/real/candidateSV.vcf.gz .."
 		tabix -p vcf "${mantaDir}/results/variants/real/candidateSV.vcf.gz"
-		printf "${mantaDir}/results/variants/real/candidateSV.vcf ..done\n"
+		printf '%s\n' "${mantaDir}/results/variants/real/candidateSV.vcf ..done"
 	else
 		echo "no candidateSVs left after filtering with the bedfile"
 		touch "${mantaDir}/results/variants/real/NO_candidateSV"
@@ -127,9 +127,9 @@ then
 		grep -v "^#" "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/diploidSV.vcf"
 
 		bgzip -c "${mantaDir}/results/variants/real/diploidSV.vcf" > "${mantaDir}/results/variants/real/diploidSV.vcf.gz"
-		printf "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
+		printf '%s' "..done\ntabix-ing ${mantaDir}/results/variants/real/diploidSV.vcf.gz .."
 		tabix -p vcf "${mantaDir}/results/variants/real/diploidSV.vcf.gz"
-		printf "${mantaDir}/results/variants/real/diploidSV.vcf ..done\n"
+		printf '%s\n' "${mantaDir}/results/variants/real/diploidSV.vcf ..done"
 	else
 		echo "no diploidSVs left after filtering with the bedfile"
 		touch "${mantaDir}/results/variants/real/NO_diploidSV"

@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string tmpName
 #string externalSampleID
@@ -41,9 +42,9 @@ mv -v "${tmpDedupBam}" "${dedupBam}"
 mv -v "${tmpDedupBamIdx}" "${dedupBamIdx}"
 
 echo "making symlinks of the bams in the results folder to ${intermediateDir} for later use"
-cd "${intermediateDir}" 
+cd "${intermediateDir}" || exit
 
-ln -sf "${dedupBam}"
-ln -sf "${dedupBamIdx}"
+ln -sf "${dedupBam}" .
+ln -sf "${dedupBamIdx}" .
 
-cd -
+cd - || exit

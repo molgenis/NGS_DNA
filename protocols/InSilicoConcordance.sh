@@ -1,3 +1,4 @@
+set -o pipefail
 #string tmpName
 #string simulatedPhiXVariants
 #string inSilicoConcordanceFile
@@ -32,7 +33,7 @@ FNR==NR{
 	}
 }' "${intermediateDir}/InSilico.txt" "${projectVariantsMergedSortedGz}.vcf" > "${intermediateDir}/InSilicoConcordanceCheck.txt"
 
-count=$(cat "${intermediateDir}/InSilicoConcordanceCheck.txt" | wc -l)
+count=$(wc -l "${intermediateDir}/InSilicoConcordanceCheck.txt" | awk '{print $1}')
 
 if [[ "${count}" -ne 4 ]]
 then

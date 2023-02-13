@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string tmpName
 #string gatkVersion
@@ -23,8 +24,6 @@ tmpProjectBatchGenotypedVariantCalls="${MC_tmpFile}"
 module purge
 module load "${gatkVersion}"
 module list
-
-ALLGVCFs=()
 
 if [[ -f ${projectBatchCombinedVariantCalls} ]]
 then

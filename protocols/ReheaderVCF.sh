@@ -1,3 +1,4 @@
+set -o pipefail
 #Parameter mapping
 #string logsDir
 #string intermediateDir
@@ -15,7 +16,7 @@ module load "${htsLibVersion}"
 
 ##new prefix will be externalSampleID + sampleProcessStepIDwith new sample identifier --> familyname+umcgnumber
 newGVCFSampleIdentifier=$(echo "${externalSampleID}" | awk 'BEGIN {FS="_"}{print $1"_"$2}')
-oldIdentifier=$(cat ${intermediateDir}/${externalSampleID}.txt)
+oldIdentifier=$(cat "${intermediateDir}/${externalSampleID}.txt")
 echo -e "old:${oldIdentifier}, new:${newGVCFSampleIdentifier}"
 echo -e "${oldIdentifier} ${newGVCFSampleIdentifier}" > "${intermediateDir}/${externalSampleID}.newVCFHeader.txt"
 

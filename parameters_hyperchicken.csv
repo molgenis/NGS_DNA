@@ -1,0 +1,4 @@
+root,/
+appsDir,${root}/apps/
+toolChain_max,foss-2022a
+toolChain_min,GCCcore-11.3.0
