@@ -38,7 +38,7 @@ htsLibVersion,HTSlib/1.16-${toolChain_min}
 iolibVersion,io_lib/1.14.11-${toolChain_min}
 mantaVersion,manta/1.6.0-${toolChain_min}
 multiQCVersion,multiqc/1.12-${toolChain_min}
-ngsUtilsVersion,ngs-utils/22.10.1
+ngsUtilsVersion,ngs-utils/23.02.1
 picardVersion,picard/2.26.10-${javaSuffix}
 pigzVersion,pigz/2.7-${toolChain_min}
 python2Version,Python/2.7.16-${toolChain_min}-bare
@@ -249,7 +249,6 @@ gavinToCADDgz,${sampleNameID}.GAVIN.toCadd.tsv.gz
 gavinFromCADDgz,${sampleNameID}.GAVIN.fromCadd.tsv.gz
 gavinOutputFinalMerged,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.vcf
 gavinOutputFinalMergedRLV,${sampleNameID}.GAVIN.rlv.vcf
-vepDataDir,${dataDir}/Ensembl/VEP/${vepDBVersion}
 sampleVariantsMergedGavin,${sampleNameID}.variant.calls.GATK.vcf
 projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.VEP.vcf
 

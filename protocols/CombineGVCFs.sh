@@ -48,7 +48,7 @@ then
 	done
 
 	#shellcheck disable=SC2068
-	gatk CombineGVCFs \
+	gatk --java-options "-Xmx10g" CombineGVCFs \
 	--reference "${indexFile}" \
 	${gvcfArray[@]} \
 	--output "${tmpProjectBatchCombinedVariantCalls}"

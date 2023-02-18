@@ -105,7 +105,7 @@ function checkIfFinished(){
 	echo -e "\n${_projectName} test succeeded!\n"
 
 }
-tmpdirectory='tmp01'
+tmpdirectory='tmp09'
 groupName='umcg-atd'
 
 pipelinefolder="/groups/${groupName}/${tmpdirectory}/tmp/NGS_DNA/betaAutotest/"

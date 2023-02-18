@@ -30,4 +30,5 @@ with open(updatedSamplesheet, 'w') as out:
 					teller+=1
 				else:
 					out.write(','.join(row.values())+","+default+'\n')
+					teller+=1
 
