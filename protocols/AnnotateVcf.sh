@@ -101,7 +101,7 @@ cat > "${vcfAnnoConf}" << HERE
 file="${caddAnnotation}"
 columns= [4, 5]
 names=["CADD","CADD_SCALED"]
-ops=["self","self"]
+ops=["by_alt","by_alt"]
 HERE
 
 if [[ "${sizeToCADD}" != '0' ]]
@@ -145,7 +145,7 @@ ops=["self","self","self","self"]
 file="${cgdFile}"
 columns = [5, 6, 7, 8, 9, 10]
 names=["CGD_Condition","CGD_Inheritance","CGD_AgeGroup","CGD_Manfest_cat","CGD_invent_cat","invent_rat"]
-ops=["self","self","self","self","self","self"]
+ops=["by_alt","by_alt","by_alt","by_alt","by_alt","by_alt"]
 
 HERE
 
