@@ -12,7 +12,7 @@ node {
 	sh '''
             sudo ssh -tt portal+hyperchicken 'exec bash -l << 'ENDSSH'
 	    	echo "Starting automated test"
-		bash /home/umcg-molgenis/test_pipeline.sh '''+env.CHANGE_ID+'''
+		bash /home/umcg-molgenis/test_pipeline_DNA.sh '''+env.CHANGE_ID+'''
 ENDSSH'
         '''	
 	}
