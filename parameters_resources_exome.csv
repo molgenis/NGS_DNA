@@ -40,7 +40,7 @@ mem_protocols_VariantGenotyping,8gb
 ppn_protocols_AnnotateVcf,4
 ppn_protocols_Autotest,1
 ppn_protocols_BaseRecalibrator,8
-ppn_protocols_BwaAlignAndSortSam,8
+ppn_protocols_BwaAlignAndSortSam,4
 ppn_protocols_CollectBamIndexMetrics,2
 ppn_protocols_CollectGCBiasMetrics,2
 ppn_protocols_CollectHSMetrics,2
@@ -69,7 +69,7 @@ ppn_protocols_MergeBatches,2
 ppn_protocols_MergeIndelsAndSnpsProject,1
 ppn_protocols_MergeIndelsAndSnpsSample,1
 ppn_protocols_MultiQC,1
-ppn_protocols_PrepareFastQ,4
+ppn_protocols_PrepareFastQ,1
 ppn_protocols_SnpEff,2
 ppn_protocols_SnpFiltration,1
 ppn_protocols_SplitIndelsAndSNPs,2

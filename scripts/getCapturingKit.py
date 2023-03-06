@@ -1,7 +1,7 @@
 import sys
 import csv
 
-reader = csv.DictReader(open(sys.argv[1], "rb"), delimiter=",")
+reader = csv.DictReader(open(sys.argv[1]), delimiter=",")
 
 count=0
 for row in reader:
@@ -9,5 +9,5 @@ for row in reader:
         if "capturingKit" in row:
             if k == "capturingKit":
                 if count == 0:
-                    print v
+                    print(v)
                     count+=1

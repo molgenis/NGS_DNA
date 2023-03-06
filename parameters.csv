@@ -24,7 +24,7 @@ vepAssemblyVersion,GRCh37
 bcfToolsVersion,BCFtools/1.16-${toolChain_min}
 bedToolsVersion,BEDTools/2.30.0-${toolChain_min}
 bwaVersion,BWA/0.7.17-20220923-139f68f-${toolChain_min}
-computeVersion,Molgenis-Compute/v19.01.1-${javaSuffix}
+computeVersion,Molgenis-Compute/20.03.1-Java-11-LTS
 caddVersion,CADD/v1.4-foss-2018b
 fastqcVersion,FastQC/0.11.9-${javaSuffix}
 gatkVersion,GATK/4.2.4.1-${javaSuffix}
@@ -41,7 +41,7 @@ multiQCVersion,multiqc/1.12-${toolChain_min}
 ngsUtilsVersion,ngs-utils/23.02.1
 picardVersion,picard/2.26.10-${javaSuffix}
 pigzVersion,pigz/2.7-${toolChain_min}
-python2Version,Python/2.7.16-${toolChain_min}-bare
+python2Version,Python/2.7.16-GCCcore-7.3.0-bare
 pythonVersion,Python/3.10.4-${toolChain_min}-bare
 rVersion,R/4.2.1-${toolChain_max}-bare
 sambambaVersion,sambamba/0.7.0
@@ -179,7 +179,7 @@ recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
-caddAnnotation,${dataDir}/CADD/prescored/GRCh37/no_anno/whole_genome_SNVs.tsv.gz
+caddAnnotationVcf,${dataDir}/CADD/prescored/GRCh37/no_anno/whole_genome_SNVs.vcf.gz
 caddUnknownIndelAnnotation,${projectPrefix}.batch-${batchID}.unknown.indels.vcf.gz
 gnomADGenomesAnnotation,${dataDir}/gnomAD/release-170228/vcf/genomes/${refGnomADGenomesVersion}/
 gnomADExomesAnnotation,${dataDir}/gnomAD/${refGnomADExomesVersion}/

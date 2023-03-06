@@ -2,7 +2,7 @@ set -o pipefail
 #string logsDir
 #string groupname
 #string project
-#string caddAnnotation
+#string caddAnnotationVcf
 #string toCADD
 #string fromCADD
 #string projectBatchGenotypedVariantCalls
@@ -98,10 +98,10 @@ else
 cat > "${vcfAnnoConf}" << HERE
 
 [[annotation]]
-file="${caddAnnotation}"
-columns= [4, 5]
-names=["CADD","CADD_SCALED"]
-ops=["by_alt","by_alt"]
+file="${caddAnnotationVcf}"
+fields=["phred", "raw"]
+names=["CADD_SCALED","CADD"]
+ops=["self","self"]
 HERE
 
 if [[ "${sizeToCADD}" != '0' ]]
@@ -232,8 +232,6 @@ HERE
 
 	echo "starting to annotate with vcfanno"
 	vcfanno -p 4 -lua "${vcfAnnoCustomConfLua}" "${vcfAnnoConf}" "${projectBatchGenotypedVariantCalls}" > "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
-	perl -pi -e 's|CADD_SCALED,Number=1,Type=String|CADD_SCALED,Number=A,Type=Float|' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
-	perl -pi -e 's|CADD,Number=1,Type=String|CADD,Number=A,Type=Float|' "${tmpProjectBatchGenotypedAnnotatedVariantCalls}"
 	mv -v "${tmpProjectBatchGenotypedAnnotatedVariantCalls}" "${projectBatchGenotypedAnnotatedVariantCalls}"
 
 fi

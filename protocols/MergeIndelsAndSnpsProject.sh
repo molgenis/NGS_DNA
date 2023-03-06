@@ -4,7 +4,6 @@ set -o pipefail
 #string gatkVersion
 #string htsLibVersion
 #string bcfToolsVersion
-#string barcode
 #string indexFile
 #string logsDir 
 #string groupname

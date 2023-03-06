@@ -24,7 +24,6 @@ set -o pipefail
 #string seqTkVersion
 #string pigzVersion
 
-
 #Load module
 module load "${seqTkVersion}"
 module load "${pigzVersion}"
