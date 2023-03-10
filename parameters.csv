@@ -65,7 +65,7 @@ sequenomDir,${dataDir}/Sequenom/
 tmpDataDir,${groupDir}/${tmpName}/
 tempDir,${tmpDataDir}/temp/
 tmpDirectory,${tmpDataDir}/tmp/NGS_DNA/
-logsDir,${tmpDataDir}/logs
+logsDir,${tmpDataDir}/logs/
 
 ##### RAW DATA FILES/DIRS ####
 allRawNgsTmpDataDir,${tmpDataDir}/rawdata/ngs/

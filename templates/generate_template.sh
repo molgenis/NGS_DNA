@@ -51,7 +51,6 @@ if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
 genScripts="${groupDir}/${tmpDirectory}/generatedscripts/NGS_DNA/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv"
-mac2unix "${samplesheet}"
 
 #
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
