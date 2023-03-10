@@ -52,8 +52,8 @@ ppn_protocols_Convading,1
 ppn_protocols_CopyToResultsDir,1
 ppn_protocols_CountAllFinishedFiles,1
 ppn_protocols_CoverageCalculations_gvcf,1
-ppn_protocols_CramConversion,9
-ppn_protocols_DetermineTrio,10
+ppn_protocols_CramConversion,7
+ppn_protocols_DetermineTrio,4
 ppn_protocols_FastQC,1
 ppn_protocols_FlagstatMetrics,5
 ppn_protocols_Gavin,1
@@ -64,7 +64,7 @@ ppn_protocols_IndelFiltration,1
 ppn_protocols_MakeDedupBamMd5,1
 ppn_protocols_Manta,6
 ppn_protocols_MarkDuplicates,5
-ppn_protocols_MergeBam,10
+ppn_protocols_MergeBam,4
 ppn_protocols_MergeBatches,2
 ppn_protocols_MergeIndelsAndSnpsProject,1
 ppn_protocols_MergeIndelsAndSnpsSample,1
