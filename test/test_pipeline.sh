@@ -33,7 +33,7 @@ function preparePipeline(){
 	## Grep used version of molgenis compute out of the parameters file
 
 	cp "${pipelinefolder}/test/${_projectName}.csv" "${_generatedScriptsFolder}"
-	perl -p -e "s|/groups/umcg-atd/tmp01/|${tmpfolder}/|g" "${_generatedScriptsFolder}/${_projectName}.csv" > "${_generatedScriptsFolder}/${_projectName}.csv.tmp"
+	perl -p -e "s|/groups/umcg-atd/tmp09/|${tmpfolder}/|g" "${_generatedScriptsFolder}/${_projectName}.csv" > "${_generatedScriptsFolder}/${_projectName}.csv.tmp"
 
 	mv -v "${_generatedScriptsFolder}/${_projectName}.csv"{.tmp,} 
 
@@ -105,7 +105,7 @@ function checkIfFinished(){
 	echo -e "\n${_projectName} test succeeded!\n"
 
 }
-tmpdirectory='tmp01'
+tmpdirectory='tmp09'
 groupName='umcg-atd'
 
 pipelinefolder="/groups/${groupName}/${tmpdirectory}/tmp/NGS_DNA/betaAutotest/"

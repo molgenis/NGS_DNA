@@ -42,7 +42,7 @@ allRawDataAvailable='true'
 
 mkdir -p "${logsDir}/${project}/"
 max_index=${#externalSampleID[@]}-1
-rm -f "${logsDir}/${project}/${project}.data.requested"
+rm -f "${logsDir}/${project}/${project}.copyDataFromPrm.requested"
 for ((samplenumber = 0; samplenumber <= max_index; samplenumber++))
 do
 	dataProcessingStarted='false'
@@ -60,7 +60,7 @@ do
 		done<"${TMPDATADIR}/rejectedBarcodes.txt"
 	fi
 
-	if [[ -f "${logsDir}/${project}/${project}.data.started" ]]
+	if [[ -f "${logsDir}/${project}/${project}.copyDataFromPrm.started" ]]
 	then
 		dataProcessingStarted='true'
 	fi
@@ -74,7 +74,7 @@ do
 			then
 				if [[ "${dataProcessingStarted}" == 'false' ]]
 				then
-					echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}.fq.gz" >> "${logsDir}/${project}/${project}.data.requested"
+					echo "rawdata/ngs/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}.fq.gz" >> "${logsDir}/${project}/${project}.copyDataFromPrm.requested"
 				fi
 				echo "${TMPDATADIR}/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}.fq.gz missing"
 				allRawDataAvailable='false'
@@ -87,7 +87,7 @@ do
 			then
 				if [[ "${dataProcessingStarted}" == 'false' ]]
 				then
-					echo "${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz" >> "${logsDir}/${project}/${project}.data.requested"
+					echo "rawdata/ngs/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz" >> "${logsDir}/${project}/${project}.copyDataFromPrm.requested"
 				fi
 				echo "${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}.fq.gz missing"
 				allRawDataAvailable='false'
@@ -104,9 +104,9 @@ do
 			then
 				if [[ "${dataProcessingStarted}" == 'false' ]]
 				then
-					echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz" >> "${logsDir}/${project}/${project}.data.requested"
+					echo "rawdata/ngs/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz" >> "${logsDir}/${project}/${project}.copyDataFromPrm.requested"
 				fi
-				echo "${TMPDATADIR}/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz missing"
+				echo "${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz missing"
 				allRawDataAvailable='false'
 			else
 				echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_1.fq.gz available"	
@@ -116,9 +116,9 @@ do
 			then
 				if [[ "${dataProcessingStarted}" == 'false' ]]
 				then
-					echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz" >> "${logsDir}/${project}/${project}.data.requested"
+					echo "rawdata/ngs/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz" >> "${logsDir}/${project}/${project}.copyDataFromPrm.requested"
 				fi
-				echo "${TMPDATADIR}/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz missing"
+				echo "${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz missing"
 				allRawDataAvailable='false'
 			else
 				echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz available"	
@@ -132,9 +132,9 @@ do
 				then
 					if [[ "${dataProcessingStarted}" == 'false' ]]
 					then
-						echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" >> "${logsDir}/${project}/${project}.data.requested"
+						echo "rawdata/ngs/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" >> "${logsDir}/${project}/${project}.copyDataFromPrm.requested"
 					fi
-					echo "${TMPDATADIR}/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz missing"
+					echo "${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz missing"
 					allRawDataAvailable='false'
 				else
 					echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz available"
@@ -144,9 +144,9 @@ do
 				then
 					if [[ "${dataProcessingStarted}" == 'false' ]]
 					then
-						echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz" >> "${logsDir}/${project}/${project}.data.requested"
+						echo "rawdata/ngs/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz" >> "${logsDir}/${project}/${project}.copyDataFromPrm.requested"
 					fi
-					echo "${TMPDATADIR}/${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz missing"
+					echo "${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz missing"
 					allRawDataAvailable='false'
 				else
 					echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz available"
@@ -164,14 +164,14 @@ done
 if [[ "${allRawDataAvailable}" == 'true' ]]
 then
 	echo "rawdata already available"
-	if [[  -f "${logsDir}/${project}/${project}.data.started" ]]
+	if [[  -f "${logsDir}/${project}/${project}.copyDataFromPrm.started" ]]
 	then
-		mv "${logsDir}/${project}/${project}.data."{started,finished}
+		mv "${logsDir}/${project}/${project}.copyDataFromPrm."{started,finished}
 	else
-		touch "${logsDir}/${project}/${project}.data.finished"
+		touch "${logsDir}/${project}/${project}.copyDataFromPrm.finished"
 	fi
 else
-	rm -f "${logsDir}/${project}/${project}.data.finished"
+	rm -f "${logsDir}/${project}/${project}.copyDataFromPrm.finished"
 	echo "all Data is not yet available, exiting"
 	trap - EXIT
 	exit 0

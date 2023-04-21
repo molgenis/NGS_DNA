@@ -3,9 +3,9 @@ set -o pipefail
 #string gatkVersion
 #string bcfToolsVersion
 #string htsLibVersion
-#string barcode
 #string indexFile
-#string logsDir 
+#string logsDir
+#string barcode
 #string groupname
 #string projectFinalVcf
 #string externalSampleID

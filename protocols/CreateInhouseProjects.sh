@@ -185,7 +185,6 @@ then
 fi
 
 batching="_small"
-ml "${python2Version}"
 capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||')
 captKit=$(echo "${capturingKitProject}" | awk 'BEGIN {FS="/"}{print $2}')
 

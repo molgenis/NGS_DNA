@@ -51,7 +51,6 @@ if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
 genScripts="${groupDir}/${tmpDirectory}/generatedscripts/NGS_DNA/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv"
-mac2unix "${samplesheet}"
 
 #
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
@@ -65,7 +64,7 @@ then
 	mv "${samplesheet}.temp" "${samplesheet}"
 fi
 ## adding columns if they are not present in the samplesheet
-for i in "Gender" "MotherSampleId" "FatherSampleId" "MotherAffected" "FatherAffected" "FirstPriority"
+for i in "Gender" "MotherSampleId" "FatherSampleId" "MotherAffected" "FatherAffected" "FirstPriority" "sampleProcessStepID"
 do
 	python "${EBROOTNGS_DNA}/scripts/updatingColumns.py" "${samplesheet}" "${i}" ; mv "${samplesheet}.tmp" "${samplesheet}"
 done

@@ -45,7 +45,7 @@ tmpMergedBamRecalibratedTable="${MC_tmpFile}"
 sambamba index "${sampleMergedBam}"
 
 # shellcheck disable=SC2068 #${INPUTS} => gatk needs seperate strings, not one captured in quotes
-gatk --java-options "-XX:ParallelGCThreads=7 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
+gatk --java-options "-XX:ParallelGCThreads=1 -Djava.io.tmpdir=${tempDir} -Xmx9g" BaseRecalibrator \
 -R "${indexFile}" \
 ${INPUTS[@]} \
 --known-sites "${dbSnp}" \

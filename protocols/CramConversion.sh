@@ -31,7 +31,7 @@ scramble \
 -r "${indexFile}" \
 -P \
 -m \
--t 8 \
+-t 6 \
 "${dedupBam}" \
 "${tmpDedupBamCram}"
 
