@@ -21,7 +21,7 @@ inputTrioFile="${projectPrefix}.trio"
 sed -i -e '$a\' "${inputTrioFile}"
 count=$(wc -l "${inputTrioFile}" | awk '{print $1}')
 
-if [ "${count}" -gt 1 ]
+if [[ "${count}" -gt 1 ]]
 then
 	while read -r trioFile
 	do

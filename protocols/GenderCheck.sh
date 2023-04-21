@@ -16,12 +16,12 @@ set -o pipefail
 #string logsDir 
 #string groupname
 
-if [ -f "${dedupBamMetrics}.noChrX" ]
+if [[ -f "${dedupBamMetrics}.noChrX" ]]
 then
 	printf "There is no chrX, a gender cannot be determined\n" > "${whichSex}"
 	printf "Unknown\n" >> "${whichSex}"
 else
-	if [ -f "${checkSexMeanCoverage}" ]
+	if [[ -f "${checkSexMeanCoverage}" ]]
 	then
 		rm "${checkSexMeanCoverage}"
 	fi
@@ -66,8 +66,6 @@ if ($0 ~ /^#/){
 				print $23
 			}
 		}' "${hsMetricsNonAutosomalRegionChrX}" >> "${checkSexMeanCoverage}"
-
-
 
 		perl -pi -e 's/\n/\t/' "${checkSexMeanCoverage}"
 
@@ -121,7 +119,7 @@ then
 	echo "gender is different between samplesheet and calculated"
 	if [[ "${sex}" == "Unknown" || "${Gender}" == "Unknown" ]]
 	then
-		if [ "${sex}" == "Unknown" ]
+		if [[ "${sex}" == "Unknown" ]]
 		then
 			echo "calculated (${sex}) was unknown, but in the samplesheet it was specified (${Gender}), ${whichSex} file has been updated"
 			cp "${whichSex}" "${whichSex}.tmp"

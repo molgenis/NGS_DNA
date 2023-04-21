@@ -16,21 +16,20 @@ echo -e "Sample\tBatchName\ttotal_reads\tduplicate_reads\tunique_reads\tmean_ins
 
 for jsonFile in "${jsonFiles[@]}"
 do
-	seq_batch=$(cat "${jsonFile}" | "jq-linux64" '. | .sequencer.seq_batch ' | tr -d '"')
-	total_reads=$(cat "${jsonFile}" | "jq-linux64" '. | .mapping.total_reads')
-	duplicate_reads=$(cat "${jsonFile}" | "jq-linux64" '. | .mapping.duplicate_reads')
-	unique_reads=$(cat "${jsonFile}" | "jq-linux64" '. | .mapping.unique_reads')
-	mean_insertsize=$(cat "${jsonFile}" | "jq-linux64" '. | .insert.mean' )
-	frac_min_20x_coverage=$(cat "${jsonFile}" | "jq-linux64" '. | .coverage.roi1.frac_min_20x_coverage')
-	average_autosomal_coverage=$(cat "${jsonFile}" | "jq-linux64" '. | .coverage.roi1.average_autosomal_coverage')
-	sample_name=$(basename "${jsonFile}" | cut -f 1,2,3 -d "-" )
-	file_date=$(date -r "${jsonFile}" "+%d/%m/%Y")
-	
+	seq_batch=$(jq-linux64 '. | .sequencer.seq_batch' "${jsonFile}" | tr -d '"')
+	total_reads=$(jq-linux64 '. | .mapping.total_reads' "${jsonFile}")
+	duplicate_reads=$(jq-linux64 '. | .mapping.duplicate_reads' "${jsonFile}")
+	unique_reads=$(jq-linux64 '. | .mapping.unique_reads' "${jsonFile}")
+	mean_insertsize=$(jq-linux64 '. | .insert.mean' "${jsonFile}")
+	frac_min_20x_coverage=$(jq-linux64 '. | .coverage.roi1.frac_min_20x_coverage' "${jsonFile}")
+	average_autosomal_coverage=$(jq-linux64 '. | .coverage.roi1.average_autosomal_coverage' "${jsonFile}")
+	sample_name=$(basename "${jsonFile}" | cut -f 1,2,3 -d '-' )
+	file_date=$(date -r "${jsonFile}" '+%d/%m/%Y')
 
 	echo -e "${sample_name},${seq_batch},${file_date}" >> Dragen_runinfo.csv
 	echo -e "${sample_name}\t${seq_batch}\t${total_reads}\t${duplicate_reads}\t${unique_reads}\t${mean_insertsize}\t${frac_min_20x_coverage}\t${average_autosomal_coverage}" >> Dragen.csv
 
-# 	echo "${seq_batch}"
+#	echo "${seq_batch}"
 #	echo "${total_reads}"
 #	echo "${duplicate_reads}"
 #	echo "${unique_reads}"
@@ -38,8 +37,6 @@ do
 #	echo "${frac_min_20x_coverage}"
 #	echo "${average_autosomal_coverage}"
 #	echo "${sample_name}"
-
-	
 done
 
 mv Dragen_runinfo.csv "${seq_batch}.Dragen_runinfo.csv"

@@ -123,7 +123,7 @@ batching="_small"
 capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||' )
 captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
 
-if [ ! -d "${dataDir}/${capturingKitProject}" ]
+if [[ ! -d "${dataDir}/${capturingKitProject}" ]]
 then
 	echo "Bedfile does not exist! Exiting"
 	exit 1
@@ -132,7 +132,7 @@ if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *
 then
 	batching="_chr"
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
-	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+	if [[ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]]
 	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
@@ -144,7 +144,7 @@ then
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
-	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
+	if [[ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]]
 	then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
@@ -152,7 +152,7 @@ else
 	fi
 fi
 
-if [ -f ".compute.properties" ];
+if [[ -f ".compute.properties" ]]
 then
 	rm "../.compute.properties"
 fi

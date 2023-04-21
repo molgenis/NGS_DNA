@@ -76,7 +76,7 @@ mkdir -p -m 2770 "${logsDir}/${project}/"
 #
 rocketPoint=$(pwd)
 
-if [ -f "rejectedBarcodes.txt" ]
+if [[ -f "rejectedBarcodes.txt" ]]
 then
 	arrayRejected=()
 	while read -r line
@@ -117,7 +117,7 @@ do
 					"${projectRawTmpDataDir}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_2.fq.gz.md5"
 		else
 			array_contains arrayRejected "${barcode[samplenumber]}"
-			if [ "${rejected}" == "false" ]
+			if [[ "${rejected}" == "false" ]]
 			then
 
 			ln -sf "../../../../../../rawdata/ngs/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}/${sequencingStartDate[samplenumber]}_${sequencer[samplenumber]}_${run[samplenumber]}_${flowcell[samplenumber]}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" \
@@ -151,7 +151,7 @@ cd "${rocketPoint}" || exit
 rm -f "${projectJobsDir}/${project}.filteredRejected.csv"
 rm -f "${intermediateDir}/${project}.filteredBarcodes.csv"
 
-if [ -f "rejectedBarcodes.txt" ]
+if [[ -f "rejectedBarcodes.txt" ]]
 then
 	size=$(wc -l "rejectedBarcodes.txt" | awk '{print $1}')
 	teller=1
@@ -188,7 +188,7 @@ batching="_small"
 capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||')
 captKit=$(echo "${capturingKitProject}" | awk 'BEGIN {FS="/"}{print $2}')
 
-if [ ! -d "${dataDir}/${capturingKitProject}" ]
+if [[ ! -d "${dataDir}/${capturingKitProject}" ]]
 then
 	echo 'Bedfile does not exist! Exiting'
 	echo "ls ${dataDir}/${capturingKitProject}"
@@ -199,7 +199,7 @@ if [[ "${capturingKitProject,,}" == *"exoom"* || "${capturingKitProject,,}" == *
 then
 	batching='_chr'
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
-	if [ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]
+	if [[ ! -e "${coveragePerTargetDir}/${captKit}/${captKit}" ]]
 	then
 		echo "Bedfile in ${coveragePerTargetDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
@@ -211,7 +211,7 @@ then
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_wgs.csv"
 else
 	resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
-	if [ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]
+	if [[ ! -e "${coveragePerBaseDir}/${captKit}/${captKit}" ]]
 	then
 		echo "Bedfile in ${coveragePerBaseDir} does not exist! Exiting"
 		echo "ls ${coveragePerTargetDir}/${captKit}/${captKit}"
@@ -257,7 +257,7 @@ groupname=${groupname};\
 runid=${runid}"
 
 
-if [ -f "${intermediateDir}/${project}.filteredBarcodes.csv" ]
+if [[ -f "${intermediateDir}/${project}.filteredBarcodes.csv" ]]
 then
 	echo -e "\n################### THE FOLLOWING LINES ARE REJECTED BECAUSE OF TOO LOW PERCENTAGE READS ###############\n"
 	cat "${intermediateDir}/${project}.filteredBarcodes.csv"

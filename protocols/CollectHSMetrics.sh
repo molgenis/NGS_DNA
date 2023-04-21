@@ -21,7 +21,7 @@ makeTmpDir "${hsMetrics}" "${intermediateDir}"
 tmpHsMetrics="${MC_tmpFile}"
 
 #Run gatk HsMetrics if capturingKit was used
-if [ "${capturingKit}" == "UMCG/wgs" ] || [ "${capturingKit}" == "None" ]
+if [[ "${capturingKit}" == "UMCG/wgs" ]] || [[ "${capturingKit}" == "None" ]]
 then
 	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
 	-I "${dedupBam}" \

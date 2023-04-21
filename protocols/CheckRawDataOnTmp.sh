@@ -26,7 +26,7 @@ array_contains () {
 	for element in "${!array-}"; do
 		if [[ "${element}" == "${seeking}" ]]; then
 		
-			if [ "${barcodeLane}" == "true" ]
+			if [[ "${barcodeLane}" == "true" ]]
 			then
 				echo "barcode+Lane already exists!!"
 				exit 1
@@ -121,11 +121,11 @@ do
 				echo "${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz missing"
 				allRawDataAvailable='false'
 			else
-				echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz available"	
+				echo "${RUNNAME}/${RUNNAME}_L${lane[samplenumber]}_2.fq.gz available"
 			fi
 		else	
 			array_contains arrayRejected "${barcode[samplenumber]}" "false"
-			if [ "${rejected}" == "false" ]
+			if [[ "${rejected}" == "false" ]]
 			then
 				array_contains arrayUniqueBarcodes "${barcode[samplenumber]}-L${lane[samplenumber]}" "true" || arrayUniqueBarcodes+=("${barcode[samplenumber]}-L${lane[samplenumber]}")
 				if [[ ! -f "${TMPDATADIR}/${RUNNAME}_L${lane[samplenumber]}_${barcode[samplenumber]}_1.fq.gz" ]]
