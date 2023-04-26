@@ -49,7 +49,7 @@ INPUTS=()
 
 for b in "${batchID[@]}"
 do
-	if [ -f "${projectPrefix}.batch-${b}.${extension}" ]
+	if [[ -f "${projectPrefix}.batch-${b}.${extension}" ]]
 	then
 		array_contains INPUTS "-I ${projectPrefix}.batch-${b}.${extension}" || INPUTS+=("-I ${projectPrefix}.batch-${b}.${extension}")
 	fi

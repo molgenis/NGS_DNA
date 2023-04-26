@@ -23,7 +23,7 @@ makeTmpDir "${outputFolderFastQC}" "${intermediateDir}"
 tmpOutputFolderFastQC="${MC_tmpFile}"
 
 #If paired-end do fastqc for both ends, else only for one
-if [ "${seqType}" == "PE" ]
+if [[ "${seqType}" == "PE" ]]
 then
 	fastqc "${fastq1}" \
 	"${fastq2}" \

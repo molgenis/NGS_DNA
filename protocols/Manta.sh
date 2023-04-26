@@ -90,7 +90,7 @@ if [[ "${capturingKit}" != *"wgs"* && "${bedfile}" != *"NGS_DNA_Test"* ]]
 then
 	bedtools intersect -header -a "${mantaDir}/results/variants/candidateSmallIndels.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp"
 
-	if [ -f "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" ]
+	if [[ -f "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" ]]
 	then
 		grep "^#" "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" > "${mantaDir}/results/variants/real/candidateSmallIndels.vcf"
 		grep -v "^#" "${mantaDir}/results/variants/real/candidateSmallIndels.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/candidateSmallIndels.vcf"
@@ -106,7 +106,7 @@ then
 
 	bedtools intersect -header -a "${mantaDir}/results/variants/candidateSV.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/candidateSV.vcf.tmp"
 
-	if [ -f "${mantaDir}/results/variants/real/candidateSV.vcf.tmp" ]
+	if [[ -f "${mantaDir}/results/variants/real/candidateSV.vcf.tmp" ]]
 	then
 		grep "^#" "${mantaDir}/results/variants/real/candidateSV.vcf.tmp" > "${mantaDir}/results/variants/real/candidateSV.vcf"
 		grep -v "^#" "${mantaDir}/results/variants/real/candidateSV.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/candidateSV.vcf"
@@ -121,7 +121,7 @@ then
 	fi
 
 	bedtools intersect -header -a "${mantaDir}/results/variants/diploidSV.vcf.gz" -b "${capturedBed}" > "${mantaDir}/results/variants/real/diploidSV.vcf.tmp"
-	if [ -f "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" ]
+	if [[ -f "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" ]]
 	then
 		grep "^#" "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" > "${mantaDir}/results/variants/real/diploidSV.vcf"
 		grep -v "^#" "${mantaDir}/results/variants/real/diploidSV.vcf.tmp" | uniq >> "${mantaDir}/results/variants/real/diploidSV.vcf"
@@ -134,7 +134,6 @@ then
 		echo "no diploidSVs left after filtering with the bedfile"
 		touch "${mantaDir}/results/variants/real/NO_diploidSV"
 	fi
-
 
 else
 	echo "WGS sample, just copy"

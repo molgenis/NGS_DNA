@@ -71,7 +71,7 @@ then
 else
 	if [[ ! -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" ]]
 	then
-		#shellcheck disable=SC2086
+		#shellcheck disable=SC2086,SC2048
 		gatk GatherVcfs \
 		${INPUTS[*]} \
 		--OUTPUT "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
@@ -85,7 +85,7 @@ fi
 
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
-if [ -d "${coveragePerBaseDir}/${bedfile}/" ]
+if [[ -d "${coveragePerBaseDir}/${bedfile}/" ]]
 then
 	mapfile -t bedfiles < <(find "${coveragePerBaseDir}/${bedfile}/"* )
 	if [[ "${#bedfiles[@]}" -eq '0' ]]
@@ -126,7 +126,7 @@ else
 
 fi
 ## Per target bed files
-if [ -d "${coveragePerTargetDir}/${bedfile}/" ]
+if [[ -d "${coveragePerTargetDir}/${bedfile}/" ]]
 then
 	mapfile -t bedfiles < <(find "${coveragePerTargetDir}/${bedfile}/"* )
 	if [[ "${#bedfiles[@]}" -eq '0' ]]
@@ -172,7 +172,7 @@ then
 					percentage=0
 				else
 					percentage=$((count*100/totalcount))
-					if [ "${percentage%%.*}" -gt 10 ]
+					if [[ "${percentage%%.*}" -gt 10 ]]
 					then
 						echo "${sampleNameID}: percentage ${percentage} (${count}/${totalcount}) is more than 10 procent, skipped"
 						echo "${sampleNameID}: percentage ${percentage} (${count}/${totalcount}) is more than 10 procent, skipped" > "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/${externalSampleID}.rejected"

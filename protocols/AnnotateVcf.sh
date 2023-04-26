@@ -37,7 +37,7 @@ tmpProjectBatchGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
 
 bedfile=$(basename "${capturingKit}")
 
-if [ ! -f "${projectBatchGenotypedVariantCalls}" ]
+if [[ ! -f "${projectBatchGenotypedVariantCalls}" ]]
 then
 
 	echo "${projectBatchGenotypedVariantCalls} does not exist, skipped"
@@ -108,7 +108,7 @@ if [[ "${sizeToCADD}" != '0' ]]
 then
 	length=$(zcat "${fromCADDMerged}.gz" | wc -l)
 
-	if [ "${length}" -gt 8 ]
+	if [[ "${length}" -gt 8 ]]
 	then
 
 cat >> "${vcfAnnoConf}" << HERE

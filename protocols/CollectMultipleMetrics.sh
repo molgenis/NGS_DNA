@@ -42,7 +42,7 @@ mv -v "${tmpCollectBamMetricsPrefix}.quality_by_cycle_metrics" "${dedupBamMetric
 mv -v "${tmpCollectBamMetricsPrefix}.quality_by_cycle.pdf" "${dedupBamMetrics}.quality_by_cycle.pdf"
 
 #If paired-end data *.insert_size_metrics files also need to be moved
-if [ "${seqType}" == "PE" ]
+if [[ "${seqType}" == "PE" ]]
 then
 	echo -e "\nDetected paired-end data, moving all files.\n\n"
 	mv -v "${tmpCollectBamMetricsPrefix}.insert_size_metrics" "${dedupBamMetrics}.insert_size_metrics"

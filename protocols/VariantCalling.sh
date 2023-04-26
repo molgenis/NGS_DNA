@@ -51,7 +51,7 @@ do
 done
 baitBatchLength=""
 sex=$(less "${projectResultsDir}/general/${externalSampleID}.chosenSex.txt" | awk 'NR==2')
-if [ -f "${capturedBatchBed}" ] 
+if [[ -f "${capturedBatchBed}" ]] 
 then
 	baitBatchLength=$(wc -l "${capturedBatchBed}" | awk '{print $1}')
 fi
@@ -75,7 +75,7 @@ then
 else
 	if [[ "${capturedBatchBed}" == *batch-[0-9]*Y.bed || "${capturedBatchBed}" == *batch-Y.bed ]]
 	then
-		if [ "${genderCheck}" == "Female" ]
+		if [[ "${genderCheck}" == "Female" ]]
 		then
 			echo "female, Y"
 			myBed="${femaleCapturedBatchBed}"
@@ -95,7 +95,7 @@ else
 	-ploidy "${ploidy}"
 
 	echo -e "\nVariantCalling finished succesfull. Moving temp files to final.\n\n"
-	if [ -f "${tmpSampleBatchVariantCalls}" ]
+	if [[ -f "${tmpSampleBatchVariantCalls}" ]]
 	then
 		mv -v "${tmpSampleBatchVariantCalls}" "${sampleBatchVariantCalls}"
 		mv -v "${tmpSampleBatchVariantCallsIndex}" "${sampleBatchVariantCallsIndex}"
