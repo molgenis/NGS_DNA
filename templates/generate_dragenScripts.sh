@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 if module list | grep -o -P 'NGS_DNA(.+)' 
 then
 	echo "DNA pipeline loaded, proceding"
@@ -22,13 +23,12 @@ Script to copy (sync) data from a succesfully finished analysis project from tmp
 Usage:
 	$(basename $0) OPTIONS
 Options:
-	-h   Show this help.
-	-a   sampleType (DNA or RNA) (default=DNA)
-	-g   group (default=basename of ../../../ )
-	-f   filePrefix (default=basename of this directory)
-	-r   runID (default=run01)
-	-t   tmpDirectory (default=basename of ../../ )
-	-w   groupDir (default=/groups/\${group}/)
+        -h   Show this help.
+        -t   tmpDirectory (default=basename of ../../../ )
+        -g   group (default=basename of ../../../../ && pwd )
+        -w   groupDir (default=basename of ../../../../ && pwd )
+        -f   filePrefix (default=basename of this directory)
+        -r   runID (default=run01)
 
 ===============================================================================================================
 EOH
@@ -36,23 +36,21 @@ EOH
 	exit 0
 }
 
-
 while getopts "t:g:w:f:r:h" opt;
 do
-	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)groupDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
-	esac
+  	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)groupDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
+        esac
 done
 
-if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
-if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
+if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
+if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../../ && pwd )) ; fi ; echo "group=${group}"
 if [[ -z "${groupDir:-}" ]]; then groupDir="/groups/${group}/" ; fi ; echo "groupDir=${groupDir}"
-if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}/" ; fi ; echo "workDir=${workDir}"
 if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ; fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
 
-genScripts="${groupDir}/${tmpDirectory}/generatedscripts/${filePrefix}/"
-samplesheet="${genScripts}/${filePrefix}.csv" ; mac2unix "${samplesheet}"
-
+genScripts="${groupDir}/${tmpDirectory}/generatedscripts/NGS_DNA/${filePrefix}/"
+samplesheet="${genScripts}/${filePrefix}.csv"
+workDir="/groups/${group}/${tmpDirectory}/"
 #
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
 ## Checking for genderColumn
@@ -97,11 +95,10 @@ perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesPa
 ## has to be set, otherwise it will crash due to parameters which are not set, this variable will be updated in the next step
 batching="_chr"
 
-
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
-projectJobsDir="${workDir}/projects/${filePrefix}/${runID}/jobs/"
-projectResultsDir="${workDir}/projects/${filePrefix}/${runID}/results/"
-intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
+projectJobsDir="${workDir}/projects/NGS_DNA/${filePrefix}/${runID}/jobs/"
+projectResultsDir="${workDir}/projects/NGS_DNA/${filePrefix}/${runID}/results/"
+intermediateDir="${workDir}/tmp/NGS_DNA/${filePrefix}/${runID}/"
 projectLogsDir="${workDir}/logs/${filePrefix}/"
 
 mkdir -p "${intermediateDir}"
@@ -111,7 +108,7 @@ mkdir -p "${projectResultsDir}/"{alignment,general}
 mkdir -p "${projectResultsDir}/coverage/CoveragePer"{Base,Target}"/"{male,female,unknown}
 mkdir -p "${projectResultsDir}/qc/statistics/"
 mkdir -p "${projectResultsDir}/variants/"{cnv,gVCF,GAVIN}/
-mkdir -p -m 2770 "${logsDir}/${project}/"
+mkdir -p -m 2770 "${projectLogsDir}"
 
 cp "${samplesheet}" "${projectJobsDir}/${filePrefix}.csv"
 

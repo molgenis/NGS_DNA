@@ -5,13 +5,14 @@ set -o pipefail
 #string intermediateDir
 #string project
 #string groupname
+#string bcfToolsVersion
 #string tmpName
 #string tempDir
 #list sampleBatchGenotypedVariantCalls
 #string projectBatchGenotypedVariantCalls
 #string indexFileDictionary
 
-module load "${gatkVersion}"
+module load "${bcfToolsVersion}"
 
 array_contains () {
 	local array="$1[@]"
@@ -34,10 +35,7 @@ do
 	array_contains INPUTS "-I ${extId}" || INPUTS+=("-I ${extId}") 	# If bamFile does not exist in array add it
 done
 # shellcheck disable=SC2068 #${INPUTS} => gatk needs seperate strings, not one captured in quotes
-gatk --java-options "-Xmx7g" MergeVcfs \
-${INPUTS[@]} \
--D "${indexFileDictionary}" \
--O "${tmpProjectBatchGenotypedVariantCalls}"
+bcftools merge --merge all ${sampleBatchGenotypedVariantCalls[@]} -o "${tmpProjectBatchGenotypedVariantCalls}" -Ob
 
 mv -v "${tmpProjectBatchGenotypedVariantCalls}" "${projectBatchGenotypedVariantCalls}"
 

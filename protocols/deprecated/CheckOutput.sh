@@ -7,11 +7,11 @@
 #string capturingKit
 #string dataDir
 #string gavinOutputFinalMergedRLV
-#string sampleNameID
+#string samplePrefix
 
-grep -v "^#" "${gavinOutputFinalMergedRLV}" | awk '{print $1}' | sort -V | uniq > "${sampleNameID}.allChromosomes.txt"
+grep -v "^#" "${gavinOutputFinalMergedRLV}" | awk '{print $1}' | sort -V | uniq > "${samplePrefix}.allChromosomes.txt"
 
-var=$(diff "${intermediateDir}/allChromosomes.txt" "${sampleNameID}.allChromosomes.txt" | wc -l)
+var=$(diff "${intermediateDir}/allChromosomes.txt" "${samplePrefix}.allChromosomes.txt" | wc -l)
 
 if [[ "${var}" == 0 ]]
 then
@@ -19,6 +19,6 @@ then
 
 else
 	echo "not all chromosomes are found back!!"
-	diff "${intermediateDir}/allChromosomes.txt" "${sampleNameID}.allChromosomes.txt"
+	diff "${intermediateDir}/allChromosomes.txt" "${samplePrefix}.allChromosomes.txt"
 	exit 1
 fi

@@ -167,6 +167,7 @@ then
 	if [[  -f "${logsDir}/${project}/${project}.copyDataFromPrm.started" ]]
 	then
 		mv "${logsDir}/${project}/${project}.copyDataFromPrm."{started,finished}
+		rm -f "${logsDir}/${project}/${project}.copyDataFromPrm.failed"
 	else
 		touch "${logsDir}/${project}/${project}.copyDataFromPrm.finished"
 	fi

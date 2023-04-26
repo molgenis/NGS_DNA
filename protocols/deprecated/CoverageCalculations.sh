@@ -11,7 +11,7 @@
 #string indexFile
 #string capturedIntervalsPerBase
 #string capturedBed
-#string sampleNameID
+#string samplePrefix
 #string capturingKit
 #string coveragePerBaseDir
 #string coveragePerTargetDir
@@ -48,30 +48,30 @@ then
 		java -Xmx7g -XX:ParallelGCThreads=1 -jar "${EBROOTGATK}/${gatkJar}" \
 		-R "${indexFile}" \
 		-T DepthOfCoverage \
-		-o "${sampleNameID}.${perBase}.coveragePerBase" \
+		-o "${samplePrefix}.${perBase}.coveragePerBase" \
 		--omitLocusTable \
 		-mmq 20 \
 		--includeRefNSites \
 		-I "${dedupBam}" \
 		-L "${perBaseDir}/${perBase}.interval_list"
 
-		sed '1d' "${sampleNameID}.${perBase}.coveragePerBase" > "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader"
-		sort -V "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader" > "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted"
-		tail -n+87 "${perBaseDir}/${perBase}.uniq.per_base.interval_list" > "${sampleNameID}.${perBase}.uniqperbase_chompedHeaders.txt"
-		paste "${sampleNameID}.${perBase}.uniqperbase_chompedHeaders.txt" "${sampleNameID}.${perBase}.coveragePerBase_withoutHeader.sorted" > "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
+		sed '1d' "${samplePrefix}.${perBase}.coveragePerBase" > "${samplePrefix}.${perBase}.coveragePerBase_withoutHeader"
+		sort -V "${samplePrefix}.${perBase}.coveragePerBase_withoutHeader" > "${samplePrefix}.${perBase}.coveragePerBase_withoutHeader.sorted"
+		tail -n+87 "${perBaseDir}/${perBase}.uniq.per_base.interval_list" > "${samplePrefix}.${perBase}.uniqperbase_chompedHeaders.txt"
+		paste "${samplePrefix}.${perBase}.uniqperbase_chompedHeaders.txt" "${samplePrefix}.${perBase}.coveragePerBase_withoutHeader.sorted" > "${samplePrefix}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
 
 		##Paste command produces ^M character
-		perl -p -i -e "s/\r//g" "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
+		perl -p -i -e "s/\r//g" "${samplePrefix}.${perBase}.combined_bedfile_and_samtoolsoutput.txt"
 
-		echo -e "Index\tChr\tChr Position Start\tDescription\tMin Counts\tCDS\tContig" > "${sampleNameID}.${perBase}.coveragePerBase.txt"
+		echo -e "Index\tChr\tChr Position Start\tDescription\tMin Counts\tCDS\tContig" > "${samplePrefix}.${perBase}.coveragePerBase.txt"
 
-		awk -v OFS='\t' '{print NR,$1,$2,$5,$7,"CDS","1"}' "${sampleNameID}.${perBase}.combined_bedfile_and_samtoolsoutput.txt" >> "${sampleNameID}.${perBase}.coveragePerBase.txt"
+		awk -v OFS='\t' '{print NR,$1,$2,$5,$7,"CDS","1"}' "${samplePrefix}.${perBase}.combined_bedfile_and_samtoolsoutput.txt" >> "${samplePrefix}.${perBase}.coveragePerBase.txt"
 
 		#remove phiX
-		grep -v "NC_001422.1" "${sampleNameID}.${perBase}.coveragePerBase.txt" > "${sampleNameID}.${perBase}.coveragePerBase.txt.tmp"
-		mv "${sampleNameID}.${perBase}.coveragePerBase.txt.tmp" "${sampleNameID}.${perBase}.coveragePerBase.txt"
-		echo "phiX is removed for ${sampleNameID}.${perBase} perBase" 
-		rsync -a "${sampleNameID}.${perBase}.coveragePerBase.txt" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/" 
+		grep -v "NC_001422.1" "${samplePrefix}.${perBase}.coveragePerBase.txt" > "${samplePrefix}.${perBase}.coveragePerBase.txt.tmp"
+		mv "${samplePrefix}.${perBase}.coveragePerBase.txt.tmp" "${samplePrefix}.${perBase}.coveragePerBase.txt"
+		echo "phiX is removed for ${samplePrefix}.${perBase} perBase" 
+		rsync -a "${samplePrefix}.${perBase}.coveragePerBase.txt" "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/" 
 
 	done
 else
@@ -89,40 +89,40 @@ then
 		java -Xmx7g -XX:ParallelGCThreads=1 -jar "${EBROOTGATK}/${gatkJar}" \
 		-R "${indexFile}" \
 		-T DepthOfCoverage \
-		-o "${sampleNameID}.${perTarget}.coveragePerTarget" \
+		-o "${samplePrefix}.${perTarget}.coveragePerTarget" \
 		-I "${dedupBam}" \
 		-mmq 20 \
 		--omitDepthOutputAtEachBase \
 		-L "${perTargetDir}/${perTarget}.interval_list"
 
-		awk -v OFS='\t' '{print $1,$3}' "${sampleNameID}.${perTarget}.coveragePerTarget.sample_interval_summary" | sed '1d' > "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp"
-		sort -V "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp" > "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp"
-		perl -p -e 's|-|\^|' "${perTargetDir}/${perTarget}.genesOnly" > "${sampleNameID}.${perTarget}.coveragePerTarget.genesOnly.tmp"
-		paste "${sampleNameID}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp" "${sampleNameID}.${perTarget}.coveragePerTarget.genesOnly.tmp" > "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt"
+		awk -v OFS='\t' '{print $1,$3}' "${samplePrefix}.${perTarget}.coveragePerTarget.sample_interval_summary" | sed '1d' > "${samplePrefix}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp"
+		sort -V "${samplePrefix}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp.tmp" > "${samplePrefix}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp"
+		perl -p -e 's|-|\^|' "${perTargetDir}/${perTarget}.genesOnly" > "${samplePrefix}.${perTarget}.coveragePerTarget.genesOnly.tmp"
+		paste "${samplePrefix}.${perTarget}.coveragePerTarget.coveragePerTarget.txt.tmp" "${samplePrefix}.${perTarget}.coveragePerTarget.genesOnly.tmp" > "${samplePrefix}.${perTarget}.coveragePerTarget_inclGenes.txt"
 		##Paste command produces ^M character
 
-		perl -p -i -e "s/\r//g" "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt"
+		perl -p -i -e "s/\r//g" "${samplePrefix}.${perTarget}.coveragePerTarget_inclGenes.txt"
 
-		awk 'BEGIN { OFS = "\t" } ; {split($1,a,":"); print a[1],a[2],$2,$3}' "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes.txt" | awk 'BEGIN { OFS = "\t" } ; {split($0,a,"-"); print a[1],a[2]}' > "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
-		perl -pi -e 's|\^|-|' "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
-		if [ -d "${sampleNameID}.${perTarget}.coveragePerTarget.txt" ]
+		awk 'BEGIN { OFS = "\t" } ; {split($1,a,":"); print a[1],a[2],$2,$3}' "${samplePrefix}.${perTarget}.coveragePerTarget_inclGenes.txt" | awk 'BEGIN { OFS = "\t" } ; {split($0,a,"-"); print a[1],a[2]}' > "${samplePrefix}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
+		perl -pi -e 's|\^|-|' "${samplePrefix}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt"
+		if [ -d "${samplePrefix}.${perTarget}.coveragePerTarget.txt" ]
 		then
-			rm "${sampleNameID}.${perTarget}.coveragePerTarget.txt"
+			rm "${samplePrefix}.${perTarget}.coveragePerTarget.txt"
 		fi 
 
-		echo -e "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig" > "${sampleNameID}.${perTarget}.coveragePerTarget.txt"
-		awk '{OFS="\t"} {len=$3-$2} {print NR,$0,len,"CDS","1"}' "${sampleNameID}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt" >> "${sampleNameID}.${perTarget}.coveragePerTarget.txt"
+		echo -e "Index\tChr\tChr Position Start\tChr Position End\tAverage Counts\tDescription\tReference Length\tCDS\tContig" > "${samplePrefix}.${perTarget}.coveragePerTarget.txt"
+		awk '{OFS="\t"} {len=$3-$2} {print NR,$0,len,"CDS","1"}' "${samplePrefix}.${perTarget}.coveragePerTarget_inclGenes_splitted.txt" >> "${samplePrefix}.${perTarget}.coveragePerTarget.txt"
 
 		#Remove phiX
-		grep -v "NC_001422.1" "${sampleNameID}.${perTarget}.coveragePerTarget.txt" > "${sampleNameID}.${perTarget}.coveragePerTarget.txt.tmp"
-		mv "${sampleNameID}.${perTarget}.coveragePerTarget.txt.tmp" "${sampleNameID}.${perTarget}.coveragePerTarget.txt"
-		echo "phiX is removed for ${sampleNameID}.${perTarget} perTarget"
+		grep -v "NC_001422.1" "${samplePrefix}.${perTarget}.coveragePerTarget.txt" > "${samplePrefix}.${perTarget}.coveragePerTarget.txt.tmp"
+		mv "${samplePrefix}.${perTarget}.coveragePerTarget.txt.tmp" "${samplePrefix}.${perTarget}.coveragePerTarget.txt"
+		echo "phiX is removed for ${samplePrefix}.${perTarget} perTarget"
 		
 		if [ "${perTarget}" ==  "${bedfile}" ]
 		then
-			totalcount=$(($(cat "${sampleNameID}.${perTarget}.coveragePerTarget.txt" | wc -l)-1))
+			totalcount=$(($(cat "${samplePrefix}.${perTarget}.coveragePerTarget.txt" | wc -l)-1))
 			count=0
-			count=$(awk 'BEGIN{sum=0}{if($5 < 20){sum++}} END {print sum}' "${sampleNameID}.${perTarget}.coveragePerTarget.txt")
+			count=$(awk 'BEGIN{sum=0}{if($5 < 20){sum++}} END {print sum}' "${samplePrefix}.${perTarget}.coveragePerTarget.txt")
 
 			if [ $count == 0 ]
 			then
@@ -131,12 +131,12 @@ then
 				percentage=$(echo $((count*100/totalcount)))
 				if [ ${percentage%%.*} -gt 10 ]
 				then
-					echo "WARNING: ${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent"
-					echo "WARNING: ${sampleNameID}: percentage $percentage ($count/$totalcount) is more than 10 procent" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
+					echo "WARNING: ${samplePrefix}: percentage $percentage ($count/$totalcount) is more than 10 procent"
+					echo "WARNING: ${samplePrefix}: percentage $percentage ($count/$totalcount) is more than 10 procent" >> "${projectResultsDir}/coverage/${externalSampleID}.rejected"
 				fi
 			fi
 		fi
-		rsync -a "${sampleNameID}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/"
+		rsync -a "${samplePrefix}.${perTarget}.coveragePerTarget.txt" "${projectResultsDir}/coverage/CoveragePerTarget/${Gender,,}/"
 	done
 else
 	echo "There are no CoveragePerTarget calculations for this bedfile: ${bedfile}"

@@ -124,15 +124,17 @@ echo 'done.'
 #
 # Only for UMCG groups on UMCG clusters.
 # scriptsDir is:
-#	/groups/umcg-${group}/tmp*/projects/${project}/run*/jobs/
+#	/groups/umcg-${group}/tmp*/projects/${pipeline}/${project}/run*/jobs/
 # Central location for log files for all projects of a group is:
 #	/groups/umcg-${group}/tmp*/logs/
 # (Cannot get this from a parameters file; vars are not available in the submit template.)
 #
-project=$(basename $(dirname $(cd ../ && pwd)))
-baseDir=$(dirname $(cd ../../../ && pwd))
+
+run=$(basename $(dirname $(cd ../ && pwd)))
+project=$(basename $(dirname $(cd ../../ && pwd)))
+baseDir=$(dirname $(cd ../../../../ && pwd))
 logsDir="${baseDir}/logs"
-MC_failedFile="${logsDir}/${project}.pipeline.failed"
+MC_failedFile="${logsDir}/${project}/${run}.pipeline.failed"
 
 if [ -f "${MC_failedFile}" ]; then
 	rm "${MC_failedFile}"

@@ -10,6 +10,7 @@ set -o pipefail
 #string htsLibVersion
 #string externalSampleID
 #string gavinOutputFinalMergedRLV
+#string projectResultsDir
 
 module load "${bcfToolsVersion}"
 module load "${htsLibVersion}"
@@ -23,3 +24,4 @@ echo -e "${oldIdentifier} ${newGVCFSampleIdentifier}" > "${intermediateDir}/${ex
 bcftools reheader -s "${intermediateDir}/${externalSampleID}.newVCFHeader.txt" "${gavinOutputFinalMergedRLV}.gz" -o "${gavinOutputFinalMergedRLV}.gz.tmp"
 mv -v "${gavinOutputFinalMergedRLV}.gz.tmp" "${gavinOutputFinalMergedRLV}.gz"
 tabix -f -p vcf "${gavinOutputFinalMergedRLV}.gz"
+rsync -av "${gavinOutputFinalMergedRLV}.gz" "${projectResultsDir}/variants/GAVIN/"
