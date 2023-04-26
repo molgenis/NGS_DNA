@@ -38,7 +38,7 @@ htsLibVersion,HTSlib/1.16-${toolChain_min}
 iolibVersion,io_lib/1.14.11-${toolChain_min}
 mantaVersion,manta/1.6.0-${toolChain_min}
 multiQCVersion,multiqc/1.12-${toolChain_min}
-ngsUtilsVersion,ngs-utils/23.02.1
+ngsUtilsVersion,ngs-utils/23.04.1
 picardVersion,picard/2.26.10-${javaSuffix}
 pigzVersion,pigz/2.7-${toolChain_min}
 python2Version,Python/2.7.16-GCCcore-7.3.0-bare

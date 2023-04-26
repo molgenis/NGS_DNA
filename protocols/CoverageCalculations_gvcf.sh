@@ -61,7 +61,6 @@ fi
 #
 ##removing beta once pull request in ngs-utils is accepted
 #
-ml ngs-utils/beta
 
 if [[ "${merge}" = "yes" ]]
 then 
