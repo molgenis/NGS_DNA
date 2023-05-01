@@ -92,8 +92,6 @@ then
 		fi
 		cp "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" "${variantCalls}"
 	fi
-else
-	
 fi
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
