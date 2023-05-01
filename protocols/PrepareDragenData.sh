@@ -31,7 +31,7 @@ rsync -av "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIde
 ## rename (g)VCF files
 rename "${combinedIdentifier}" "${externalSampleID}" "${intermediateDir}/${combinedIdentifier}.hard-filtered."*"vcf.gz"*
 
-bedtools intersect -header -a "${intermediateDir}/${externalSampleID}.hard-filtered.vcf.gz" -b "${captured}.merged.bed" > "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf"
+bedtools intersect -u -header -a "${intermediateDir}/${externalSampleID}.hard-filtered.vcf.gz" -b "${captured}.merged.bed" > "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf"
 bcftools annotate -x 'FORMAT/AF,FORMAT/F1R2,FORMAT/F2R1,FORMAT/GP' "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf" > "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.tmp"
 bgzip -c -f "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.tmp" > "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.gz"
 echo "start indexing ${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.gz"

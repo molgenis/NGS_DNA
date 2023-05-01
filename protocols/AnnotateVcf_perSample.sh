@@ -5,7 +5,6 @@ set -o pipefail
 #string caddAnnotationVcf
 #string toCaddSample
 #string fromCaddSample
-#string fromCaddMergedSample
 #string indexFile
 #string htsLibVersion
 #string vcfAnnoVersion
@@ -42,8 +41,8 @@ then
 
 else
 	echo "create file toCADD"
-	##create file toCADD (split alternative alleles per line)
-	bcftools norm --force -f "${indexFile}" -m -any "${variantCalls}" | awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' | bgzip -c > "${toCaddSample}.gz"
+
+	awk '{if (!/^#/){if (length($4) > 1 || length($5) > 1){print $1"\t"$2"\t"$3"\t"$4"\t"$5}}}' "${variantCalls}" | bgzip -c > "${toCaddSample}.gz"
 	sizeToCADD=$(zcat "${toCaddSample}.gz" | wc -l)
 	if [[ "${sizeToCADD}" == '0' ]]
 	then
@@ -56,17 +55,9 @@ else
 		echo "convert fromCaddSample tsv file to fromCaddSample vcf"
 		##convert tsv to vcf
 		(echo -e '##fileformat=VCFv4.1\n##INFO=<ID=raw,Number=A,Type=Float,Description="raw cadd score">\n##INFO=<ID=phred,Number=A,Type=Float,Description="phred-scaled cadd score">\n##CADDCOMMENT=<ID=comment,comment="CADD v1.3 (c) University of Washington and Hudson-Alpha Institute for Biotechnology 2013-2015. All rights reserved.">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO' && gzip -dc "${fromCaddSample}"\
-			| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCaddSample}.vcf.gz"
-
-		tabix -f -p vcf "${fromCaddSample}.vcf.gz"
-		##merge the alternative alleles back in one vcf line
-		echo "merging the alternative alleles back in one vcf line .. "
-		module load "${bcfToolsVersion}"
-		bcftools norm --force -f "${indexFile}" -m +any "${fromCaddSample}.vcf.gz" > "${fromCaddMergedSample}"
-
-		echo "bgzipping + indexing ${fromCaddMergedSample}"
-		bgzip -c "${fromCaddMergedSample}" > "${fromCaddMergedSample}.gz"
-		tabix -f -p vcf "${fromCaddMergedSample}.gz"
+			| awk '{if(NR>2){ printf $1"\t"$2"\t.\t"$3"\t"$4"\t1\tPASS\traw="; printf "%0.1f;",$5 ;printf "phred=";printf "%0.1f\n",$6}}') | bgzip -c > "${fromCaddSample%.tsv.gz}.vcf.gz"
+		
+		tabix -f -p vcf "${fromCaddSample%.tsv.gz}.vcf.gz"
 
 	fi
 	## Prepare gnomAD config 
@@ -88,14 +79,14 @@ HERE
 
 if [[ "${sizeToCADD}" != '0' ]]
 then
-	length=$(zcat "${fromCaddMergedSample}.gz" | wc -l)
+	length=$(zcat "${fromCaddSample%.tsv.gz}.vcf.gz" | wc -l)
 
 	if [ "${length}" -gt 8 ]
 	then
 
 cat >> "${vcfAnnoConfSample}" << HERE
 [[annotation]]
-file="${fromCaddMergedSample}.gz"
+file="${fromCaddSample%.tsv.gz}.vcf.gz"
 fields=["phred", "raw"]
 names=["CADD_SCALED","CADD"]
 ops=["self","self"]

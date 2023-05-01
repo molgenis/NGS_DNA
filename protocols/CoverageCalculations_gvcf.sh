@@ -90,12 +90,15 @@ then
 		then
 			tabix -p vcf "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
 		fi
+		cp "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" "${variantCalls}"
 	fi
+else
+	
 fi
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
-capturedVariantCalls="${variantCalls%.hard-filtered.g.vcf.gz}.captured.g.vcf"
-bedtools intersect -header -a "${variantCalls}" -b ${captured}.merged.bed > "${capturedVariantCalls}"
+capturedVariantCalls="${variantCalls%%.*}.captured.g.vcf"
+bedtools intersect -u -header -a "${variantCalls}" -b ${captured}.merged.bed > "${capturedVariantCalls}"
 bgzip -f "${capturedVariantCalls}"
 tabix -p vcf "${capturedVariantCalls}.gz"
 

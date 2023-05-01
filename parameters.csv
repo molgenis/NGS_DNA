@@ -226,7 +226,6 @@ fromCADDMerged,${projectPrefix}.batch-${batchID}.fromCadd.merged.vcf
 #perSample
 toCaddSample,${samplePrefix}.toCadd.vcf
 fromCaddSample,${samplePrefix}.fromCadd.tsv.gz
-fromCaddMergedSample,${samplePrefix}.fromCadd.merged.vcf
 sampleGenotypedAnnotatedVariantCalls,${samplePrefix}.variant.calls.genotyped.annotated.vcf
 
 ### Protocols 19, 20, 21, 21, 22, 23 and 24 (SnpEff,CmdLineAnnotator, VariantAnnotator, MergeBatches,Gavin VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
