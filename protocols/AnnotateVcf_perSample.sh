@@ -36,6 +36,8 @@ if [[ ! -f "${variantCalls}" ]]
 then
 
 	echo "${variantCalls} does not exist, skipped"
+	trap - EXIT
+	exit 0
 
 else
 	echo "create file toCADD"

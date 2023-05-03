@@ -58,10 +58,6 @@ else
 	bedfile="${bedfileRaw}"
 fi
 
-#
-##removing beta once pull request in ngs-utils is accepted
-#
-
 if [[ "${merge}" = "yes" ]]
 then 
 	INPUTS=()

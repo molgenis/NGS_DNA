@@ -90,7 +90,7 @@ else
 		for i in {1..22}
 		do
 			#shellcheck disable=SC2129
-			if [[ $(zcat "${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz" | wc -l) == 0 ]]
+			if [[ $(zcat "${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz" | head | wc -l) == 0 ]]
 			then
 				echo "${gnomADGenomesAnnotation}/gnomad.genomes.r2.0.2.sites.chr${i}.normalized.vcf.gz is zero, skipped"
 			else

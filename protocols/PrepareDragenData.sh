@@ -41,13 +41,13 @@ rename 'gvcf.gz' 'g.vcf.gz' "${intermediateDir}/${externalSampleID}.hard-filtere
 rsync -av "${intermediateDir}/${externalSampleID}.hard-filtered.g.vcf.gz"* "${projectResultsDir}/variants/gVCF/"
 
 # moving files to results folder
-if [[ -f "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}.bam" ]]
+if [[ -f "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.bam" || -f "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/${externalSampleID}.merged.dedup.bam" ]]
 then
 	rename "${combinedIdentifier}.bam" "${externalSampleID}.merged.dedup.bam" "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/"*".bam"*
-	mv -v "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/"*".bam"* "${projectResultsDir}/alignment/"
-	echo "bam files renamed in ${projectResultsDir}/alignment/" 
+	mv -v "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/${externalSampleID}.merged.dedup.bam"{,.md5,.bai} "${projectResultsDir}/alignment/"
+	echo "bam files renamed and moved into ${projectResultsDir}/alignment/" 
 else
-	echo -e "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}.bam not found.\nThis can have 2 reasons, the data is already moved before to ${projectResultsDir}/alignment/\n or the data does not exist at all"
+	echo -e "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.bam not found.\nThis can have 2 reasons, the data is already moved before to ${projectResultsDir}/alignment/\n or the data does not exist at all"
 fi
 # moving qc files
 if [[ -f "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.html" ]]
