@@ -32,8 +32,6 @@ module load "${bcfToolsVersion}"
 makeTmpDir "${sampleGenotypedAnnotatedVariantCalls}"
 tmpSampleGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
 
-bedfile=$(basename "${capturingKit}")
-
 if [[ ! -f "${variantCalls}" ]]
 then
 
