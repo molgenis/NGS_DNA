@@ -96,7 +96,7 @@ fi
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
 capturedVariantCalls="${variantCalls%%.*}.captured.g.vcf"
-bedtools intersect -u -header -a "${variantCalls}" -b ${captured}.merged.bed > "${capturedVariantCalls}"
+bedtools intersect -u -header -a "${variantCalls}" -b "${captured}.merged.bed" > "${capturedVariantCalls}"
 bgzip -f "${capturedVariantCalls}"
 tabix -p vcf "${capturedVariantCalls}.gz"
 
