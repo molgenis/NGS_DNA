@@ -38,7 +38,7 @@ htsLibVersion,HTSlib/1.16-${toolChain_min}
 iolibVersion,io_lib/1.14.11-${toolChain_min}
 mantaVersion,manta/1.6.0-${toolChain_min}
 multiQCVersion,multiqc/1.12-${toolChain_min}
-ngsUtilsVersion,ngs-utils/23.02.1
+ngsUtilsVersion,ngs-utils/23.04.1
 picardVersion,picard/2.26.10-${javaSuffix}
 pigzVersion,pigz/2.7-${toolChain_min}
 python2Version,Python/2.7.16-GCCcore-7.3.0-bare
@@ -85,7 +85,8 @@ indexFileDictionary,${indicesDir}/${indexFileIDPhiX}.dict
 #### Prefixes ####
 runPrefix,${sequencingStartDate}_${sequencer}_${run}_${flowcell}
 filePrefix,${runPrefix}_L${lane}
-sampleNameID,${intermediateDir}/${externalSampleID}
+samplePrefix,${intermediateDir}/${externalSampleID}
+projectPrefix,${intermediateDir}/${project}
 
 #### INTERVALS ####
 nameBed,captured
@@ -104,7 +105,7 @@ capturedExomeBed,${dataDir}/UMCG/All_Exon_v1/${indexFileID}/${nameBed}.bed
 #### Projects ####
 projectDir,${tmpDataDir}projects/NGS_DNA/${project}/${runid}
 intermediateDir,${tmpDirectory}/${project}/${runid}/
-projectPrefix,${intermediateDir}/${project}
+
 projectJobsDir,${projectDir}/jobs/
 projectLogsDir,${projectDir}/logs/
 projectResultsDir,${projectDir}/results/
@@ -140,9 +141,9 @@ alignedSam,${fileWithIndexId}.sam
 alignedBam,${fileWithIndexId}.bam
 alignedSortedBam,${fileWithIndexId}.sorted.bam
 alignedSortedBamIdx,${fileWithIndexId}.sorted.bam.bai
-sampleMergedBam,${sampleNameID}.merged.bam
-sampleMergedBai,${sampleNameID}.merged.bai
-sampleMergedBamIdx,${sampleNameID}.merged.bam.bai
+sampleMergedBam,${samplePrefix}.merged.bam
+sampleMergedBai,${samplePrefix}.merged.bai
+sampleMergedBamIdx,${samplePrefix}.merged.bam.bai
 dedupBam,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam
 dedupBamIdx,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.bai
 dedupBamMetrics,${projectResultsDir}/qc/statistics/${externalSampleID}.merged.dedup.bam
@@ -156,12 +157,12 @@ MillsGoldStandardIndelsVcf,${MillsGoldStandardDir}/1000G_phase1.indels_Mills_and
 MillsGoldStandardChr1Intervals,${MillsGoldStandardDir}/1000G_phase1.indels_Mills_and_1000G_gold_standard.indels.b37.human_g1k_v37.chr1.intervals
 
 ### Protocols 11, 12, 13 and 14 (CheckSex, Manta, CoveragePerBase, SequonomConcordanceCheck, CollectBamMetrics) ###
-whichSex,${sampleNameID}.chosenSex.txt
-checkSexMeanCoverage,${sampleNameID}.checkSex.filter.meancoverage.txt
-capturedIntervals_nonAutoChrX,${sampleNameID}.${nameBed}.nonAutosomalChrX.interval_list
-familyList,${sampleNameID}.familylist.txt
-arrayMapFile,${sampleNameID}.concordance.map
-sampleConcordanceFile,${sampleNameID}.concordance.ngsVSarray.txt
+whichSex,${samplePrefix}.chosenSex.txt
+checkSexMeanCoverage,${samplePrefix}.checkSex.filter.meancoverage.txt
+capturedIntervals_nonAutoChrX,${samplePrefix}.${nameBed}.nonAutosomalChrX.interval_list
+familyList,${samplePrefix}.familylist.txt
+arrayMapFile,${samplePrefix}.concordance.map
+sampleConcordanceFile,${samplePrefix}.concordance.ngsVSarray.txt
 sequenomReport,${tmpDataDir}/rawdata/array/${project}_Sequenom_Report.txt
 sequenomInfo,${sequenomDir}/Sequonome_SNPinfo.txt
 collectMultipleMetricsJar,CollectMultipleMetrics
@@ -176,7 +177,7 @@ hsMetricsJar,CalculateHsMetrics
 hsMetrics,${dedupBamMetrics}.hs_metrics
 hsMetricsNonAutosomalRegionChrX,${dedupBamMetrics}.nonAutosomalRegionChrX_hs_metrics
 recreateInsertSizePdfR,createInsertSizePlot_c5.R
-projectDellyAnnotatorOutputVcf,${sampleNameID}.delly.snpeff.hpo.vcf
+projectDellyAnnotatorOutputVcf,${samplePrefix}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup
 hpoTerms,${hpoDir}/build.${hpoVersion}/ALL_SOURCES_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
 caddAnnotationVcf,${dataDir}/CADD/prescored/GRCh37/no_anno/whole_genome_SNVs.vcf.gz
@@ -194,6 +195,7 @@ dbSNP137VcfIdx,${dbSNP137Vcf}.idx
 dbSNPExSiteAfter129Vcf,${dbSNPDir}/dbsnp_137.b37.excluding_sites_after_129.vcf
 dbSNPExSiteAfter129VcfIdx,${dbSNPExSiteAfter129Vcf}.idx
 sampleBatchVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
+
 sampleVariantCalls,${projectResultsDir}/variants/gVCF/${externalSampleID}.variant.calls.g.vcf.gz
 sampleBatchVariantCallsIndex,${sampleBatchVariantCalls}.tbi
 
@@ -204,21 +206,35 @@ sampleGvcf2Bed,${projectResultsDir}/variants/gVCF/${externalSampleID}.gvcfto.bed
 
 sampleBatchVariantCallsCompressed,${intermediateDir}/gVCF/${externalSampleID}.batch-${batchID}.variant.calls.g.vcf.gz
 projectBatchCombinedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.combined.g.vcf.gz
-sampleBatchGenotypedVariantCalls,${intermediateDir}/${externalSampleID}.batch-${batchID}.variant.calls.genotyped.vcf
+sampleBatchGenotypedVariantCalls,${intermediateDir}/${externalSampleID}.batch-${batchID}.variant.calls.genotyped.vcf.gz
 projectBatchGenotypedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.vcf
 
+sampleGenotypedVariantCalls,${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.gz
 
-vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
+#annotate vcf
+vcfAnnoGnomadGenomesConfSample,${samplePrefix}.conf.gnomad.genomes.txt
+vcfAnnoConfSample,${samplePrefix}.conf.toml
 vcfAnnoCustomConfLua,${projectPrefix}.batch-${batchID}.custom.conf.lua
+vcfAnnoCustomConfLuaSample,${samplePrefix}.custom.conf.lua
+vcfAnnoConf,${projectPrefix}.batch-${batchID}.conf.toml
 vcfAnnoGnomadGenomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.genomes.txt
 vcfAnnoGnomadExomesConf,${projectPrefix}.batch-${batchID}.conf.gnomad.exomes.txt
 projectBatchGenotypedAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.annotated.vcf
 toCADD,${projectPrefix}.batch-${batchID}.toCadd.vcf
 fromCADD,${projectPrefix}.batch-${batchID}.fromCadd.tsv.gz
 fromCADDMerged,${projectPrefix}.batch-${batchID}.fromCadd.merged.vcf
-
+#perSample
+toCaddSample,${samplePrefix}.toCadd.vcf
+fromCaddSample,${samplePrefix}.fromCadd.tsv.gz
+sampleGenotypedAnnotatedVariantCalls,${samplePrefix}.variant.calls.genotyped.annotated.vcf
 
 ### Protocols 19, 20, 21, 21, 22, 23 and 24 (SnpEff,CmdLineAnnotator, VariantAnnotator, MergeBatches,Gavin VariantFiltration, IndelFiltration, SplitIndelsSNPs) ###
+#persample
+sampleVariantCallsSnpEff_Annotated,${samplePrefix}.variant.calls.snpeff.vcf
+sampleVariantCallsSnpEff_SummaryHtml,${samplePrefix}.variant.calls.snpeff_Summary.html
+sampleSnpsOnlyVcf,${samplePrefix}.snps.vcf
+sampleIndelsOnlyVcf,${samplePrefix}.indels.vcf
+
 projectVariantCallsSnpEff_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.vcf
 projectVariantCallsSnpEff_HPO_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.HPO.vcf
 projectVariantCallsSnpEff_SummaryHtml,${projectPrefix}.batch-${batchID}.variant.calls.snpeff_Summary.html
@@ -226,8 +242,8 @@ projectVariantCallsSnpEff_ExAC_Annotated,${projectPrefix}.batch-${batchID}.varia
 projectVariantCallsSnpEff_ExAC_GoNL_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.vcf
 projectVariantCallsSnpEff_ExAC_GoNL_CADD_GATK_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.snpeff.exac.gonl.cadd.gatk.vcf
-sampleVariantsMergedIndelsVcf,${sampleNameID}.annotated.indels.vcf
-sampleVariantsMergedSnpsVcf,${sampleNameID}.annotated.snps.vcf
+sampleVariantsMergedIndelsVcf,${samplePrefix}.annotated.indels.vcf
+sampleVariantsMergedSnpsVcf,${samplePrefix}.annotated.snps.vcf
 projectVariantsMerged,${projectPrefix}.variant.calls.GATK.vcf
 projectVariantsIndelsOnlyVcf,${projectPrefix}.annotated.indels.vcf
 projectVariantsSnpsOnlyVcf,${projectPrefix}.annotated.snps.vcf
@@ -241,20 +257,20 @@ gavinCGD,${gavinDataDir}/CGD_26jun2018.txt.gz
 gavinFDR,${gavinDataDir}/FDR_allGenes_r1.2.tsv
 gavinCalibrations,${gavinDataDir}/GAVIN_calibrations_r0.5.tsv
 gavinClinVar,${gavinDataDir}/clinvar.vkgl.patho.26june2018.vcf.gz
-gavinOutputFirstPass,${sampleNameID}.GAVIN.RVCF.firstpass.vcf
-gavinOutputFinal,${sampleNameID}.GAVIN.RVCF.final.vcf
-gavinToCADD,${sampleNameID}.GAVIN.toCadd.tsv
-gavinFromCADD,${sampleNameID}.GAVIN.fromCadd.tsv
-gavinToCADDgz,${sampleNameID}.GAVIN.toCadd.tsv.gz
-gavinFromCADDgz,${sampleNameID}.GAVIN.fromCadd.tsv.gz
-gavinOutputFinalMerged,${sampleNameID}.GAVIN.RVCF.final.mergedWithOriginal.vcf
-gavinOutputFinalMergedRLV,${sampleNameID}.GAVIN.rlv.vcf
-sampleVariantsMergedGavin,${sampleNameID}.variant.calls.GATK.vcf
+gavinOutputFirstPass,${samplePrefix}.GAVIN.RVCF.firstpass.vcf
+gavinOutputFinal,${samplePrefix}.GAVIN.RVCF.final.vcf
+gavinToCADD,${samplePrefix}.GAVIN.toCadd.tsv
+gavinFromCADD,${samplePrefix}.GAVIN.fromCadd.tsv
+gavinToCADDgz,${samplePrefix}.GAVIN.toCadd.tsv.gz
+gavinFromCADDgz,${samplePrefix}.GAVIN.fromCadd.tsv.gz
+gavinOutputFinalMerged,${samplePrefix}.GAVIN.RVCF.final.mergedWithOriginal.vcf
+gavinOutputFinalMergedRLV,${samplePrefix}.GAVIN.rlv.vcf
+sampleVariantsMergedGavin,${samplePrefix}.variant.calls.GATK.vcf
 projectVariantCallsVEP_Annotated,${projectPrefix}.batch-${batchID}.variant.calls.VEP.vcf
 
 ### 25, 26
-sampleVariantsMergedIndelsFilteredVcf,${sampleNameID}.annotated.filtered.indels.vcf
-sampleVariantsMergedSnpsFilteredVcf,${sampleNameID}.annotated.filtered.snps.vcf
+sampleIndelsOnlyFilteredVcf,${samplePrefix}.annotated.filtered.indels.vcf
+sampleSnpsOnlyFilteredVcf,${samplePrefix}.annotated.filtered.snps.vcf
 projectVariantsIndelsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.indels.vcf
 projectVariantsSnpsOnlyFilteredVcf,${projectPrefix}.annotated.filtered.snps.vcf
 sampleFinalVcf,${intermediateDir}/${externalSampleID}.final.vcf
@@ -300,5 +316,9 @@ mergedBamRecalibratedTable,${projectResultsDir}/alignment/${externalSampleID}.re
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz
-sampleMergedRecalibratedBam,${sampleNameID}.merged.recalibrated.bam
-sampleMergedRecalibratedBamIdx,${sampleNameID}.merged.recalibrated.bam.bai
+sampleMergedRecalibratedBam,${samplePrefix}.merged.recalibrated.bam
+sampleMergedRecalibratedBamIdx,${samplePrefix}.merged.recalibrated.bam.bai
+sampleDragenVariantCalls,${samplePrefix}.variant.calls.genotyped.vcf.gz
+sampleDragenRawVariantCalls,${samplePrefix}.hard-filtered.g.vcf.gz
+noMerge,no
+yesMerge,yes

@@ -15,6 +15,7 @@ set -o pipefail
 #string project
 #string logsDir 
 #string groupname
+#string externalSampleID
 
 if [[ -f "${dedupBamMetrics}.noChrX" ]]
 then
@@ -112,8 +113,6 @@ fi
 
 sex=$(less "${whichSex}" | awk 'NR==2')
 
-runNumber=$(basename "${intermediateDir}")
-
 if [[ "${sex}" != "${Gender}" ]]
 then
 	echo "gender is different between samplesheet and calculated"
@@ -131,7 +130,7 @@ then
 	else
 		echo -e "ALARM ALARM\nALARM, ALARM, the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!"
 		sampleName=$(basename "${dedupBamMetrics}")
-		echo -e "ALARM!\nFor sample ${sampleName%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${runNumber}.pipeline.gendercheckfailed"
+		echo -e "ALARM!\nFor sample ${sampleName%%.*} the calculated gender (${sex}) and the gender given in the samplesheet(${Gender}) are not the same!" > "${logsDir}/${project}/${externalSampleID}.pipeline.gendercheckfailed"
 	fi
 fi
 mv -v "${whichSex}" "${projectResultsDir}/general/"

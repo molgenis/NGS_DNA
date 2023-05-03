@@ -24,12 +24,11 @@ Usage:
 	$(basename $0) OPTIONS
 Options:
         -h   Show this help.
-        -a   sampleType (DNA or RNA) (default=DNA)
-        -g   group (default=basename of ../../../ )
+        -t   tmpDirectory (default=basename of ../../../ )
+        -g   group (default=basename of ../../../../ && pwd )
+        -w   groupDir (default=basename of ../../../../ && pwd )
         -f   filePrefix (default=basename of this directory)
         -r   runID (default=run01)
-        -t   tmpDirectory (default=basename of ../../ )
-        -w   groupDir (default=/groups/\${group}/)
 
 ===============================================================================================================
 EOH
@@ -56,7 +55,6 @@ samplesheet="${genScripts}/${filePrefix}.csv"
 ## Checking for columns: externalSampleID, species, build, project and sampleType and creating {COLUMNNAME}.txt.tmp files
 ## Checking for genderColumn
 #
-
 
 python "${EBROOTNGS_DNA}/scripts/sampleSheetChecker.py" "${samplesheet}"
 if [ -f "${samplesheet}.temp" ]

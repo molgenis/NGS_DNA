@@ -80,7 +80,7 @@ function checkIfFinished(){
 	local _projectName="PlatinumSubset${1}"
 	count=0
 	minutes=0
-	while [[ ! -f "${tmpfolder}/projects/${_projectName}/run01/jobs/Autotest_0.sh.finished" ]]
+	while [[ ! -f "${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/Autotest_0.sh.finished" ]]
 	do
 		echo "${_projectName} is not finished in ${minutes} minutes, sleeping for 2 minutes"
 		sleep 120
@@ -91,7 +91,7 @@ function checkIfFinished(){
 		then
 			echo "the test was not finished within 60 minutes, let's kill it"
 			echo -e "\n"
-			for i in "${tmpfolder}/projects/${_projectName}/run01/jobs/"*".sh"
+			for i in "${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"*".sh"
 			do
 				if [[ ! -f "${i}.finished" ]]
 				then
