@@ -113,8 +113,6 @@ fi
 
 sex=$(less "${whichSex}" | awk 'NR==2')
 
-runNumber=$(basename "${intermediateDir}")
-
 if [[ "${sex}" != "${Gender}" ]]
 then
 	echo "gender is different between samplesheet and calculated"

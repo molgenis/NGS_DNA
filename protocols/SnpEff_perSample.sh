@@ -19,7 +19,7 @@ tmpSampleVariantCallsSnpEff_Annotated="${MC_tmpFile}"
 module load "${snpEffVersion}"
 module list
 
-if [ -f "${sampleGenotypedAnnotatedVariantCalls}" ]
+if [[ -f "${sampleGenotypedAnnotatedVariantCalls}" ]]
 then
 	#Run snpEff
 	java -XX:ParallelGCThreads=1 -Djava.io.tmpdir="${tempDir}" -Xmx3g -jar \

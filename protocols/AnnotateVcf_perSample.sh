@@ -34,7 +34,7 @@ tmpSampleGenotypedAnnotatedVariantCalls="${MC_tmpFile}"
 
 bedfile=$(basename "${capturingKit}")
 
-if [ ! -f "${variantCalls}" ]
+if [[ ! -f "${variantCalls}" ]]
 then
 
 	echo "${variantCalls} does not exist, skipped"
@@ -81,7 +81,7 @@ if [[ "${sizeToCADD}" != '0' ]]
 then
 	length=$(zcat "${fromCaddSample%.tsv.gz}.vcf.gz" | wc -l)
 
-	if [ "${length}" -gt 8 ]
+	if [[ "${length}" -gt 8 ]]
 	then
 
 cat >> "${vcfAnnoConfSample}" << HERE
