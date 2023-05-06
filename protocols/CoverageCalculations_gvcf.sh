@@ -41,7 +41,6 @@ array_contains () {
 }
 module purge
 module load "${gatkVersion}"
-module load "${ngsUtilsVersion}"
 module load "${htsLibVersion}"
 module load "${bedToolsVersion}"
 module load "${gVCF2BEDVersion}"
