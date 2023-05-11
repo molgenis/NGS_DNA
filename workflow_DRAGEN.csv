@@ -1,5 +1,6 @@
 step,protocol,dependencies
 s01_PrepareDragenData,protocols/PrepareDragenData.sh,
+s01b_processDragenTrendAnalysis,protocols/processDragenTrendAnalysis.sh,
 s02_CoverageCalculations,protocols/CoverageCalculations_gvcf.sh,s01_PrepareDragenData;variantCalls=sampleDragenRawVariantCalls;merge=noMerge
 s03_AnnotateVcf,protocols/AnnotateVcf_perSample.sh,s01_PrepareDragenData;variantCalls=sampleDragenVariantCalls
 s04_SnpEff,protocols/SnpEff_perSample.sh,s03_AnnotateVcf
@@ -9,4 +10,4 @@ s06b_IndelFiltration,protocols/IndelFiltration_perSample.sh,s05_SplitIndelsAndSN
 s07_MergeIndelsAndSnps,protocols/MergeIndelsAndSnps_perSample.sh,s06a_SnpFiltration;s06b_IndelFiltration
 s08_Gavin,protocols/Gavin.sh,s07_MergeIndelsAndSnps
 s09_ReheaderVcf,protocols/ReheaderVCF.sh,s08_Gavin
-s10_PipelineFinished,protocols/PipelineFinished.sh,s09_ReheaderVcf
+s10_PipelineFinished,protocols/PipelineFinished.sh,s01b_processDragenTrendAnalysis;s02_CoverageCalculations;s09_ReheaderVcf

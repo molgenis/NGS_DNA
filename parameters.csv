@@ -32,6 +32,7 @@ gatkJar,gatk-package-local.jar
 gavinPlusJar,gavin-plus-RELEASE.jar
 gavinPlusVersion,gavin-plus/1.5.0-${javaSuffix}
 gVCF2BEDVersion,gVCF2BED/1.0.0-${toolChain_min}
+jqVersion,jq/1.6
 refGnomADExomesVersion,2.1.1
 refGnomADGenomesVersion,r2.0.2
 htsLibVersion,HTSlib/1.16-${toolChain_min}
