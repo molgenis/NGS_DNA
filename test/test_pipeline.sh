@@ -44,36 +44,41 @@ function preparePipeline(){
 	cd scripts
 
 	bash submit.sh
-	jobsFolder="${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"
-	cd "${jobsFolder}"
-	perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
-	perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
-
-	for i in s*_Manta_1.sh; do touch "${i}.finished" ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
-
-	## "gender cannot be determined for Male NA12891"
-	for i in s*_GenderCheck_1.sh; do touch "${i}.finished" ; touch "${i%.*}.env"; chmod 755 "${i%.*}.env" ;done
-	for i in $(ls s*_GenderCalculate_1.sh); do touch "${i}.finished" ; touch "${i%.*}.env"; chmod 755 "${i%.*}.env" ;done
-	printf "This is a male\nMale\n" > "${tmpfolder}/tmp/NGS_DNA/${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt"
-	perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
-	perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
-	if [[ "${_workflowType}" == "ExternalSamples" ]]
+	sleep 3
+	if [[ ! -f "${_generatedScriptsFolder}/scripts/CheckRawDataOnTmp_0.sh.finished" ]]
 	then
-		cd "${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"
-		perl -pi -e 's|ExternalSamples|InhouseSamples|g' "s01"*"_0.sh"
-		var=$(diff s01*_0.sh "${jobsFolder}/s01"*"_0.sh" | wc -l)
-		if [[ "${var}" -eq '0' ]]
-		then
-			echo "ExternalSamples is correct"
-		else
-			echo "PlatinumSubsetExternalSamples is not creating the same scripts as the PlatinumSubsetInhouseSamples (compared s01*_1.sh "
-			exit 1
-		fi
+		echo "${_generatedScriptsFolder}/scripts/CheckRawDataOnTmp_0.sh.finished is not there, EXIT!"
 	else
+		jobsFolder="${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"
+		cd "${jobsFolder}"
+		perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
+		perl -pi -e 's|module load \"test\"||' s*_Manta_0.sh
 
-		bash submit.sh
+		for i in s*_Manta_1.sh; do touch "${i}.finished" ; touch ${i%.*}.env; chmod 755 ${i%.*}.env ;done
+
+		## "gender cannot be determined for Male NA12891"
+		for i in s*_GenderCheck_1.sh; do touch "${i}.finished" ; touch "${i%.*}.env"; chmod 755 "${i%.*}.env" ;done
+		for i in $(ls s*_GenderCalculate_1.sh); do touch "${i}.finished" ; touch "${i%.*}.env"; chmod 755 "${i%.*}.env" ;done
+		printf "This is a male\nMale\n" > "${tmpfolder}/tmp/NGS_DNA/${_projectName}/run01//PlatinumSample_NA12891.chosenSex.txt"
+		perl -pi -e 's|--time=16:00:00|--time=05:59:00|' *.sh
+		perl -pi -e 's|--time=23:59:00|--time=05:59:00|' *.sh
+		if [[ "${_workflowType}" == "ExternalSamples" ]]
+		then
+			cd "${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"
+			perl -pi -e 's|ExternalSamples|InhouseSamples|g' "s01"*"_0.sh"
+			var=$(diff s01*_0.sh "${jobsFolder}/s01"*"_0.sh" | wc -l)
+			if [[ "${var}" -eq '0' ]]
+			then
+				echo "ExternalSamples is correct"
+			else
+				echo "PlatinumSubsetExternalSamples is not creating the same scripts as the PlatinumSubsetInhouseSamples (compared s01*_1.sh "
+				exit 1
+			fi
+		else
+
+			bash submit.sh
+		fi
 	fi
-
 
 }
 function checkIfFinished(){
