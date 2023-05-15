@@ -51,6 +51,8 @@ function preparePipeline(){
 		then
 			echo "${_generatedScriptsFolder}/scripts/CheckRawDataOnTmp_0.sh.finished is not there, EXIT!"
 			exit 1
+		else 
+			sleep 20
 		fi
 	fi
 
