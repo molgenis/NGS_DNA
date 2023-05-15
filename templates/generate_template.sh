@@ -90,6 +90,7 @@ sh "${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh" \
 -p "${genScripts}/${filePrefix}.csv" \
 -w "${EBROOTNGS_DNA}/create_in-house_ngs_projects_workflow.csv" \
 -rundir "${genScripts}/scripts" \
+-b slurm \
 --runid "${runID}" \
 -o workflowpath="${workflow};\
 outputdir=scripts/jobs;\
