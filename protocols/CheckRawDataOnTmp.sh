@@ -173,16 +173,15 @@ else
 	rm -f "${logsDir}/${project}/${project}.copyDataFromPrm.finished"
 	echo "all Data is not yet available, manually stopping dependent jobs"
 	teller=0
-	while read line 
+	while read -r line 
 	do
 		if [[ "${teller}" == 0 ]]
 		then
 			teller=1
 		else
-			jobId=$(echo ${line} | awk 'BEGIN {FS=":"}{print $2}')
-			jobName=$(echo ${line} | awk 'BEGIN {FS=":"}{print $1}')
+			jobId=$(echo "${line}" | awk 'BEGIN {FS=":"}{print $2}')
+			jobName=$(echo "${line}" | awk 'BEGIN {FS=":"}{print $1}')
 			echo -n "INFO: Cancelling job ${jobName} (${jobId})... "
-			squeue
 			scancel -Q "${jobId}"
 		fi
 
