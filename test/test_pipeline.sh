@@ -152,7 +152,7 @@ rsync -v 'test/results/'*'_True.txt' '/home/umcg-molgenis/NGS_DNA/'
 rsync -v 'test/results/PlatinumSample_NA12878.Manta.diploidSV_True.vcf.gz' '/home/umcg-molgenis/NGS_DNA/'
 rsync -v 'test/results/PlatinumSample_NA12878.GAVIN.rlv.vcf.gz' '/home/umcg-molgenis/NGS_DNA/'
 
-preparePipeline 'InhouseSamples'
 preparePipeline 'ExternalSamples'
+preparePipeline 'InhouseSamples'
 
 checkIfFinished 'InhouseSamples'
