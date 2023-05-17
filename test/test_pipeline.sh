@@ -44,7 +44,7 @@ function preparePipeline(){
 	cd scripts
 
 	bash submit.sh
-	sleep 3
+	sleep 15
 	if [[ "${_workflowType}" == "InhouseSamples" ]]
 	then	
 		if [[ ! -f "${_generatedScriptsFolder}/scripts/CheckRawDataOnTmp_0.sh.finished" ]]
