@@ -44,6 +44,18 @@ function preparePipeline(){
 	cd scripts
 
 	bash submit.sh
+	sleep 15
+	if [[ "${_workflowType}" == "InhouseSamples" ]]
+	then	
+		if [[ ! -f "${_generatedScriptsFolder}/scripts/CheckRawDataOnTmp_0.sh.finished" ]]
+		then
+			echo "${_generatedScriptsFolder}/scripts/CheckRawDataOnTmp_0.sh.finished is not there, EXIT!"
+			exit 1
+		else 
+			sleep 20
+		fi
+	fi
+
 	jobsFolder="${tmpfolder}/projects/NGS_DNA/${_projectName}/run01/jobs/"
 	cd "${jobsFolder}"
 	perl -pi -e 's|--runDir ${tmpMantaDir}|--region 2:100000-500000 \\\n --runDir ${tmpMantaDir}|' s*_Manta_0.sh
@@ -73,7 +85,7 @@ function preparePipeline(){
 
 		bash submit.sh
 	fi
-
+	
 
 }
 function checkIfFinished(){
@@ -140,7 +152,7 @@ rsync -v 'test/results/'*'_True.txt' '/home/umcg-molgenis/NGS_DNA/'
 rsync -v 'test/results/PlatinumSample_NA12878.Manta.diploidSV_True.vcf.gz' '/home/umcg-molgenis/NGS_DNA/'
 rsync -v 'test/results/PlatinumSample_NA12878.GAVIN.rlv.vcf.gz' '/home/umcg-molgenis/NGS_DNA/'
 
-preparePipeline 'InhouseSamples'
 preparePipeline 'ExternalSamples'
+preparePipeline 'InhouseSamples'
 
 checkIfFinished 'InhouseSamples'

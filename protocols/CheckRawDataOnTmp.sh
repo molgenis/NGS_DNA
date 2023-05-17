@@ -159,8 +159,6 @@ do
 done
 
 
-	
-
 if [[ "${allRawDataAvailable}" == 'true' ]]
 then
 	echo "rawdata already available"
@@ -173,7 +171,22 @@ then
 	fi
 else
 	rm -f "${logsDir}/${project}/${project}.copyDataFromPrm.finished"
-	echo "all Data is not yet available, exiting"
+	echo "all Data is not yet available, manually stopping dependent jobs"
+	teller=0
+	while read -r line 
+	do
+		if [[ "${teller}" == 0 ]]
+		then
+			teller=1
+		else
+			jobId=$(echo "${line}" | awk 'BEGIN {FS=":"}{print $2}')
+			jobName=$(echo "${line}" | awk 'BEGIN {FS=":"}{print $1}')
+			echo -n "INFO: Cancelling job ${jobName} (${jobId})... "
+			scancel -Q "${jobId}"
+		fi
+
+	done <"molgenis.submitted.log"
+	
 	trap - EXIT
 	exit 0
 fi
