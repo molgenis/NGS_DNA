@@ -93,7 +93,7 @@ echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
 capturedVariantCalls="${variantCalls%%.*}.captured.g.vcf"
 bedtools intersect -u -header -a "${variantCalls}" -b "${captured}.merged.bed" > "${capturedVariantCalls}"
 bgzip -f "${capturedVariantCalls}"
-tabix -p vcf "${capturedVariantCalls}.gz"
+tabix -f -p vcf "${capturedVariantCalls}.gz"
 
 
 if [[ -d "${coveragePerBaseDir}/${bedfile}/" ]]
