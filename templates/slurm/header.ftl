@@ -31,7 +31,7 @@ logsDirectory="${logsDir}/${project}/"
 <#noparse>
 runName=$(basename $(cd ../ && pwd ))
 projectName=$(basename $(cd ../../ && pwd ))
-MC_failedFile="${logsDirectory}/${projectName}/${runName}.pipeline.failed"
+MC_failedFile="${logsDirectory}/${runName}.pipeline.failed"
 
 declare MC_singleSeperatorLine=$(head -c 120 /dev/zero | tr '\0' '-')
 declare MC_doubleSeperatorLine=$(head -c 120 /dev/zero | tr '\0' '=')
