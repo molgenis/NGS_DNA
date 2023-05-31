@@ -48,7 +48,6 @@ export mydate_start
 #
 <#noparse>
 runName=$(basename $(cd ../ && pwd ))
-projectName=$(basename $(cd ../../ && pwd ))
 MC_failedFile="${logsDirectory}/${runName}.pipeline.failed"
 
 
