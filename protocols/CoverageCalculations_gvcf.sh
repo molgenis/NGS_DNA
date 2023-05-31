@@ -90,10 +90,13 @@ then
 fi
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
-capturedVariantCalls="${variantCalls%%.*}.captured.g.vcf"
+dirVariantCalls="$(dirname "${variantCalls}")"
+basenameVariantCalls="$(basename "${variantCalls}")"
+capturedVariantCalls="${dirVariantCalls}/${basenameVariantCalls%%.*}.captured.g.vcf"
+
 bedtools intersect -u -header -a "${variantCalls}" -b "${captured}.merged.bed" > "${capturedVariantCalls}"
 bgzip -f "${capturedVariantCalls}"
-tabix -p vcf "${capturedVariantCalls}.gz"
+tabix -f -p vcf "${capturedVariantCalls}.gz"
 
 
 if [[ -d "${coveragePerBaseDir}/${bedfile}/" ]]
