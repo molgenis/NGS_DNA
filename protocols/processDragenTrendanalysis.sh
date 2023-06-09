@@ -8,9 +8,7 @@ set -o pipefail
 #string groupname
 #string tmpName
 #string tmpDataDir
-#string externalSampleID
 #string projectPrefix
-#string sampleProcessStepID
 #string gsBatch
 #string projectResultsDir
 #string bedToolsVersion
@@ -47,8 +45,8 @@ then
 
 	done
 
-	mv -v "${intermediateDir}/Dragen_runinfo.csv" "${projectResultsDir}/qc/statistics/${seq_batch}.Dragen_runinfo.csv"
-	mv -v "${intermediateDir}/Dragen.csv" "${projectResultsDir}/qc/statistics/${seq_batch}.Dragen.csv"
+	mv -v "${intermediateDir}/Dragen_runinfo.csv" "${projectResultsDir}/qc/statistics/${project}.Dragen_runinfo.csv"
+	mv -v "${intermediateDir}/Dragen.csv" "${projectResultsDir}/qc/statistics/${project}.Dragen.csv"
 else
 	echo "There are no .metrics.json files found in ${tmpDataDir}/${gsBatch}/Analysis/*/"
 fi

@@ -74,7 +74,7 @@ ppn_protocols_MergeBatches,2
 ppn_protocols_MergeIndelsAndSnpsProject,1
 ppn_protocols_MergeIndelsAndSnpsSample,1
 ppn_protocols_MultiQC,1
-ppn_protocols_PrepareFastQ,1
+ppn_protocols_PrepareFastQ,3
 ppn_protocols_SnpEff,2
 ppn_protocols_SnpFiltration,1
 ppn_protocols_SplitIndelsAndSNPs,2
