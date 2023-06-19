@@ -23,12 +23,12 @@ Script to copy (sync) data from a succesfully finished analysis project from tmp
 Usage:
 	$(basename $0) OPTIONS
 Options:
-        -h   Show this help.
-        -t   tmpDirectory (default=basename of ../../../ )
-        -g   group (default=basename of ../../../../ && pwd )
-        -w   groupDir (default=basename of ../../../../ && pwd )
-        -f   filePrefix (default=basename of this directory)
-        -r   runID (default=run01)
+	-h   Show this help.
+	-t   tmpDirectory (default=basename of ../../../ )
+	-g   group (default=basename of ../../../../ && pwd )
+	-w   groupDir (default=basename of ../../../../ && pwd )
+	-f   filePrefix (default=basename of this directory)
+	-r   runID (default=run01)
 
 ===============================================================================================================
 EOH
@@ -38,8 +38,20 @@ EOH
 
 while getopts "t:g:w:f:r:h" opt;
 do
-  	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)groupDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
-        esac
+	case $opt in
+		h)
+			showHelp;;
+		t)
+			tmpDirectory="${OPTARG}";;
+		g)
+			group="${OPTARG}";;
+		w)
+			groupDir="${OPTARG}";;
+		f)
+			filePrefix="${OPTARG}";;
+		r)
+			runID="${OPTARG}";;
+	esac
 done
 
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
