@@ -1,0 +1,6 @@
+* text=auto
+
+*.sh        eol=lf
+*.bash      eol=lf
+*.md        eol=lf
+*.cfg       eol=lf
