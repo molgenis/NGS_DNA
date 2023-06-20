@@ -32,7 +32,19 @@ EOH
 
 while getopts "t:g:w:f:r:h" opt;
 do
-	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)workDir="${OPTARG}";; f)filePrefix="${OPTARG}";; r)runID="${OPTARG}";;
+	case $opt in
+		h)
+			showHelp;;
+		t)
+			tmpDirectory="${OPTARG}";;
+		g)
+			group="${OPTARG}";;
+		w)
+			workDir="${OPTARG}";;
+		f)
+			filePrefix="${OPTARG}";;
+		r)
+			runID="${OPTARG}";;
 	esac
 done
 
