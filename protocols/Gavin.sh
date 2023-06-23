@@ -25,7 +25,7 @@ set -o pipefail
 
 #string gavinOutputFinalMerged
 #string gavinOutputFinalMergedRLV
-#string sampleFinalVcf
+#string inputFile
 
 #string gavinPlusVersion
 #string gavinPlusJar
@@ -42,10 +42,10 @@ module load "${picardVersion}"
 
 touch "${intermediateDir}/emptyFile.tsv"
 
-bcftools norm -f "${indexFile}" -m -any "${sampleFinalVcf}" > "${sampleFinalVcf}.splitPerAllele.vcf"
+bcftools norm -f "${indexFile}" -m -any "${inputFile}" > "${inputFile}.splitPerAllele.vcf"
 
 java -Xmx4g -jar "${EBROOTGAVINMINPLUS}/${gavinPlusJar}" \
--i "${sampleFinalVcf}.splitPerAllele.vcf" \
+-i "${inputFile}.splitPerAllele.vcf" \
 -o "${tmpGavinOutputFinal}" \
 -m ANALYSIS \
 -c "${intermediateDir}/emptyFile.tsv" \

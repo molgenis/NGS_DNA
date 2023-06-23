@@ -37,7 +37,6 @@ mem_protocols_SnpEff,4gb
 mem_protocols_SnpEff_perSample,8gb
 mem_protocols_SplitVcfBySample,4gb
 mem_protocols_SnpFiltration,5gb
-mem_protocols_SnpFiltration_perSample,5gb
 mem_protocols_SplitIndelsAndSNPs,6gb
 mem_protocols_VariantCalling,8gb
 mem_protocols_VariantGenotyping,8gb
