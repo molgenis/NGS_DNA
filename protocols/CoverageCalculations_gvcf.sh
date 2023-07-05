@@ -158,7 +158,7 @@ then
 			gvcf2bed2.py \
 				-I "${capturedVariantCalls}.gz" \
 				-O "${outputFile}" \
-				-b "${perTargetDir}/${perTarget}.bed"
+				-b "${perTargetDir}/${perTarget}.merged.bed"
 
 			awk '{sumDP+=$11;sumTargetSize+=$12;sumCoverageInDpLow+=$13;sumZeroCoverage+=14}END{print "avgCov: "(sumDP/sumTargetSize)"\t%coverageBelow20: "((sumCoverageInDpLow/sumTargetSize)*100)"\t%ZeroCoverage: "((sumZeroCoverage/sumTargetSize)*100)}' "${outputFile}" > "${outputFile%.*}.incl_TotalAvgCoverage_TotalPercentagebelow20x.txt"
 
