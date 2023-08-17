@@ -131,20 +131,6 @@ do
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
 	printf '.'
 	
-	mapfile -t coveragePerBaseFiles < <(find "${intermediateDir}" -name "${sa}*.coveragePerBase.txt")
-	if [[ "${#coveragePerBaseFiles[@]}" -eq '0' ]]
-	then
-		echo "there are no coveragePerBase files for sample: ${sa}"
-		continue
-	else
-		for coveragePerBaseFile in "${coveragePerBaseFiles[@]}"
-		do
-			rsync -a "${coveragePerBaseFile}" "${projectResultsDir}/coverage/CoveragePerBase/"
-			printf '.'
-		done
-	fi
-	
-
 	## copy the rejected samples (with less 90% of the targets with > 20x coverage)
 	mapfile -t rejectedSamples < <(find "${intermediateDir}" -name "${sa}*.rejected")
 	if [[ "${#rejectedSamples[@]}" -eq '0' ]]
@@ -158,23 +144,9 @@ do
 		done
 		cat "${intermediateDir}/${sa}"*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
-	
-	mapfile -t coveragePerTargetFiles < <(find "${intermediateDir}" -name "${sa}*.coveragePerTarget.txt")
-	if [[ "${#coveragePerTargetFiles[@]}" -eq '0' ]]
-	then
-		echo "there are no coveragePerTarget files for sample: ${sa}"
-		continue
-	else
-		for coveragePerTargetFile in "${coveragePerTargetFiles[@]}"
-		do
-			rsync -a "${coveragePerTargetFile}" "${projectResultsDir}/coverage/CoveragePerTarget/"
-			printf '.'
-		done
-	fi
 
 done
 printf " finished\n"
-
 
 # print README.txt files
 printf "Copying QC report to results directory "
