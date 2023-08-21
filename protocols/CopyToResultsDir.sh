@@ -122,7 +122,7 @@ done
 printf '%s' " finished\n"
 
 #copy vcf file
-printf "Copying vcf files, gender determination, coverage per base and per target files "
+printf "Copying vcf files"
 for sa in "${UNIQUESAMPLES[@]}"
 do
 
