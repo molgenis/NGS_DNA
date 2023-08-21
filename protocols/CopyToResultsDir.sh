@@ -121,7 +121,7 @@ do
 done
 printf '%s' " finished\n"
 
-#copy vcf file + coveragePerBase.txt + gender determination
+#copy vcf file
 printf "Copying vcf files, gender determination, coverage per base and per target files "
 for sa in "${UNIQUESAMPLES[@]}"
 do
