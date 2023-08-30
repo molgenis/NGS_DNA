@@ -125,7 +125,7 @@ then
 			
 			grep -v "NC_001422.1" "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt" > "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt.tmp"
 			echo "phiX is removed for ${externalSampleID}.${perBase} perBase" 
-			awk '{if (NR>1){printf "%s\t%s\t%s\t%s\t%.0f\t%s\t%s\t%s\t%s\n",$1,$2,$3,$4,$5,$6,$7,$8,$9}else {print $0}}' "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt.tmp" > "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/${externalSampleID}.${perBase}.coveragePerBase.txt"
+			awk '{if (NR>1){printf "%s\t%s\t%s\t%s\t%.0f\t%s\t%s\n",$1,$2,$3,$4,$5,$6,$7}else {print $0}}' "${intermediateDir}/${externalSampleID}.${perBase}.coveragePerBase.txt.tmp" > "${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/${externalSampleID}.${perBase}.coveragePerBase.txt"
 			
 			echo "coveragePerTarget file can be found here: ${projectResultsDir}/coverage/CoveragePerBase/${Gender,,}/${externalSampleID}.${perBase}.coveragePerBase.txt"
 			
