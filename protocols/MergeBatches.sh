@@ -21,11 +21,11 @@ set -o pipefail
 #string extension
 #string dataDir
 #string capturingKit
-
+#string bcfToolsVersion
 
 #Load module GATK,tabix
 module load "${gatkVersion}"
-
+module load "${bcfToolsVersion}"
 module list
 
 makeTmpDir "${projectVariantsMergedSortedGz}"
@@ -61,10 +61,13 @@ ${INPUTS[@]} \
 -O "${tmpProjectVariantsMergedSortedGz}" \
 --SEQUENCE_DICTIONARY "${indexFileDictionary}"
 
-mv -v "${tmpProjectVariantsMergedSortedGz}" "${projectVariantsMergedSortedGz}"
-mv -v "${tmpProjectVariantsMergedSortedGz}.tbi" "${projectVariantsMergedSortedGz}.tbi"
+echo "##intervals=[${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed]" > "${intermediateDir}/bedfile.txt"
+
+bcftools annotate -h "${intermediateDir}/bedfile.txt" -O v -o "${tmpProjectVariantsMergedSortedGz}.tmp.vcf.gz" "${tmpProjectVariantsMergedSortedGz}"
+tabix -p vcf "${tmpProjectVariantsMergedSortedGz}.tmp.vcf.gz"
+
+mv -v "${tmpProjectVariantsMergedSortedGz}.tmp.vcf.gz" "${projectVariantsMergedSortedGz}"
+mv -v "${tmpProjectVariantsMergedSortedGz}.tmp.vcf.gz.tbi" "${projectVariantsMergedSortedGz}.tbi"
 
 ### make allChromosomes bedfile to use it later in CheckOutput script
 awk '{print $1}' "${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed" | uniq > "${intermediateDir}/allChromosomes.txt"
-
-
