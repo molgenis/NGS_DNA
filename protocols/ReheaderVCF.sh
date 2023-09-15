@@ -11,6 +11,8 @@ set -o pipefail
 #string externalSampleID
 #string gavinOutputFinalMergedRLV
 #string projectResultsDir
+#string capturingKit
+#string dataDir
 
 module load "${bcfToolsVersion}"
 module load "${htsLibVersion}"
@@ -21,7 +23,9 @@ oldIdentifier=$(cat "${intermediateDir}/${externalSampleID}.txt")
 echo -e "old:${oldIdentifier}, new:${newGVCFSampleIdentifier}"
 echo -e "${oldIdentifier} ${newGVCFSampleIdentifier}" > "${intermediateDir}/${externalSampleID}.newVCFHeader.txt"
 
+echo "##intervals=[${dataDir}/${capturingKit}/human_g1k_v37/captured.merged.bed]" > "${intermediateDir}/bedfile.txt"
 bcftools reheader -s "${intermediateDir}/${externalSampleID}.newVCFHeader.txt" "${gavinOutputFinalMergedRLV}.gz" -o "${gavinOutputFinalMergedRLV}.gz.tmp"
-mv -v "${gavinOutputFinalMergedRLV}.gz.tmp" "${gavinOutputFinalMergedRLV}.gz"
+bcftools annotate -h "${intermediateDir}/bedfile.txt" -O v -o "${gavinOutputFinalMergedRLV}.tmp.vcf.gz" "${gavinOutputFinalMergedRLV}.gz.tmp"
+mv -v "${gavinOutputFinalMergedRLV}.tmp.vcf.gz" "${gavinOutputFinalMergedRLV}.gz"
 tabix -f -p vcf "${gavinOutputFinalMergedRLV}.gz"
 rsync -av "${gavinOutputFinalMergedRLV}.gz" "${projectResultsDir}/variants/GAVIN/"
