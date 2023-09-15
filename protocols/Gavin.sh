@@ -65,7 +65,7 @@ java -jar "${EBROOTPICARD}/picard.jar" SortVcf \
 -SD "${indexFileDictionary}" \
 -O "${gavinOutputFinalMergedRLV}"
 
-
+perl -pi -e 's=|""|="\\"|' "${gavinOutputFinalMergedRLV}"
 #sortVCFbyFai.pl -fastaIndexFile "${indexFile}.fai" -inputVCF "${tmpGavinOutputFinal}" -outputVCF "${gavinOutputFinalMergedRLV}"
 perl -pi -e 's|RLV=|;RLV=|'  "${gavinOutputFinalMergedRLV}"
 
