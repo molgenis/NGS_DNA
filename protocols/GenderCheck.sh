@@ -48,7 +48,7 @@ if ($0 ~ /^#/){
 		printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
 		printf "Unknown\n" >> "${whichSex}"
 
-	elif [[ "${avgCov}" -lt '1' ]]
+	elif [[ "${avgCov}" < '1' ]]
 	then
 		echo "${avgCov} of autosomes is lower than 1, skipped"
 		printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
@@ -60,11 +60,11 @@ if ($0 ~ /^#/){
 		if ($0 ~ /^#/){
 
 		}
-		else if ($23 == ""){
-			}else if ( $23 == "MEAN_TARGET_COVERAGE" ){
+		else if ($34 == ""){
+			}else if ( $34 == "MEAN_TARGET_COVERAGE" ){
 
 			}else{
-				print $23
+				print $34
 			}
 		}' "${hsMetricsNonAutosomalRegionChrX}" >> "${checkSexMeanCoverage}"
 

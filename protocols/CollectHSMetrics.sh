@@ -28,10 +28,6 @@ then
 	-O "${tmpHsMetrics}" \
 	-BI "${capturedExomeIntervals}" \
 	-TI "${capturedExomeIntervals}" \
-	--VALIDATION_STRINGENCY LENIENT \
-	--CLIP_OVERLAPPING_READS false \
-	--MINIMUM_MAPPING_QUALITY 1 \
-	--MINIMUM_BASE_QUALITY 0 \
 	--TMP_DIR "${tempDir}"
 else
 	gatk --java-options "-Xmx3g -XX:ParallelGCThreads=1" CollectHsMetrics \
@@ -39,10 +35,6 @@ else
 	-O "${tmpHsMetrics}" \
 	-BI "${capturedIntervals}" \
 	-TI "${capturedIntervals}" \
-	--VALIDATION_STRINGENCY LENIENT \
-	--CLIP_OVERLAPPING_READS false \
-	--MINIMUM_MAPPING_QUALITY 1 \
-	--MINIMUM_BASE_QUALITY 0 \
 	--TMP_DIR "${tempDir}"
 fi
 
