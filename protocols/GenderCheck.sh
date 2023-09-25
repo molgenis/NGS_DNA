@@ -48,7 +48,7 @@ if ($0 ~ /^#/){
 		printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
 		printf "Unknown\n" >> "${whichSex}"
 
-	elif [[ "${avgCov}" < '1' ]]
+	elif [[ "${avgCov}" -lt '1' ]]
 	then
 		echo "${avgCov} of autosomes is lower than 1, skipped"
 		printf "There is no autosomal region, a gender cannot be determined\n" > "${whichSex}"
