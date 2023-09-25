@@ -40,8 +40,8 @@ done
 if [[ -z "${capturingKit:-}" ]]; then echo -e '\nERROR: Must specify an capturingKit\n' ;showHelp ; exit 1 ; fi
 if [[ -z "${vcfFile:-}" ]]; then echo -e '\nERROR: Must specify an inputFile (vcf)\n' ;showHelp ; exit 1 ; fi
 
-if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
-if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../ && pwd )) ; fi ; echo "group=${group}"
+if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
+if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../../ && pwd )) ; fi ; echo "group=${group}"
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
 if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ;fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
@@ -73,12 +73,12 @@ fi
 
 
 ## make samplesheet
-sh ${EBROOTNGS_DNA}/scripts/convertVcfToSamplesheet.sh -i "${inputVcf}" -p "${filePrefix}" -c "${capturingKit}" 
-genScripts="${workDir}/generatedscripts/${filePrefix}/"
+bash "${EBROOTNGS_DNA}/scripts/convertVcfToSamplesheet.sh" -i "${inputVcf}" -p "${filePrefix}" -c "${capturingKit}" 
+genScripts="${workDir}/generatedscripts/NGS_DNA/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv"
 
-build="b37"
-species="homo_sapiens"
+build='b37'
+species='homo_sapiens'
 
 if [ -s build.txt ]; then build=$(cat build.txt);fi
 if [ -s species.txt ];then species=$(cat species.txt); fi
@@ -94,9 +94,9 @@ perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_D
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
 
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
-projectJobsDir="${workDir}/projects/${filePrefix}/${runID}/jobs/"
-projectResultsDir="${workDir}/projects/${filePrefix}/${runID}/results/"
-intermediateDir="${workDir}/tmp/${filePrefix}/${runID}/"
+projectJobsDir="${workDir}/projects/NGS_DNA/${filePrefix}/${runID}/jobs/"
+projectResultsDir="${workDir}/projects/NGS_DNA/${filePrefix}/${runID}/results/"
+intermediateDir="${workDir}/tmp/NGS_DNA/${filePrefix}/${runID}/"
 projectLogsDir="${workDir}/logs/${filePrefix}/"
 
 
