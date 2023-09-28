@@ -21,7 +21,7 @@ set -o pipefail
 #still needs some work to make it fit in the pipeline...
 #
 module load "${jqVersion}"
-mapfile -t jsonFiles < <(find "${tmpDataDir}/${gsBatch}/Analysis/"*/ -maxdepth 1 -mindepth 1 -name "*.metrics.json")
+mapfile -t jsonFiles < <(find "${projectResultsDir}/qc/" -maxdepth 1 -mindepth 1 -name "*.metrics.json")
 
 echo -e 'Sample,Run,Date' > "${intermediateDir}/Dragen_runinfo.csv"
 echo -e 'Sample\tBatchName\ttotal_reads\tduplicate_reads\tunique_reads\tmean_insertsize\tfrac_min_20x_coverage\taverage_autosomal_coverage' > "${intermediateDir}/Dragen.csv"
