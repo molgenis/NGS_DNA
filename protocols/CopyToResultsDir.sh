@@ -43,6 +43,7 @@ array_contains () {
 mkdir -p "${projectResultsDir}/coverage/CoveragePerBase"
 mkdir -p "${projectResultsDir}/coverage/CoveragePerTarget"
 mkdir -p "${projectResultsDir}/bedfile/"
+mkdir -p "${projectResultsDir}/concordanceCheckSnps/"
 
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
@@ -144,6 +145,9 @@ do
 		done
 		cat "${intermediateDir}/${sa}"*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
+
+	## copy concordanceCheckCalls vcf files
+	rsync -a "${sa}.concordanceCheckCalls.vcf" "${projectResultsDir}/concordanceCheckSnps/"
 
 done
 printf " finished\n"
