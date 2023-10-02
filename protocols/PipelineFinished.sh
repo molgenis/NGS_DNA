@@ -9,10 +9,10 @@ set -e
 set -u
 set -o pipefail
 
-
 # copy samplesheet to results directory
-rsync -a "${projectJobsDir}/${project}.csv" "${projectResultsDir}"
-
+rsync -av "${projectJobsDir}/${project}.csv" "${projectResultsDir}"
+mkdir -p "${projectResultsDir}/concordanceCheckSnps/"
+rsync -av "${intermediateDir}/"*".concordanceCheckCalls.vcf" "${projectResultsDir}/concordanceCheckSnps/"
 
 if [[ -f "${logsDir}//${project}/${runid}.pipeline.started" ]]
 then

@@ -5,8 +5,6 @@ set -o pipefail
 #string tempDir
 #string intermediateDir
 #string indexFile
-#string capturedBatchBed
-#string dbSnp
 #string project
 #string tmpDataDir
 #string projectJobsDir
@@ -31,6 +29,7 @@ then
 	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
 	-R "${indexFile}" \
 	--variant "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
+	--include-non-variant-sites true \
 	-L "${concordanceCheckSnps}" \
 	-O "${tmpConcordanceCheckCallsVcf}"
 
