@@ -121,7 +121,7 @@ sampleSheetCsv="${projectJobsDir}/${project}.csv"
 batching="_small"
 
 capturingKitProject=$(python "${EBROOTNGS_DNA}/scripts/getCapturingKit.py" "${sampleSheetCsv}" | sed 's|\\||' )
-captKit=$(echo "capturingKitProject" | awk 'BEGIN {FS="/"}{print $2}')
+
 
 if [[ ! -d "${dataDir}/${capturingKitProject}" ]]
 then
