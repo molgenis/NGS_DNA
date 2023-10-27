@@ -43,6 +43,7 @@ array_contains () {
 mkdir -p "${projectResultsDir}/coverage/CoveragePerBase"
 mkdir -p "${projectResultsDir}/coverage/CoveragePerTarget"
 mkdir -p "${projectResultsDir}/bedfile/"
+mkdir -p "${projectResultsDir}/concordanceCheckSnps/"
 
 UNIQUESAMPLES=()
 for samples in "${externalSampleID[@]}"
@@ -130,6 +131,9 @@ do
 	printf '.'
 	rsync -a "${intermediateDir}/${sa}.final.vcf.gz.tbi" "${projectResultsDir}/variants/"
 	printf '.'
+
+	## copy concordanceCheckCalls vcf files
+	rsync -a "${intermediateDir}/${sa}.concordanceCheckCalls.vcf" "${projectResultsDir}/concordanceCheckSnps/"
 	
 	## copy the rejected samples (with less 90% of the targets with > 20x coverage)
 	mapfile -t rejectedSamples < <(find "${intermediateDir}" -name "${sa}*.rejected")
@@ -144,6 +148,7 @@ do
 		done
 		cat "${intermediateDir}/${sa}"*.rejected > "${projectResultsDir}/coverage/rejectedSamplesResult.txt"
 	fi
+
 
 done
 printf " finished\n"

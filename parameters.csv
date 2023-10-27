@@ -312,8 +312,6 @@ familyList,${intermediateDir}/${externalSampleID}.familyList.txt
 
 mergedBamRecalibratedTable,${projectResultsDir}/alignment/${externalSampleID}.recalibrated.table
 
-
-
 cgdDataDir,${dataDir}/CGD/
 projectBatchGenotypedCGDAnnotatedVariantCalls,${projectPrefix}.batch-${batchID}.variant.calls.genotyped.cgd.annotated.vcf
 cgdFile,${cgdDataDir}/CGD_perPosition.bed.gz
@@ -323,3 +321,5 @@ sampleDragenVariantCalls,${samplePrefix}.variant.calls.genotyped.vcf.gz
 sampleDragenRawVariantCalls,${samplePrefix}.hard-filtered.g.vcf.gz
 noMerge,no
 yesMerge,yes
+concordanceCheckSnps,${dataDir}/UMCG/concordanceCheckSnps.bed
+concordanceCheckCallsVcf,${samplePrefix}.concordanceCheckCalls.vcf
