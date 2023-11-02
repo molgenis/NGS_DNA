@@ -13,6 +13,7 @@ set -o pipefail
 #string externalSampleID
 #string concordanceCheckSnps
 #string concordanceCheckCallsVcf
+#string inputGVCF
 
 #Function to check if array contains value
 
@@ -24,11 +25,11 @@ module purge
 module load "${gatkVersion}"
 module list
 
-if [[ -f "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" ]]
+if [[ -f "${inputGVCF}" ]]
 then
 	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
 	-R "${indexFile}" \
-	--variant "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" \
+	--variant "${inputGVCF}" \
 	--include-non-variant-sites true \
 	-L "${concordanceCheckSnps}" \
 	-O "${tmpConcordanceCheckCallsVcf}"
@@ -36,5 +37,5 @@ then
 	mv -v "${tmpConcordanceCheckCallsVcf}" "${concordanceCheckCallsVcf}"
 	
 else
-	echo "The ${intermediateDir}/${externalSampleID}.merged.g.vcf.gz does not exist"
+	echo "The ${inputGVCF} does not exist"
 fi
