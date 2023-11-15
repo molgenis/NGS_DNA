@@ -117,7 +117,7 @@ ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh \
 --header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
 --footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
--w "${EBROOTNGS_DNA}/workflow_startFromVcf.csv" \
+-w "${EBROOTNGS_DNA}/workflow_GavinStandAlone.csv" \
 -b slurm \
 -g \
 -weave \
