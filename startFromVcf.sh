@@ -21,7 +21,7 @@ Options:
 	-f   filePrefix (default=basename of this directory)
 	-r   runID (default=run01)
 	-t   tmpDirectory (default=basename of ../../ )
-        -w   groupDir="${OPTARG}";;
+	-w   groupDir="${OPTARG}";;
 	-c   capturingKit
 	-v   inputfile (vcf or vcf.gz)
 
