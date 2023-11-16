@@ -1,7 +1,7 @@
 set -o pipefail
 #Parameter mapping
 #string tmpName
-#string gatkVersion
+#string bcfToolsVersion
 #string tempDir
 #string intermediateDir
 #string indexFile
@@ -13,29 +13,29 @@ set -o pipefail
 #string externalSampleID
 #string concordanceCheckSnps
 #string concordanceCheckCallsVcf
-#string inputGVCF
+#string dedupBam
 
 #Function to check if array contains value
 
 makeTmpDir "${concordanceCheckCallsVcf}"
 tmpConcordanceCheckCallsVcf="${MC_tmpFile}"
 
-#Load GATK module
+#Load bcfTools module
 module purge
-module load "${gatkVersion}"
+module load "${bcfToolsVersion}"
 module list
 
-if [[ -f "${inputGVCF}" ]]
+if [[ -f "${dedupBam}" ]]
 then
-	gatk --java-options "-Xmx7g -XX:ParallelGCThreads=2 -Djava.io.tmpdir=${tempDir}" GenotypeGVCFs \
-	-R "${indexFile}" \
-	--variant "${inputGVCF}" \
-	--include-non-variant-sites true \
-	-L "${concordanceCheckSnps}" \
-	-O "${tmpConcordanceCheckCallsVcf}"
+
+	bcftools mpileup \
+	-Ou -f "${indexFile}" \
+	"${dedupBam}" \
+	-R "${concordanceCheckSnps}" \
+	| bcftools call \
+	-m -Ob -o "${tmpConcordanceCheckCallsVcf}"
 
 	mv -v "${tmpConcordanceCheckCallsVcf}" "${concordanceCheckCallsVcf}"
-	
 else
-	echo "The ${inputGVCF} does not exist"
+	echo "The ${dedupBam} does not exist"
 fi
