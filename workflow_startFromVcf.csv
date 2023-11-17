@@ -2,7 +2,7 @@ step,protocol,dependencies
 s01_PrepareVcf,protocols/PrepareVcf.sh,
 s02_AnnotateVcf,protocols/AnnotateVcf.sh,s01_PrepareVcf
 s03_SnpEff,protocols/SnpEff.sh,s02_AnnotateVcf
-s04_MergeBatches,protocols/MergeBatchesGavinSA.sh,s03_SnpEff;extension=annotatedSnpEffExtension
+s04_MergeBatches,protocols/MergeBatches.sh,s03_SnpEff;extension=annotatedSnpEffExtension
 s05_SplitIndelsAndSNPs,protocols/SplitIndelsAndSNPs.sh,s04_MergeBatches
 s06a_SnpFiltration,protocols/SnpFiltration.sh,s05_SplitIndelsAndSNPs
 s06b_IndelFiltration,protocols/IndelFiltration.sh,s05_SplitIndelsAndSNPs
