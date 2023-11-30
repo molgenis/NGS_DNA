@@ -22,6 +22,12 @@ module load "${bcfToolsVersion}"
 module load "${bedToolsVersion}"
 module load "${htsLibVersion}"
 
+## first copy the the stats.csv file
+if [[ -f "${tmpDataDir}/${gsBatch}/stats.tsv" ]]
+then
+	rsync -v "${tmpDataDir}/${gsBatch}/stats.tsv" "${projectResultsDir}/qc/"
+fi
+
 ## copy (g)VCF files first
 combinedIdentifier=$(ls -d "${tmpDataDir}/${gsBatch}/Analysis/"*"-${sampleProcessStepID}")
 combinedIdentifier=$(basename "${combinedIdentifier}")
