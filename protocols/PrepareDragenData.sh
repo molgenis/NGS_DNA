@@ -23,9 +23,9 @@ module load "${bedToolsVersion}"
 module load "${htsLibVersion}"
 
 ## first copy the the stats.csv file
-if [[ -f "${tmpDataDir}/${gsBatch}/stats.tsv" ]]
+if [[ -f "${tmpDataDir}/${gsBatch}/Analysis/stats.tsv" ]]
 then
-	rsync -v "${tmpDataDir}/${gsBatch}/stats.tsv" "${projectResultsDir}/qc/"
+	rsync -v "${tmpDataDir}/${gsBatch}/Analysis/stats.tsv" "${projectResultsDir}/qc/"
 fi
 
 ## copy (g)VCF files first
