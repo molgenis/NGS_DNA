@@ -28,6 +28,7 @@ mem_protocols_Manta,5gb
 mem_protocols_MarkDuplicates,10gb
 mem_protocols_MergeBam,4gb
 mem_protocols_MergeBatches,6gb
+mem_protocols_MergeBatchesGavinSA,6gb
 mem_protocols_MergeIndelsAndSnpsSample,4gb
 mem_protocols_MergeIndelsAndSnpsProject,4gb
 mem_protocols_MultiQC,5gb

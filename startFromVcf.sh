@@ -21,7 +21,7 @@ Options:
 	-f   filePrefix (default=basename of this directory)
 	-r   runID (default=run01)
 	-t   tmpDirectory (default=basename of ../../ )
-	-w   workdir (default=/groups/\${group}/\${tmpDirectory})
+	-w   groupDir="${OPTARG}";;
 	-c   capturingKit
 	-v   inputfile (vcf or vcf.gz)
 
@@ -34,7 +34,7 @@ EOH
 
 while getopts "t:g:w:f:r:c:v:h" opt; 
 do
-	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)workDir="${OPTARG}";; f)filePrefix="${OPTARG}";; c)capturingKit="${OPTARG}";; v)vcfFile="${OPTARG}";; r)runID="${OPTARG}";; 
+	case $opt in h)showHelp;; t)tmpDirectory="${OPTARG}";; g)group="${OPTARG}";; w)groupDir="${OPTARG}";; f)filePrefix="${OPTARG}";; c)capturingKit="${OPTARG}";; v)vcfFile="${OPTARG}";; r)runID="${OPTARG}";; 
 	esac 
 done
 if [[ -z "${capturingKit:-}" ]]; then echo -e '\nERROR: Must specify an capturingKit\n' ;showHelp ; exit 1 ; fi
@@ -42,6 +42,7 @@ if [[ -z "${vcfFile:-}" ]]; then echo -e '\nERROR: Must specify an inputFile (vc
 
 if [[ -z "${tmpDirectory:-}" ]]; then tmpDirectory=$(basename $(cd ../../../ && pwd )) ; fi ; echo "tmpDirectory=${tmpDirectory}"
 if [[ -z "${group:-}" ]]; then group=$(basename $(cd ../../../../ && pwd )) ; fi ; echo "group=${group}"
+if [[ -z "${groupDir:-}" ]]; then groupDir="/groups/${group}/" ; fi ; echo "groupDir=${groupDir}"
 if [[ -z "${workDir:-}" ]]; then workDir="/groups/${group}/${tmpDirectory}" ; fi ; echo "workDir=${workDir}"
 if [[ -z "${filePrefix:-}" ]]; then filePrefix=$(basename $(pwd )) ;fi ; echo "filePrefix=${filePrefix}"
 if [[ -z "${runID:-}" ]]; then runID="run01" ; fi ; echo "runID=${runID}"
@@ -73,24 +74,25 @@ fi
 
 
 ## make samplesheet
-bash "${EBROOTNGS_DNA}/scripts/convertVcfToSamplesheet.sh" -i "${inputVcf}" -p "${filePrefix}" -c "${capturingKit}" 
+bash ${EBROOTNGS_DNA}/scripts/convertVcfToSamplesheet.sh -i "${inputVcf}" -p "${filePrefix}" -c "${capturingKit}" 
 genScripts="${workDir}/generatedscripts/NGS_DNA/${filePrefix}/"
 samplesheet="${genScripts}/${filePrefix}.csv"
 
-build='b37'
-species='homo_sapiens'
+build="b37"
+species="homo_sapiens"
 
 if [ -s build.txt ]; then build=$(cat build.txt);fi
 if [ -s species.txt ];then species=$(cat species.txt); fi
 sampleSize=$(cat "${genScripts}/${filePrefix}.csv" |  wc -l) ; echo "Samplesize is ${sampleSize}"
 batching="_chr"
 
+resourcesParameters="${EBROOTNGS_DNA}/parameters_resources_exome.csv"
+
 echo "tmpName,${tmpDirectory}" > ${genScripts}/tmpdir_parameters.csv 
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${genScripts}/tmpdir_parameters.csv" > "${genScripts}/parameters_tmpdir_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters.csv" > "${genScripts}/parameters_converted.csv"
-perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/parameters_${group}.csv" > "${genScripts}/parameters_group_converted.csv"
 perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${EBROOTNGS_DNA}/${environmentParameters}.csv" > "${genScripts}/parameters_environment_converted.csv"
-
+perl "${EBROOTNGS_DNA}/scripts/convertParametersGitToMolgenis.pl" "${resourcesParameters}" > "resources_parameters.converted.csv"
 echo "BATCHIDLIST=${EBROOTNGS_DNA}/batchIDList${batching}.csv"
 
 ngsversion=$(module list | grep -o -P 'NGS_DNA(.+)')
@@ -110,14 +112,14 @@ cp "${vcfFile}" "${intermediateDir}"
 
 ${EBROOTMOLGENISMINCOMPUTE}/molgenis_compute.sh \
 -p "parameters_converted.csv" \
--p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" -p "${projectJobsDir}/${filePrefix}.csv" -p "parameters_environment_converted.csv" -p "parameters_group_converted.csv" -p "parameters_tmpdir_converted.csv" \
+-p "${EBROOTNGS_DNA}/batchIDList${batching}.csv" -p "${projectJobsDir}/${filePrefix}.csv" -p "parameters_environment_converted.csv" -p "resources_parameters.converted.csv" -p "parameters_tmpdir_converted.csv" \
 -rundir "${projectJobsDir}" \
 --header "${EBROOTNGS_DNA}/templates/slurm/header.ftl" \
 --footer "${EBROOTNGS_DNA}/templates/slurm/footer.ftl" \
 --submit "${EBROOTNGS_DNA}/templates/slurm/submit.ftl" \
--w "${EBROOTNGS_DNA}/workflow_startFromVcf.csv" \
+-w "${EBROOTNGS_DNA}/workflow_GavinStandAlone.csv" \
 -b slurm \
 -g \
 -weave \
 -runid "${runID}" \
--o "ngsversion=${ngsversion};groupname=${group};inputVcf=${intermediateDir}/${vcfFile}"
+-o "ngsversion=${ngsversion};groupDir=${groupDir};groupname=${group};inputVcf=${intermediateDir}/${vcfFile}"
