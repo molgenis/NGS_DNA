@@ -10,7 +10,6 @@ process reheader {
     output:
     tuple val(samples), path(genotypedVCFgz)
 
-
 shell:  
 
   genotypedVCFgz="${genotypedVCF}.gz"

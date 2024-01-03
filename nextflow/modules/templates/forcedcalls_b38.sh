@@ -4,7 +4,7 @@ set -o pipefail
 set -eu
 
 if [[ -f "!{samples.combinedIdentifier}.bam" ]]
-	then
+then
 
 	bcftools mpileup \
 	-Ou -f "!{params.dataDir}/GRC/GRCh38/GRCh38_full_analysis_set_plus_decoy_hla.fa" \
