@@ -1,23 +1,65 @@
- projectResultsDir="!{params.tmpDataDir}/projects/NGS_DNA/!{samples.project}/run01/results/"
-    combi=$(cat "!{combinedIdentifier}")
-    analysisF=$(cat "!{analysisFolder}")
-    # moving files to results folder
-    if [[ -f "!{analysisFolder}/!{combinedIdentifier}/${combinedIdentifier}.bam" || -f "!{analysisFolder}/!{combinedIdentifier}/!{samples.externalSampleID}.merged.dedup.bam" ]]
-    then
-    	rename "!{combinedIdentifier}.bam" "!{samplesexternalSampleID}.merged.dedup.bam" "!{analysisFolder}/!{combinedIdentifier}/"*".bam"*
-    	mv -v "!{analysisFolder}/!{combinedIdentifier}/!{samples.externalSampleID}.merged.dedup.bam"{,.md5,.bai} "${projectResultsDir}/alignment/"
-    	echo "bam files renamed and moved into ${projectResultsDir}/alignment/" 
-    else
-    	echo -e "!{analysisFolder}/!{combinedIdentifier}/!{combinedIdentifier}.bam not found.\nThis can have 2 reasons, the data is already moved before to ${projectResultsDir}/alignment/\n or the data does not exist at all"
-    fi
-    # moving qc files
-    if [[ -f "!{analysisFolder}/!{combinedIdentifier}/!{combinedIdentifier}.html" ]]
-    then
-    	mv -v "${tmpDataDir}/!{samples.gsBatch}/Analysis/!{combinedIdentifier}/"*.{bed,json,html} "${projectResultsDir}/qc/"
-    	rename "!{combinedIdentifier}" "!{samples.externalSampleID}" "${projectResultsDir}/qc/"*
-    	echo "qc files renamed in ${projectResultsDir}/qc/" 
-    else
-    	echo -e "!{analysisFolder}/!{combinedIdentifier}/!{combinedIdentifier}.html.\nThis can have 2 reasons:\n1)the data is already moved before to ${projectResultsDir}/qc/ or\n2) the data does not exist at all"
-    fi
+#!/usr/bin/env nextflow
 
-    echo "$gsBatch"
+nextflow.enable.dsl=2
+
+log.info """\
+         T E S T - N F   P I P E L I N E
+         ===================================
+         outdir       : ${params.outdir}
+         samplesheet  : ${params.samplesheet}
+         group        : ${params.group}
+         tmpdir       : ${params.tmpdir}
+         launchDir    : ${params.launchDir}
+         """
+         .stripIndent()
+
+include { preprocess } from './modules/preprocess'
+include { reheader } from './modules/reheader'
+include { forcedcalls } from './modules/forcedcalls'
+
+def find_file(sample) {
+
+    String path=params.tmpDataDir + sample.gsBatch + "/Analysis/" + sample.GS_ID + "-" + sample.originalproject + "-" + sample.sampleProcessStepID
+    sample.files = file(path+"/*")
+    sample.analysisFolder="/groups/umcg-gst/tmp05/" + sample.gsBatch + "/Analysis/"
+    sample.projectResultsDir=params.tmpDataDir+"/projects/NGS_DNA/"+sample.project+"/run01/results/"
+    sample.combinedIdentifier= file(path).getBaseName()
+    return sample
+}
+
+workflow {
+
+  Channel.fromPath(params.samplesheet)
+  | splitCsv(header:true)
+  | map { find_file(it) }
+  | map { samples -> [ samples, samples.files ]}
+  | set { ch_input }
+
+  //Run once
+  ch_input.last()
+  | copyStats
+
+  ch_input
+  | forcedcalls
+  | preprocess
+  | reheader
+  | view
+
+}
+
+process copyStats{
+
+input: 
+ tuple val(samples), path(files)
+
+echo true
+   
+  shell:
+  '''
+    mkdir -p !{samples.projectResultsDir}/{alignment,qc,variants/{gVCF,GAVIN}}
+
+    rsync -av "!{samples.analysisFolder}/stats.tsv" "!{samples.projectResultsDir}/qc/"
+    echo "DONE DONE"
+  '''
+
+}
