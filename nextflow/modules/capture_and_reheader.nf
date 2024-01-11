@@ -1,4 +1,4 @@
-process reheader {
+process capture_and_reheader {
 
   publishDir "$samples.projectResultsDir/variants", mode: 'copy', overwrite: true
   label 'reheader'

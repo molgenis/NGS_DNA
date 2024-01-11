@@ -5,16 +5,15 @@ nextflow.enable.dsl=2
 log.info """\
          T E S T - N F   P I P E L I N E
          ===================================
-         outdir       : ${params.outdir}
          samplesheet  : ${params.samplesheet}
          group        : ${params.group}
          tmpdir       : ${params.tmpdir}
-         launchDir    : ${params.launchDir}
          """
          .stripIndent()
 
+include { structure_and_copystats } from './modules/structure_and_copystats'
 include { preprocess } from './modules/preprocess'
-include { reheader } from './modules/reheader'
+include { capture_and_reheader } from './modules/capture_and_reheader'
 include { forcedcalls } from './modules/forcedcalls'
 
 def find_file(sample) {
@@ -24,42 +23,24 @@ def find_file(sample) {
     sample.analysisFolder="/groups/umcg-gst/tmp05/" + sample.gsBatch + "/Analysis/"
     sample.projectResultsDir=params.tmpDataDir+"/projects/NGS_DNA/"+sample.project+"/run01/results/"
     sample.combinedIdentifier= file(path).getBaseName()
+
     return sample
 }
 
 workflow {
-
   Channel.fromPath(params.samplesheet)
   | splitCsv(header:true)
   | map { find_file(it) }
   | map { samples -> [ samples, samples.files ]}
   | set { ch_input }
 
-  //Run once
-  ch_input.last()
-  | copyStats
+  ch_input.collect()
+  | structure_and_copystats
 
   ch_input
   | forcedcalls
+
+  ch_input
   | preprocess
-  | reheader
-  | view
-
-}
-
-process copyStats{
-
-input: 
- tuple val(samples), path(files)
-
-echo true
-   
-  shell:
-  '''
-    mkdir -p !{samples.projectResultsDir}/{alignment,qc,variants/{gVCF,GAVIN}}
-
-    rsync -av "!{samples.analysisFolder}/stats.tsv" "!{samples.projectResultsDir}/qc/"
-    echo "DONE DONE"
-  '''
-
+  | capture_and_reheader
 }
