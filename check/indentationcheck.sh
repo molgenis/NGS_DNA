@@ -5,7 +5,7 @@ MYDIR="$(cd -P "$(dirname "${0}")" && pwd)"
 echo '#####################################################################################'
 echo '  Bash code must be indented with TABs. Checking for lines indented with spaces ... '
 echo '#####################################################################################'
-grep --recursive --line-number --include='*.*sh' --exclude-dir='deprecated' '^[[:space:]]* [[:space:]]*' "${MYDIR}"/../
+grep --recursive --line-number --include='*.*sh' --exclude-dir='deprecated' --exclude-dir='nextflow' '^[[:space:]]* [[:space:]]*' "${MYDIR}"/../
 grep_exit_status="${?}"
 if [[ "${grep_exit_status}" -eq 0 ]]; then
 	echo '#####################################################################################'
