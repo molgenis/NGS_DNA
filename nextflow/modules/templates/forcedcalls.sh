@@ -7,7 +7,9 @@ fasta="!{params.reference_GRCh37}"
 
 if [[ "!{samples.build}" == "GRCh38" ]]
 then
-    fasta="!{params.reference_GRCh38}"
+    fasta="!{params.reference_GRCh38}"	
+else
+	fasta="!{params.reference_GRCh37}"
 fi
 
 if [[ -f "!{samples.combinedIdentifier}.bam" ]]
