@@ -19,7 +19,11 @@ fi
 
 if [[ -f "!{samples.externalSampleID}.bam" ]]
 then
-    rsync -Lv "!{samples.externalSampleID}.bam"{,.md5,.bai} "!{samples.projectResultsDir}/alignment/"
+    for i in "!{samples.externalSampleID}.bam"*
+    do  
+        mv $(readlink ${i}) "!{samples.projectResultsDir}/alignment/"
+    done
+    rename "!{samples.combinedIdentifier}" "!{samples.externalSampleID}" "!{samples.projectResultsDir}/alignment/"*
 fi
     
 if [[ -f "!{samples.externalSampleID}.html" ]]
