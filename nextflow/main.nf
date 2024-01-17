@@ -37,9 +37,6 @@ workflow {
   ch_input.collect()
   | structure_and_copystats
 
- // ch_input
- // | forcedcalls
-
   ch_input
   | forcedcalls
   | preprocess
