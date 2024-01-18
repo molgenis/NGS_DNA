@@ -2,7 +2,7 @@ process capture_and_reheader {
 
   publishDir "$samples.projectResultsDir/variants", mode: 'copy', overwrite: true
   label 'reheader'
-  module = ['HTSlib/1.16-GCCcore-11.3.0','BCFtools/1.16-GCCcore-11.3.0']
+   module = ['BEDTools/2.30.0-GCCcore-11.3.0','HTSlib/1.16-GCCcore-11.3.0','BCFtools/1.16-GCCcore-11.3.0']
 
   input: 
     tuple val(samples), path(genotypedVCF)
@@ -12,8 +12,8 @@ process capture_and_reheader {
 
 shell:  
 
-  genotypedVCFgz="${genotypedVCF}.gz"
+  genotypedVCFgz="${samples.externalSampleID}.captured.vcf.gz"
   
-  template 'reheader.sh'
+  template 'capture_and_reheader.sh'
 
 }

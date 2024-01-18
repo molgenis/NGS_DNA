@@ -39,8 +39,6 @@ workflow {
 
   ch_input
   | forcedcalls
-
-  ch_input
   | preprocess
   | capture_and_reheader
 }
