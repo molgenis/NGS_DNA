@@ -58,6 +58,7 @@ do
 		do
 			arrayRejected+=("${line}")
 		done<"${TMPDATADIR}/rejectedBarcodes.txt"
+		cp "${TMPDATADIR}/rejectedBarcodes.txt" .
 	fi
 
 	if [[ -f "${logsDir}/${project}/${project}.copyDataFromPrm.started" ]]
