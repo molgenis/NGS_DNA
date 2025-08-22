@@ -44,6 +44,7 @@ picardVersion,picard/2.26.10-${javaSuffix}
 pigzVersion,pigz/2.7-${toolChain_min}
 python2Version,Python/2.7.16-GCCcore-7.3.0-bare
 pythonVersion,Python/3.10.4-${toolChain_min}-bare
+pythonPlusVersion,PythonPlus/3.10.4-${toolChain_min}-v23.01.2
 rVersion,R/4.2.1-${toolChain_max}-bare
 sambambaVersion,sambamba/0.7.0
 samtoolsVersion,SAMtools/1.16.1-${toolChain_min}
@@ -148,6 +149,7 @@ sampleMergedBamIdx,${samplePrefix}.merged.bam.bai
 dedupBam,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam
 dedupBamIdx,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.bai
 dedupBamMetrics,${projectResultsDir}/qc/statistics/${externalSampleID}.merged.dedup.bam
+dedupBamChrXMetrics,${projectResultsDir}/qc/${externalSampleID}.merged.dedup.bam
 dedupBamCram,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.cram
 dedupBamCramIdx,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.cram.crai
 dedupBamCramBam,${projectResultsDir}/alignment/${externalSampleID}.merged.dedup.bam.cram.bam
@@ -176,7 +178,7 @@ gcBiasMetricsJar,CollectGcBiasMetrics
 insertSizeMetrics,${dedupBamMetrics}.insert_size_metrics
 hsMetricsJar,CalculateHsMetrics
 hsMetrics,${dedupBamMetrics}.hs_metrics
-hsMetricsNonAutosomalRegionChrX,${dedupBamMetrics}.nonAutosomalRegionChrX_hs_metrics
+hsMetricsNonAutosomalRegionChrX,${dedupBamChrXMetrics}.nonAutosomalRegionChrX_hs_metrics
 recreateInsertSizePdfR,createInsertSizePlot_c5.R
 projectDellyAnnotatorOutputVcf,${samplePrefix}.delly.snpeff.hpo.vcf
 collectBamMetricsPrefix,${intermediateDir}/${externalSampleID}.merged.dedup

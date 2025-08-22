@@ -17,6 +17,7 @@ set -o pipefail
 #string coveragePerTargetDir
 #string ngsUtilsVersion
 #string gatkVersion
+#string ngsversion
 #string projectResultsDir
 #string gVCF2BEDVersion
 #string htsLibVersion
@@ -25,6 +26,7 @@ set -o pipefail
 #string Gender
 #string merge
 #string variantCalls
+#string pythonPlusVersion
 #list batchID
 
 array_contains () {
@@ -43,7 +45,7 @@ module purge
 module load "${gatkVersion}"
 module load "${htsLibVersion}"
 module load "${bedToolsVersion}"
-module load "${gVCF2BEDVersion}"
+
 
 ### Per base bed files
 bedfileRaw=$(basename "${capturingKit}")
@@ -85,9 +87,18 @@ then
 		then
 			tabix -p vcf "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz"
 		fi
+		module load "${ngsversion}"
+		module load "${pythonPlusVersion}"
 		cp "${intermediateDir}/${externalSampleID}.merged.g.vcf.gz" "${variantCalls}"
+		python "${EBROOTNGS_DNA}/scripts/umcg_nx_cnv2vcf_gatk_transform_v01.py" -i "${variantCalls}"
+		
+		mv "${projectResultsDir}/variants/gVCF/${externalSampleID}_mod.vcf.gz" "${projectResultsDir}/variants/gVCF/${externalSampleID}.merged.mod.g.vcf.gz"
+		module purge
 	fi
 fi
+module load "${gVCF2BEDVersion}"
+module load "${htsLibVersion}"
+module load "${bedToolsVersion}"
 echo "starting to do the calculations"
 echo "MYBEDFILE is: ${bedfile} it was ${bedfileRaw}"
 dirVariantCalls="$(dirname "${variantCalls}")"
@@ -97,6 +108,7 @@ capturedVariantCalls="${dirVariantCalls}/${basenameVariantCalls%%.*}.captured.g.
 bedtools intersect -u -header -a "${variantCalls}" -b "${captured}.merged.bed" > "${capturedVariantCalls}"
 bgzip -f "${capturedVariantCalls}"
 tabix -f -p vcf "${capturedVariantCalls}.gz"
+
 
 
 if [[ -d "${coveragePerBaseDir}/${bedfile}/" ]]

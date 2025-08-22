@@ -34,6 +34,7 @@ combinedIdentifier=$(basename "${combinedIdentifier}")
 echo  "${combinedIdentifier}" > "${intermediateDir}/${externalSampleID}.txt"
 rsync -av "${tmpDataDir}/${gsBatch}/Analysis/${combinedIdentifier}/${combinedIdentifier}.hard-filtered"*"vcf.gz"* "${intermediateDir}"
 
+
 ## rename (g)VCF files
 rename "${combinedIdentifier}" "${externalSampleID}" "${intermediateDir}/${combinedIdentifier}.hard-filtered."*"vcf.gz"*
 
@@ -42,6 +43,8 @@ bcftools annotate -x 'FORMAT/AF,FORMAT/F1R2,FORMAT/F2R1,FORMAT/GP' "${intermedia
 bgzip -c -f "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.tmp" > "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.gz"
 echo "start indexing ${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.gz"
 tabix -p vcf "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.gz"
+
+rsync -av "${intermediateDir}/${externalSampleID}.variant.calls.genotyped.vcf.gz" "${projectResultsDir}/variants/"
 
 rename 'gvcf.gz' 'g.vcf.gz' "${intermediateDir}/${externalSampleID}.hard-filtered.gvcf.gz"*
 rsync -av "${intermediateDir}/${externalSampleID}.hard-filtered.g.vcf.gz"* "${projectResultsDir}/variants/gVCF/"
